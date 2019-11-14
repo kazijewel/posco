@@ -1040,10 +1040,11 @@ public class ReplacementLeaveApplication extends Window
 		
 		dReplacementLeaveTo.setValue(null);
 		dReplacementLeaveFrom.setValue(null);
-		txtLeaveType.setValue("");
+		txtLeaveType.setValue("Replace");
 		txtReplacementLeaveAddress.setValue("");
 		txtMobileNo.setValue("");
 		txtTotalDays.setValue("");
+		
 	}
 
 	private void focusEnter()
