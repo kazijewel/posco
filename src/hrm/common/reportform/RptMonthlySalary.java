@@ -440,6 +440,8 @@ public class RptMonthlySalary extends Window {
 						"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
 						"order by vUnitId,vDepartmentName,vSectionName,SUBSTRING(vEmployeeCode,3,15)";
 				
+				System.out.println("reportShow: "+query);
+				
 				//==========Didarul Alam Update By: 16-10-2018 Start==========//
 				if(RadioBtnGroup.getValue()=="Excel")
 				{

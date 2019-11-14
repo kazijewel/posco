@@ -83,7 +83,7 @@
 	<field name="iWorkingDayNetOTHr" class="java.lang.Integer"/>
 	<field name="mPerHrOTRate" class="java.math.BigDecimal"/>
 	<field name="mOtTaka" class="java.math.BigDecimal"/>
-	<field name="mTotalPayable" class="java.lang.String"/>
+	<field name="mTotalPayable" class="java.math.BigDecimal"/>
 	<field name="mIncomeTax" class="java.math.BigDecimal"/>
 	<field name="mNetPayableTaka" class="java.math.BigDecimal"/>
 	<field name="mRevenueStamp" class="java.math.BigDecimal"/>
@@ -92,6 +92,7 @@
 	<field name="vBranchName" class="java.lang.String"/>
 	<field name="vBankId" class="java.lang.String"/>
 	<field name="vBankName" class="java.lang.String"/>
+	<field name="vAccountNo" class="java.lang.String"/>
 	<field name="vRoutingNo" class="java.lang.String"/>
 	<field name="vUserId" class="java.lang.String"/>
 	<field name="vUserName" class="java.lang.String"/>
@@ -784,7 +785,7 @@
 			<textField pattern="#,##0;(-#,##0)">
 				<reportElement x="600" y="0" width="45" height="20"/>
 				<box leftPadding="0"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iHolidayOTHr}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(-#,##0)">
@@ -796,7 +797,7 @@
 			<textField pattern="#,##0;(-#,##0)">
 				<reportElement x="686" y="0" width="49" height="20"/>
 				<box leftPadding="2"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iHolidayNetOTHr}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(-#,##0)">
