@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 21, 2011 11:16:52 AM by Hibernate Tools 3.3.0.GA -->
+<hibernate-mapping>
+    <class name="database.hibernate.TbBankBranch" table="tbBankBranch" schema="dbo" >
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="branchName" type="string">
+            <column name="branchName" not-null="true" unique="true" />
+        </property>
+        <property name="userId" type="java.lang.Integer">
+            <column name="userId" />
+        </property>
+        <property name="userIp" type="string">
+            <column name="userIp" length="50" />
+        </property>
+        <property name="entryTime" type="timestamp">
+            <column name="entryTime" length="23" />
+        </property>
+        <set name="tbClientDetailses" table="tbClientDetails" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="iBankBranch" />
+            </key>
+            <one-to-many class="database.hibernate.TbClientDetails" />
+        </set>
+    </class>
+</hibernate-mapping>
