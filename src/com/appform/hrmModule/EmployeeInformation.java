@@ -181,24 +181,11 @@ public class EmployeeInformation extends Window
 
 	private void addCmp()
 	{
-		//add Tab Sheet
-		if(sessionBean.isAdmin() || sessionBean.isSuperAdmin())
-		{
-			tabSheet.addTab(firstTab,"Official Information");
-			tabSheet.addTab(secondTab,"Personal Information");
-			tabSheet.addTab(thirdTab,"Education");
-			tabSheet.addTab(fourthTab,"Experience");
-			tabSheet.addTab(fifthTab,"Salary Structure");
-		}
-		else
-		{
-			tabSheet.addTab(firstTab,"Official Information");
-			tabSheet.addTab(secondTab,"Personal Information");
-			tabSheet.addTab(thirdTab,"Education");
-			tabSheet.addTab(fourthTab,"Experience");
-			tabSheet.addTab(fifthTab,"Salary Structure");
-		}
-		//tabSheet.addTab(sixTab,"PF Information");
+		tabSheet.addTab(firstTab,"Official Information");
+		tabSheet.addTab(secondTab,"Personal Information");
+		tabSheet.addTab(thirdTab,"Education");
+		tabSheet.addTab(fourthTab,"Experience");
+		tabSheet.addTab(fifthTab,"Salary Structure");
 	}
 
 	private void addFindEmployee(String findString)
@@ -433,6 +420,13 @@ public class EmployeeInformation extends Window
 				isFind = false;
 				isUpdate = false;
 				
+
+				/*firstTab.setEnabled(false);
+				secondTab.setEnabled(false);
+				thirdTab.setEnabled(false);
+				fourthTab.setEnabled(false);  
+				fifthTab.setEnabled(false);*/
+				
 			}
 		});
 
@@ -453,6 +447,12 @@ public class EmployeeInformation extends Window
 					isUpdate = true;
 					btnInit(false);
 					tabInit(true);
+					
+					/*firstTab.setEnabled(true);
+					secondTab.setEnabled(true);
+					thirdTab.setEnabled(true);
+					fourthTab.setEnabled(true);  
+					fifthTab.setEnabled(true);*/
 				}
 				else
 				{
@@ -636,6 +636,14 @@ public class EmployeeInformation extends Window
 		forthTabClear();
 		fifthTabClear();
 		sixTabClear();
+		
+
+		firstTab.setEnabled(true);
+		secondTab.setEnabled(true);
+		thirdTab.setEnabled(true);
+		fourthTab.setEnabled(true);  
+		fifthTab.setEnabled(true);
+		
 		try
 		{
 			String sqlOfficial = "select vEmployeeId,vEmployeeCode,vFingerId,vProximityId,vEmployeeName," +
