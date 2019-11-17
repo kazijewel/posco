@@ -1,2 +1,0 @@
-# Module com.example.posco.widgetset.poscoWidgetset
-# RPC service class, partial path of RPC policy file

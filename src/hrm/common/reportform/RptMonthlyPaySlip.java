@@ -420,11 +420,16 @@ public class RptMonthlyPaySlip extends Window
 		try
 		{
 			
-			String query="select * from funPaySlip ('"+cmbUnit.getValue().toString()+"', "
-					+ " '"+cmbSalaryMonth.getValue()+"','"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"',"
-					+ " '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"',"
-					+ " '"+(chkEmployeeName.booleanValue()?"%":cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"') " +
-					"order by vSectionName,iRank,dJoiningDate";
+			String query = "select * from tbMonthlySalary " +
+					" where vUnitId='"+cmbUnit.getValue().toString()+"' "+
+					" and vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' "+
+					" and vSectionId like '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"' "+
+					" and YEAR(dSalaryDate)=YEAR('"+dFormat.format(cmbSalaryMonth.getValue())+"') " +
+					" and MONTH(dSalaryDate)=MONTH('"+dFormat.format(cmbSalaryMonth.getValue())+"') " +
+					" and vEmployeeId like '"+(chkEmployeeName.booleanValue()?"%":cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"' "+
+					" order by vEmployeeName";
+			
+			
 			System.out.println("reportShow: "+query);
 			
 
