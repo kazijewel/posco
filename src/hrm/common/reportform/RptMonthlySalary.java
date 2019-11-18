@@ -511,7 +511,7 @@ public class RptMonthlySalary extends Window {
 				else
 				{
 					HashMap <String,Object>  hm = new HashMap <String,Object> ();
-					hm.put("developer", sessionBean.getCompany());
+					hm.put("company", sessionBean.getCompany());
 					hm.put("address", txtAddress.getValue().toString());
 					hm.put("phone",sessionBean.getCompanyContact());
 					hm.put("Month",cmbMonth.getItemCaption(cmbMonth.getValue()));
