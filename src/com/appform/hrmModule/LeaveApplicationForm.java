@@ -93,7 +93,7 @@ public class LeaveApplicationForm extends Window
 	private TextRead txtAnualLeave;
 
 	private Label lblLeaveType;
-	private ComboBox cmbLeaveType;
+	private ComboBox cmbLeaveType,cmbELType;
 	private TextField txtLeaveType;
 
 	private Label lblPaymentType;
@@ -415,6 +415,8 @@ public class LeaveApplicationForm extends Window
 				{
 					//txtClear();
 					employeeData();
+					cmbELType.setValue(null);
+					
 				}
 			}
 		});
@@ -443,6 +445,31 @@ public class LeaveApplicationForm extends Window
 						catch (Exception e)
 						{/*System.out.println("Error "+e);*/}
 					}
+					
+					if(cmbLeaveType.getValue()!=null)
+					{
+						if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
+						{						
+							cmbELType.setEnabled(true);
+							int iELeave=0;
+							iELeave=Integer.parseInt(txtAnualLeave.getValue().toString());
+							
+							if(iELeave>0)
+							{
+								cmbELType.setValue("Advance");
+							}
+							else
+							{
+								cmbELType.setValue("Current");
+							}
+						}
+						else
+						{
+							cmbELType.setValue(null);
+							cmbELType.setEnabled(false);
+						}
+					}
+					
 				}
 			}
 		});
@@ -461,6 +488,31 @@ public class LeaveApplicationForm extends Window
 			{
 				tableClear();
 				selectLeaveDays();
+
+				if(cmbLeaveType.getValue()!=null)
+				{
+					if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
+					{						
+						cmbELType.setEnabled(true);
+						int iELeave=0,iDuration;
+						iELeave=Integer.parseInt(txtAnualLeave.getValue().toString());
+						iDuration=Integer.parseInt(txtDuration.getValue().toString());
+						
+						if(iELeave<iDuration)
+						{
+							cmbELType.setValue("Advance");
+						}
+						else
+						{
+							cmbELType.setValue("Current");
+						}
+					}
+					else
+					{
+						cmbELType.setValue(null);
+						cmbELType.setEnabled(false);
+					}
+				}
 			}
 		});
 
@@ -471,6 +523,31 @@ public class LeaveApplicationForm extends Window
 				tableClear();
 				System.out.println("dLeaveTo");
 				selectLeaveDays();
+
+				if(cmbLeaveType.getValue()!=null)
+				{
+					if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
+					{						
+						cmbELType.setEnabled(true);
+						int iELeave=0,iDuration;
+						iELeave=Integer.parseInt(txtAnualLeave.getValue().toString());
+						iDuration=Integer.parseInt(txtDuration.getValue().toString());
+						
+						if(iELeave<iDuration)
+						{
+							cmbELType.setValue("Advance");
+						}
+						else
+						{
+							cmbELType.setValue("Current");
+						}
+					}
+					else
+					{
+						cmbELType.setValue(null);
+						cmbELType.setEnabled(false);
+					}
+				}
 			}
 		});
 
@@ -1916,6 +1993,14 @@ private void tableRowAdd( final int ar)
 		cmbLeaveType.setHeight("-1px");
 		mainLayout.addComponent(cmbLeaveType, "top:68.0px; left:530.0px;");
 
+		cmbELType = new ComboBox();
+		cmbELType.setImmediate(true);
+		cmbELType.setWidth("100px");
+		cmbELType.setHeight("-1px");
+		mainLayout.addComponent(cmbELType, "top:68.0px; left:670.0px;");
+		cmbELType.addItem("Advance");
+		cmbELType.addItem("Current");
+
 		txtLeaveType = new TextField();
 		txtLeaveType.setImmediate(true);
 		txtLeaveType.setWidth("130px");
@@ -2087,6 +2172,7 @@ private void tableRowAdd( final int ar)
 
 		txtReferenceNo.setEnabled(!t);
 		cmbLeaveType.setEnabled(!t);
+		cmbELType.setEnabled(!t);
 		txtLeaveType.setEnabled(!t);
 		ogPaymentType.setEnabled(!t);
 		dLeaveFrom.setEnabled(!t);
@@ -2122,6 +2208,7 @@ private void tableRowAdd( final int ar)
 		txtAnualLeave.setValue("");
 		txtSickLeave.setValue("");
 		cmbLeaveType.setValue(null);
+		cmbELType.setValue(null);
 		txtLeaveType.setValue("");
 		dLeaveTo.setValue(null);
 		txtPurposeOfLeave.setValue("");
