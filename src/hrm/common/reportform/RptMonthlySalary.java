@@ -61,8 +61,7 @@ public class RptMonthlySalary extends Window {
 
 	SimpleDateFormat dRptFormat = new SimpleDateFormat("dd-MM-yyyy");
 	SimpleDateFormat dMonthYear = new SimpleDateFormat("MMMMM-yyyy");
-	TextField txtPath=new TextField();
-	TextField txtAddress=new TextField();
+	
 	private CommonMethod cm;
 	private String menuId = "";
 	public RptMonthlySalary(SessionBean sessionBean,String menuId)
@@ -512,7 +511,7 @@ public class RptMonthlySalary extends Window {
 				{
 					HashMap <String,Object>  hm = new HashMap <String,Object> ();
 					hm.put("company", sessionBean.getCompany());
-					hm.put("address", txtAddress.getValue().toString());
+					hm.put("address", sessionBean.getCompanyAddress());
 					hm.put("phone",sessionBean.getCompanyContact());
 					hm.put("Month",cmbMonth.getItemCaption(cmbMonth.getValue()));
 					hm.put("user", sessionBean.getUserName()+" "+sessionBean.getUserIp());
