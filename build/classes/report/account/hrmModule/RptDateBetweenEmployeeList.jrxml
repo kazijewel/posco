@@ -13,7 +13,7 @@
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA["select vEmployeeCode,vEmployeeName,(select vDesignation from tbEmpDesignationInfo where vEmployeeId=a.vEmployeeId)vDesignation, vUnitName,vSectionName,vEmployeeType,vStatusDate,bStatus,vEmployeeStatus,vDepartmentId,vDepartmentName  from tbEmpOfficialPersonalInfo a  where bStatus=0 and vStatusDate between '2018-01-05' and '2018-08-30'"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select vEmployeeCode,a.vEmployeeName,vDesignationName,vUnitName,vSectionName,vEmployeeType,vStatusDate,bStatus,''iRank,vEmployeeStatus, vDepartmentId,vDepartmentName from tbEmpOfficialPersonalInfo a where bStatus=0 and vStatusDate between '2019-11-01' and '2019-11-23'  and vUnitId like '19001' and vDepartmentId like '%' and vSectionId like '%' and vEmployeeStatus like'%'  order by vUnitName,vDepartmentName,vSectionName,iRank,dJoiningDate"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="section" class="java.lang.String"/>
 	<parameter name="username" class="java.lang.String"/>
@@ -29,12 +29,13 @@
 	</queryString>
 	<field name="vEmployeeCode" class="java.lang.String"/>
 	<field name="vEmployeeName" class="java.lang.String"/>
-	<field name="vDesignation" class="java.lang.String"/>
+	<field name="vDesignationName" class="java.lang.String"/>
 	<field name="vUnitName" class="java.lang.String"/>
 	<field name="vSectionName" class="java.lang.String"/>
 	<field name="vEmployeeType" class="java.lang.String"/>
 	<field name="vStatusDate" class="java.sql.Date"/>
 	<field name="bStatus" class="java.lang.Integer"/>
+	<field name="iRank" class="java.lang.String"/>
 	<field name="vEmployeeStatus" class="java.lang.String"/>
 	<field name="vDepartmentId" class="java.lang.String"/>
 	<field name="vDepartmentName" class="java.lang.String"/>
@@ -331,7 +332,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vDesignation}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vDesignationName}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd-MM-yyyy" isBlankWhenNull="true">
 				<reportElement x="483" y="0" width="63" height="11"/>

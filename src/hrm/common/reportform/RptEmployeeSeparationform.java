@@ -69,9 +69,6 @@ public class RptEmployeeSeparationform extends Window
 	private SimpleDateFormat dDbFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private SimpleDateFormat dDbMonth = new SimpleDateFormat("MMMMMMMMM-yyyy");
 	
-
-	TextField txtPath=new TextField();
-	TextField txtAddress=new TextField();
 	private CommonMethod cm;
 	private String menuId = "";
 	public RptEmployeeSeparationform(SessionBean sessionBean,String menuId) 
@@ -523,10 +520,9 @@ public class RptEmployeeSeparationform extends Window
 			if(opgTimeSelect.getValue().toString().equals("Monthly"))
 			{
 				report="report/account/hrmModule/RptMonthlyEmployeeList.jasper";
-				query="select vEmployeeCode,a.vEmployeeName,b.vDesignation,vUnitName,vSectionName,vEmployeeType,vStatusDate,bStatus," +
-						"(select iRank from tbDesignationInfo where vDesignationId=b.vDesignationId)iRank,vEmployeeStatus,vDepartmentId,vDepartmentName " +
+				query="select vEmployeeCode,a.vEmployeeName,vDesignationName,vUnitName,vSectionName,vEmployeeType,vStatusDate,bStatus," +
+						"''iRank,vEmployeeStatus,vDepartmentId,vDepartmentName " +
 						"from tbEmpOfficialPersonalInfo a " +
-						"inner join tbEmpDesignationInfo b on a.vEmployeeId=b.vEmployeeId " +
 						"where bStatus=0 and YEAR(vStatusDate) = YEAR('"+dDbFormat.format(dMonth.getValue())+"') " +
 						"and month(vStatusDate) = month('"+dDbFormat.format(dMonth.getValue())+"') " +
 						"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue():"")+"' and vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue():"%")+"' " +
@@ -536,10 +532,9 @@ public class RptEmployeeSeparationform extends Window
 			else if(opgTimeSelect.getValue().toString().equals("Between Date"))
 			{
 				report="report/account/hrmModule/RptDateBetweenEmployeeList.jasper";
-				query="select vEmployeeCode,a.vEmployeeName,b.vDesignation,vUnitName,vSectionName,vEmployeeType,vStatusDate,bStatus," +
-						"(select iRank from tbDesignationInfo where vDesignationId=b.vDesignationId)iRank,vEmployeeStatus,vDepartmentId,vDepartmentName " +
+				query="select vEmployeeCode,a.vEmployeeName,vDesignationName,vUnitName,vSectionName,vEmployeeType,vStatusDate,bStatus," +
+						"''iRank,vEmployeeStatus,vDepartmentId,vDepartmentName " +
 						"from tbEmpOfficialPersonalInfo a " +
-						"inner join tbEmpDesignationInfo b on a.vEmployeeId=b.vEmployeeId " +
 						"where bStatus=0 and vStatusDate between '"+dDbFormat.format(dFromDate.getValue())+"' and '"+dDbFormat.format(dToDate.getValue())+"' " +
 						"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue():"")+"' and vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue():"%")+"' " +
 						"and vSectionId like '"+(cmbSection.getValue()!=null?cmbSection.getValue():"%")+"' and vEmployeeStatus like'"+vEmployeeStatus+"' " +
@@ -551,8 +546,8 @@ public class RptEmployeeSeparationform extends Window
 			if(queryValueCheck(query))
 			{
 				HashMap <String,Object> hm = new HashMap <String,Object> ();
-				hm.put("company", cmbUnit.getItemCaption(cmbUnit.getValue()));
-				hm.put("address", txtAddress.getValue().toString());
+				hm.put("company", sessionBean.getCompany());
+				hm.put("address", sessionBean.getCompanyAddress());
 				hm.put("phone", sessionBean.getCompanyContact());
 				hm.put("userName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
 				hm.put("dMonth", dDbMonth.format(dMonth.getValue()).toString());
@@ -560,7 +555,7 @@ public class RptEmployeeSeparationform extends Window
 				hm.put("fromDate", dFromDate.getValue());
 				hm.put("toDate", dToDate.getValue());
 				hm.put("SysDate",reportTime.getTime);
-				hm.put("logo", txtPath.getValue().toString().isEmpty()?"0":txtPath.getValue().toString());
+				hm.put("logo", sessionBean.getCompanyLogo());
 				hm.put("branch", "Project Name : "+cmbUnit.getItemCaption(cmbUnit.getValue().toString()));
 				hm.put("sql", query);
 
