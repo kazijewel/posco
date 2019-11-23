@@ -37,7 +37,6 @@ public class RptIndividualEmployeeDetails extends Window
 	private AbsoluteLayout mainLayout;
 	private CommonMethod cm;
 	private String menuId = "";
-	private OptionGroup radioButtonGroup;
 	private OptionGroup opgReport;
 
 	private ComboBox cmbEmployee,cmbUnit;
@@ -56,7 +55,6 @@ public class RptIndividualEmployeeDetails extends Window
 
 	private Label lblComboLabel ;
 
-	private static final List<String> groupButton = Arrays.asList(new String[]{"Employee ID"/*,"Finger/Proximity ID"*/,"Employee Name"});
 	private static final List<String> type1 = Arrays.asList(new String[]{"PDF","Other"});
 
 	boolean isPreview=false;
@@ -395,16 +393,6 @@ public class RptIndividualEmployeeDetails extends Window
 				}
 			}
 		});
-
-		radioButtonGroup.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-
-				cmbEmployeeNameDataAdd();
-
-			}
-		});
 	}
 	private void cmbDepartmentDataLoad()
 	{
@@ -414,9 +402,10 @@ public class RptIndividualEmployeeDetails extends Window
 			unitId=cmbUnit.getValue().toString();
 		}
 		try{
-			String sql="select distinct epo.vDepartmentId,epo.vDepartmentName from " +
-					" tbEmpOfficialPersonalInfo epo inner join tbDepartmentInfo sec "
-					+ " on sec.vDepartmentId=epo.vDepartmentId where epo.vUnitId like '"+unitId+"' order by epo.vDepartmentName";
+			String sql="select distinct vDepartmentId,vDepartmentName from tbEmpOfficialPersonalInfo " +
+					"where vUnitId like '"+unitId+"' order by vDepartmentName";
+			System.out.println("cmbDepartmentDataLoad: "+sql);
+			
 			Iterator<?> iter=dbService(sql);
 			while(iter.hasNext())
 			{
@@ -441,11 +430,11 @@ public class RptIndividualEmployeeDetails extends Window
 			unitId=cmbUnit.getValue().toString();
 		}
 		try{
-			String sql="select distinct epo.vSectionId,epo.vSectionName from " +
-					" tbEmpOfficialPersonalInfo epo inner join tbSectionInfo sec "
-					+ " on sec.vSectionId=epo.vSectionId where epo.vUnitId like '"+unitId+"' and epo.vDepartmentId like '"+deptId+"'  order by epo.vSectionName";
-			Iterator<?> iter=dbService(sql);
-			System.out.println("Section :"+sql);
+			String sql="select distinct vSectionId,vSectionName from tbEmpOfficialPersonalInfo " +
+					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"'  order by vSectionName";
+			System.out.println("cmbSectionDataLoad: "+sql);
+			
+			Iterator<?> iter=dbService(sql);			
 			while(iter.hasNext())
 			{
 				Object[] element=(Object[])iter.next();
@@ -475,13 +464,12 @@ public class RptIndividualEmployeeDetails extends Window
 			unitId=cmbUnit.getValue().toString();
 		}
 		try{
-			String sql="select distinct edi.vDesignationId,edi.vDesignation from " +
-					" tbEmpOfficialPersonalInfo epo inner join tbEmpDesignationInfo edi on edi.vEmployeeId=epo.vEmployeeId "
-					+ " inner join tbDesignationInfo des on des.vDesignationId=edi.vDesignationId where "
-					+ " epo.vUnitId like '"+unitId+"' and epo.vDepartmentId like '"+deptId+"'  and epo.vSectionId like '"+secId+"' "
-					+ " order by edi.vDesignation";
+			String sql="select distinct vDesignationId,vDesignationName from tbEmpOfficialPersonalInfo " +
+					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' " +
+					"order by vDesignationName";
+			System.out.println("cmbDesignationDataLoad: "+sql);
+			
 			Iterator<?> iter=dbService(sql);
-			System.out.println("Designation :"+sql);
 			while(iter.hasNext())
 			{
 				Object[] element=(Object[])iter.next();
@@ -516,44 +504,19 @@ public class RptIndividualEmployeeDetails extends Window
 		}
 		try
 		{
-			if(radioButtonGroup.getValue().toString().equals("Employee ID"))
-			{
-				query="select epo.vEmployeeId,epo.vFingerId,epo.vProximityId,epo.vEmployeeName,epo.vEmployeeCode from tbEmpOfficialPersonalInfo epo "
-						+ " inner join tbEmpDesignationInfo edi on edi.vEmployeeId=epo.vEmployeeId where epo.vUnitId like '"+unitId+"' " 
-						+ " and epo.vDepartmentId like '"+deptId+"' and epo.vSectionId like '"+secId+"' and edi.vDesignationId like '"+desId+"'  "
-						+ " order by epo.vEmployeeCode";
-				System.out.println("Employee: "+query);
-
-			}
-			else if(radioButtonGroup.getValue().toString().equals("Employee Name"))
-			{
-				query="select epo.vEmployeeId,epo.vFingerId,epo.vProximityId,epo.vEmployeeName,epo.vEmployeeCode from tbEmpOfficialPersonalInfo epo "
-						+ " inner join tbEmpDesignationInfo edi on edi.vEmployeeId=epo.vEmployeeId where epo.vUnitId like '"+unitId+"' " +
-						" and epo.vDepartmentId like '"+deptId+"' and epo.vSectionId like '"+secId+"' and edi.vDesignationId like '"+desId+"'  "
-						+ " order by epo.vEmployeeName";
-				System.out.println("Employee: "+query);
-			}
+			query="select vEmployeeId,vEmployeeCode,vEmployeeName from tbEmpOfficialPersonalInfo " +
+					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' " +
+					"and vDesignationId like '"+desId+"' order by vEmployeeCode";
+			
+			System.out.println("cmbEmployeeNameDataAdd: "+query);
+			
 			Iterator<?> iter=dbService(query);
 
 			while(iter.hasNext())
 			{
 				Object [] element=(Object[])iter.next();
-				if(radioButtonGroup.getValue().toString().equals("Employee ID"))
-				{
-					cmbEmployee.addItem(element[0]);
-					cmbEmployee.setItemCaption(element[0], element[4].toString());
-
-				}
-				/*	if(radioButtonGroup.getValue().toString().equals("Finger/Proximity ID"))
-				{
-					cmbEmployee.addItem(element[0]);
-					cmbEmployee.setItemCaption(element[0], element[1].toString()+" / "+element[2].toString());
-				}*/
-				if(radioButtonGroup.getValue().toString().equals("Employee Name"))
-				{
-					cmbEmployee.addItem(element[0]);
-					cmbEmployee.setItemCaption(element[0], element[3].toString());
-				}
+				cmbEmployee.addItem(element[0]);
+				cmbEmployee.setItemCaption(element[0], element[1]+"-"+element[2]);
 			}
 		}
 		catch (Exception exp)
@@ -637,15 +600,13 @@ public class RptIndividualEmployeeDetails extends Window
 		chkDesignationAll.setHeight("-1px");
 		mainLayout.addComponent(chkDesignationAll,"top:100px; left:370px;");
 
-		radioButtonGroup=new OptionGroup("",groupButton);
 		cmbEmployee = new ComboBox();
 		cmbEmployee.setImmediate(true);
-		radioButtonGroup.setImmediate(true);
 		cmbEmployee.setWidth("250.0px");
 		cmbEmployee.setHeight("-1px");
-		mainLayout.addComponent(radioButtonGroup,"top:130px; left:20px");
-		radioButtonGroup.setValue("Employee ID");
+		mainLayout.addComponent(new Label("Employee"),"top:130px; left:30px");
 		mainLayout.addComponent(cmbEmployee, "top:128px; left:120.0px;");
+		cmbEmployee.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 
 		chkEmployeeAll = new CheckBox("All");
 		chkEmployeeAll.setImmediate(true);
