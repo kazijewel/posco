@@ -53,7 +53,6 @@ public class RptAgeAsOnDate extends Window
 	private CheckBox chkEmployeeTypeAll;
 
 	private ComboBox cmbEmpType;
-	private OptionGroup opgEmployee;
 	private ComboBox cmbJobDuration;
 	private PopupDateField dAsOnDate;
 	private AmountField txtNumberOfYear;
@@ -61,7 +60,6 @@ public class RptAgeAsOnDate extends Window
 	private CheckBox chkUnitAll = new CheckBox("All");
 
 	private static final List<String> reportType = Arrays.asList(new String[] {"Joining Date", "Confirmation Date"});
-	private static final List<String> employee = Arrays.asList(new String[]{"Employee ID"/*,"Finger/Proximity ID"*/,"Employee Name"});
 	private static final List<String> typeReport=Arrays.asList(new String[]{"PDF","Other","Excel"});
 	private static final List<String> typeActivity=Arrays.asList(new String[]{"Active","Inactive","All"});
 
@@ -272,55 +270,22 @@ public class RptAgeAsOnDate extends Window
 		}
 		try
 		{
-			String query= " select vEmployeeId,vFingerId,vEmployeeName,vEmployeeCode,vProximityId from tbEmpOfficialPersonalInfo " +
-					" where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' and " +
-					" vEmployeeType like '"+empType+"' ";
-			if(opgEmployee.getValue().toString().equals("Employee ID"))
-			{
-				query += "order by vEmployeeCode";
-				List <?> lst=session.createSQLQuery(query).list();
+			String query= " select vEmployeeId,vEmployeeCode,vEmployeeName from tbEmpOfficialPersonalInfo " +
+					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' and vEmployeeType like '"+empType+"' " +
+					"order by vEmployeeCode";
 
-				if(!lst.isEmpty())
-				{
-					for(Iterator <?> itr=lst.iterator();itr.hasNext();)
-					{
-						Object [] element=(Object[])itr.next();
-						cmbEmployeeName.addItem(element[0]);
-						cmbEmployeeName.setItemCaption(element[0], element[3].toString());
-					}
-				}
-			}
-
-			/*	if(opgEmployee.getValue().toString().equals("Finger/Proximity ID"))
-			{
-				List <?> lst=session.createSQLQuery(query).list();
-				if(!lst.isEmpty())
-				{
-					for(Iterator <?> itr=lst.iterator();itr.hasNext();)
-					{
-						Object [] element=(Object[])itr.next();
-						cmbEmployeeName.addItem(element[0]);
-						cmbEmployeeName.setItemCaption(element[0], element[1].toString()+"/"+element[4].toString());
-					}
-				}
-			}*/
-
-			if(opgEmployee.getValue().toString().equals("Employee Name"))
-			{
-				query += "order by vEmployeeName";
-				List <?> lst=session.createSQLQuery(query).list();
-
-				if(!lst.isEmpty())
-				{
-					for(Iterator <?> itr=lst.iterator();itr.hasNext();)
-					{
-						Object [] element=(Object[])itr.next();
-						cmbEmployeeName.addItem(element[0]);
-						cmbEmployeeName.setItemCaption(element[0], element[2].toString());
-					}
-				}
-			}
 			System.out.println(query);
+			
+			List <?> lst=session.createSQLQuery(query).list();
+			if(!lst.isEmpty())
+			{
+				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
+				{
+					Object [] element=(Object[])itr.next();
+					cmbEmployeeName.addItem(element[0]);
+					cmbEmployeeName.setItemCaption(element[0], element[1]+"-"+element[2]);
+				}
+			}
 		}
 		catch (Exception exp)
 		{
@@ -565,24 +530,6 @@ public class RptAgeAsOnDate extends Window
 			}
 		});
 
-		opgEmployee.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				cmbEmployeeName.removeAllItems();
-				chkEmployeeAll.setValue(false);
-				cmbEmployeeName.setEnabled(false);
-				if(cmbEmpType.getValue()!=null || chkEmployeeTypeAll.booleanValue())
-				{
-					if(opgEmployee.getValue()!=null)
-					{
-						cmbEmployeeNameDataAdd();
-						cmbEmployeeName.setEnabled(true);
-					}
-				}
-			}
-		});
-
 		chkEmployeeAll.addListener(new ClickListener()
 		{
 			public void buttonClick(ClickEvent event)
@@ -775,17 +722,12 @@ public class RptAgeAsOnDate extends Window
 		chkEmployeeTypeAll.setImmediate(true);
 		mainLayout.addComponent(chkEmployeeTypeAll,"top:110px; left:265px;");
 
-		opgEmployee = new OptionGroup("",employee);
-		opgEmployee.setImmediate(true);
-		opgEmployee.setStyleName("horizontal");
-		opgEmployee.setValue("Employee ID");
-		mainLayout.addComponent(opgEmployee, "top:140px; left:30px;");
-
 		cmbEmployeeName = new ComboBox();
 		cmbEmployeeName.setImmediate(true);
 		cmbEmployeeName.setWidth("200px");
 		mainLayout.addComponent(new Label("Employee : "), "top:170px; left:30.0px;");
 		mainLayout.addComponent(cmbEmployeeName, "top:168px; left:140.0px;");
+		cmbEmployeeName.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 
 		chkEmployeeAll = new CheckBox("All");
 		chkEmployeeAll.setImmediate(true);
