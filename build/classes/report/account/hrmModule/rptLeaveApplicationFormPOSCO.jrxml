@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptLeaveApplicationForm" language="groovy" pageWidth="595" pageHeight="842" columnWidth="541" leftMargin="29" rightMargin="25" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="507"/>
+	<property name="ireport.y" value="365"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
 	<parameter name="userName" class="java.lang.String"/>
@@ -509,7 +509,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="13"/>
 				</textElement>
-				<text><![CDATA[Leave Taken Status]]></text>
+				<text><![CDATA[Leave Remaining Status]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="236" y="173" width="19" height="18"/>
