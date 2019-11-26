@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" columnCount="2" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="493" leftMargin="11" rightMargin="11" topMargin="11" bottomMargin="14">
 	<property name="ireport.zoom" value="1.2100000000000046"/>
-	<property name="ireport.x" value="40"/>
-	<property name="ireport.y" value="13"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="76"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
 	<parameter name="email" class="java.lang.String"/>
@@ -1034,15 +1034,8 @@
 				</textElement>
 				<text><![CDATA[Received By]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="411" y="518" width="38" height="15"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy hh:mm:ss aaa">
-				<reportElement x="4" y="518" width="68" height="15"/>
+				<reportElement x="4" y="518" width="108" height="15"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7"/>
@@ -1050,26 +1043,19 @@
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{SysDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="72" y="518" width="72" height="15"/>
+				<reportElement x="112" y="518" width="81" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{username}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="144" y="518" width="267" height="15" forecolor="#000000"/>
+				<reportElement x="193" y="518" width="298" height="15" forecolor="#000000"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<text><![CDATA[Developed by: E-Vision Software Ltd. ||  Mob:01755-506044 || www.eslctg.com]]></text>
 			</staticText>
-			<textField evaluationTime="Report">
-				<reportElement x="449" y="518" width="40" height="15"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="2" y="0" width="1" height="537"/>
 				<graphicElement>
