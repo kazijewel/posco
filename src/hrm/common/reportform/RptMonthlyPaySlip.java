@@ -420,14 +420,28 @@ public class RptMonthlyPaySlip extends Window
 		try
 		{
 			
-			String query = "select * from tbMonthlySalary " +
-					" where vUnitId='"+cmbUnit.getValue().toString()+"' "+
-					" and vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' "+
-					" and vSectionId like '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"' "+
+			
+			String query = 
+			
+					" select b.vEmployeeId,b.vEmployeeCode,b.vEmployeeName,a.vDesignationName,"+
+					" b.dJoiningDate,a.vUnitName,a.vDepartmentName,a.vEmployeeType,a.vBankName,a.vBranchName,"+
+					" a.vAccountNo,a.vRoutingNo,mBasic,mPerDaySalary,mOtTaka,mHouseRent,mMobileAllowance,mOtherEarning,"+
+					" mIncomeTax,mOtherDeduction,mNetPayableTaka,iWorkingDay,iHoliday,iLeaveDay,iLeaveWithoutPay,"+
+					" iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate,"+
+					" (select TOP(1)iCasualLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iCasualLeave,"+
+					" (select TOP(1)iSickLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iSickLeave,"+
+					" (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='1' "+
+					" and iPrimary=1 and iFinal=1 and iHR=1)iCLEnjoyed,"+
+					" (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='2' "+
+					" and iPrimary=1 and iFinal=1 and iHR=1)iSLEnjoyed "+
+					" from tbMonthlySalary a inner join tbEmpOfficialPersonalInfo b on a.vEmployeeID=b.vEmployeeId"+
+					" where a.vUnitId='"+cmbUnit.getValue().toString()+"' "+
+					" and a.vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' "+
+					" and a.vSectionId like '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"' "+
 					" and YEAR(dSalaryDate)=YEAR('"+dFormat.format(cmbSalaryMonth.getValue())+"') " +
 					" and MONTH(dSalaryDate)=MONTH('"+dFormat.format(cmbSalaryMonth.getValue())+"') " +
-					" and vEmployeeId like '"+(chkEmployeeName.booleanValue()?"%":cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"' "+
-					" order by vEmployeeName";
+					" and b.vEmployeeId like '"+(chkEmployeeName.booleanValue()?"%":cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"' "+
+					" order by b.vEmployeeName";
 			
 			
 			System.out.println("reportShow: "+query);
@@ -441,8 +455,7 @@ public class RptMonthlyPaySlip extends Window
 				hm.put("phone", sessionBean.getCompanyContact());
 				hm.put("username", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
 				hm.put("section",cmbSection.getItemCaption(cmbSection.getValue()));
-				hm.put("month",fMonth.format(cmbSalaryMonth.getValue()));
-				hm.put("year",fYear.format(cmbSalaryMonth.getValue()));
+				hm.put("month",fMonth.format(cmbSalaryMonth.getValue())+"-"+fYear.format(cmbSalaryMonth.getValue()));
 				hm.put("SysDate",reportTime.getTime);
 				hm.put("logo", sessionBean.getCompanyLogo());
 				hm.put("sql", query);
