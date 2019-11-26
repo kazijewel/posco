@@ -249,6 +249,7 @@ public class EmployeeInformation extends Window
 				textClear();
 				btnInit(false);
 				tabInit(true);
+				firstTab.dJoiningDate.setEnabled(true);
 				firstTab.chkOtEnable.setValue(true);
 				isEdit = false;
 				isFind = false;
@@ -414,6 +415,7 @@ public class EmployeeInformation extends Window
 				textClear();
 				btnInit(true);
 				tabInit(false);
+				firstTab.dJoiningDate.setEnabled(true);
 				firstTab.chkOtEnable.setValue(false);
 
 				isEdit = false;
@@ -447,6 +449,7 @@ public class EmployeeInformation extends Window
 					isUpdate = true;
 					btnInit(false);
 					tabInit(true);
+					firstTab.dJoiningDate.setEnabled(false);
 					
 					/*firstTab.setEnabled(true);
 					secondTab.setEnabled(true);
@@ -479,6 +482,7 @@ public class EmployeeInformation extends Window
 					isEdit = true;
 
 					selectEmployeeInformation(ListSearch.getValue().toString());
+					firstTab.dJoiningDate.setEnabled(false);
 
 					if(birthImageLoc.equals("0"))
 					{firstTab.btnBirthPreview.setCaption("attach");}
