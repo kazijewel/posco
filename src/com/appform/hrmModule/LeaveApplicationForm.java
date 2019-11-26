@@ -429,6 +429,16 @@ public class LeaveApplicationForm extends Window
 			}
 		});
 
+
+
+		dApplicationDate.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				getLeaveId();
+			}
+		});
+		
 		cmbLeaveType.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -446,13 +456,14 @@ public class LeaveApplicationForm extends Window
 						{/*System.out.println("Error "+e);*/}
 					}
 					
-					if(cmbLeaveType.getValue()!=null)
+					if(cmbLeaveType.getValue()!=null && isFind==false)
 					{
 						if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
 						{						
 							cmbELType.setEnabled(true);
 							int iELeave=0;
-							iELeave=Integer.parseInt(txtAnualLeave.getValue().toString());
+							iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
+							System.out.println("cmbLeaveType iELeave: "+iELeave);
 							
 							if(iELeave>0)
 							{
@@ -474,14 +485,6 @@ public class LeaveApplicationForm extends Window
 			}
 		});
 
-		dApplicationDate.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				getLeaveId();
-			}
-		});
-
 		dLeaveFrom.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -489,14 +492,14 @@ public class LeaveApplicationForm extends Window
 				tableClear();
 				selectLeaveDays();
 
-				if(cmbLeaveType.getValue()!=null)
+				if(cmbLeaveType.getValue()!=null && isFind==false)
 				{
 					if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
 					{						
 						cmbELType.setEnabled(true);
 						int iELeave=0,iDuration;
-						iELeave=Integer.parseInt(txtAnualLeave.getValue().toString());
-						iDuration=Integer.parseInt(txtDuration.getValue().toString());
+						iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
+						iDuration=Integer.parseInt(txtDuration.getValue()+"");
 						
 						if(iELeave<iDuration)
 						{
@@ -524,14 +527,14 @@ public class LeaveApplicationForm extends Window
 				System.out.println("dLeaveTo");
 				selectLeaveDays();
 
-				if(cmbLeaveType.getValue()!=null)
+				if(cmbLeaveType.getValue()!=null && isFind==false)
 				{
 					if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
 					{						
 						cmbELType.setEnabled(true);
 						int iELeave=0,iDuration;
-						iELeave=Integer.parseInt(txtAnualLeave.getValue().toString());
-						iDuration=Integer.parseInt(txtDuration.getValue().toString());
+						iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
+						iDuration=Integer.parseInt(txtDuration.getValue()+"");
 						
 						if(iELeave<iDuration)
 						{
@@ -824,7 +827,7 @@ public class LeaveApplicationForm extends Window
 		}
 		else
 		{
-			showNotification("Warning!","Leave is approved/canceled, try new one.",Notification.TYPE_WARNING_MESSAGE);
+			showNotification("Warning!","Leave is approved, try new one or Delete",Notification.TYPE_WARNING_MESSAGE);
 		}
 	}
 
