@@ -84,7 +84,7 @@ public class SessionBean
 	public static String employeeJoin = "D:/Tomcat 7.0/webapps/report/SamPolymer/employee/join/";
 	public static String vehicleMaintenBillImage = "D:/Tomcat 7.0/webapps/report/SamPolymer/vehicleBill/";
 	public static String catlogue ="D:/Tomcat 7.0/webapps/report/attachment/";
-	public static String emailPath = "D:/Tomcat 7.0/webapps/report/ISL/Notice/";
+	public static String emailPath = "D:/Tomcat 7.0/webapps/report/posco/";
 	public static String Purchase;
 	public static String Requisition;
 	public static String Attachment;

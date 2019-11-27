@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -44,6 +46,7 @@ import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -61,10 +64,10 @@ public class sendPayslip extends Window {
 
 	// private Panel vList = new Panel();
 	public Table table = new Table();
-	private ArrayList<CheckBox> vNo = new ArrayList<CheckBox>();
-	public ArrayList<Label> tbMasterId = new ArrayList<Label>();
-	public ArrayList<Label> tbMemberId = new ArrayList<Label>();
-	public ArrayList<Label> tbMemerName = new ArrayList<Label>();
+	private ArrayList<CheckBox> tbchk = new ArrayList<CheckBox>();
+	public ArrayList<Label> tbEmployeeId = new ArrayList<Label>();
+	public ArrayList<Label> tbEmployeeCode = new ArrayList<Label>();
+	public ArrayList<Label> tbEmployeeName = new ArrayList<Label>();
 	public ArrayList<Label> tbEmailId = new ArrayList<Label>();
 	//private ComboBox cmbMemberType = new ComboBox("Employee Type :");
 	private TextRead txtEmailId;
@@ -449,9 +452,9 @@ public class sendPayslip extends Window {
 				{
 					Object[] element = (Object[]) iter.next();
 					tbEmailId.get(index).setValue(element[3]);
-					tbMasterId.get(index).setValue(element[0]);
-					tbMemberId.get(index).setValue(element[1]);
-					tbMemerName.get(index).setValue(element[2]);
+					tbEmployeeId.get(index).setValue(element[0]);
+					tbEmployeeCode.get(index).setValue(element[1]);
+					tbEmployeeName.get(index).setValue(element[2]);
 
 					if (index == tbEmailId.size() - 1) 
 					{
@@ -481,22 +484,36 @@ public class sendPayslip extends Window {
 	}
 
 	public void tablerow(int ar) {
-		vNo.add(ar, new CheckBox());
-		vNo.get(ar).setWidth("100%");
+		tbchk.add(ar, new CheckBox());
+		tbchk.get(ar).setWidth("100%");
 
-		tbMemberId.add(ar, new Label());
-		tbMemberId.get(ar).setWidth("100%");
+		tbEmployeeCode.add(ar, new Label());
+		tbEmployeeCode.get(ar).setWidth("100%");
+		tbEmployeeCode.get(ar).addListener(new ValueChangeListener() {
+			
+			public void valueChange(ValueChangeEvent event) {
+				int x=0;
+				table.setColumnFooter("#", "");
+				for(int i=0;i<tbEmployeeCode.size();i++)
+				{
+					if(!tbEmployeeCode.get(i).getValue().toString().isEmpty())
+					{
+						table.setColumnFooter("#", new DecimalFormat("#").format(++x));
+					}
+				}
+			}
+		});
 
-		tbMemerName.add(ar, new Label());
-		tbMemerName.get(ar).setWidth("100%");
+		tbEmployeeName.add(ar, new Label());
+		tbEmployeeName.get(ar).setWidth("100%");
 
-		tbMasterId.add(ar, new Label());
-		tbMasterId.get(ar).setWidth("100%");
+		tbEmployeeId.add(ar, new Label());
+		tbEmployeeId.get(ar).setWidth("100%");
 
 		tbEmailId.add(ar, new Label());
 		tbEmailId.get(ar).setWidth("100%");
 
-		table.addItem(new Object[] { vNo.get(ar), tbMemberId.get(ar),tbMemerName.get(ar), tbMasterId.get(ar), tbEmailId.get(ar) },ar);
+		table.addItem(new Object[] { tbchk.get(ar), tbEmployeeCode.get(ar),tbEmployeeName.get(ar), tbEmployeeId.get(ar), tbEmailId.get(ar) },ar);
 
 	}
 
@@ -510,12 +527,12 @@ public class sendPayslip extends Window {
 	}
 
 	private void tableClear() {
-		for (int i = 0; i < tbMemberId.size(); i++) {
-			tbMemberId.get(i).setValue("");
-			tbMasterId.get(i).setValue("");
-			tbMemerName.get(i).setValue("");
+		for (int i = 0; i < tbEmployeeCode.size(); i++) {
+			tbEmployeeCode.get(i).setValue("");
+			tbEmployeeId.get(i).setValue("");
+			tbEmployeeName.get(i).setValue("");
 			tbEmailId.get(i).setValue("");
-			vNo.get(i).setValue(false);
+			tbchk.get(i).setValue(false);
 		}
 	}
 
@@ -531,7 +548,7 @@ public class sendPayslip extends Window {
 			System.out.printf("3");
 			System.out.printf("f"+f);
 			String MasterId="";
-			log = new FileWriter("D:/Tomcat 7.0/webapps/report/TechniPlex/tp/log.txt");
+			log = new FileWriter(sessionBean.emailPath+"Email/"+"log.txt");
 			System.out.printf("log"+log);
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			Transaction tx = session.beginTransaction();
@@ -546,7 +563,7 @@ public class sendPayslip extends Window {
 			pass=txtEmailPass.getValue().toString();
 			System.out.printf("\nHost"+from);
 			System.out.printf("\nPass"+pass);
-
+			
 			Properties props = System.getProperties();
 			props.put("mail.smtp.starttls.enable", "true"); // added this line
 			props.put("mail.smtp.host", host);
@@ -554,22 +571,22 @@ public class sendPayslip extends Window {
 			props.put("mail.smtp.password", pass);
 			props.put("mail.smtp.port", "587");
 			props.put("mail.smtp.auth", "true");
-
-			for(int i=0;i<vNo.size();i++)
+			String EmailTo="";
+			for(int i=0;i<tbchk.size();i++)
 			{
-				if(Boolean.valueOf(vNo.get(i).getValue().toString()))
+				if(Boolean.valueOf(tbchk.get(i).getValue().toString()) && !tbEmailId.get(i).getValue().toString().isEmpty() && isValid(tbEmailId.get(i).getValue().toString()))
 				{
 				//reportGenerate
 				javax.mail.Session esession = javax.mail.Session.getDefaultInstance(props, null);
-				MasterId=tbMasterId.get(i).getValue().toString();
-				/*for(int j=0;j<vNo.size();j++)
-				{*/
+				MasterId=tbEmployeeId.get(i).getValue().toString();
+				
 					System.out.printf("4");
 					System.out.printf("\n4.1"+MasterId);
-					reportGenerate(MasterId,sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+dSalaryMonth.getValue()+".pdf");
-					
+					System.out.printf("\n4.2"+sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+fMonth.format(dSalaryMonth.getValue())+"-"+fYear.format(dSalaryMonth.getValue())+".pdf");
+					reportGenerate(MasterId,sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+fMonth.format(dSalaryMonth.getValue())+"-"+fYear.format(dSalaryMonth.getValue())+".pdf");
+
 				
-					String EmailTo=tbEmailId.get(i).getValue().toString();
+					EmailTo=tbEmailId.get(i).getValue().toString();
 					MimeMessage message = new MimeMessage(esession);
 					message.setFrom(new InternetAddress(from));
 					message.addRecipient(Message.RecipientType.TO, new InternetAddress(EmailTo));
@@ -585,16 +602,16 @@ public class sendPayslip extends Window {
 					System.out.printf("8");
 					// Part two is attachment
 					messageBodyPart = new MimeBodyPart();
-					DataSource source = new FileDataSource(sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+dSalaryMonth.getValue()+".pdf");
+					DataSource source = new FileDataSource(sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+fMonth.format(dSalaryMonth.getValue())+"-"+fYear.format(dSalaryMonth.getValue())+".pdf");
 					messageBodyPart.setDataHandler( new DataHandler(source));
-					messageBodyPart.setFileName(sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+dSalaryMonth.getValue()+".pdf");
+					//messageBodyPart.setFileName(sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+dLastDate.getValue().toString()+".pdf");
+					messageBodyPart.setFileName(tbEmployeeCode.get(i).getValue()+","+"Pay Slip-"+fMonth.format(dSalaryMonth.getValue())+"-"+fYear.format(dSalaryMonth.getValue())+".pdf");
 					multipart.addBodyPart(messageBodyPart);
 					System.out.printf("9");
 					// Put parts in message
 					message.setContent(multipart);
 					System.out.printf("10");
 					Transport transport = esession.getTransport("smtp");
-					System.out.println(sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+dSalaryMonth.getValue()+".pdf");
 					System.out.printf("11");
 					System.out.printf("host "+host+" from "+from+" pass "+pass);
 					transport.connect(host, from, pass);
@@ -603,67 +620,109 @@ public class sendPayslip extends Window {
 					System.out.printf("13");
 					transport.close();
 					System.out.printf("14");
-					//log.write("Info:"+"E-mail Send for client id: "+MasterId+"\n");
+					log.write("Info:"+"E-mail Send for client id: "+MasterId+"\n");
 					System.out.printf("15");
-				this.getParent().showNotification("E-mail Send Successfully.");	
+				/*}*/
+				this.getParent().showNotification("E-mail Send Successfully.");
+				tbchk.get(i).setValue(false);	
 			}
 		}
 		}
 		catch(Exception exp){
-			showNotification("mail send :"+exp,Notification.TYPE_ERROR_MESSAGE);
+			try {
+				log.write("Error:"+exp+"\n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.getParent().showNotification(
+					"Error",
+					exp+"",
+					Notification.TYPE_ERROR_MESSAGE);
 		}
-
+		finally{
+			try {
+				log.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
-
-	private void reportGenerate(String iclientId, String fpath) throws HibernateException, JRException, IOException 
-	{	
+	public boolean isValid(String email) {
+		String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
+	   }
+	
+	private void reportGenerate(String iclientId,String fpath) throws HibernateException, JRException, IOException{
+		System.out.printf("6");
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 		Transaction tx = session.beginTransaction();
-
-		String DepartmentId = "%";
-		String report = "";
-		String sql = "";
-		
-		if(!chkDepartmentAll.booleanValue())
-		{
-			DepartmentId=cmbDepartment.getValue().toString();
-		}
-
-		sql="select * from funPaySlip ('"+cmbUnit.getValue().toString()+"', '"+dSalaryMonth.getValue()+"','"+DepartmentId+"','"+iclientId+"') " +
-				"order by vDepartmentName,iRank,dJoiningDate";
-
 		HashMap <String,Object> hm = new HashMap <String,Object> ();
 		hm.put("company", sessionBean.getCompany());
 		hm.put("address", sessionBean.getCompanyAddress());
 		hm.put("phone", sessionBean.getCompanyContact());
 		hm.put("username", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
 		hm.put("section",cmbDepartment.getItemCaption(cmbDepartment.getValue()));
-		hm.put("month",fMonth.format(dSalaryMonth.getValue()));
+		hm.put("month",fMonth.format(dSalaryMonth.getValue())+"-"+fYear.format(dSalaryMonth.getValue()));
 		hm.put("year",fYear.format(dSalaryMonth.getValue()));
 		hm.put("SysDate",reportTime.getTime);
-		hm.put("logo", txtPath.getValue().toString().isEmpty()?"0":txtPath.getValue().toString());
-		hm.put("sql", sql);
+		hm.put("logo", sessionBean.getCompanyLogo());
+	
 		hm.put("Unit", cmbUnit.getItemCaption(cmbUnit.getValue()));
 		
-		FileOutputStream of = new FileOutputStream(fpath);
+		
+String query = 
+				
+				" select b.vEmployeeId,b.vEmployeeCode,b.vEmployeeName,a.vDesignationName,"+
+				" b.dJoiningDate,a.vUnitName,a.vDepartmentName,a.vEmployeeType,a.vBankName,a.vBranchName,"+
+				" a.vAccountNo,a.vRoutingNo,mBasic,mPerDaySalary,mOtTaka,mHouseRent,mMobileAllowance,mOtherEarning,"+
+				" mIncomeTax,mOtherDeduction,mNetPayableTaka,iWorkingDay,iHoliday,iLeaveDay,iLeaveWithoutPay,"+
+				" iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate,"+
+				" (select TOP(1)iCasualLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iCasualLeave,"+
+				" (select TOP(1)iSickLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iSickLeave,"+
+				" (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='1' "+
+				" and iPrimary=1 and iFinal=1 and iHR=1)iCLEnjoyed,"+
+				" (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='2' "+
+				" and iPrimary=1 and iFinal=1 and iHR=1)iSLEnjoyed "+
+				" from tbMonthlySalary a inner join tbEmpOfficialPersonalInfo b on a.vEmployeeID=b.vEmployeeId"+
+				" where a.vUnitId='"+cmbUnit.getValue().toString()+"' "+
+				" and a.vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' "+
+				" and a.vSectionId like '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"' "+
+				" and YEAR(dSalaryDate)=YEAR('"+dFormat.format(dSalaryMonth.getValue())+"') " +
+				" and MONTH(dSalaryDate)=MONTH('"+dFormat.format(dSalaryMonth.getValue())+"') " +
+				" and b.vEmployeeId like '"+iclientId+"' "+
+				" order by b.vEmployeeName";
 
-		JasperRunManager.runReportToPdfStream(getClass().getClassLoader().getResourceAsStream("report/account/hrmModule/rptpayslip.jasper"), of, hm,session.connection());
+
+		System.out.println("Report :"+query);     
+		hm.put("sql", query);
+		System.out.printf("\npath"+fpath);
+		FileOutputStream of = new FileOutputStream(fpath);
+		
+		JasperRunManager.runReportToPdfStream(getClass().getClassLoader().getResourceAsStream("report/account/hrmModule/rptpayslipEmail.jasper"),
+				of, hm, session.connection());
 		tx.commit();
 		of.close();
+		log.write("Info:"+"Report generated for client id: "+iclientId+"\n");
+			/*}
+		}*/
 	}
-
 	private void allBtnAction() {
 		if (isAllSelect) {
 			allBtn.setCaption("Select All");
-			for (int i = 0; i < tbMemerName.size(); i++)
-				if (!tbMemerName.get(i).getValue().toString().isEmpty()) {
-					vNo.get(i).setValue(false);
+			for (int i = 0; i < tbEmployeeName.size(); i++)
+				if (!tbEmployeeName.get(i).getValue().toString().isEmpty()) {
+					tbchk.get(i).setValue(false);
 				}
 		} else {
 			allBtn.setCaption("Deselect All");
-			for (int i = 0; i < tbMemerName.size(); i++)
-				if (!tbMemerName.get(i).getValue().toString().isEmpty()) {
-					vNo.get(i).setValue(true);
+			for (int i = 0; i < tbEmployeeName.size(); i++)
+				if (!tbEmployeeName.get(i).getValue().toString().isEmpty()) {
+					tbchk.get(i).setValue(true);
 				}
 		}
 		isAllSelect = !isAllSelect;
@@ -794,6 +853,7 @@ public class sendPayslip extends Window {
 		table.setColumnCollapsed("Master Id", true);
 		table.addContainerProperty("Email Id", Label.class, new Label());
 		table.setColumnWidth("Email Id", 235);
+		table.setFooterVisible(true);
 		table.setColumnCollapsed("Email Id", true);
 		tableini();
 
