@@ -55,9 +55,6 @@ public class EditMonthlySalary extends Window
 	private ComboBox csbEmployee;
 	private CheckBox chkEmployeeAll,chkDepartmentAll,chkSectionAll;
 
-	private Label lblNoteSalary=new Label("HR: House Rent,  Conv.: Conveyance,  MA: Medical Allowance,  Attn. Bonus: Present Bonus ");
-	private Label lblNoteSalary2=new Label("Late. Att: Late Attendance,  Avd. Sal: Advance Salary/Other");
-
 	private ArrayList<NativeButton> btnDel=new ArrayList<NativeButton>();
 	private ArrayList<Label> lblsa = new ArrayList<Label>();
 	private ArrayList<Label> lblAutoEmployeeID=new ArrayList<Label>();
@@ -68,7 +65,6 @@ public class EditMonthlySalary extends Window
 
 	private ArrayList<Label> lblBasic = new ArrayList<Label>();
 	private ArrayList<Label> lblHouseRent = new ArrayList<Label>();
-	private ArrayList<Label> lblConveyance = new ArrayList<Label>();
 	private ArrayList<Label> lblMedicalAll = new ArrayList<Label>();
 	private ArrayList<Label> lblOthersAll = new ArrayList<Label>();
 	private ArrayList<Label> lblSpecialAll = new ArrayList<Label>();
@@ -482,7 +478,6 @@ public class EditMonthlySalary extends Window
 
 						lblBasic.get(i).setValue(cs.setComma(Double.parseDouble(element[5].toString())));
 						lblHouseRent.get(i).setValue(cs.setComma(Double.parseDouble(element[6].toString())));
-						lblConveyance.get(i).setValue(cs.setComma(Double.parseDouble(element[7].toString())));
 						lblMedicalAll.get(i).setValue(cs.setComma(Double.parseDouble(element[8].toString())));
 						lblOthersAll.get(i).setValue(cs.setComma(Double.parseDouble(element[9].toString())));
 						lblSpecialAll.get(i).setValue(cs.setComma(Double.parseDouble(element[10].toString())));
@@ -789,12 +784,10 @@ public class EditMonthlySalary extends Window
 		csbUnit.setEnabled(!b);
 		csbDepartment.setEnabled(!b);
 		csbSection.setEnabled(!b);
-		lblNoteSalary.setEnabled(!b);
 		csbEmployee.setEnabled(!b);
 		chkDepartmentAll.setEnabled(!b);
 		chkSectionAll.setEnabled(!b);
 		chkEmployeeAll.setEnabled(!b);
-		lblNoteSalary2.setEnabled(!b);
 		table.setEnabled(!b);
 		chkEmployeeAll.setValue(false);
 		if(isUpdate)
@@ -834,7 +827,6 @@ public class EditMonthlySalary extends Window
 			lblDesignation.get(i).setValue("");
 			lblBasic.get(i).setValue("");
 			lblHouseRent.get(i).setValue("");
-			lblConveyance.get(i).setValue("");
 			lblMedicalAll.get(i).setValue("");
 			lblOthersAll.get(i).setValue("");
 			lblSpecialAll.get(i).setValue("");
@@ -881,7 +873,6 @@ public class EditMonthlySalary extends Window
 				
 				lblBasic.get(ar).setValue("");
 				lblHouseRent.get(ar).setValue("");
-				lblConveyance.get(ar).setValue("");
 				lblMedicalAll.get(ar).setValue("");
 				lblOthersAll.get(ar).setValue("");
 				lblSpecialAll.get(ar).setValue("");
@@ -914,7 +905,6 @@ public class EditMonthlySalary extends Window
 							
 							lblBasic.get(rowcount).setValue(lblBasic.get(rowcount+1).getValue().toString());
 							lblHouseRent.get(rowcount).setValue(lblHouseRent.get(rowcount+1).getValue().toString());
-							lblConveyance.get(rowcount).setValue(lblConveyance.get(rowcount+1).getValue().toString());
 							lblMedicalAll.get(rowcount).setValue(lblMedicalAll.get(rowcount+1).getValue().toString());
 							lblOthersAll.get(rowcount).setValue(lblOthersAll.get(rowcount+1).getValue().toString());
 							lblSpecialAll.get(rowcount).setValue(lblSpecialAll.get(rowcount+1).getValue().toString());
@@ -940,7 +930,6 @@ public class EditMonthlySalary extends Window
 							
 							lblBasic.get(rowcount+1).setValue("");
 							lblHouseRent.get(rowcount+1).setValue("");
-							lblConveyance.get(rowcount+1).setValue("");
 							lblMedicalAll.get(rowcount+1).setValue("");
 							lblOthersAll.get(rowcount+1).setValue("");
 							lblSpecialAll.get(rowcount+1).setValue("");
@@ -990,9 +979,6 @@ public class EditMonthlySalary extends Window
 
 		lblHouseRent.add(ar, new Label());
 		lblHouseRent.get(ar).setWidth("100%");
-
-		lblConveyance.add(ar, new Label());
-		lblConveyance.get(ar).setWidth("100%");
 
 		lblMedicalAll.add(ar, new Label());
 		lblMedicalAll.get(ar).setWidth("100%");
@@ -1131,10 +1117,10 @@ public class EditMonthlySalary extends Window
 		TotalCalculation(ar);
 
 		table.addItem(new Object[]{btnDel.get(ar),lblsa.get(ar),lblAutoEmployeeID.get(ar),lblEmployeeID.get(ar),lblFingerID.get(ar),
-				lblEmployeeName.get(ar),lblDesignation.get(ar),lblBasic.get(ar),lblHouseRent.get(ar),lblConveyance.get(ar),lblMedicalAll.get(ar),
+				lblEmployeeName.get(ar),lblDesignation.get(ar),lblBasic.get(ar),lblHouseRent.get(ar),lblMedicalAll.get(ar),
 				lblOthersAll.get(ar),lblSpecialAll.get(ar),lblGross.get(ar),lblAttBonus.get(ar),lblAbsAmount.get(ar),lblLwpAmount.get(ar),txtLoan.get(ar),
-				txtAdvSalary.get(ar),lblLateAttAmount.get(ar)/*,txtCompensation.get(ar),txtMobileBillExtra.get(ar)*/,lblIncomeTax.get(ar)
-				,txtTotal.get(ar),lblLoanId.get(ar),lblTransactionId.get(ar)},ar);
+				txtAdvSalary.get(ar),lblLateAttAmount.get(ar)/*,txtCompensation.get(ar),txtMobileBillExtra.get(ar)*/,lblIncomeTax.get(ar),
+				txtTotal.get(ar),lblLoanId.get(ar),lblTransactionId.get(ar)},ar);
 	}
 
 	private void TotalCalculation(int ar)
@@ -1260,10 +1246,6 @@ public class EditMonthlySalary extends Window
 		chkSectionAll.setHeight("-1px");
 		mainLayout.addComponent(chkSectionAll, "top:95px; left:435px;");
 
-		lblNoteSalary.setStyleName("lbltxtColor");
-		lblNoteSalary.setImmediate(true);
-		mainLayout.addComponent(lblNoteSalary, "top:120px;left:550.0px;");
-
 		lblEmployee = new Label("Employee ID :");
 		lblEmployee.setImmediate(false); 
 		lblEmployee.setWidth("-1px");
@@ -1285,28 +1267,21 @@ public class EditMonthlySalary extends Window
 		chkEmployeeAll.setWidth("-1px");
 		mainLayout.addComponent(chkEmployeeAll, "top:120px; left:435.0px;");
 
-		lblNoteSalary2.setStyleName("lbltxtColor");
-		lblNoteSalary2.setImmediate(true);
-		mainLayout.addComponent(lblNoteSalary2, "top:95px;left:550.0px;");
-
 		table.setWidth("1160px");
 		table.setHeight("340px");
 		table.setColumnCollapsingAllowed(true);
 
-		table.addContainerProperty("Del", NativeButton.class, new NativeButton());
-		table.setColumnWidth("Del", 30);
+		table.addContainerProperty("Remove", NativeButton.class, new NativeButton());
+		table.setColumnWidth("Remove", 30);
 
 		table.addContainerProperty("SL", Label.class, new Label());
 		table.setColumnWidth("SL", 20);
 
-		table.addContainerProperty("EMP ID", Label.class, new Label());
-		table.setColumnWidth("EMP ID", 60);
+		table.addContainerProperty("System ID", Label.class, new Label());
+		table.setColumnWidth("System ID", 60);
 
 		table.addContainerProperty("EMPLOYEE ID", Label.class, new Label());
 		table.setColumnWidth("EMPLOYEE ID", 60);
-
-		table.addContainerProperty("Finger ID", Label.class, new Label());
-		table.setColumnWidth("Finger ID", 60);
 
 		table.addContainerProperty("Employee Name", Label.class, new Label());
 		table.setColumnWidth("Employee Name",  150);
@@ -1314,8 +1289,8 @@ public class EditMonthlySalary extends Window
 		table.addContainerProperty("Designation", Label.class, new Label());
 		table.setColumnWidth("Designation", 100);
 
-		table.addContainerProperty("Basic", Label.class, new Label());
-		table.setColumnWidth("Basic", 60);
+		table.addContainerProperty("Gross Salary", Label.class, new Label());
+		table.setColumnWidth("Gross Salary", 60);
 
 		table.addContainerProperty("HR", Label.class, new Label());
 		table.setColumnWidth("HR", 60);
@@ -1326,71 +1301,42 @@ public class EditMonthlySalary extends Window
 		table.addContainerProperty("MA", Label.class, new Label());
 		table.setColumnWidth("MA", 60);
 		
-		//--------as per decesion Nazim Sir and NK group (Other ->Mobile) 13-03-2019--------//
 		table.addContainerProperty("Mobile", Label.class, new Label());
 		table.setColumnWidth("Mobile", 60);
-		//--------as per decesion Nazim Sir and NK group (Other ->Mobile) 13-03-2019--------//
 
-		table.addContainerProperty("Sepcial", Label.class, new Label());
-		table.setColumnWidth("Sepcial", 60);
+		table.addContainerProperty("Salary Taka", Label.class, new Label());
+		table.setColumnWidth("Salary Taka", 60);
 
-		table.addContainerProperty("Gross", Label.class, new Label());
-		table.setColumnWidth("Gross", 70);
+		table.addContainerProperty("O.T Taka", Label.class, new Label());
+		table.setColumnWidth("O.T Taka", 60);
 
-		table.addContainerProperty("Attn. Bonus", Label.class, new Label());
-		table.setColumnWidth("Attn. Bonus", 50);
+		table.addContainerProperty("Other Earning", Label.class, new Label());
+		table.setColumnWidth("Other Earning", 60);
 
-		table.addContainerProperty("Abs. Amount", Label.class, new Label());
-		table.setColumnWidth("Abs. Amount", 50);
+		table.addContainerProperty("Other Deduction", Label.class, new Label());
+		table.setColumnWidth("Other Deduction", 60);
 
-		table.addContainerProperty("LWP. Amount", Label.class, new Label());
-		table.setColumnWidth("LWP. Amount", 50);
+		table.addContainerProperty("Total Payable", Label.class, new Label());
+		table.setColumnWidth("Total Payable", 60);
 
-		table.addContainerProperty("Loan", AmountCommaSeperator.class, new AmountCommaSeperator());
-		table.setColumnWidth("Loan", 70);
+		table.addContainerProperty("Tax/AIT Deduct", Label.class, new Label());
+		table.setColumnWidth("Tax/AIT Deduct", 60);
 
-		table.addContainerProperty("Adv. Sal.", AmountCommaSeperator.class, new AmountCommaSeperator());
-		table.setColumnWidth("Adv. Sal.", 70);
+		table.addContainerProperty("Net Payable Taka", Label.class, new Label());
+		table.setColumnWidth("Net Payable Taka", 90);
 
-		table.addContainerProperty("Late. Att", Label.class, new Label());
-		table.setColumnWidth("Late. Att", 50);
-
-		/*table.addContainerProperty("Comp.", AmountCommaSeperator.class, new AmountCommaSeperator());
-		table.setColumnWidth("Comp.", 70);
-		
-		table.addContainerProperty("Mobile", AmountCommaSeperator.class, new AmountCommaSeperator());
-		table.setColumnWidth("Mobile", 50);*/
-
-		table.addContainerProperty("Income Tax", Label.class, new Label());
-		table.setColumnWidth("Income Tax", 60);
-
-		table.addContainerProperty("Total", Label.class, new Label());
-		table.setColumnWidth("Total", 90);
-
-		table.addContainerProperty("LoanId", Label.class, new Label());
-		table.setColumnWidth("LoanId", 60);
-
-		table.addContainerProperty("Transaction Id", Label.class, new Label());
-		table.setColumnWidth("Transaction Id", 60);
-
-		table.setColumnAlignments(new String[] {Table.ALIGN_CENTER,Table.ALIGN_CENTER,Table.ALIGN_LEFT,Table.ALIGN_LEFT,Table.ALIGN_LEFT, Table.ALIGN_LEFT,
+		/*table.setColumnAlignments(new String[] {Table.ALIGN_CENTER,Table.ALIGN_CENTER,Table.ALIGN_LEFT,Table.ALIGN_LEFT,Table.ALIGN_LEFT, Table.ALIGN_LEFT,
 				Table.ALIGN_LEFT, Table.ALIGN_RIGHT, Table.ALIGN_RIGHT,	Table.ALIGN_RIGHT, Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,
 				Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,Table.ALIGN_RIGHT, 
-				Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER,Table.ALIGN_LEFT,Table.ALIGN_CENTER,Table.ALIGN_RIGHT});
+				Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER,Table.ALIGN_LEFT,Table.ALIGN_CENTER,Table.ALIGN_RIGHT});*/
 
-		table.setColumnCollapsed("EMP ID", true);
-		table.setColumnCollapsed("Finger ID", true);
-
-		mainLayout.addComponent(table,"top:150px; left:20.0px;");
+		table.setColumnCollapsed("System ID", true);
 		table.setColumnCollapsed("HR", true);
 		table.setColumnCollapsed("Conv.", true);
 		table.setColumnCollapsed("MA", true);
 		table.setColumnCollapsed("Mobile", true);
-		table.setColumnCollapsed("Sepcial", true);
 
-		table.setColumnCollapsed("LoanId", true);
-		table.setColumnCollapsed("Transaction Id", true);
-		
+		mainLayout.addComponent(table,"top:150px; left:20.0px;");		
 		table.setStyleName("wordwrap-headers");
 		
 		mainLayout.addComponent(button,"bottom:15px; left:440.0px");
