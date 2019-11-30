@@ -68,10 +68,12 @@ import com.appform.hrmModule.LeaveBalanceEntry;
 import com.appform.hrmModule.LeaveTypeInfo;
 import com.appform.hrmModule.MealChargeInformation;
 import com.appform.hrmModule.NoticeInfo;
+import com.appform.hrmModule.OverTimeRequestApproval;
 import com.appform.hrmModule.OverTimeRequestForm;
 import com.appform.hrmModule.PresentBonusInformation;
 import com.appform.hrmModule.ProjectInformation;
 import com.appform.hrmModule.ReplacementLeaveApplication;
+import com.appform.hrmModule.ReplacementLeaveApproval;
 import com.appform.hrmModule.SectionInformation;
 import com.appform.hrmModule.ShiftInformation;
 import com.appform.hrmModule.UnitAndDepartmentWiseShiftInformation;
@@ -559,6 +561,10 @@ public class HrmMenu
 		{
 			addCaptionedItem("LEAVE APPROVAL STEP 3", leaveTransaction);
 		}
+		if(isValidMenu("ReplacementLeaveApproval"))
+		{
+			addCaptionedItem("REPLACEMENT LEAVE APPROVAL",leaveTransaction);
+		}
 	}
 	private void addleaveReport(Object leaveReport) {
 		if(isValidMenu("leaveapplicationform"))
@@ -765,6 +771,11 @@ public class HrmMenu
 		{
 			addCaptionedItem("OVER TIME REQUEST FORM", otTransaction);
 		}
+		if(isValidMenu("OverTimeRequestApproval"))
+		{
+			addCaptionedItem("OVER TIME REQUEST APPROVAL", otTransaction);
+		}
+		
 	}
 	private void addOTReportChild(Object otReport) {
 		
@@ -1013,6 +1024,14 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL STEP 3"))
 				{
 					showWindow(new LeaveApproveFinal(sessionBean,"LeaveApprovalStep3"),event.getItem(),"LeaveApprovalStep3","HRM MODULE","TRANSACTION");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("REPLACEMENT LEAVE APPROVAL"))
+				{
+					showWindow(new ReplacementLeaveApproval(sessionBean,"ReplacementLeaveApproval"),event.getItem(),"ReplacementLeaveApproval","HRM MODULE","TRANSACTION");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("OVER TIME REQUEST APPROVAL"))
+				{
+					showWindow(new OverTimeRequestApproval(sessionBean,"OverTimeRequestApproval"),event.getItem(),"OverTimeRequestApproval","HRM MODULE","TRANSACTION");
 				}
 				/*if(event.getItem().toString().equalsIgnoreCase("LEAVE CANCEL"))
 				{
