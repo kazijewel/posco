@@ -1015,11 +1015,12 @@ public class OverTimeRequestForm extends Window
 			String employeeCode=strToken.nextToken();
 			String employeeName=strToken.nextToken(); 
 			
+			String approved = "0";
 			
 			String query = "insert into tbOTRequest(vTransactionId,vEmployeeId,vEmployeeName,"
 					+ " vDesignationId,vDesignationName,vDepartmentId,vDepartmentName, "
 					+ " vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,"
-					+ " iHoliday,iNightTim,vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking)  "
+					+ " iHoliday,iNightTim,vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal)  "
 			        + " values('"+transactionID+"','"+cmbEmployee.getValue()+"','"+employeeName+"','"+cmbDesignationID.getValue()+"',"
                     + " '"+cmbDesignationID.getItemCaption(cmbDesignationID.getValue())+"','"+cmbDepartment.getValue()+"',"
                     + " '"+cmbDepartment.getItemCaption(cmbDepartment.getValue())+"',"
@@ -1036,7 +1037,7 @@ public class OverTimeRequestForm extends Window
                     + " '"+sessionBean.getUserId()+"',"
                     + " '"+sessionBean.getUserName()+"',"
                     + " '"+sessionBean.getUserIp()+"',GETDATE(),"
-                    + " '"+sessionBean.dfDb.format(dReplaceHoliday.getValue())+"','"+sessionBean.dfDb.format(dReplaceWorking.getValue())+"')";
+                    + " '"+sessionBean.dfDb.format(dReplaceHoliday.getValue())+"','"+sessionBean.dfDb.format(dReplaceWorking.getValue())+"','"+approved+"')";
 			
 			
 			session.createSQLQuery(query).executeUpdate();
