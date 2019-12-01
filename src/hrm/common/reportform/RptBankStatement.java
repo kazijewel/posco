@@ -61,7 +61,7 @@ public class RptBankStatement extends Window {
 	private OptionGroup opgReportType;
 	private static final List<String> reportType=Arrays.asList(new String[]{"Forwarding Letter","Encloser","Excel"});
 	private OptionGroup opgMoneyTransferType;
-	private static final List<String> accountType=Arrays.asList(new String[]{"Bank A/C","BFTN","Cash","Mobile A/C"});
+	private static final List<String> accountType=Arrays.asList(new String[]{"Bank A/C","BFTN"/*,"Cash","Mobile A/C"*/});
 	private CommonMethod cm;
 	private String menuId = "";
 	private OptionGroup RadioBtnGroup;
@@ -193,14 +193,7 @@ public class RptBankStatement extends Window {
 							{
 								if(txtAccountNo.getValue().toString().length()>0)
 								{
-									if(!opgMoneyTransferType.getValue().toString().equals("Cash"))
-									{
-										reportPreview();
-									}
-									else
-									{
-										showNotification("Warning", "Unable to show Bank Statement!!!", Notification.TYPE_WARNING_MESSAGE);
-									}
+									reportPreview();
 								}
 								else
 								{
@@ -278,29 +271,29 @@ public class RptBankStatement extends Window {
 				}
 				
 				String loc = getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/themes/temp/attendanceFolder";
-				String fname = "BankAdviceGEFU.xls";
+				String fname = "Salary_Advice_List_"+cmbMonthName.getItemCaption(cmbMonthName.getValue())+".xls";
 				String url = getWindow().getApplication().getURL()+"VAADIN/themes/temp/attendanceFolder/"+fname;
-				String strColName[]={"SL#","Account No","Dr_Cr","Amount","Currency","Home Brn","Narration"};
-				String Header="";
+				String strColName[]={"SL#","ID#","Name","A/C Number","Bank Name","Branch Name","Routing No.","Amount"};
 				String exelSql="";
 				String signature[]={""};
 			
-						
-						exelSql="select vAccountNo,vDrCr,CONVERT(float,mAmount)Amount,vCurrency,vHomeBrn,vNarration from funEncloserInExcel('"+cmbMonthName.getValue().toString()+"','"+bankId+"','"+opgMoneyTransferType.getValue().toString()+"','"+txtAccountNo.getValue()+"')";
-				
+				exelSql="select vEmployeeCode,vEmployeeName,vAccountNo,vBankName,vBranchName,vRoutingNo,CONVERT(float,CONVERT(Decimal(18,0),mNetPayableTaka))mNetPayableTaka from tbMonthlySalary "+
+						" where MONTH(dSalaryDate)=MONTH('"+cmbMonthName.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonthName.getValue()+"') and vBankId like '%' "+ 
+						" and vMoneyTransferType='"+opgMoneyTransferType.getValue().toString()+"'";
 				System.out.println(exelSql);
 				List <?> lst1=session.createSQLQuery(exelSql).list();				
 				String detailQuery[]=new String[lst1.size()];
-				String [] signatureOption = new String []{""};
-				String [] groupItem=new String[]{""};
-				Object [][] GroupElement=new Object[0][];
-				String [] GroupColName=new String[0];
+				String [] signatureOption = new String []{"Financial Administration Manager","Project Manager"};
+				String [] groupItem=new String[]{};
+				//Object [][] GroupElement=new Object[][];
+				String [] GroupColName=new String[]{};
 				int countInd=0;
 					for(Iterator<?> iter=lst1.iterator(); iter.hasNext();)
 					{
 					 Object [] element = (Object[])iter.next();	
-					 detailQuery[countInd]="select vAccountNo,vDrCr,CONVERT(float,mAmount)mAmount,vCurrency,vHomeBrn,vNarration from funEncloserInExcel('"+cmbMonthName.getValue().toString()+"','"+bankId+"','"+opgMoneyTransferType.getValue().toString()+"','"+txtAccountNo.getValue()+"')";
-						
+					 detailQuery[countInd]="select vEmployeeCode,vEmployeeName,vAccountNo,vBankName,vBranchName,vRoutingNo,CONVERT(float,CONVERT(Decimal(18,0),mNetPayableTaka))mNetPayableTaka from tbMonthlySalary "+
+								" where MONTH(dSalaryDate)=MONTH('"+cmbMonthName.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonthName.getValue()+"') and vBankId like '%' "+ 
+								" and vMoneyTransferType='"+opgMoneyTransferType.getValue().toString()+"'";
 						
 						countInd++;
 					 
@@ -308,8 +301,8 @@ public class RptBankStatement extends Window {
 					
 					 
 					 System.out.println("Details query :"+countInd);
-						new GenerateExcelReport(sessionBean, loc, url, fname, "Bank Advice GEFU", "Bank Advice GEFU",
-								Header, strColName, 2, groupItem, GroupColName, GroupElement, 1, detailQuery, 0, 0, "A4",
+						new GenerateExcelReport(sessionBean, loc, url, fname, "Salary Advice List "+cmbMonthName.getItemCaption(cmbMonthName.getValue()), "Salary Advice List "+cmbMonthName.getItemCaption(cmbMonthName.getValue()),
+								"", strColName, 2, groupItem, GroupColName, null, 1, detailQuery, 0, 0, "A4",
 								"Landscape",signatureOption,sessionBean.getCompany());
 						Window window = new Window();
 						getApplication().addWindow(window);
@@ -364,7 +357,9 @@ public class RptBankStatement extends Window {
 					{
 						bankId=cmbBankName.getValue().toString();
 					}
-					query="select * from funEncloser('"+cmbMonthName.getValue()+"','"+bankId+"','"+opgMoneyTransferType.getValue().toString()+"')";
+					query="select vEmployeeID,vEmployeeCode,vEmployeeName,vBankName,vBranchName,vRoutingNo,mNetPayableTaka,vAccountNo from tbMonthlySalary "+
+					" where MONTH(dSalaryDate)=MONTH('"+cmbMonthName.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonthName.getValue()+"') and vBankId like '%' "+ 
+					" and vMoneyTransferType='"+opgMoneyTransferType.getValue().toString()+"'";
 					
 					System.out.println(query);
 					

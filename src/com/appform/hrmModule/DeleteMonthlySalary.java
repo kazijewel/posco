@@ -133,7 +133,6 @@ public class DeleteMonthlySalary extends Window
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				
 				if(cmbUnit.getValue()!=null)
 				{
 					cmbDepartmentData();
@@ -382,14 +381,15 @@ public class DeleteMonthlySalary extends Window
 										"vDesignationId,vDesignationName,vEmployeeType,dJoiningDate,vUnitId,vUnitName,vDepartmentId,vDepartmentName,vSectionID,vSectionName," +
 										"iTotalDay,iHoliday,iWorkingDay,iPresentDay,iAbsentDay,iLeaveDay,iLeaveWithoutPay,mBasic,mHouseRent,mMobileAllowance,mGrossSalary," +
 										"mPerDaySalary,mSalaryTaka,iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate,mOtTaka,mTotalPayable," +
-										"mIncomeTax,mNetPayableTaka,mRevenueStamp,vMoneyTransferType,vBranchId,vBranchName,vBankId,vBankName,vRoutingNo,vAccountNo,vUDFlag," +
-										"vUserId,vUserName,vUserIP,dEntryTime" +
+										"mIncomeTax,mNetPayableTaka,mRevenueStamp,vMoneyTransferType,vBranchId,vBranchName,vBankId,vBankName,vAccountNo,vRoutingNo," +
+										"mOtherEarning,mOtherDeduction,vUDFlag,vUserId,vUserName,vUserIP,dEntryTime" +
 										") " +
 										"select dGenerateDate,dSalaryDate,vSalaryMonth,vSalaryYear,vEmployeeID,vEmployeeCode,vFingerId,vProximityID,vEmployeeName," +
 										"vDesignationId,vDesignationName,vEmployeeType,dJoiningDate,vUnitId,vUnitName,vDepartmentId,vDepartmentName,vSectionID,vSectionName," +
 										"iTotalDay,iHoliday,iWorkingDay,iPresentDay,iAbsentDay,iLeaveDay,iLeaveWithoutPay,mBasic,mHouseRent,mMobileAllowance,mGrossSalary," +
 										"mPerDaySalary,mSalaryTaka,iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate,mOtTaka,mTotalPayable," +
-										"mIncomeTax,mNetPayableTaka,mRevenueStamp,vMoneyTransferType,vBranchId,vBranchName,vBankId,vBankName,vAccountNo,vRoutingNo,'DELETE'," +
+										"mIncomeTax,mNetPayableTaka,mRevenueStamp,vMoneyTransferType,vBranchId,vBranchName,vBankId,vBankName,vAccountNo,vRoutingNo," +
+										"mOtherEarning,mOtherDeduction,'DELETE'," +
 										"vUserId,vUserName,vUserIP,dEntryTime from tbMonthlySalary " +
 										"where vSalaryMonth= '"+vMonthName+"' AND vSalaryYear= '"+yearName+"' and vUnitID like '"+Unit+"' and vDepartmentID like '"+department+"' " +
 										"AND vSectionID like '"+section+"' and vEmployeeID like '"+employee+"'";
@@ -431,19 +431,17 @@ public class DeleteMonthlySalary extends Window
 		}
 	}
 
-	private void cmbUnitData() 
+	private void cmbUnitData()
 	{
 		cmbUnit.removeAllItems();
 		Session session=SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
 		{
+			String query="select distinct vUnitId,vUnitName from tbMonthlySalary where vSalaryMonth='"+vMonthName+"' and vSalaryYear='"+yearName+"' " +
+					"order by vUnitName";
 			
-		/*	'"+dFormat.format(dGenerateDate.getValue())+"'*/
-			
-			String query="select distinct vUnitId,vUnitName from tbMonthlySalary order by vUnitName";
-			
-			System.out.println("Unit"+query);
+			System.out.println("cmbUnitData: "+query);
 			
 			List <?> list=session.createSQLQuery(query).list();	
 
@@ -461,16 +459,16 @@ public class DeleteMonthlySalary extends Window
 		}
 		finally{session.close();}
 	}
-	private void cmbDepartmentData() 
+	private void cmbDepartmentData()
 	{
 		cmbDepartment.removeAllItems();
 		Session session=SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
 		{
-/*			String query="select distinct vSectionId,vSectionName from tbEmpSectionInfo  where order by vSectionName";
-*/		
-			String query="select distinct vDepartmentId,vDepartmentName from tbMonthlySalary  where vUnitId='"+cmbUnit.getValue().toString()+"'  order by vDepartmentName";
+			String query="select distinct vDepartmentId,vDepartmentName from tbMonthlySalary  where vUnitId='"+cmbUnit.getValue().toString()+"' " +
+					"and vSalaryMonth='"+vMonthName+"' and vSalaryYear='"+yearName+"' " +
+					"order by vDepartmentName";
 			
 			System.out.println("Section"+query);
 			
@@ -497,12 +495,10 @@ public class DeleteMonthlySalary extends Window
 		session.beginTransaction();
 		try
 		{
-/*			String query="select distinct vSectionId,vSectionName from tbEmpSectionInfo  where order by vSectionName";
-*/		
-			String query="select distinct vSectionId,vSectionName from tbMonthlySalary  where "
-					+ " vUnitId='"+cmbUnit.getValue().toString()+"'   "
-					+ " and vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"'   "
-					+ " order by vSectionName";
+			String query="select distinct vSectionId,vSectionName from tbMonthlySalary where vUnitId='"+cmbUnit.getValue().toString()+"' " +
+					"and vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' " +
+					"and vSalaryMonth='"+vMonthName+"' and vSalaryYear='"+yearName+"' " +
+					"order by vSectionName";
 			
 			System.out.println("Section"+query);
 			
@@ -530,11 +526,11 @@ public class DeleteMonthlySalary extends Window
 		session.beginTransaction();
 		try
 		{
-			String query="select vEmployeeId,vEmployeeName,vEmployeeCode from tbMonthlySalary where "
-					+ " vUnitId like '"+cmbUnit.getValue().toString()+"'   "
-					+ " and vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"'   "
-					+ " and vSectionId like '"+(cmbSection.getValue()==null?"%":cmbSection.getValue())+"'   "
-					+ " order by vEmployeeName";
+			String query="select vEmployeeId,vEmployeeName,vEmployeeCode from tbMonthlySalary where vUnitId like '"+cmbUnit.getValue().toString()+"' " +
+					"and vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' " +
+					"and vSectionId like '"+(cmbSection.getValue()==null?"%":cmbSection.getValue())+"' " +
+					"and vSalaryMonth='"+vMonthName+"' and vSalaryYear='"+yearName+"' " +
+					"order by vEmployeeName";
 	
 			System.out.println("Employee"+query);
 			

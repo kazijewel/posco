@@ -11,6 +11,8 @@ import hrm.common.reportform.RptIncomeTaxStatement;
 import hrm.common.reportform.RptIncrementProposal;
 import hrm.common.reportform.RptIndividualOt;
 import hrm.common.reportform.RptIndivitualIncomeTax;
+import hrm.common.reportform.RptMonthlyHouseAllowanceSheet;
+import hrm.common.reportform.RptMonthlyMobileAllowanceSheet;
 import hrm.common.reportform.RptMonthlyPaySlip;
 import hrm.common.reportform.RptMonthlySalary;
 import hrm.common.reportform.RptNotesRequisition;
@@ -182,6 +184,14 @@ public class HrmAccountMenu
 		if(isValidMenu("monthlySalary"))
 		{
 			addCaptionedItem("MONTHLY SALARY", salaryReport);
+		}
+		if(isValidMenu("RptMonthlyHouseAllowanceSheet"))
+		{
+			addCaptionedItem("MONTHLY HOUSE ALLOWANCE SHEET", salaryReport);
+		}
+		if(isValidMenu("RptMonthlyMobileAllowanceSheet"))
+		{
+			addCaptionedItem("MONTHLY MOBILE ALLOWANCE SHEET", salaryReport);
 		}
 		/*if(isValidMenu("monthlySalary(device)"))
 		{
@@ -413,10 +423,18 @@ public class HrmAccountMenu
 					showWindow(new OverTimeRequestForm(sessionBean,"OverTimeRequestForm",false),event.getItem(),"OverTimeRequestForm","HRM MODULE","TRANSACTION");
 				}*/
 				
-				
+
 				if(event.getItem().toString().equalsIgnoreCase("MONTHLY SALARY"))
 				{
 					showWindow(new RptMonthlySalary(sessionBean,"monthlySalary"),event.getItem(),"monthlySalary","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("MONTHLY HOUSE ALLOWANCE SHEET"))
+				{
+					showWindow(new RptMonthlyHouseAllowanceSheet(sessionBean,"RptMonthlyHouseAllowanceSheet"),event.getItem(),"RptMonthlyHouseAllowanceSheet","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("MONTHLY MOBILE ALLOWANCE SHEET"))
+				{
+					showWindow(new RptMonthlyMobileAllowanceSheet(sessionBean,"RptMonthlyMobileAllowanceSheet"),event.getItem(),"RptMonthlyMobileAllowanceSheet","HRM MODULE","REPORT");
 				}
 
 				if(event.getItem().toString().equalsIgnoreCase("EDIT MONTHLY SALARY."))

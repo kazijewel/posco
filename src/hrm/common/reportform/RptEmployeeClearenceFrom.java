@@ -524,6 +524,7 @@ public class RptEmployeeClearenceFrom extends Window
 		cmbEmployeeId.setHeight("-1px");
 		cmbEmployeeId.setImmediate(true);
 		fLayout.addComponent(cmbEmployeeId);
+		cmbEmployeeId.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		
 		dResSubDate=new PopupDateField("Resignation Submission Date :");
 		dResSubDate.setImmediate(true);

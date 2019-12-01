@@ -330,7 +330,7 @@
 				<text><![CDATA[SL#]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="0" width="177" height="51"/>
+				<reportElement x="81" y="0" width="177" height="51"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -342,7 +342,7 @@
 				<text><![CDATA[Employee Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="208" y="0" width="50" height="51"/>
+				<reportElement x="31" y="0" width="50" height="51"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -351,7 +351,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ID Number]]></text>
+				<text><![CDATA[Employee ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="258" y="0" width="145" height="51"/>
@@ -363,7 +363,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Position]]></text>
+				<text><![CDATA[Designation]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="403" y="0" width="50" height="51"/>
@@ -586,7 +586,7 @@
 				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sl}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="31" y="0" width="177" height="20" isPrintWhenDetailOverflows="true"/>
+				<reportElement stretchType="RelativeToBandHeight" x="81" y="0" width="177" height="20" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="2">
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
@@ -597,7 +597,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vEmployeeName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="208" y="0" width="50" height="20" isPrintWhenDetailOverflows="true"/>
+				<reportElement stretchType="RelativeToBandHeight" x="31" y="0" width="50" height="20" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="2">
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
