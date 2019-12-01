@@ -86,9 +86,6 @@ public class ReplacementLeaveApplication extends Window
 
 	private ArrayList<Component> allComp = new ArrayList<Component>(); 
 	private TextField txtTransactionID=new TextField();
-	
-	private CheckBox chkApproved;
-	private CheckBox chkCancel;
 
 	String sectionId = "";
 	String designationId = "";
@@ -246,7 +243,6 @@ public class ReplacementLeaveApplication extends Window
 			{
 				isFind = false;
 				Update = false;
-				chkApproved.setValue(true);
 				txtClear();
 				componentIni(false);
 				btnIni(false);
@@ -370,35 +366,6 @@ public class ReplacementLeaveApplication extends Window
 			}
 		});
 		
-		chkApproved.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(chkApproved.booleanValue())
-				{
-					chkCancel.setValue(false);
-				}
-				else
-				{
-					chkCancel.setValue(true);
-				}
-			}
-		});
-		
-		chkCancel.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(chkCancel.booleanValue())
-				{
-					chkApproved.setValue(false);
-				}
-				else
-				{
-					chkApproved.setValue(true);
-				}
-			}
-		});
 		dReplacementLeaveFrom.addListener(new ValueChangeListener() {
 			
 			public void valueChange(ValueChangeEvent event) {
@@ -823,7 +790,7 @@ public class ReplacementLeaveApplication extends Window
 							Update=false;
 							isFind=false;
 							count=0;
-							Notification n=new Notification("All Information Updated Successfully!","",Notification.TYPE_HUMANIZED_MESSAGE);
+							Notification n=new Notification("All Information Updated Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 							n.setPosition(Notification.POSITION_TOP_RIGHT);
 							showNotification(n);
 							
@@ -837,7 +804,7 @@ public class ReplacementLeaveApplication extends Window
 							Update=false;
 							isFind=false;
 							count=0;
-							Notification n=new Notification("All Information Save Successfully!","",Notification.TYPE_HUMANIZED_MESSAGE);
+							Notification n=new Notification("All Information Save Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 							n.setPosition(Notification.POSITION_TOP_RIGHT);
 							showNotification(n);
 						}
@@ -893,13 +860,11 @@ public class ReplacementLeaveApplication extends Window
 			String employeeCode=strToken.nextToken();
 			String employeeName=strToken.nextToken(); 
 			
-			String approved = "1";
-			if(chkCancel.booleanValue())
-				approved = "0";
+			String approved = "0";
 			
 			String query = "insert into tbReplacementLeaveApplication (vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName," +
 					"vDesignationID,vDesignationName,vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom," +
-					"dReplacementLeaveTo,iTotalDays,vApprovedFlag,vPurposeOfLeave,vVisitingAddress,vUserName,vUserIP,dEntryTime) " +
+					"dReplacementLeaveTo,iTotalDays,iFinal,vPurposeOfLeave,vVisitingAddress,vUserName,vUserIP,dEntryTime) " +
 					"values " +
 					"('"+transactionID+"'," +
 					"'"+dbDateFormat.format(dApplicationDate.getValue())+"'," +
@@ -963,7 +928,7 @@ public class ReplacementLeaveApplication extends Window
 		{
 			String query = "select dApplicationDate,(select vUnitId from tbEmpOfficialPersonalInfo where vEmployeeId=la.vEmployeeId)vUnitId,"
 					+ "(select vDepartmentId from tbEmpOfficialPersonalInfo where vEmployeeId=la.vEmployeeId)vSectionId,vEmployeeID,dReplacementLeaveFrom," +
-					"dReplacementLeaveTo,vPurposeOfLeave,vVisitingAddress,vMobileNo,vApprovedFlag,vTransactionId, "
+					"dReplacementLeaveTo,vPurposeOfLeave,vVisitingAddress,vMobileNo,iFinal,vTransactionId, "
 					+ "(select vDepartmentId from tbEmpOfficialPersonalInfo where vEmployeeId=la.vEmployeeId)vDepartmentId," +
 					"(select vDesignationId from tbEmpOfficialPersonalInfo where vEmployeeId=la.vEmployeeId)vDesignationId  " +
 					"from tbReplacementLeaveApplication la where vTransactionID = '"+TransID+"'";
@@ -986,10 +951,6 @@ public class ReplacementLeaveApplication extends Window
 					txtLeaveType.setValue(element[6]);
 					txtReplacementLeaveAddress.setValue(element[7].toString().replaceAll("#","'"));
 					txtMobileNo.setValue(element[8]);
-					if(element[9].toString().equals("1"))
-						chkApproved.setValue(true);
-					else
-						chkCancel.setValue(true);
 					txtTransactionID.setValue(element[10].toString());
 				}
 			}
@@ -1022,8 +983,6 @@ public class ReplacementLeaveApplication extends Window
 		txtTotalDays.setEnabled(!t);
 		txtLeaveType.setEnabled(!t);
 		txtReplacementLeaveAddress.setEnabled(!t);
-		chkApproved.setEnabled(!t);
-		chkCancel.setEnabled(!t);
 	}
 
 
@@ -1296,15 +1255,6 @@ public class ReplacementLeaveApplication extends Window
 		txtReplacementLeaveAddress.setWidth("220px");
 		txtReplacementLeaveAddress.setHeight("60px");
 		mainLayout.addComponent(txtReplacementLeaveAddress, "top:158px; left:530.0px;");
-		
-		chkApproved = new CheckBox("Approved");
-		chkApproved.setImmediate(true);
-		chkApproved.setValue(true);
-		mainLayout.addComponent(chkApproved, "top:220px; left:530px;");
-		
-		chkCancel = new CheckBox("Cancel");
-		chkCancel.setImmediate(true);
-		mainLayout.addComponent(chkCancel, "top:220px; left:630px;");
 
 		mainLayout.addComponent(cButton, "top:270.0px; left:55.0px;");
 		return mainLayout;
