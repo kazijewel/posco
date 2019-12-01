@@ -68,7 +68,7 @@ public class OverTimeRequestApproval extends Window
 	private CommonMethod cm;
 	private String menuId = "";
 	private boolean click = true;
-
+	private CheckBox chkAll=new CheckBox("Select All");
 	public OverTimeRequestApproval( SessionBean sessionBean,String menuId)
 	{
 		this.sessionBean=sessionBean;
@@ -124,7 +124,31 @@ public class OverTimeRequestApproval extends Window
 			}
 		});
 		
-		
+		chkAll.addListener(new ClickListener() {
+					
+			public void buttonClick(ClickEvent event) {
+				if(chkAll.booleanValue())
+				{
+					for(int i=0;i<tbLblEmployeeId.size();i++)
+					{
+						if(!tbLblEmployeeId.get(i).getValue().toString().isEmpty())
+						{
+							tbChkSelect.get(i).setValue(true);
+						}
+					}
+				}
+				else
+				{
+					for(int i=0;i<tbLblEmployeeId.size();i++)
+					{
+						if(!tbLblEmployeeId.get(i).getValue().toString().isEmpty())
+						{
+							tbChkSelect.get(i).setValue(false);
+						}
+					}
+				}
+			}
+		});
 		cmbUnit.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -618,6 +642,11 @@ public class OverTimeRequestApproval extends Window
 		mainLayout.addComponent(chkDepartmentAll,"top:15.0px;left:825.0px");
 
 		mainLayout.addComponent(btnFind,"top:11.0px;left:860.0px");
+		
+		chkAll.setImmediate(true);
+		chkAll.setWidth("-1px");
+		chkAll.setHeight("-1px");
+		mainLayout.addComponent(chkAll,"top:15px; right:60px");
 
 		tableAdd();
 
@@ -646,10 +675,10 @@ public class OverTimeRequestApproval extends Window
 		table.setColumnWidth("Employee Id", 75);
 
 		table.addContainerProperty("Employee Name", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
-		table.setColumnWidth("Employee Name", 300);
+		table.setColumnWidth("Employee Name", 280);
 
 		table.addContainerProperty("Designation", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
-		table.setColumnWidth("Designation", 200);
+		table.setColumnWidth("Designation", 220);
 
 		table.addContainerProperty("Unit Name", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Unit Name", 105);
@@ -676,13 +705,13 @@ public class OverTimeRequestApproval extends Window
 		table.setColumnWidth("Apr. Days", 55);*/
 
 		table.addContainerProperty("OT Request Date", PopupDateField.class, new PopupDateField());
-		table.setColumnWidth("OT Request Date", 65);
+		table.setColumnWidth("OT Request Date", 100);
 
 		table.addContainerProperty("Application", NativeButton.class, new NativeButton());
 		table.setColumnWidth("Application", 65);
 
 		table.addContainerProperty("Approved", CheckBox.class, new CheckBox(),null,null,Table.ALIGN_CENTER);
-		table.setColumnWidth("Approved", 60);
+		table.setColumnWidth("Approved", 70);
 
 	
 
@@ -699,6 +728,7 @@ public class OverTimeRequestApproval extends Window
 		cmbUnit.setValue(null);
 		cmbDepartment.setValue(null);
 		chkDepartmentAll.setValue(false);
+		chkAll.setValue(false);
 		tableClear();
 	}
 
@@ -740,6 +770,7 @@ public class OverTimeRequestApproval extends Window
 		cmbUnit.setEnabled(!t);
 		cmbDepartment.setEnabled(!t);
 		chkDepartmentAll.setEnabled(!t);
+		chkAll.setEnabled(!t);
 		btnFind.setEnabled(!t);
 		table.setEnabled(!t);
 	}

@@ -64,6 +64,7 @@ public class ReplacementLeaveApproval extends Window
 	private ArrayList<NativeButton> tbBtnDetails = new ArrayList<NativeButton>();
 	private ArrayList<CheckBox> tbChkSelect = new ArrayList<CheckBox>();
 
+	private CheckBox chkAll=new CheckBox("Select All");
 	CommonButton cButton = new CommonButton("New", "Save", "", "", "Refresh", "", "", "", "", "Exit");
 	private CommonMethod cm;
 	private String menuId = "";
@@ -124,7 +125,31 @@ public class ReplacementLeaveApproval extends Window
 			}
 		});
 		
-		
+		chkAll.addListener(new ClickListener() {
+			
+			public void buttonClick(ClickEvent event) {
+				if(chkAll.booleanValue())
+				{
+					for(int i=0;i<tbLblEmployeeId.size();i++)
+					{
+						if(!tbLblEmployeeId.get(i).getValue().toString().isEmpty())
+						{
+							tbChkSelect.get(i).setValue(true);
+						}
+					}
+				}
+				else
+				{
+					for(int i=0;i<tbLblEmployeeId.size();i++)
+					{
+						if(!tbLblEmployeeId.get(i).getValue().toString().isEmpty())
+						{
+							tbChkSelect.get(i).setValue(false);
+						}
+					}
+				}
+			}
+		});
 		cmbUnit.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -133,11 +158,7 @@ public class ReplacementLeaveApproval extends Window
 				{
 					 cmbDepartmentDataAdd();
 				}
-				else
-				{
-					showNotification("Warning!","Select Project",Notification.TYPE_WARNING_MESSAGE);
-					cmbDepartment.focus();
-				}
+				
 			}
 		});
 
@@ -149,11 +170,7 @@ public class ReplacementLeaveApproval extends Window
 				{
 					addTableData();
 				}
-				else
-				{
-					showNotification("Warning!","Select Department",Notification.TYPE_WARNING_MESSAGE);
-					cmbDepartment.focus();
-				}
+				
 			}
 		});
 
@@ -621,7 +638,13 @@ public class ReplacementLeaveApproval extends Window
 		mainLayout.addComponent(chkDepartmentAll,"top:15.0px;left:825.0px");
 
 		mainLayout.addComponent(btnFind,"top:11.0px;left:860.0px");
-
+		
+		chkAll.setImmediate(true);
+		chkAll.setWidth("-1px");
+		chkAll.setHeight("-1px");
+		mainLayout.addComponent(chkAll,"top:15px; right:60px");
+		
+	
 		tableAdd();
 
 		mainLayout.addComponent(table,"top:55.0px; left:10.0px;");
@@ -649,16 +672,16 @@ public class ReplacementLeaveApproval extends Window
 		table.setColumnWidth("Employee Id", 75);
 
 		table.addContainerProperty("Employee Name", Label.class, new Label());
-		table.setColumnWidth("Employee Name", 170);
+		table.setColumnWidth("Employee Name", 200);
 
 		table.addContainerProperty("Designation", Label.class, new Label());
-		table.setColumnWidth("Designation", 100);
+		table.setColumnWidth("Designation", 150);
 
 		table.addContainerProperty("Unit Name", Label.class, new Label());
 		table.setColumnWidth("Unit Name", 105);
 
 		table.addContainerProperty("Department Name", Label.class, new Label());
-		table.setColumnWidth("Department Name", 105);
+		table.setColumnWidth("Department Name", 150);
 
 		table.addContainerProperty("Leave From", PopupDateField.class, new PopupDateField());
 		table.setColumnWidth("Leave From", 90);
@@ -705,6 +728,7 @@ public class ReplacementLeaveApproval extends Window
 		cmbUnit.setValue(null);
 		cmbDepartment.setValue(null);
 		chkDepartmentAll.setValue(false);
+		chkAll.setValue(false);
 		tableClear();
 	}
 
@@ -746,6 +770,7 @@ public class ReplacementLeaveApproval extends Window
 		cmbUnit.setEnabled(!t);
 		cmbDepartment.setEnabled(!t);
 		chkDepartmentAll.setEnabled(!t);
+		chkAll.setEnabled(!t);
 		btnFind.setEnabled(!t);
 		table.setEnabled(!t);
 	}
