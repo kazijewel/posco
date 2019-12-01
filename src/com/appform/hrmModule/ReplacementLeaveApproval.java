@@ -232,7 +232,7 @@ public class ReplacementLeaveApproval extends Window
 
 			
 			String query=" select epo.vUnitId,epo.vUnitName from tbEmpOfficialPersonalInfo epo inner join "
-					+ " tbReplacementLeaveApplication b on epo.vEmployeeId=b.vEmployeeId  where b.vApprovedFlag='0' "
+					+ " tbReplacementLeaveApplication b on epo.vEmployeeId=b.vEmployeeId  where b.iFinal='0' "
 					+ " order by epo.vUnitName";
 			
 			
@@ -273,7 +273,7 @@ public class ReplacementLeaveApproval extends Window
 		
 			
 	String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbReplacementLeaveApplication "
-			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and  b.vApprovedFlag='0' "
+			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and  b.iFinal='0' "
 			+ " order by epo.vDepartmentName";
 			
 	
@@ -367,7 +367,7 @@ public class ReplacementLeaveApproval extends Window
 							" dReplacementLeaveFrom = '"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"'," +
 							" dReplacementLeaveTo = '"+sessionBean.dfDb.format(tbdLeaveTo.get(i).getValue())+"'," +
 							" iTotalDays = '"+"0"+tbTxtApproveDays.get(i).getValue().toString()+"'," +
-							" vApprovedFlag=1" +
+							" iFinal=1" +
 							" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
 
 					session.createSQLQuery(updateInfo).executeUpdate();
@@ -415,7 +415,7 @@ public class ReplacementLeaveApproval extends Window
 			String sql = "select vTransactionID,b.dApplicationDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,dReplacementLeaveFrom,dReplacementLeaveTo,iTotalDays," 
 					+" epo.vEmployeeId,epo.vEmployeeCode from tbReplacementLeaveApplication b inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=b.vEmployeeId "
 					+" where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"'" 
-					+" and b.vApprovedFlag='0'  order by b.dApplicationDate";
+					+" and b.iFinal='0'  order by b.dApplicationDate";
 			List <?> list = session.createSQLQuery(sql).list();
 			System.out.println("Find Query :" + sql);
 			tableClear();

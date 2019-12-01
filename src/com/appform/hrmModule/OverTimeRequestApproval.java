@@ -232,7 +232,7 @@ public class OverTimeRequestApproval extends Window
 
 			
 			String query=" select epo.vUnitId,epo.vUnitName from tbEmpOfficialPersonalInfo epo inner join "
-					+ " tbOTRequest b on epo.vEmployeeId=b.vEmployeeId  where b.iApprovedFlag='0' "
+					+ " tbOTRequest b on epo.vEmployeeId=b.vEmployeeId  where b.iFinal='0' "
 					+ " order by epo.vUnitName";
 			
 			
@@ -273,7 +273,7 @@ public class OverTimeRequestApproval extends Window
 		
 			
 	String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbOTRequest "
-			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and  b.iApprovedFlag='0' "
+			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and  b.iFinal='0' "
 			+ " order by epo.vDepartmentName";
 			
 	
@@ -364,7 +364,7 @@ public class OverTimeRequestApproval extends Window
 					int adjust = (Integer.parseInt("0"+tbTxtTotalDays.get(i).getValue().toString())-Integer.parseInt("0"+tbTxtApproveDays.get(i).getValue().toString()));
 
 					String updateInfo = " update tbOTRequest set " +
-							" iApprovedFlag=1" +
+							" iFinal=1" +
 							" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
 
 					session.createSQLQuery(updateInfo).executeUpdate();
@@ -412,7 +412,7 @@ public class OverTimeRequestApproval extends Window
 			String sql = "select vTransactionID,b.dRequestDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,dReplaceHoliday,dReplaceWorking,1 days," 
 					+" epo.vEmployeeId,epo.vEmployeeCode from tbOTRequest b inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=b.vEmployeeId "
 					+" where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"'" 
-					+" and b.iApprovedFlag='0'  order by b.dRequestDate";
+					+" and b.iFinal='0'  order by b.dRequestDate";
 			List <?> list = session.createSQLQuery(sql).list();
 			System.out.println("Find Query :" + sql);
 			tableClear();
