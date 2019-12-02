@@ -17,6 +17,7 @@ import hrm.common.reportform.RptMonthlyPaySlip;
 import hrm.common.reportform.RptMonthlySalary;
 import hrm.common.reportform.RptNotesRequisition;
 import hrm.common.reportform.RptOverTimeStatement;
+import hrm.common.reportform.RptSalaryIncomeTaxCertification;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -224,6 +225,10 @@ public class HrmAccountMenu
 		if(isValidMenu("RptOverTimeBankStatement"))
 		{
 			addCaptionedItem("OVER TIME BANK STATEMENT", salaryReport);
+		}
+		if(isValidMenu("RptSalaryAndIncomeTaxCertification"))
+		{
+			addCaptionedItem("SALARY AND INCOME TAX CERTIFICATION", salaryReport);
 		}
 		/*if(isValidMenu("RptEmployeeSeparationList"))
 		{
@@ -454,6 +459,10 @@ public class HrmAccountMenu
 				if(event.getItem().toString().equalsIgnoreCase("PAY SLIP"))
 				{
 					showWindow(new RptMonthlyPaySlip(sessionBean, "RptMonthlyPaySlip"), event.getItem(), "RptMonthlyPaySlip","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("SALARY AND INCOME TAX CERTIFICATION"))
+				{
+					showWindow(new RptSalaryIncomeTaxCertification(sessionBean, "RptSalaryAndIncomeTaxCertification"), event.getItem(), "RptSalaryAndIncomeTaxCertification","HRM MODULE","REPORT");
 				}
 				
 				//OT Report
