@@ -135,7 +135,7 @@ public class EditMonthlySalary extends Window
 		session.beginTransaction();
 		try
 		{
-			String query="select vSalaryMonth,vSalaryYear,dSalaryDate from tbMonthlySalary  order by dSalaryDate desc";
+			String query="select vSalaryMonth,vSalaryYear,DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,dSalaryDate)+1,0)) dSalaryDate from tbMonthlySalary  order by dSalaryDate desc";
 			List <?> list=session.createSQLQuery(query).list();	
 
 			for(Iterator <?> iter=list.iterator();iter.hasNext();)
