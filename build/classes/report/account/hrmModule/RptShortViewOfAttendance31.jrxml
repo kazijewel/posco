@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptMonthlyAttendanceSummaryDevice" language="groovy" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1170" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10">
-	<property name="ireport.zoom" value="1.5026296018031595"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.1289478601075578"/>
+	<property name="ireport.x" value="570"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
@@ -802,7 +802,8 @@
 			</textField>
 			<rectangle>
 				<reportElement x="395" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay1}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay1}.equals("A")?true:false ||
+$F{vDay1}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -821,6 +822,20 @@
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay1}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="395" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -866,7 +881,12 @@
 			</rectangle>
 			<rectangle>
 				<reportElement x="395" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay1}.equals("H")?false:true &&    $F{vDay1}.equals("A")?false:true &&    $F{vDay1}.equals("L")?false:true &&    $F{vDay1}.equals("J")?false:true &&    $F{vDay1}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay1}.equals("H")?false:true &&
+$F{vDay1}.equals("A")?false:true &&
+$F{vDay1}.equals("WP")?false:true &&
+$F{vDay1}.equals("L")?false:true &&
+$F{vDay1}.equals("J")?false:true &&
+$F{vDay1}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -877,6 +897,7 @@
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay1}.equals("H")?false:true &&
 $F{vDay1}.equals("A")?false:true &&
+$F{vDay1}.equals("WP")?false:true &&
 $F{vDay1}.equals("L")?false:true &&
 $F{vDay1}.equals("J")?false:true &&
 $F{vDay1}.equals("P")?false:true]]></printWhenExpression>
@@ -892,7 +913,8 @@ $F{vDay1}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="420" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay2}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay2}.equals("A")?true:false ||
+$F{vDay2}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -911,6 +933,20 @@ $F{vDay1}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay2}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="420" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -956,7 +992,12 @@ $F{vDay1}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="420" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay2}.equals("H")?false:true &&    $F{vDay2}.equals("A")?false:true &&    $F{vDay2}.equals("L")?false:true &&    $F{vDay2}.equals("J")?false:true &&   $F{vDay2}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay2}.equals("H")?false:true &&
+$F{vDay2}.equals("A")?false:true &&
+$F{vDay2}.equals("WP")?false:true &&
+$F{vDay2}.equals("L")?false:true &&
+$F{vDay2}.equals("J")?false:true &&
+$F{vDay2}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -967,6 +1008,7 @@ $F{vDay1}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay2}.equals("H")?false:true &&
 $F{vDay2}.equals("A")?false:true &&
+$F{vDay2}.equals("WP")?false:true &&
 $F{vDay2}.equals("L")?false:true &&
 $F{vDay2}.equals("J")?false:true &&
 $F{vDay2}.equals("P")?false:true]]></printWhenExpression>
@@ -982,7 +1024,8 @@ $F{vDay2}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="445" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay3}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay3}.equals("A")?true:false ||
+$F{vDay3}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1001,6 +1044,20 @@ $F{vDay2}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay3}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="445" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1046,7 +1103,12 @@ $F{vDay2}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="445" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay3}.equals("H")?false:true &&    $F{vDay3}.equals("A")?false:true &&    $F{vDay3}.equals("L")?false:true &&    $F{vDay3}.equals("J")?false:true &&    $F{vDay3}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay3}.equals("H")?false:true &&
+$F{vDay3}.equals("A")?false:true &&
+$F{vDay3}.equals("WP")?false:true &&
+$F{vDay3}.equals("L")?false:true &&
+$F{vDay3}.equals("J")?false:true &&
+$F{vDay3}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1057,6 +1119,7 @@ $F{vDay2}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay3}.equals("H")?false:true &&
 $F{vDay3}.equals("A")?false:true &&
+$F{vDay3}.equals("WP")?false:true &&
 $F{vDay3}.equals("L")?false:true &&
 $F{vDay3}.equals("J")?false:true &&
 $F{vDay3}.equals("P")?false:true]]></printWhenExpression>
@@ -1072,7 +1135,8 @@ $F{vDay3}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="470" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay4}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay4}.equals("A")?true:false ||
+$F{vDay4}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1091,6 +1155,20 @@ $F{vDay3}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay4}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="470" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1138,6 +1216,7 @@ $F{vDay3}.equals("P")?false:true]]></printWhenExpression>
 				<reportElement x="470" y="0" width="25" height="15" backcolor="#FFFFCC">
 					<printWhenExpression><![CDATA[$F{vDay4}.equals("H")?false:true &&
 $F{vDay4}.equals("A")?false:true &&
+$F{vDay4}.equals("WP")?false:true &&
 $F{vDay4}.equals("L")?false:true &&
 $F{vDay4}.equals("J")?false:true &&
 $F{vDay4}.equals("P")?false:true]]></printWhenExpression>
@@ -1151,6 +1230,7 @@ $F{vDay4}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay4}.equals("H")?false:true &&
 $F{vDay4}.equals("A")?false:true &&
+$F{vDay4}.equals("WP")?false:true &&
 $F{vDay4}.equals("L")?false:true &&
 $F{vDay4}.equals("J")?false:true &&
 $F{vDay4}.equals("P")?false:true]]></printWhenExpression>
@@ -1166,7 +1246,8 @@ $F{vDay4}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="495" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay5}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay5}.equals("A")?true:false ||
+$F{vDay5}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1185,6 +1266,20 @@ $F{vDay4}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay5}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="495" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1232,6 +1327,7 @@ $F{vDay4}.equals("P")?false:true]]></printWhenExpression>
 				<reportElement x="495" y="0" width="25" height="15" backcolor="#FFFFCC">
 					<printWhenExpression><![CDATA[$F{vDay5}.equals("H")?false:true &&
 $F{vDay5}.equals("A")?false:true &&
+$F{vDay5}.equals("WP")?false:true &&
 $F{vDay5}.equals("L")?false:true &&
 $F{vDay5}.equals("J")?false:true &&
 $F{vDay5}.equals("P")?false:true]]></printWhenExpression>
@@ -1245,6 +1341,7 @@ $F{vDay5}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay5}.equals("H")?false:true &&
 $F{vDay5}.equals("A")?false:true &&
+$F{vDay5}.equals("WP")?false:true &&
 $F{vDay5}.equals("L")?false:true &&
 $F{vDay5}.equals("J")?false:true &&
 $F{vDay5}.equals("P")?false:true]]></printWhenExpression>
@@ -1260,7 +1357,8 @@ $F{vDay5}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="520" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay6}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay6}.equals("A")?true:false ||
+$F{vDay6}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1279,6 +1377,20 @@ $F{vDay5}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay6}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="520" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1324,7 +1436,12 @@ $F{vDay5}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="520" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay6}.equals("H")?false:true &&   $F{vDay6}.equals("A")?false:true &&    $F{vDay6}.equals("L")?false:true &&    $F{vDay6}.equals("J")?false:true &&    $F{vDay6}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay6}.equals("H")?false:true &&
+$F{vDay6}.equals("A")?false:true &&
+$F{vDay6}.equals("WP")?false:true &&
+$F{vDay6}.equals("L")?false:true &&
+$F{vDay6}.equals("J")?false:true &&
+$F{vDay6}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1335,6 +1452,7 @@ $F{vDay5}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay6}.equals("H")?false:true &&
 $F{vDay6}.equals("A")?false:true &&
+$F{vDay6}.equals("WP")?false:true &&
 $F{vDay6}.equals("L")?false:true &&
 $F{vDay6}.equals("J")?false:true &&
 $F{vDay6}.equals("P")?false:true]]></printWhenExpression>
@@ -1350,7 +1468,8 @@ $F{vDay6}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="545" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay7}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay7}.equals("A")?true:false ||
+$F{vDay7}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1369,6 +1488,20 @@ $F{vDay6}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="545" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay7}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="545" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1414,7 +1547,12 @@ $F{vDay6}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="545" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay7}.equals("H")?false:true &&    $F{vDay7}.equals("A")?false:true &&    $F{vDay7}.equals("L")?false:true &&    $F{vDay7}.equals("J")?false:true &&    $F{vDay7}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay7}.equals("H")?false:true &&
+$F{vDay7}.equals("A")?false:true &&
+$F{vDay7}.equals("WP")?false:true &&
+$F{vDay7}.equals("L")?false:true &&
+$F{vDay7}.equals("J")?false:true &&
+$F{vDay7}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1425,6 +1563,7 @@ $F{vDay6}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay7}.equals("H")?false:true &&
 $F{vDay7}.equals("A")?false:true &&
+$F{vDay7}.equals("WP")?false:true &&
 $F{vDay7}.equals("L")?false:true &&
 $F{vDay7}.equals("J")?false:true &&
 $F{vDay7}.equals("P")?false:true]]></printWhenExpression>
@@ -1440,7 +1579,8 @@ $F{vDay7}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="570" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay8}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay8}.equals("A")?true:false ||
+$F{vDay8}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1459,6 +1599,20 @@ $F{vDay7}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="570" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay8}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="570" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1504,7 +1658,12 @@ $F{vDay7}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="570" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay8}.equals("H")?false:true &&    $F{vDay8}.equals("A")?false:true &&    $F{vDay8}.equals("L")?false:true &&    $F{vDay8}.equals("J")?false:true &&    $F{vDay8}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay8}.equals("H")?false:true &&
+$F{vDay8}.equals("A")?false:true &&
+$F{vDay8}.equals("WP")?false:true &&
+$F{vDay8}.equals("L")?false:true &&
+$F{vDay8}.equals("J")?false:true &&
+$F{vDay8}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1515,6 +1674,7 @@ $F{vDay7}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay8}.equals("H")?false:true &&
 $F{vDay8}.equals("A")?false:true &&
+$F{vDay8}.equals("WP")?false:true &&
 $F{vDay8}.equals("L")?false:true &&
 $F{vDay8}.equals("J")?false:true &&
 $F{vDay8}.equals("P")?false:true]]></printWhenExpression>
@@ -1530,7 +1690,8 @@ $F{vDay8}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="595" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay9}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay9}.equals("A")?true:false ||
+$F{vDay9}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1549,6 +1710,20 @@ $F{vDay8}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="595" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay9}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="595" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1594,7 +1769,12 @@ $F{vDay8}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="595" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay9}.equals("H")?false:true &&    $F{vDay9}.equals("A")?false:true &&    $F{vDay9}.equals("L")?false:true &&    $F{vDay9}.equals("J")?false:true &&    $F{vDay9}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay9}.equals("H")?false:true &&
+$F{vDay9}.equals("A")?false:true &&
+$F{vDay9}.equals("WP")?false:true &&
+$F{vDay9}.equals("L")?false:true &&
+$F{vDay9}.equals("J")?false:true &&
+$F{vDay9}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1605,6 +1785,7 @@ $F{vDay8}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay9}.equals("H")?false:true &&
 $F{vDay9}.equals("A")?false:true &&
+$F{vDay9}.equals("WP")?false:true &&
 $F{vDay9}.equals("L")?false:true &&
 $F{vDay9}.equals("J")?false:true &&
 $F{vDay9}.equals("P")?false:true]]></printWhenExpression>
@@ -1620,7 +1801,8 @@ $F{vDay9}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="620" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay10}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay10}.equals("A")?true:false ||
+$F{vDay10}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1639,6 +1821,20 @@ $F{vDay9}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="620" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay10}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="620" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1684,7 +1880,12 @@ $F{vDay9}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="620" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay10}.equals("H")?false:true &&    $F{vDay10}.equals("A")?false:true &&    $F{vDay10}.equals("L")?false:true &&    $F{vDay10}.equals("J")?false:true &&    $F{vDay10}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay10}.equals("H")?false:true &&
+$F{vDay10}.equals("A")?false:true &&
+$F{vDay10}.equals("WP")?false:true &&
+$F{vDay10}.equals("L")?false:true &&
+$F{vDay10}.equals("J")?false:true &&
+$F{vDay10}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1695,6 +1896,7 @@ $F{vDay9}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay10}.equals("H")?false:true &&
 $F{vDay10}.equals("A")?false:true &&
+$F{vDay10}.equals("WP")?false:true &&
 $F{vDay10}.equals("L")?false:true &&
 $F{vDay10}.equals("J")?false:true &&
 $F{vDay10}.equals("P")?false:true]]></printWhenExpression>
@@ -1710,7 +1912,8 @@ $F{vDay10}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="645" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay11}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay11}.equals("A")?true:false ||
+$F{vDay11}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1729,6 +1932,20 @@ $F{vDay10}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="645" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay11}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="645" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1774,7 +1991,12 @@ $F{vDay10}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="645" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay11}.equals("H")?false:true &&    $F{vDay11}.equals("A")?false:true &&    $F{vDay11}.equals("L")?false:true &&    $F{vDay11}.equals("J")?false:true &&    $F{vDay11}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay11}.equals("H")?false:true &&
+$F{vDay11}.equals("A")?false:true &&
+$F{vDay11}.equals("WP")?false:true &&
+$F{vDay11}.equals("L")?false:true &&
+$F{vDay11}.equals("J")?false:true &&
+$F{vDay11}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1785,6 +2007,7 @@ $F{vDay10}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay11}.equals("H")?false:true &&
 $F{vDay11}.equals("A")?false:true &&
+$F{vDay11}.equals("WP")?false:true &&
 $F{vDay11}.equals("L")?false:true &&
 $F{vDay11}.equals("J")?false:true &&
 $F{vDay11}.equals("P")?false:true]]></printWhenExpression>
@@ -1800,7 +2023,8 @@ $F{vDay11}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="670" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay12}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay12}.equals("A")?true:false ||
+$F{vDay12}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1819,6 +2043,20 @@ $F{vDay11}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="670" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay12}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="670" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1864,7 +2102,12 @@ $F{vDay11}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="670" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay12}.equals("H")?false:true &&   $F{vDay12}.equals("A")?false:true &&    $F{vDay12}.equals("L")?false:true &&    $F{vDay12}.equals("J")?false:true &&    $F{vDay12}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay12}.equals("H")?false:true &&
+$F{vDay12}.equals("A")?false:true &&
+$F{vDay12}.equals("WP")?false:true &&
+$F{vDay12}.equals("L")?false:true &&
+$F{vDay12}.equals("J")?false:true &&
+$F{vDay12}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1875,6 +2118,7 @@ $F{vDay11}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay12}.equals("H")?false:true &&
 $F{vDay12}.equals("A")?false:true &&
+$F{vDay12}.equals("WP")?false:true &&
 $F{vDay12}.equals("L")?false:true &&
 $F{vDay12}.equals("J")?false:true &&
 $F{vDay12}.equals("P")?false:true]]></printWhenExpression>
@@ -1890,7 +2134,8 @@ $F{vDay12}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="695" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay13}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay13}.equals("A")?true:false ||
+$F{vDay13}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1909,6 +2154,20 @@ $F{vDay12}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="695" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay13}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="695" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -1954,7 +2213,12 @@ $F{vDay12}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="695" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay13}.equals("H")?false:true &&   $F{vDay13}.equals("A")?false:true &&    $F{vDay13}.equals("L")?false:true &&   $F{vDay13}.equals("J")?false:true &&    $F{vDay13}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay13}.equals("H")?false:true &&
+$F{vDay13}.equals("A")?false:true &&
+$F{vDay13}.equals("WP")?false:true &&
+$F{vDay13}.equals("L")?false:true &&
+$F{vDay13}.equals("J")?false:true &&
+$F{vDay13}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -1965,6 +2229,7 @@ $F{vDay12}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay13}.equals("H")?false:true &&
 $F{vDay13}.equals("A")?false:true &&
+$F{vDay13}.equals("WP")?false:true &&
 $F{vDay13}.equals("L")?false:true &&
 $F{vDay13}.equals("J")?false:true &&
 $F{vDay13}.equals("P")?false:true]]></printWhenExpression>
@@ -1980,7 +2245,8 @@ $F{vDay13}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="720" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay14}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay14}.equals("A")?true:false ||
+$F{vDay14}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -1999,6 +2265,20 @@ $F{vDay13}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay14}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="720" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2044,7 +2324,12 @@ $F{vDay13}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="720" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay14}.equals("H")?false:true &&    $F{vDay14}.equals("A")?false:true &&    $F{vDay14}.equals("L")?false:true &&    $F{vDay14}.equals("J")?false:true &&    $F{vDay14}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay14}.equals("H")?false:true &&
+$F{vDay14}.equals("A")?false:true &&
+$F{vDay14}.equals("WP")?false:true &&
+$F{vDay14}.equals("L")?false:true &&
+$F{vDay14}.equals("J")?false:true &&
+$F{vDay14}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2055,6 +2340,7 @@ $F{vDay13}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay14}.equals("H")?false:true &&
 $F{vDay14}.equals("A")?false:true &&
+$F{vDay14}.equals("WP")?false:true &&
 $F{vDay14}.equals("L")?false:true &&
 $F{vDay14}.equals("J")?false:true &&
 $F{vDay14}.equals("P")?false:true]]></printWhenExpression>
@@ -2070,7 +2356,8 @@ $F{vDay14}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="745" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay15}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay15}.equals("A")?true:false ||
+$F{vDay15}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2089,6 +2376,20 @@ $F{vDay14}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="745" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay15}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="745" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2134,7 +2435,12 @@ $F{vDay14}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="745" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay15}.equals("H")?false:true &&    $F{vDay15}.equals("A")?false:true &&    $F{vDay15}.equals("L")?false:true &&    $F{vDay15}.equals("J")?false:true &&    $F{vDay15}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay15}.equals("H")?false:true &&
+$F{vDay15}.equals("A")?false:true &&
+$F{vDay15}.equals("WP")?false:true &&
+$F{vDay15}.equals("L")?false:true &&
+$F{vDay15}.equals("J")?false:true &&
+$F{vDay15}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2145,6 +2451,7 @@ $F{vDay14}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay15}.equals("H")?false:true &&
 $F{vDay15}.equals("A")?false:true &&
+$F{vDay15}.equals("WP")?false:true &&
 $F{vDay15}.equals("L")?false:true &&
 $F{vDay15}.equals("J")?false:true &&
 $F{vDay15}.equals("P")?false:true]]></printWhenExpression>
@@ -2160,7 +2467,8 @@ $F{vDay15}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="770" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay16}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay16}.equals("A")?true:false ||
+$F{vDay16}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2179,6 +2487,20 @@ $F{vDay15}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="770" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay16}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="770" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2224,7 +2546,12 @@ $F{vDay15}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="770" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay16}.equals("H")?false:true &&    $F{vDay16}.equals("A")?false:true &&    $F{vDay16}.equals("L")?false:true &&    $F{vDay16}.equals("J")?false:true &&    $F{vDay16}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay16}.equals("H")?false:true &&
+$F{vDay16}.equals("A")?false:true &&
+$F{vDay16}.equals("WP")?false:true &&
+$F{vDay16}.equals("L")?false:true &&
+$F{vDay16}.equals("J")?false:true &&
+$F{vDay16}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2234,6 +2561,7 @@ $F{vDay15}.equals("P")?false:true]]></printWhenExpression>
 				<reportElement x="770" y="0" width="25" height="15" forecolor="#000000" backcolor="#FFFFFF">
 					<printWhenExpression><![CDATA[$F{vDay16}.equals("H")?false:true &&
 $F{vDay16}.equals("A")?false:true &&
+$F{vDay16}.equals("WP")?false:true &&
 $F{vDay16}.equals("L")?false:true &&
 $F{vDay16}.equals("J")?false:true &&
 $F{vDay16}.equals("P")?false:true]]></printWhenExpression>
@@ -2249,7 +2577,8 @@ $F{vDay16}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="795" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay17}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay17}.equals("A")?true:false ||
+$F{vDay17}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2268,6 +2597,20 @@ $F{vDay16}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="795" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay17}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="795" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2313,7 +2656,12 @@ $F{vDay16}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="795" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay17}.equals("H")?false:true &&    $F{vDay17}.equals("A")?false:true &&    $F{vDay17}.equals("L")?false:true &&    $F{vDay17}.equals("J")?false:true &&    $F{vDay17}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay17}.equals("H")?false:true &&
+$F{vDay17}.equals("A")?false:true &&
+$F{vDay17}.equals("WP")?false:true &&
+$F{vDay17}.equals("L")?false:true &&
+$F{vDay17}.equals("J")?false:true &&
+$F{vDay17}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2324,6 +2672,7 @@ $F{vDay16}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay17}.equals("H")?false:true &&
 $F{vDay17}.equals("A")?false:true &&
+$F{vDay17}.equals("WP")?false:true &&
 $F{vDay17}.equals("L")?false:true &&
 $F{vDay17}.equals("J")?false:true &&
 $F{vDay17}.equals("P")?false:true]]></printWhenExpression>
@@ -2339,7 +2688,8 @@ $F{vDay17}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="820" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay18}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay18}.equals("A")?true:false ||
+$F{vDay18}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2358,6 +2708,20 @@ $F{vDay17}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="820" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay18}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="820" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2403,7 +2767,12 @@ $F{vDay17}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="820" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay18}.equals("H")?false:true &&    $F{vDay18}.equals("A")?false:true &&    $F{vDay18}.equals("L")?false:true &&    $F{vDay18}.equals("J")?false:true &&    $F{vDay18}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay18}.equals("H")?false:true &&
+$F{vDay18}.equals("A")?false:true &&
+$F{vDay18}.equals("WP")?false:true &&
+$F{vDay18}.equals("L")?false:true &&
+$F{vDay18}.equals("J")?false:true &&
+$F{vDay18}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2414,6 +2783,7 @@ $F{vDay17}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay18}.equals("H")?false:true &&
 $F{vDay18}.equals("A")?false:true &&
+$F{vDay18}.equals("WP")?false:true &&
 $F{vDay18}.equals("L")?false:true &&
 $F{vDay18}.equals("J")?false:true &&
 $F{vDay18}.equals("P")?false:true]]></printWhenExpression>
@@ -2429,7 +2799,8 @@ $F{vDay18}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="845" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay19}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay19}.equals("A")?true:false ||
+$F{vDay19}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2448,6 +2819,20 @@ $F{vDay18}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="845" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay19}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="845" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2493,7 +2878,12 @@ $F{vDay18}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="845" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay19}.equals("H")?false:true &&    $F{vDay19}.equals("A")?false:true &&    $F{vDay19}.equals("L")?false:true &&    $F{vDay19}.equals("J")?false:true &&    $F{vDay19}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay19}.equals("H")?false:true &&
+$F{vDay19}.equals("A")?false:true &&
+$F{vDay19}.equals("L")?false:true &&
+$F{vDay19}.equals("WP")?false:true &&
+$F{vDay19}.equals("J")?false:true &&
+$F{vDay19}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2504,6 +2894,7 @@ $F{vDay18}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay19}.equals("H")?false:true &&
 $F{vDay19}.equals("A")?false:true &&
+$F{vDay19}.equals("WP")?false:true &&
 $F{vDay19}.equals("L")?false:true &&
 $F{vDay19}.equals("J")?false:true &&
 $F{vDay19}.equals("P")?false:true]]></printWhenExpression>
@@ -2519,7 +2910,8 @@ $F{vDay19}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="870" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay20}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay20}.equals("A")?true:false ||
+$F{vDay20}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2538,6 +2930,20 @@ $F{vDay19}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="870" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay20}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="870" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2583,7 +2989,12 @@ $F{vDay19}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="870" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay20}.equals("H")?false:true &&    $F{vDay20}.equals("A")?false:true &&    $F{vDay20}.equals("L")?false:true &&    $F{vDay20}.equals("J")?false:true &&    $F{vDay20}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay20}.equals("H")?false:true &&
+$F{vDay20}.equals("A")?false:true &&
+$F{vDay20}.equals("WP")?false:true &&
+$F{vDay20}.equals("L")?false:true &&
+$F{vDay20}.equals("J")?false:true &&
+$F{vDay20}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2594,6 +3005,7 @@ $F{vDay19}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay20}.equals("H")?false:true &&
 $F{vDay20}.equals("A")?false:true &&
+$F{vDay20}.equals("WP")?false:true &&
 $F{vDay20}.equals("L")?false:true &&
 $F{vDay20}.equals("J")?false:true &&
 $F{vDay20}.equals("P")?false:true]]></printWhenExpression>
@@ -2609,7 +3021,8 @@ $F{vDay20}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="895" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay21}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay21}.equals("A")?true:false ||
+$F{vDay21}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2628,6 +3041,20 @@ $F{vDay20}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="895" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay21}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="895" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2673,7 +3100,12 @@ $F{vDay20}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="895" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay21}.equals("H")?false:true &&    $F{vDay21}.equals("A")?false:true &&   $F{vDay21}.equals("L")?false:true &&   $F{vDay21}.equals("J")?false:true &&    $F{vDay21}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay21}.equals("H")?false:true &&
+$F{vDay21}.equals("A")?false:true &&
+$F{vDay21}.equals("WP")?false:true &&
+$F{vDay21}.equals("L")?false:true &&
+$F{vDay21}.equals("J")?false:true &&
+$F{vDay21}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2684,6 +3116,7 @@ $F{vDay20}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay21}.equals("H")?false:true &&
 $F{vDay21}.equals("A")?false:true &&
+$F{vDay21}.equals("WP")?false:true &&
 $F{vDay21}.equals("L")?false:true &&
 $F{vDay21}.equals("J")?false:true &&
 $F{vDay21}.equals("P")?false:true]]></printWhenExpression>
@@ -2699,7 +3132,8 @@ $F{vDay21}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="920" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay22}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay22}.equals("A")?true:false ||
+$F{vDay22}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2718,6 +3152,20 @@ $F{vDay21}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="920" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay22}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="920" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2763,7 +3211,12 @@ $F{vDay21}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="920" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay22}.equals("H")?false:true &&    $F{vDay22}.equals("A")?false:true &&    $F{vDay22}.equals("L")?false:true &&    $F{vDay22}.equals("J")?false:true &&   $F{vDay22}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay22}.equals("H")?false:true &&
+$F{vDay22}.equals("A")?false:true &&
+$F{vDay22}.equals("WP")?false:true &&
+$F{vDay22}.equals("L")?false:true &&
+$F{vDay22}.equals("J")?false:true &&
+$F{vDay22}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2774,6 +3227,7 @@ $F{vDay21}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay22}.equals("H")?false:true &&
 $F{vDay22}.equals("A")?false:true &&
+$F{vDay22}.equals("WP")?false:true &&
 $F{vDay22}.equals("L")?false:true &&
 $F{vDay22}.equals("J")?false:true &&
 $F{vDay22}.equals("P")?false:true]]></printWhenExpression>
@@ -2789,7 +3243,8 @@ $F{vDay22}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="945" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay23}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay23}.equals("A")?true:false ||
+$F{vDay23}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2808,6 +3263,20 @@ $F{vDay22}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="945" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay23}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="945" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2853,7 +3322,12 @@ $F{vDay22}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="945" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay23}.equals("H")?false:true &&    $F{vDay23}.equals("A")?false:true &&    $F{vDay23}.equals("L")?false:true &&    $F{vDay23}.equals("J")?false:true &&    $F{vDay23}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay23}.equals("H")?false:true &&
+$F{vDay23}.equals("A")?false:true &&
+$F{vDay23}.equals("WP")?false:true &&
+$F{vDay23}.equals("L")?false:true &&
+$F{vDay23}.equals("J")?false:true &&
+$F{vDay23}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2864,6 +3338,7 @@ $F{vDay22}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay23}.equals("H")?false:true &&
 $F{vDay23}.equals("A")?false:true &&
+$F{vDay23}.equals("WP")?false:true &&
 $F{vDay23}.equals("L")?false:true &&
 $F{vDay23}.equals("J")?false:true &&
 $F{vDay23}.equals("P")?false:true]]></printWhenExpression>
@@ -2879,7 +3354,8 @@ $F{vDay23}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="970" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay24}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay24}.equals("A")?true:false ||
+$F{vDay24}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2898,6 +3374,20 @@ $F{vDay23}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="970" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay24}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="970" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -2943,7 +3433,12 @@ $F{vDay23}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="970" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay24}.equals("H")?false:true &&    $F{vDay24}.equals("A")?false:true &&    $F{vDay24}.equals("L")?false:true &&    $F{vDay24}.equals("J")?false:true &&    $F{vDay24}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay24}.equals("H")?false:true &&
+$F{vDay24}.equals("A")?false:true &&
+$F{vDay24}.equals("WP")?false:true &&
+$F{vDay24}.equals("L")?false:true &&
+$F{vDay24}.equals("J")?false:true &&
+$F{vDay24}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -2954,6 +3449,7 @@ $F{vDay23}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay24}.equals("H")?false:true &&
 $F{vDay24}.equals("A")?false:true &&
+$F{vDay24}.equals("WP")?false:true &&
 $F{vDay24}.equals("L")?false:true &&
 $F{vDay24}.equals("J")?false:true &&
 $F{vDay24}.equals("P")?false:true]]></printWhenExpression>
@@ -2969,7 +3465,8 @@ $F{vDay24}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="995" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay25}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay25}.equals("A")?true:false ||
+$F{vDay25}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -2988,6 +3485,20 @@ $F{vDay24}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="995" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay25}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="995" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -3033,7 +3544,12 @@ $F{vDay24}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="995" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay25}.equals("H")?false:true &&    $F{vDay25}.equals("A")?false:true &&    $F{vDay25}.equals("L")?false:true &&    $F{vDay25}.equals("J")?false:true &&    $F{vDay25}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay25}.equals("H")?false:true &&
+$F{vDay25}.equals("A")?false:true &&
+$F{vDay25}.equals("WP")?false:true &&
+$F{vDay25}.equals("L")?false:true &&
+$F{vDay25}.equals("J")?false:true &&
+$F{vDay25}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -3044,6 +3560,7 @@ $F{vDay24}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay25}.equals("H")?false:true &&
 $F{vDay25}.equals("A")?false:true &&
+$F{vDay25}.equals("WP")?false:true &&
 $F{vDay25}.equals("L")?false:true &&
 $F{vDay25}.equals("J")?false:true &&
 $F{vDay25}.equals("P")?false:true]]></printWhenExpression>
@@ -3059,7 +3576,8 @@ $F{vDay25}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="1020" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay26}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay26}.equals("A")?true:false ||
+$F{vDay26}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -3078,6 +3596,20 @@ $F{vDay25}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1020" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay26}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="1020" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -3123,7 +3655,12 @@ $F{vDay25}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="1020" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay26}.equals("H")?false:true &&    $F{vDay26}.equals("A")?false:true &&    $F{vDay26}.equals("L")?false:true &&    $F{vDay26}.equals("J")?false:true &&    $F{vDay26}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay26}.equals("H")?false:true &&
+$F{vDay26}.equals("A")?false:true &&
+$F{vDay26}.equals("WP")?false:true &&
+$F{vDay26}.equals("L")?false:true &&
+$F{vDay26}.equals("J")?false:true &&
+$F{vDay26}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -3134,6 +3671,7 @@ $F{vDay25}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay26}.equals("H")?false:true &&
 $F{vDay26}.equals("A")?false:true &&
+$F{vDay26}.equals("WP")?false:true &&
 $F{vDay26}.equals("L")?false:true &&
 $F{vDay26}.equals("J")?false:true &&
 $F{vDay26}.equals("P")?false:true]]></printWhenExpression>
@@ -3149,7 +3687,8 @@ $F{vDay26}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="1045" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay27}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay27}.equals("A")?true:false ||
+$F{vDay27}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -3168,6 +3707,20 @@ $F{vDay26}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1045" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay27}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="1045" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -3213,7 +3766,12 @@ $F{vDay26}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="1045" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay27}.equals("H")?false:true &&    $F{vDay27}.equals("A")?false:true &&    $F{vDay27}.equals("L")?false:true &&    $F{vDay27}.equals("J")?false:true &&    $F{vDay27}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay27}.equals("H")?false:true &&
+$F{vDay27}.equals("A")?false:true &&
+$F{vDay27}.equals("WP")?false:true &&
+$F{vDay27}.equals("L")?false:true &&
+$F{vDay27}.equals("J")?false:true &&
+$F{vDay27}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -3224,6 +3782,7 @@ $F{vDay26}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay27}.equals("H")?false:true &&
 $F{vDay27}.equals("A")?false:true &&
+$F{vDay27}.equals("WP")?false:true &&
 $F{vDay27}.equals("L")?false:true &&
 $F{vDay27}.equals("J")?false:true &&
 $F{vDay27}.equals("P")?false:true]]></printWhenExpression>
@@ -3239,7 +3798,8 @@ $F{vDay27}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="1070" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay28}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay28}.equals("A")?true:false ||
+$F{vDay28}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -3258,6 +3818,20 @@ $F{vDay27}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1070" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay28}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="1070" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -3303,7 +3877,12 @@ $F{vDay27}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="1070" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay28}.equals("H")?false:true &&    $F{vDay28}.equals("A")?false:true &&    $F{vDay28}.equals("L")?false:true &&    $F{vDay28}.equals("J")?false:true &&    $F{vDay28}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay28}.equals("H")?false:true &&
+$F{vDay28}.equals("A")?false:true &&
+$F{vDay28}.equals("WP")?false:true &&
+$F{vDay28}.equals("L")?false:true &&
+$F{vDay28}.equals("J")?false:true &&
+$F{vDay28}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -3314,6 +3893,7 @@ $F{vDay27}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay28}.equals("H")?false:true &&
 $F{vDay28}.equals("A")?false:true &&
+$F{vDay28}.equals("WP")?false:true &&
 $F{vDay28}.equals("L")?false:true &&
 $F{vDay28}.equals("J")?false:true &&
 $F{vDay28}.equals("P")?false:true]]></printWhenExpression>
@@ -3329,7 +3909,8 @@ $F{vDay28}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="1095" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay29}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay29}.equals("A")?true:false ||
+$F{vDay29}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -3348,6 +3929,20 @@ $F{vDay28}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1095" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay29}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="1095" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -3393,7 +3988,12 @@ $F{vDay28}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="1095" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay29}.equals("H")?false:true &&    $F{vDay29}.equals("A")?false:true &&    $F{vDay29}.equals("L")?false:true &&    $F{vDay29}.equals("J")?false:true &&    $F{vDay29}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay29}.equals("H")?false:true &&
+$F{vDay29}.equals("A")?false:true &&
+$F{vDay29}.equals("WP")?false:true &&
+$F{vDay29}.equals("L")?false:true &&
+$F{vDay29}.equals("J")?false:true &&
+$F{vDay29}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -3404,6 +4004,7 @@ $F{vDay28}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay29}.equals("H")?false:true &&
 $F{vDay29}.equals("A")?false:true &&
+$F{vDay29}.equals("WP")?false:true &&
 $F{vDay29}.equals("L")?false:true &&
 $F{vDay29}.equals("J")?false:true &&
 $F{vDay29}.equals("P")?false:true]]></printWhenExpression>
@@ -3419,7 +4020,8 @@ $F{vDay29}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="1120" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay30}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay30}.equals("A")?true:false ||
+$F{vDay30}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -3438,6 +4040,20 @@ $F{vDay29}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1120" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay30}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="1120" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -3483,7 +4099,12 @@ $F{vDay29}.equals("P")?false:true]]></printWhenExpression>
 			</rectangle>
 			<rectangle>
 				<reportElement x="1120" y="0" width="25" height="15" backcolor="#FFFFCC">
-					<printWhenExpression><![CDATA[$F{vDay30}.equals("H")?false:true &&    $F{vDay30}.equals("A")?false:true &&    $F{vDay30}.equals("L")?false:true &&    $F{vDay30}.equals("J")?false:true &&    $F{vDay30}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay30}.equals("H")?false:true &&
+$F{vDay30}.equals("A")?false:true &&
+$F{vDay30}.equals("WP")?false:true &&
+$F{vDay30}.equals("L")?false:true &&
+$F{vDay30}.equals("J")?false:true &&
+$F{vDay30}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
@@ -3494,6 +4115,7 @@ $F{vDay29}.equals("P")?false:true]]></printWhenExpression>
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
 					<printWhenExpression><![CDATA[$F{vDay30}.equals("H")?false:true &&
 $F{vDay30}.equals("A")?false:true &&
+$F{vDay30}.equals("WP")?false:true &&
 $F{vDay30}.equals("L")?false:true &&
 $F{vDay30}.equals("J")?false:true &&
 $F{vDay30}.equals("P")?false:true]]></printWhenExpression>
@@ -3509,7 +4131,8 @@ $F{vDay30}.equals("P")?false:true]]></printWhenExpression>
 			</textField>
 			<rectangle>
 				<reportElement x="1145" y="0" width="25" height="15" forecolor="#FF3333" backcolor="#FF3333">
-					<printWhenExpression><![CDATA[$F{vDay31}.equals("A")?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay31}.equals("A")?true:false ||
+$F{vDay31}.equals("WP")?true:false]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.25" lineColor="#000000"/>
@@ -3528,6 +4151,20 @@ $F{vDay30}.equals("P")?false:true]]></printWhenExpression>
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1145" y="0" width="25" height="15" forecolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{vDay31}.equals("WP")?true:false]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WP]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="1145" y="0" width="25" height="15" forecolor="#000000" backcolor="#999999">
@@ -3575,6 +4212,7 @@ $F{vDay30}.equals("P")?false:true]]></printWhenExpression>
 				<reportElement x="1145" y="0" width="25" height="15" backcolor="#FFFFCC">
 					<printWhenExpression><![CDATA[$F{vDay31}.equals("H")?false:true &&
 $F{vDay31}.equals("A")?false:true &&
+$F{vDay31}.equals("WP")?false:true &&
 $F{vDay31}.equals("L")?false:true &&
 $F{vDay31}.equals("J")?false:true &&
 $F{vDay31}.equals("P")?false:true]]></printWhenExpression>
@@ -3586,7 +4224,12 @@ $F{vDay31}.equals("P")?false:true]]></printWhenExpression>
 			<textField>
 				<reportElement x="1145" y="0" width="25" height="15" forecolor="#000000">
 					<property name="$F{vDay1}.equals(&quot;P&quot;)?true:false" value=""/>
-					<printWhenExpression><![CDATA[$F{vDay31}.equals("H")?false:true && $F{vDay31}.equals("A")?false:true && $F{vDay31}.equals("L")?false:true && $F{vDay31}.equals("J")?false:true && $F{vDay31}.equals("P")?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{vDay31}.equals("H")?false:true &&
+$F{vDay31}.equals("A")?false:true &&
+$F{vDay31}.equals("WP")?false:true &&
+$F{vDay31}.equals("L")?false:true &&
+$F{vDay31}.equals("J")?false:true &&
+$F{vDay31}.equals("P")?false:true]]></printWhenExpression>
 				</reportElement>
 				<box leftPadding="2">
 					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
