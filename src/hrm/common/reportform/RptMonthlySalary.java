@@ -102,7 +102,7 @@ public class RptMonthlySalary extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct dSalaryDate,CONVERT(varchar,DATENAME(MONTH,dSalaryDate)+'-'+DATENAME(YEAR,dSalaryDate))monthyear from tbMonthlySalary order by dSalaryDate desc";
+			String query="select distinct DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,dSalaryDate)+1,0)) dSalaryDate,CONVERT(varchar,DATENAME(MONTH,dSalaryDate)+'-'+DATENAME(YEAR,dSalaryDate))monthyear from tbMonthlySalary order by dSalaryDate desc";
 			System.out.println("cmbMonthDataLoad: "+query);
 			
 			List <?> list = session.createSQLQuery(query).list();
