@@ -30,6 +30,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.InlineDateField;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
@@ -45,6 +46,7 @@ public class LeaveBalanceEntry extends Window
 	private ComboBox cmbSectioName,cmbDepartment;
 	private CheckBox chkSectionAll;
 	private CheckBox chkDepartmentAll;
+	private PopupDateField dEntryDate;
 	
 	private ComboBox cmbUnitName;
 	
@@ -626,8 +628,8 @@ public class LeaveBalanceEntry extends Window
 			String findQuery = "select vUnitId,vSectionId,vEmployeeId," +
 					"(select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=eli.vEmployeeId)vEmployeeCode," +
 					"vEmployeeName,(select vDesignation from tbEmpDesignationInfo where vEmployeeId=eli.vEmployeeId)vDesignation," +
-					"(select dJoiningDate from tbEmpOfficialPersonalInfo where vEmployeeId=eli.vEmployeeId)dJoiningDate," +
-					"iCasualLeave,iSickLeave,iEarnLeave,CONVERT(date,vYear) years,vSectionId,(select vDepartmentId from tbEmpOfficialPersonalInfo where vEmployeeId=eli.vEmployeeId)deptId  " +
+					"dJoiningDate,iCasualLeave,iSickLeave,iEarnLeave,CONVERT(date,vYear) years,vSectionId," +
+					"(select vDepartmentId from tbEmpOfficialPersonalInfo where vEmployeeId=eli.vEmployeeId)deptId,dEntryDate  " +
 					"from tbEmpLeaveInfo eli where vLeaveId = '"+findId+"' and vEmployeeId = '"+strEmpID+"'";
 			
 			System.out.println("FindQuery " + findQuery);
@@ -657,6 +659,7 @@ public class LeaveBalanceEntry extends Window
 					txtSickLeave.setValue(element[8]);
 					txtEarnLeave.setValue(element[9]);
 					cmbDepartment.setValue(element[12]);
+					dEntryDate.setValue(element[13]);
 				}
 			}
 			else
@@ -717,7 +720,7 @@ public class LeaveBalanceEntry extends Window
 		try
 		{
 			String LeaveQuaryHeading = "insert into tbEmpLeaveInfo (vSectionId,vLeaveId,vYear,vEmployeeId,vEmployeeName,"
-							+ "iCasualLeave,iSickLeave,iEarnLeave,vUserName,vUserIp,dEntryTime,vUnitId) values ";
+							+ "iCasualLeave,iSickLeave,iEarnLeave,vUserName,vUserIp,dEntryTime,vUnitId,dEntryDate,dJoiningDate) values ";
 		
 			System.out.println("insert " +LeaveQuaryHeading);
 			
@@ -739,9 +742,9 @@ public class LeaveBalanceEntry extends Window
 							" '"+(tbTxtCasualLeave.get(i).getValue().toString().trim().isEmpty()?"0":tbTxtCasualLeave.get(i).getValue().toString().trim())+"'," +
 							" '"+(tbTxtSickLeave.get(i).getValue().toString().trim().isEmpty()?"0":tbTxtSickLeave.get(i).getValue().toString().trim())+"'," +
 							" '"+(tbTxtEarnLeave.get(i).getValue().toString().trim().isEmpty()?"0":tbTxtEarnLeave.get(i).getValue().toString().trim())+"'," +
-							" '"+sessionBean.getUserName()+"'," +
-							" '"+sessionBean.getUserIp()+"'," +
-							" GETDATE(),'"+cmbUnitName.getValue()+"'),";
+							" '"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',GETDATE()," +
+							" '"+cmbUnitName.getValue()+"','"+sessionBean.dfDb.format(dEntryDate.getValue())+"'," +
+							" '"+tblblJoiningDate.get(i).getValue()+"'),";
 					if(count%1000==0)
 					{
 						System.out.println("Insert Leave : "+LeaveQuaryHeading+insertLeave.substring(0, insertLeave.length()-1));
@@ -749,7 +752,7 @@ public class LeaveBalanceEntry extends Window
 						insertLeave = "";
 					}
 				}
-			}
+			}	
 			
 			if(insertLeave.length()>0)
 			{	
@@ -785,15 +788,14 @@ public class LeaveBalanceEntry extends Window
 			if(!tblblEmployeeID.get(0).getValue().toString().isEmpty())
 			{
 				String insertLeave = " update tbEmpLeaveInfo set " +
-						
 						" iCasualLeave = '"+tbTxtCasualLeave.get(0).getValue().toString()+"'," +
 						" iSickLeave = '"+tbTxtSickLeave.get(0).getValue().toString()+"'," +
 						" iEarnLeave = '"+tbTxtEarnLeave.get(0).getValue().toString()+"'," +
+						" dEntryDate = '"+sessionBean.dfDb.format(dEntryDate.getValue())+"'," +
 						" vUserName = '"+sessionBean.getUserName()+"'," +
 						" vUserIp = '"+sessionBean.getUserIp()+"'," +
 						" dEntryTime = CURRENT_TIMESTAMP" +
-						" where vLeaveId = '"+findId.getValue().toString()+"' and vEmployeeID = '"+tblblEmployeeID.get(0).getValue().toString()+"'";
-
+						" where vLeaveId = '"+findId.getValue().toString()+"' and vEmployeeID = '"+tblblEmployeeID.get(0).getValue().toString()+"' ";
 				System.out.println("updateData : "+insertLeave);
 				
 				session.createSQLQuery(insertLeave).executeUpdate();
@@ -948,7 +950,7 @@ public class LeaveBalanceEntry extends Window
 	private void componentIni(boolean b) 
 	{
 		dEntryYear.setEnabled(!b);
-		
+		dEntryDate.setEnabled(!b);		
 		cmbUnitName.setEnabled(!b);
 		cmbDepartment.setEnabled(!b);
 		cmbSectioName.setEnabled(!b);
@@ -963,6 +965,7 @@ public class LeaveBalanceEntry extends Window
 	private void txtClear()
 	{
 		sumOfTable = 0;
+		dEntryDate.setValue(new java.util.Date());
 		cmbUnitName.setValue(null);
 		cmbDepartment.setValue(null);
 		cmbSectioName.setValue(null);
@@ -993,7 +996,8 @@ public class LeaveBalanceEntry extends Window
 
 	private void focusEnter()
 	{
-		
+
+		allComp.add(dEntryDate);
 		allComp.add(cmbUnitName);
 		allComp.add(cmbSectioName);
 		allComp.add(txtCasualLeave);
@@ -1034,10 +1038,18 @@ public class LeaveBalanceEntry extends Window
 		dEntryYear.setHeight("-1px");
 		dEntryYear.setValue(new java.util.Date());
 		dEntryYear.setResolution(InlineDateField.RESOLUTION_YEAR);
-		dEntryYear.setInvalidAllowed(false);
 		mainLayout.addComponent(dEntryYear, "top:18.0px;left:130.0px;");
-		
-		
+
+		lblCommon = new Label("Entry Date:");
+		dEntryDate=new PopupDateField();
+		dEntryDate.setImmediate(true);
+		dEntryDate.setWidth("110px");
+		dEntryDate.setHeight("-1px");
+		dEntryDate.setValue(new java.util.Date());
+		dEntryDate.setResolution(InlineDateField.RESOLUTION_DAY);
+		dEntryDate.setDateFormat("dd-MM-yyyy");
+		mainLayout.addComponent(lblCommon, "top:20.0px;left:245.0px;");
+		mainLayout.addComponent(dEntryDate, "top:18.0px;left:310.0px;");
 
 		lblCommon = new Label("Project Name :");
 		mainLayout.addComponent(lblCommon, "top:45.0px;left:20.0px;");
