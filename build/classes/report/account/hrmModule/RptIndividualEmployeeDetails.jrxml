@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptIndividualEmployeeDetails" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="624"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -308,13 +308,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{vDesignationName}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0;(#,##0)">
-					<reportElement x="98" y="358" width="57" height="12"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mOtherAllowance}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement x="91" y="480" width="2" height="12"/>
 					<textElement verticalAlignment="Middle">
@@ -366,13 +359,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					</textElement>
 					<text><![CDATA[:]]></text>
 				</staticText>
-				<textField pattern="#,##0;(#,##0)">
-					<reportElement x="255" y="347" width="57" height="12"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mKhichuriMeal}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement x="91" y="346" width="2" height="12"/>
 					<textElement verticalAlignment="Middle">
@@ -415,13 +401,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					</textElement>
 					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mBasic}]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement x="172" y="335" width="76" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Provident Fund]]></text>
-				</staticText>
 				<textField pattern="dd-MM-yyyy">
 					<reportElement x="98" y="432" width="58" height="12"/>
 					<textElement verticalAlignment="Middle">
@@ -466,13 +445,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					</textElement>
 					<text><![CDATA[N/A]]></text>
 				</staticText>
-				<textField pattern="#,##0;(#,##0)">
-					<reportElement x="255" y="359" width="57" height="12"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mMobileAllowance}]]></textFieldExpression>
-				</textField>
 				<textField pattern="#,##0;(#,##0)">
 					<reportElement x="98" y="334" width="57" height="12"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -531,13 +503,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					</textElement>
 					<text><![CDATA[:]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="172" y="359" width="76" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Mobile Ceiling]]></text>
-				</staticText>
 				<textField pattern="dd-MM-yyyy">
 					<reportElement x="131" y="155" width="90" height="12"/>
 					<textElement verticalAlignment="Middle">
@@ -555,13 +520,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<text><![CDATA[:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="91" y="370" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<staticText>
 					<reportElement x="122" y="167" width="2" height="12"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
@@ -573,7 +531,7 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Medical Allowance]]></text>
+					<text><![CDATA[Mobile Allowance]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="10" y="432" width="80" height="12"/>
@@ -614,13 +572,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<text><![CDATA[Salary Information :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="11" y="358" width="79" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Other Allowance]]></text>
-				</staticText>
-				<staticText>
 					<reportElement x="91" y="322" width="2" height="12"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
@@ -634,13 +585,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					</textElement>
 					<text><![CDATA[Present Address]]></text>
 				</staticText>
-				<textField pattern="#,##0;(#,##0)">
-					<reportElement x="98" y="370" width="57" height="12"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mConveyanceAllowance}]]></textFieldExpression>
-				</textField>
 				<textField pattern="dd-MM-yyyy">
 					<reportElement x="98" y="468" width="58" height="12"/>
 					<textElement verticalAlignment="Middle">
@@ -718,26 +662,12 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<textFieldExpression class="java.util.Date"><![CDATA[$F{dMarriageDate}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="11" y="370" width="79" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Conveyeance]]></text>
-				</staticText>
-				<staticText>
 					<reportElement x="10" y="468" width="80" height="12"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Confirmation Date]]></text>
 				</staticText>
-				<textField pattern="#,##0;(#,##0)">
-					<reportElement x="255" y="335" width="57" height="12"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mProvidentFund}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement x="91" y="468" width="2" height="12"/>
 					<textElement verticalAlignment="Middle">
@@ -796,13 +726,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 						<font fontName="SansSerif" size="9" isBold="true" isItalic="true"/>
 					</textElement>
 					<text><![CDATA[HR Information :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="172" y="347" width="76" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Meal Charge]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="10" y="496" width="114" height="12" forecolor="#000000">
@@ -865,7 +788,7 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8"/>
 					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mMedicalAllowance}]]></textFieldExpression>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mMobileAllowance}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="91" y="456" width="2" height="12"/>
@@ -915,34 +838,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Income Tax]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="91" y="358" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="249" y="359" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="249" y="335" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="249" y="347" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="249" y="323" width="2" height="12"/>
@@ -1030,25 +925,6 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{vDepartmentName}]]></textFieldExpression>
 				</textField>
 				<subreport>
-					<reportElement x="322" y="317" width="228" height="83">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<subreportParameter name="nomineeSql">
-						<subreportParameterExpression><![CDATA[$P{nomineeSql}]]></subreportParameterExpression>
-					</subreportParameter>
-					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression class="java.lang.String"><![CDATA[$P{path} + "RptIndividualEmployeeDetails_subreportNomineeInfo.jasper"]]></subreportExpression>
-				</subreport>
-				<staticText>
-					<reportElement x="322" y="301" width="132" height="14" forecolor="#000000">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="9" isBold="true" isItalic="true"/>
-					</textElement>
-					<text><![CDATA[Nominee Information :]]></text>
-				</staticText>
-				<subreport>
 					<reportElement x="11" y="511" width="543" height="45">
 						<printWhenExpression><![CDATA[$F{tempEducationEmpId}.equals( "" )?false:true]]></printWhenExpression>
 					</reportElement>
@@ -1066,28 +942,21 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<text><![CDATA[:]]></text>
 				</staticText>
 				<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
-					<reportElement x="98" y="394" width="57" height="12"/>
+					<reportElement x="98" y="370" width="57" height="12"/>
 					<box rightPadding="0">
 						<bottomPen lineWidth="1.5" lineStyle="Double"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{tlEarning}]]></textFieldExpression>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mBasic}+$F{mHouseRent}+$F{mMobileAllowance}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="11" y="394" width="79" height="12"/>
+					<reportElement x="11" y="370" width="79" height="12"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total Earning]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="91" y="370" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
 				</staticText>
 				<textField pattern="#,##0" isBlankWhenNull="true">
 					<reportElement x="255" y="371" width="57" height="12"/>
@@ -1097,7 +966,7 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{tlDeduction}]]></textFieldExpression>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mIncomeTax}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="172" y="371" width="76" height="12"/>
@@ -1135,106 +1004,12 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{vNationalIdNo}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="322" y="258" width="136" height="12" forecolor="#000000">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<box>
-						<bottomPen lineWidth="0.25" lineStyle="Dotted"/>
-					</box>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="9" isBold="true" isItalic="true"/>
-					</textElement>
-					<text><![CDATA[Providend Fund Information :]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="322" y="274" width="66" height="12">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[PF ID]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="322" y="286" width="66" height="12">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[PF Joining Date]]></text>
-				</staticText>
-				<textField>
-					<reportElement x="395" y="274" width="127" height="12">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{vPFId}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="390" y="286" width="2" height="12">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
+					<reportElement x="91" y="370" width="2" height="12"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[:]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="390" y="274" width="2" height="12">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<textField pattern="dd-MM-yyyy">
-					<reportElement x="395" y="286" width="90" height="12">
-						<printWhenExpression><![CDATA[$F{vPFId}.equals( "" )?false:true]]></printWhenExpression>
-					</reportElement>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.util.Date"><![CDATA[$F{dPfStartDate}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="91" y="394" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="11" y="382" width="79" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Special ]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="91" y="382" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="91" y="382" width="2" height="12"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8" isBold="true"/>
-					</textElement>
-					<text><![CDATA[:]]></text>
-				</staticText>
-				<textField pattern="#,##0;(#,##0)">
-					<reportElement x="98" y="382" width="57" height="12"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font fontName="SansSerif" size="8"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mSpecialAllowance}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement x="9" y="69" width="105" height="12"/>
 					<textElement verticalAlignment="Middle">
