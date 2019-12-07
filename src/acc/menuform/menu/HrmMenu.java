@@ -24,6 +24,7 @@ import hrm.common.reportform.RptJoinConfirm;
 import hrm.common.reportform.RptLeaveApplication;
 import hrm.common.reportform.RptLeaveRegister;
 import hrm.common.reportform.RptLeaveRegisterIndividual;
+import hrm.common.reportform.RptManPower;
 import hrm.common.reportform.RptMonthWiseOtStatement;
 import hrm.common.reportform.RptMonthlyAttendanceManually;
 import hrm.common.reportform.RptMonthlyAttendanceSummary;
@@ -382,6 +383,10 @@ public class HrmMenu
 		if(isValidMenu("RptEmployeeRequisitionStatement"))
 		{
 			addCaptionedItem("EMPLOYEE REQUISITION STATEMENT",setupReport);
+		}
+		if(isValidMenu("RptManPower"))
+		{
+			addCaptionedItem("MAN POWER", setupReport);
 		}
 
 	}
@@ -1354,6 +1359,10 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE LIST"))
 				{
 					showWindow(new RptEmployeeList(sessionBean,"EmployeeList"),event.getItem(),"EmployeeList","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("MAN POWER"))
+				{
+					showWindow(new RptManPower(sessionBean,"RptManPower"),event.getItem(),"EmployeeList","HRM MODULE","REPORT");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("NEW EMPLOYEE LIST"))
 				{
