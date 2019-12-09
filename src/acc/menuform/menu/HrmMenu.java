@@ -69,6 +69,7 @@ import com.appform.hrmModule.LeaveBalanceEntry;
 import com.appform.hrmModule.LeaveTypeInfo;
 import com.appform.hrmModule.MealChargeInformation;
 import com.appform.hrmModule.NoticeInfo;
+import com.appform.hrmModule.OverTimeRequestApproval;
 import com.appform.hrmModule.OverTimeRequestForm;
 import com.appform.hrmModule.PresentBonusInformation;
 import com.appform.hrmModule.ProjectInformation;
@@ -774,6 +775,11 @@ public class HrmMenu
 		{
 			addCaptionedItem("OVER TIME REQUEST FORM", otTransaction);
 		}
+		if(isValidMenu("OverTimeRequestApproval"))
+		{
+			addCaptionedItem("OVER TIME REQUEST APPROVAL", otTransaction);
+		}
+
 	}
 	private void addOTReportChild(Object otReport) {
 		
@@ -1232,6 +1238,10 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("OVER TIME REQUEST FORM"))
 				{
 					showWindow(new OverTimeRequestForm(sessionBean,"OverTimeRequestForm",false),event.getItem(),"OverTimeRequestForm","HRM MODULE","TRANSACTION");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("OVER TIME REQUEST APPROVAL"))
+				{
+					showWindow(new OverTimeRequestApproval(sessionBean,"OverTimeRequestApproval"),event.getItem(),"OverTimeRequestApproval","HRM MODULE","TRANSACTION");
 				}
 				
 				//OT Report
