@@ -18,6 +18,7 @@ import hrm.common.reportform.RptEmployeeList;
 import hrm.common.reportform.RptEmployeeRequisitionForm;
 import hrm.common.reportform.RptEmployeeSeparationform;
 import hrm.common.reportform.RptHolidays;
+import hrm.common.reportform.RptIncrementProposal;
 import hrm.common.reportform.RptIndividualEmployeeDetails;
 import hrm.common.reportform.RptItemDistribution;
 import hrm.common.reportform.RptJoinConfirm;
@@ -56,6 +57,7 @@ import com.appform.hrmModule.EmployeeRequsitionForm;
 import com.appform.hrmModule.FestivalBonus;
 import com.appform.hrmModule.GetEmployeeAttendance;
 import com.appform.hrmModule.GradeInformation;
+import com.appform.hrmModule.IncrementProcessMultiple;
 import com.appform.hrmModule.IncrementType;
 import com.appform.hrmModule.ItemDistribution;
 import com.appform.hrmModule.ItemTypeInformation;
@@ -193,6 +195,11 @@ public class HrmMenu
 		{
 			hrmOT = addCaptionedItem("OVER TIME", hrmModule);
 			addOTChild(hrmOT);
+		}
+		if(isValidMenu("employeeOthers"))
+		{
+			hrmOthers=addCaptionedItem("OTHERS", hrmModule);
+			addHrmOthers(hrmOthers);
 		}
 		/*if(isValidMenu("employeeSalaryLoan"))
 		{
@@ -756,6 +763,38 @@ public class HrmMenu
 		}
 
 	}*/
+	private void addHrmOthers(Object hrmOthers) {
+		if(isValidMenu("OthersTransaction"))
+		{
+			othersTransaction = addCaptionedItem("TRANSACTION", hrmOthers);
+			addOthersTransactionChild(othersTransaction);
+		}
+		if(isValidMenu("OthersReport"))
+		{
+			othersReport = addCaptionedItem("REPORT", hrmOthers);
+			addOthersReportChild(othersReport);
+		}
+	}
+
+	private void addOthersTransactionChild(Object OthersTransaction) {
+		if(isValidMenu("salaryIncrementProcess"))
+		{
+			addCaptionedItem("SALARY INCREMENT PROCESS", OthersTransaction);
+		}
+	}
+
+	private void addOthersReportChild(Object OthersReport) {
+		if(isValidMenu("RptIncrementProposal"))
+		{
+			addCaptionedItem("SALARY INCREMENT REPORT",OthersReport);
+		}
+	}
+	
+	
+	
+	
+	
+	
 	private void addOTChild(Object ot)
 	{
 		
@@ -1202,36 +1241,18 @@ public class HrmMenu
 				{
 					showWindow(new RptShiftInformation(sessionBean,"shiftInformationReport"),event.getItem(),"shiftInformationReport","HRM MODULE","REPORT");
 				}
-				/*if(event.getItem().toString().equalsIgnoreCase("Section WISE SHIFT REPORT"))
-				{
-					showWindow(new RptSectionWiseShiftInformation(sessionBean),event.getItem(),"sectionWiseShift");
-				}*/
 				
-				/*if(event.getItem().toString().equalsIgnoreCase("MONTHLY SALARY"))
-				{
-					showWindow(new RptMonthlySalary(sessionBean,"monthlySalary"),event.getItem(),"monthlySalary","HRM MODULE","REPORT");
-				}
+				
 
-				if(event.getItem().toString().equalsIgnoreCase("EDIT MONTHLY SALARY."))
+				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT PROCESS"))
 				{
-					showWindow(new RptEditMonthlySalary(sessionBean,"editMonthlySalaryReport"),event.getItem(),"editMonthlySalaryReport","HRM MODULE","REPORT");
+					showWindow(new IncrementProcessMultiple(sessionBean,"salaryIncrementProcess"),event.getItem(),"salaryIncrementProcess","HRM MODULE","TRANSACTION");
 				}
-				if(event.getItem().toString().equalsIgnoreCase("INDIVIDUAL OT STATEMENT"))
+				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT REPORT"))
 				{
-					showWindow(new RptIndividualOt(sessionBean,"individualOTStatement"),event.getItem(),"individualOTStatement","HRM MODULE","REPORT");
+					showWindow(new RptIncrementProposal(sessionBean, "RptIncrementProposal"), event.getItem(), "RptIncrementProposal","HRM MODULE","REPORT");
 				}
-				if(event.getItem().toString().equalsIgnoreCase("EMAIL_SEND_PAY_SLIP"))
-				{
-					showWindow(new EmailLogIn(sessionBean, "emailSendPayslip"), event.getItem(), "emailSendPayslip","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE SEPARATION LIST"))
-				{
-					showWindow(new RptEmployeeSeparationList(sessionBean, "RptEmployeeSeparationList"), event.getItem(), "RptEmployeeSeparationList","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("PAY SLIP"))
-				{
-					showWindow(new RptMonthlyPaySlip(sessionBean, "RptMonthlyPaySlip"), event.getItem(), "RptMonthlyPaySlip","HRM MODULE","REPORT");
-				}*/
+				
 				
 				
 				//OT Transaction 

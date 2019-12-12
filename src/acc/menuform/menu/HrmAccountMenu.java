@@ -8,7 +8,6 @@ import hrm.common.reportform.RptBonusStatement;
 import hrm.common.reportform.RptEditMonthlySalary;
 import hrm.common.reportform.RptEmployeeBonus;
 import hrm.common.reportform.RptIncomeTaxStatement;
-import hrm.common.reportform.RptIncrementProposal;
 import hrm.common.reportform.RptIndividualOt;
 import hrm.common.reportform.RptIndivitualIncomeTax;
 import hrm.common.reportform.RptMonthlyHouseAllowanceSheet;
@@ -29,7 +28,6 @@ import com.appform.hrmModule.DeleteMonthlySalary;
 import com.appform.hrmModule.EditMonthlySalary;
 import com.appform.hrmModule.FestivalBonus;
 import com.appform.hrmModule.IncomeTax;
-import com.appform.hrmModule.IncrementProcessMultiple;
 import com.appform.hrmModule.MonthlySalaryGenerateMachine;
 import com.common.share.SessionBean;
 import com.common.share.SessionFactoryUtil;
@@ -325,24 +323,12 @@ public class HrmAccountMenu
 		}
 	}
 	private void addOthersTransactionChild(Object OthersTransaction) {
-		if(isValidMenu("salaryIncrementProcess"))
-		{
-			addCaptionedItem("SALARY INCREMENT PROCESS", OthersTransaction);
-		}
 		if(isValidMenu("FestivalBonus"))
 		{
 			addCaptionedItem("FESTIVAL BONUS",OthersTransaction);
 		}
 	}
 	private void addOthersReportChild(Object OthersReport) {
-		if(isValidMenu("RptEmployeeBonus"))
-		{
-			addCaptionedItem("FESTIVAL BONUS REPORT",OthersReport);
-		}
-		if(isValidMenu("RptIncrementProposal"))
-		{
-			addCaptionedItem("SALARY INCREMENT REPORT",OthersReport);
-		}
 		if(isValidMenu("RptBonusStatement"))
 		{
 			addCaptionedItem("BONUS STATEMENT",OthersReport);
@@ -351,11 +337,6 @@ public class HrmAccountMenu
 		{
 			addCaptionedItem("BONUS NOTES REQUISITION",OthersReport);
 		}
-		
-		/*if(isValidMenu("RptEmployeeRequisitionStatement"))
-		{
-			addCaptionedItem("EMPLOYEE REQUISITION STATEMENT",OthersReport);
-		}*/
 	}
 
 
@@ -399,10 +380,6 @@ public class HrmAccountMenu
 				if(event.getItem().toString().equalsIgnoreCase("DELETE MONTHLY SALARY"))
 				{
 					showWindow(new DeleteMonthlySalary(sessionBean,"DeleteMonthlySalary"),event.getItem(),"DeleteMonthlySalary","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT PROCESS"))
-				{
-					showWindow(new IncrementProcessMultiple(sessionBean,"salaryIncrementProcess"),event.getItem(),"salaryIncrementProcess","HRM MODULE","TRANSACTION");
 				}
 
 
@@ -501,10 +478,6 @@ public class HrmAccountMenu
 				if(event.getItem().toString().equalsIgnoreCase("FESTIVAL BONUS REPORT"))
 				{
 					showWindow(new RptEmployeeBonus(sessionBean, "RptEmployeeBonus"), event.getItem(), "RptEmployeeBonus","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT REPORT"))
-				{
-					showWindow(new RptIncrementProposal(sessionBean, "RptIncrementProposal"), event.getItem(), "RptIncrementProposal","HRM MODULE","REPORT");
 				}
 
 				//IncomeTax Report
