@@ -1146,7 +1146,7 @@ public class LeaveApplicationForm extends Window
 		try
 		{
 			String query = " select vEmployeeId,vEmployeeName,vFingerId,vDesignation,dJoiningDate,vConfirmDate,iCasualLeaveBalance," +
-					" iSickLeaveBalance,iEarnLeaveBalance,vDesignationId,vEmployeeType,vUnitId,vUnitName,vContactNo  from funLeaveBalanceDetails(" +
+					" iSickLeaveBalance,iEarnLeaveBalance,vDesignationId,vEmployeeType,vUnitId,vUnitName,vContactNo  from funGetLeaveBalanceDetails(" +
 					" '%','"+(cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"',"
 					+ "'"+sessionBean.dfDb.format(dApplicationDate.getValue())+"')";
 

@@ -76,6 +76,7 @@ import com.appform.hrmModule.OverTimeRequestForm;
 import com.appform.hrmModule.PresentBonusInformation;
 import com.appform.hrmModule.ProjectInformation;
 import com.appform.hrmModule.ReplacementLeaveApplication;
+import com.appform.hrmModule.ReplacementLeaveApproval;
 import com.appform.hrmModule.SectionInformation;
 import com.appform.hrmModule.ShiftInformation;
 import com.appform.hrmModule.UnitAndDepartmentWiseShiftInformation;
@@ -1078,10 +1079,13 @@ public class HrmMenu
 				}*/
 				if(event.getItem().toString().equalsIgnoreCase("REPLACEMENT LEAVE APPLICATION"))
 				{
-					//showWindow(new ReplacementLeaveApplication(sessionBean,"ReplacementLeaveApplication"),event.getItem(),"ReplacementLeaveApplication","HRM MODULE","TRANSACTION");
 					showWindow(new ReplacementLeaveApplication(sessionBean,"ReplacementLeaveApplication",false),event.getItem(),"ReplacementLeaveApplication","HRM MODULE","TRANSACTION");
-					
-				}				
+				}	
+
+				if(event.getItem().toString().equalsIgnoreCase("REPLACEMENT LEAVE APPROVAL"))
+				{
+					showWindow(new ReplacementLeaveApproval(sessionBean,"ReplacementLeaveApproval"),event.getItem(),"ReplacementLeaveApproval","HRM MODULE","TRANSACTION");
+				}
 
 				/*if(event.getItem().toString().equalsIgnoreCase("GENERATE MONTHLY SALARY"))
 				{
