@@ -275,7 +275,9 @@ public class RptNotesRequisition extends Window {
 				query="select isnull(sum(mNote1000),0)mNote1000,isnull(sum(mNote500),0)mNote500,isnull(sum(mNote100),0)mNote100,isnull(sum(mNote50),0)mNote50," +
 						"isnull(sum(mNote20),0)mNote20,isnull(sum(mNote10),0)mNote10,isnull(sum(mNote5),0)mNote5,isnull(sum(mNote2),0)mNote2,isnull(sum(mNote1),0)mNote1," +
 						"isnull(sum(NetPay),0)NetPay " +
-						"from funSalaryDisbursement ('"+cmbMonthName.getValue()+"','"+branchId+"','"+deptId+"','"+secId+"','"+empId+"','"+paymentType+"') ";
+						"from funNotesRequisition ('"+cmbMonthName.getValue()+"','"+branchId+"','"+deptId+"','"+secId+"','"+empId+"','"+paymentType+"') ";
+					
+				//funNotesRequisition
 				
 				List list1=session.createSQLQuery(query).list();
 				if(!list1.isEmpty())

@@ -43,11 +43,11 @@ public class RptMonthlySalary extends Window {
 	private AbsoluteLayout mainLayout;
 
 	
-	private ComboBox cmbEmpType,cmbUnit;
+	private ComboBox cmbServiceType,cmbUnit;
 
 	private ComboBox cmbSectionName,cmbDepartmentName;
 	private CheckBox chkSectionAll,chkDepartmentAll;
-	private CheckBox chkEmployeeTypeAll;
+	private CheckBox chkServiceTypeAll;
 	private ComboBox cmbMonth;
 
 	private SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -62,6 +62,9 @@ public class RptMonthlySalary extends Window {
 	SimpleDateFormat dRptFormat = new SimpleDateFormat("dd-MM-yyyy");
 	SimpleDateFormat dMonthYear = new SimpleDateFormat("MMMMM-yyyy");
 	
+	private static final List<String> type=Arrays.asList(new String[]{"Bank A/C","BFTN","Cash","All"});
+	public OptionGroup opgPaymentType;
+	
 	private CommonMethod cm;
 	private String menuId = "";
 	public RptMonthlySalary(SessionBean sessionBean,String menuId)
@@ -73,6 +76,7 @@ public class RptMonthlySalary extends Window {
 		this.menuId = menuId;
 		buildMainLayout();
 		setContent(mainLayout);
+
 		cmbMonthDataLoad();
 		setEventAction();
 		focusMove();
@@ -204,7 +208,7 @@ public class RptMonthlySalary extends Window {
 		finally{session.close();}
 	}
 
-	public void addEmployeeType()
+	public void addServiceType()
 	{
 		String dept="%",secId="%";
 		
@@ -221,21 +225,21 @@ public class RptMonthlySalary extends Window {
 		
 		try
 		{
-			String query = "select distinct vEmployeeType from tbMonthlySalary " +
+			String query = "select distinct vServiceType from tbMonthlySalary " +
 					"where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
 					"and vUnitId='"+cmbUnit.getValue().toString()+"' and vDepartmentId like '"+dept+"' and vSectionId like '"+secId+"' " +
-					"order by vEmployeeType";
-			System.out.println("addEmployeeType: "+query);
+					"order by vServiceType";
+			System.out.println("addServiceType: "+query);
 			
 			List <?> list = session.createSQLQuery(query).list();
 			for(Iterator <?> iter=list.iterator();iter.hasNext();)
 			{
-				cmbEmpType.addItem(iter.next().toString());
+				cmbServiceType.addItem(iter.next().toString());
 			}
 		}
 		catch(Exception exp)
 		{
-			showNotification("addEmployeeType",exp+"",Notification.TYPE_ERROR_MESSAGE);
+			showNotification("addServiceType",exp+"",Notification.TYPE_ERROR_MESSAGE);
 		}
 		finally{session.close();}
 	}
@@ -311,31 +315,31 @@ public class RptMonthlySalary extends Window {
 			public void valueChange(ValueChangeEvent event)
 			{
 
-				cmbEmpType.removeAllItems();
-				chkEmployeeTypeAll.setValue(false);
-				cmbEmpType.setEnabled(true);
+				cmbServiceType.removeAllItems();
+				chkServiceTypeAll.setValue(false);
+				cmbServiceType.setEnabled(true);
 				if(cmbDepartmentName.getValue()!=null || chkDepartmentAll.booleanValue())
 				{
 					if(cmbSectionName.getValue()!=null)
 					{
-						cmbEmpType.removeAllItems();
-						addEmployeeType();
+						cmbServiceType.removeAllItems();
+						addServiceType();
 					}
 				}
 			}
 		});		
 		chkSectionAll.addListener(new ValueChangeListener() {
 			public void valueChange(ValueChangeEvent event) {
-				cmbEmpType.removeAllItems();
-				chkEmployeeTypeAll.setValue(false);
-				cmbEmpType.setEnabled(true);
+				cmbServiceType.removeAllItems();
+				chkServiceTypeAll.setValue(false);
+				cmbServiceType.setEnabled(true);
 				if(cmbDepartmentName.getValue()!=null || chkDepartmentAll.booleanValue())
 				{
 					if(chkSectionAll.booleanValue())
 					{
 						cmbSectionName.setEnabled(false);
 						cmbSectionName.setValue(null);
-						addEmployeeType();
+						addServiceType();
 					}
 					else
 					{
@@ -346,23 +350,23 @@ public class RptMonthlySalary extends Window {
 					chkSectionAll.setValue(false);
 			}
 		});
-		chkEmployeeTypeAll.addListener(new ValueChangeListener()
+		chkServiceTypeAll.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
 				if(cmbSectionName.getValue()!=null || chkSectionAll.booleanValue())
 				{
-					if(chkEmployeeTypeAll.booleanValue())
+					if(chkServiceTypeAll.booleanValue())
 					{
-						cmbEmpType.setValue(null);
-						cmbEmpType.setEnabled(false);
+						cmbServiceType.setValue(null);
+						cmbServiceType.setEnabled(false);
 					}
 					else
-						cmbEmpType.setEnabled(true);
+						cmbServiceType.setEnabled(true);
 				}
 				else
 				{
-					chkEmployeeTypeAll.setValue(false);
+					chkServiceTypeAll.setValue(false);
 				}
 			}
 		});
@@ -376,7 +380,7 @@ public class RptMonthlySalary extends Window {
 					{
 						if(cmbSectionName.getValue()!=null || chkSectionAll.booleanValue()) 
 						{
-							if(cmbEmpType.getValue()!=null || chkEmployeeTypeAll.booleanValue()) 
+							if(cmbServiceType.getValue()!=null || chkServiceTypeAll.booleanValue()) 
 							{
 								reportShow();
 							}
@@ -415,7 +419,33 @@ public class RptMonthlySalary extends Window {
 		ReportOption RadioBtn= new ReportOption(RadioBtnGroup.getValue().toString());
 		String query=null;
 		String rptName="";
-		Session session=SessionFactoryUtil.getInstance().openSession();
+		String vMoneyTransferType="";
+		Session session=SessionFactoryUtil.getInstance().openSession(); 
+		
+
+		//"Bank A/C","BFTN","Cash","All"});
+		
+		if(opgPaymentType.getValue().toString().equals("All"))
+		{
+			vMoneyTransferType="%";
+			rptName="rptMonthlySalary.jasper";
+		}
+		else if(opgPaymentType.getValue().toString().equals("Bank A/C"))
+		{
+			vMoneyTransferType=opgPaymentType.getValue().toString();
+			rptName="rptMonthlySalary.jasper";
+		}
+		else if(opgPaymentType.getValue().toString().equals("BFTN"))
+		{
+			vMoneyTransferType=opgPaymentType.getValue().toString();
+			rptName="rptMonthlySalary.jasper";
+		}
+		else if(opgPaymentType.getValue().toString().equals("Cash"))
+		{
+			vMoneyTransferType=opgPaymentType.getValue().toString();
+			rptName="rptMonthlySalaryCash.jasper";
+		}
+		
 		
 		try
 		{
@@ -423,10 +453,9 @@ public class RptMonthlySalary extends Window {
 					"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
 					"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 					"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-					"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
+					"and vServiceType like '"+(cmbServiceType.getValue()!=null?cmbServiceType.getValue().toString():"%")+"' " +
+					"and vMoneyTransferType like '"+vMoneyTransferType+"' " +
 					"order by vUnitId,vDepartmentName,vSectionName";
-			
-			rptName="rptMonthlySalary.jasper";
 
 			System.out.println("SALARY "+query);
 
@@ -436,7 +465,8 @@ public class RptMonthlySalary extends Window {
 						"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
 						"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 						"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-						"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
+						"and vServiceType like '"+(cmbServiceType.getValue()!=null?cmbServiceType.getValue().toString():"%")+"' " +
+						"and vMoneyTransferType like '"+vMoneyTransferType+"' " +
 						"order by vUnitId,vDepartmentName,vSectionName,SUBSTRING(vEmployeeCode,3,15)";
 				
 				System.out.println("reportShow: "+query);
@@ -451,14 +481,14 @@ public class RptMonthlySalary extends Window {
 					String Header="For the Month Of: "+cmbMonth.getItemCaption(cmbMonth.getValue());
 					String exelSql="";
 					
-					exelSql = "select distinct vSectionName,vEmployeeType,vSectionID,vUnitId,vDepartmentName,vDepartmentId from tbMonthlySalary " +
-							"where vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
+					exelSql = "select distinct vSectionName,vServiceType,vSectionID,vUnitId,vDepartmentName,vDepartmentId from tbMonthlySalary " +
+							"where vServiceType like '"+(cmbServiceType.getValue()!=null?cmbServiceType.getValue().toString():"%")+"' " +
 							"and vUnitId like '"+cmbUnit.getValue().toString()+"' " +
 							"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 							"and vSectionID like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
 							"and MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') " +
 							"and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
-							"order by vSectionID,vEmployeeType,vUnitId";
+							"order by vSectionID,vServiceType,vUnitId";
 					
 					System.out.println("exelSql: "+exelSql);
 					
@@ -567,7 +597,7 @@ public class RptMonthlySalary extends Window {
 		allComp.add(cmbUnit);
 		allComp.add(cmbDepartmentName);
 		allComp.add(cmbSectionName);
-		allComp.add(cmbEmpType);
+		allComp.add(cmbServiceType);
 		allComp.add(cButton.btnPreview);
 		new FocusMoveByEnter(this,allComp);
 	}
@@ -623,26 +653,34 @@ public class RptMonthlySalary extends Window {
 		mainLayout.addComponent(chkSectionAll,"top:120.0px; left:395px");
 
 
-		cmbEmpType = new ComboBox();
-		cmbEmpType.setImmediate(false);
-		cmbEmpType.setWidth("260px");
-		cmbEmpType.setHeight("-1px");
-		cmbEmpType.setNullSelectionAllowed(true);
-		cmbEmpType.setImmediate(true);
+		cmbServiceType = new ComboBox();
+		cmbServiceType.setImmediate(false);
+		cmbServiceType.setWidth("260px");
+		cmbServiceType.setHeight("-1px");
+		cmbServiceType.setNullSelectionAllowed(true);
+		cmbServiceType.setImmediate(true);
 		mainLayout.addComponent(new Label("Employee Type :"), "top:150px; left:30.0px;");
-		mainLayout.addComponent(cmbEmpType, "top:148.0px; left:130.0px;");
+		mainLayout.addComponent(cmbServiceType, "top:148.0px; left:130.0px;");
 
-		chkEmployeeTypeAll = new CheckBox("All");
-		chkEmployeeTypeAll.setHeight("-1px");
-		chkEmployeeTypeAll.setWidth("-1px");
-		chkEmployeeTypeAll.setImmediate(true);
-		mainLayout.addComponent(chkEmployeeTypeAll, "top:150.0px; left:396.0px;");
+		chkServiceTypeAll = new CheckBox("All");
+		chkServiceTypeAll.setHeight("-1px");
+		chkServiceTypeAll.setWidth("-1px");
+		chkServiceTypeAll.setImmediate(true);
+		mainLayout.addComponent(chkServiceTypeAll, "top:150.0px; left:396.0px;");
+		
+		opgPaymentType=new OptionGroup("",type);
+		opgPaymentType.setHeight("-1px");
+		opgPaymentType.setImmediate(true);
+		opgPaymentType.setStyleName("horizontal");
+		mainLayout.addComponent(new Label("Payment Type : "),"top:180px; left:30.0px");
+		mainLayout.addComponent(opgPaymentType,"top:178px; left:130px");
+		opgPaymentType.setValue("All");
 
 		RadioBtnGroup = new OptionGroup("",type1);
 		RadioBtnGroup.setImmediate(true);
 		RadioBtnGroup.setStyleName("horizontal");
 		RadioBtnGroup.setValue("PDF");
-		mainLayout.addComponent(RadioBtnGroup, "top:180.0px;left:130.0px;");
+		mainLayout.addComponent(RadioBtnGroup, "top:210.0px;left:130.0px;");
 		RadioBtnGroup.setVisible(false);
 
 		//mainLayout.addComponent(new Label("______________________________________________________________________________"), "top:200.0px; left:20.0px; right:20.0px;");

@@ -556,7 +556,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Other Earning]]></text>
+				<text><![CDATA[Other Earning / Increment]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="959" y="0" width="40" height="51"/>
