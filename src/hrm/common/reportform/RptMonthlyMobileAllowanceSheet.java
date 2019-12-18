@@ -423,7 +423,7 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 					"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
 					"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 					"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-					"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
+					"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' and mMobileAllowance>0 " +
 					"order by vUnitId,vDepartmentName";
 			
 			rptName="rptMonthlyMobileAllowanceSheet.jasper";
@@ -437,7 +437,7 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 						"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
 						"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 						"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-						"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
+						"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' and mMobileAllowance>0 " +
 						"order by vUnitId,vDepartmentName,vSectionName,SUBSTRING(vEmployeeCode,3,15)";
 				
 				System.out.println("reportShow: "+query);
