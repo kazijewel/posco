@@ -2,12 +2,12 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptBankForwardingLetter" language="groovy" pageWidth="595" pageHeight="842" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36" isSummaryNewPage="true">
 	<property name="ireport.zoom" value="1.3636363636363635"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="575"/>
+	<property name="ireport.y" value="577"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA["select isnull(sum(mNote1000),0)mNote1000,isnull(sum(mNote500),0)mNote500,isnull(sum(mNote100),0)mNote100,isnull(sum(mNote50),0)mNote50, isnull(sum(mNote20),0)mNote20,isnull(sum(mNote10),0)mNote10,isnull(sum(mNote5),0)mNote5,isnull(sum(mNote2),0)mNote2,isnull(sum(mNote1),0)mNote1, isnull(sum(NetPay),0)NetPay  from funSalaryDisbursement ('2019-1','%','%','%','%','Cash')"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select isnull(sum(mNote1000),0)mNote1000,isnull(sum(mNote500),0)mNote500,isnull(sum(mNote100),0)mNote100,isnull(sum(mNote50),0)mNote50, isnull(sum(mNote20),0)mNote20,isnull(sum(mNote10),0)mNote10,isnull(sum(mNote5),0)mNote5,isnull(sum(mNote2),0)mNote2,isnull(sum(mNote1),0)mNote1, isnull(sum(NetPay),0)NetPay  from funNotesRequisition ('2019-1','%','%','%','%','Cash')"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="section" class="java.lang.String"/>
 	<parameter name="username" class="java.lang.String"/>
@@ -128,17 +128,6 @@
 					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[Thanking You]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="1" y="647" width="178" height="22"/>
-				<box leftPadding="2">
-					<topPen lineWidth="0.5" lineStyle="Dashed"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="12"/>
-				</textElement>
-				<text><![CDATA[Mohammed Mohiuddin, FCMA
-]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="668" width="125" height="22"/>
