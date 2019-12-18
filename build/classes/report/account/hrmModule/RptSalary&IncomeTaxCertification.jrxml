@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptBankForwardingLetter" language="groovy" pageWidth="595" pageHeight="842" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36" isSummaryNewPage="true">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="361"/>
+	<parameter name="company" class="java.lang.String"/>
+	<parameter name="address" class="java.lang.String"/>
+	<parameter name="sql" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["select * from funSalaryAIT('EMP-148')"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="section" class="java.lang.String"/>
+	<parameter name="username" class="java.lang.String"/>
+	<parameter name="phone" class="java.lang.String"/>
+	<parameter name="logo" class="java.lang.String">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="month" class="java.lang.String"/>
+	<parameter name="SysDate" class="java.util.Date"/>
+	<parameter name="BankName" class="java.lang.String"/>
+	<parameter name="BranchName" class="java.lang.String"/>
+	<parameter name="AccountNo" class="java.lang.String"/>
+	<parameter name="year" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["E:\\workspace\\uptd\\src\\report\\account\\hrmModule\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Date" class="java.lang.String"/>
+	<parameter name="amount" class="java.lang.String"/>
+	<parameter name="InWords" class="java.lang.String"/>
+	<parameter name="refNo" class="java.lang.String"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="id" class="java.lang.String"/>
+	<parameter name="recvName" class="java.lang.String"/>
+	<parameter name="recvDesignation" class="java.lang.String"/>
+	<parameter name="footer" class="java.lang.String">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{sql}]]>
+	</queryString>
+	<field name="vEmployeeId" class="java.lang.String"/>
+	<field name="vEmployeeCode" class="java.lang.String"/>
+	<field name="vEmployeeName" class="java.lang.String"/>
+	<field name="mBasic" class="java.math.BigDecimal"/>
+	<field name="mHouseRent" class="java.math.BigDecimal"/>
+	<field name="mMobileAllowance" class="java.math.BigDecimal"/>
+	<field name="mIncomeTax" class="java.math.BigDecimal"/>
+	<field name="mNetPayable" class="java.math.BigDecimal"/>
+	<field name="vMonthYear" class="java.lang.String"/>
+	<field name="vSalaryCaption" class="java.lang.String"/>
+	<field name="vIncomeTaxCaption" class="java.lang.String"/>
+	<variable name="sl" class="java.lang.Number">
+		<variableExpression><![CDATA[$V{sl}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalSalary" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalOT" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalFridayAllow" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalDearness" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalFireAllowance" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalDeduction" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalNetPay" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalPage" class="java.math.BigDecimal" incrementType="Report">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="currentPage" class="java.lang.String">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalInsurance" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="EmpType">
+		<groupExpression><![CDATA[]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="485">
+			<textField pattern="">
+				<reportElement x="5" y="80" width="159" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Date : "+$P{Date}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="5" y="3" width="59" height="42"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="77" y="3" width="446" height="17"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="77" y="21" width="446" height="17"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="120" width="518" height="47"/>
+				<textElement markup="none">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["This is to certify that "+$P{name}+",ID # "+$P{id}+", Safety Assistant of POSCO Engineering & Construction Co., Ltd. has drawn his remuneration from the company for the fiscal year "+$P{year}+" and since last four (4) months under the following scale per month."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="186" width="518" height="17"/>
+				<textElement markup="none">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Tax deducted from his Salary u/s of Income Tax Ordinance 1984. Details are given bellows:- ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="218" width="116" height="17"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Salary]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="236" width="116" height="17"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[House Rent Allowance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="126" y="254" width="116" height="17"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Mobile Allowance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="218" width="30" height="17"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[: Tk.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="236" width="30" height="17"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[: Tk.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="254" width="30" height="17"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[: Tk.]]></text>
+			</staticText>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="273" y="218" width="105" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mBasic}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="273" y="236" width="105" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mHouseRent}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="273" y="254" width="105" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mMobileAllowance}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="213" y="274" width="60" height="17"/>
+				<textElement markup="none">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total : Tk.]]></text>
+			</staticText>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="273" y="274" width="105" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mMobileAllowance}+$F{mBasic}+$F{mHouseRent}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="312" width="518" height="17"/>
+				<textElement markup="none">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[He will maintain personnel tax file by himself and will pay his income tax as per laws.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="5" y="330" width="518" height="31"/>
+				<textElement markup="none">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[For
+POSCO Engineering & Construction Co., Ltd.
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="5" y="394" width="208" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{recvName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="414" width="208" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{recvDesignation}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="5" y="468" width="518" height="17"/>
+				<textElement markup="none">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Details Enclosed: Monthly Salary + O.T. & AIT Deduction and Deposited to Bank:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="47" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$V{sl}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="47" y="0" width="117" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vMonthYear}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="191" y="0" width="150" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vSalaryCaption}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="361" y="0" width="133" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vIncomeTaxCaption}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="38">
+			<image onErrorType="Blank">
+				<reportElement x="0" y="1" width="523" height="36"/>
+				<imageExpression class="java.lang.String"><![CDATA["D:\\Tomcat 7.0\\webapps\\report\\posco\\PoscoFooter.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="38">
+			<image onErrorType="Blank">
+				<reportElement x="0" y="0" width="523" height="38"/>
+				<imageExpression class="java.lang.String"><![CDATA["D:\\Tomcat 7.0\\webapps\\report\\posco\\PoscoFooter.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

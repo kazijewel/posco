@@ -636,7 +636,7 @@ public class IncrementProcessMultiple extends Window{
 								showNotification("Warning!","Increment Data already exists!",Notification.TYPE_WARNING_MESSAGE);						
 							}
 							else{
-								addTableData(cmbEmployee.getValue().toString());
+								tableDataLoad(cmbEmployee.getValue().toString());
 							}
 						}
 					}
@@ -669,7 +669,7 @@ public class IncrementProcessMultiple extends Window{
 									showNotification("Warning!","Data already exists!",Notification.TYPE_WARNING_MESSAGE);						
 								}
 								else{
-									addTableData("%");
+									tableDataLoad("%");
 								}
 							}
 							else{
@@ -798,31 +798,27 @@ public class IncrementProcessMultiple extends Window{
 		this.getParent().addWindow(win);
 
 	}
-	private void addTableData(String empId)
+	private void tableDataLoad(String empId)
 	{
 		Session session=SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
 		{
-			String sql="select distinct a.vEmployeeId,a.vEmployeeCode,a.vFingerId,a.vProximityId,a.vEmployeeName,"+
-					" a.vEmployeeType,c.vDesignationId,c.vDesignation,b.mBasic,b.mHouseRent, "+
-					" b.mMedicalAllowance,b.mMobileAllowance, "+
-					" b.mProvidentFund pf, "+
-					" a.dJoiningDate, "+
+			
+			String sql="select distinct a.vEmployeeId,a.vEmployeeCode,a.vFingerId,a.vProximityId,a.vEmployeeName," +
+					"a.vEmployeeType,a.vDesignationId,a.vDesignationName,b.mBasic,b.mHouseRent,b.mMedicalAllowance,b.mMobileAllowance," +
+					"b.mProvidentFund pf,a.dJoiningDate," +
 					" DATEDIFF(DD,a.dJoiningDate,'"+dFormatSql.format(dIncrementDate.getValue())+"')/365 jdYear, "+
 					" DATEDIFF(DD,a.dJoiningDate,'"+dFormatSql.format(dIncrementDate.getValue())+"')%365/30 jdMonth, "+
 					" DATEDIFF(DD,a.dJoiningDate,'"+dFormatSql.format(dIncrementDate.getValue())+"')%365%30 jdDay, "+
-					" (b.mBasic+b.mHouseRent+b.mMedicalAllowance+b.mMobileAllowance) as total,b.mProvidentFund," +
-					" (select iDesignationSerial from tbDesignationInfo where vDesignationId=c.vDesignationId)iDesignationSerial," +
-					" a.vUnitId,a.vUnitName,a.vDepartmentId,a.vDepartmentName "+
-					" from tbEmpOfficialPersonalInfo a "+
-					" inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId "+
-					" inner join tbEmpDesignationInfo c on a.vEmployeeId=c.vEmployeeId "+
-					" inner join tbEmpOfficialPersonalInfo d on a.vEmployeeId=d.vEmployeeId "+
-					" where d.vDepartmentId='"+cmbDepartment.getValue().toString()+"' "+
-					" and a.vEmployeeId like '"+empId+"' "+
-					" and a.bStatus='1' "+
-					" order by iDesignationSerial,a.dJoiningDate";
+					"(b.mBasic+b.mHouseRent+b.mMedicalAllowance+b.mMobileAllowance) as total,b.mProvidentFund," +
+					"'0' iDesignationSerial,a.vUnitId,a.vUnitName,a.vDepartmentId,a.vDepartmentName " +
+					"from tbEmpOfficialPersonalInfo a " +
+					"inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId " +
+					"where a.vDepartmentId='"+cmbDepartment.getValue().toString()+"' " +
+					"and a.vEmployeeId like '"+empId+"' " +
+					"and a.bStatus='1' " +
+					"order by a.dJoiningDate";
 			
 			System.out.println("TableDataLoadByDidar: "+sql);
 			
@@ -1021,7 +1017,7 @@ public class IncrementProcessMultiple extends Window{
 							" vRegisterId,vRegisterName,mBasic,mHouseRent,mMedicalAllowance,mClinicalAllowance,mNonPracticeAllowance," +
 							" mSpecialAllowance,mOtherAllowance,mDearnessAllowance,mMobileAllowance,mAttendanceBonus," +
 							" mRoomCharge,mIncomeTax,mProvidentFund,mKallanFund,mKhichuriMeal,vUdFlag,iOtEnable,vUserName,vUserIp,dEntryTime," +
-							" iProbationPeriod,vUnitId,vUnitName,vDepartmentId,vDepartmentName,vSectionId,vSectionName )" +
+							" iProbationPeriod,vUnitId,vUnitName,vDepartmentId,vDepartmentName,vSectionId,vSectionName,mConveyanceAllowance )" +
 
 							" select ei.vEmployeeId,vEmployeeCode,vFingerId,vProximityId,ei.vEmployeeName,vReligion,vGender,"+
 							" dDateOfBirth,vNationality,vNationalIdNo,vEmployeeType,vServiceType,bPhysicallyDisable,"+
@@ -1033,7 +1029,7 @@ public class IncrementProcessMultiple extends Window{
 							" mMedicalAllowance,mClinicalAllowance,'"+0+"',mSpecialAllowance,mOtherAllowance,"+
 							" mDearnessAllowance,mMobileAllowance,mAttendanceBonus,mRoomCharge,mIncomeTax,"+
 							" mProvidentFund,mKallanFund,mKhichuriMeal,'"+udFlagForUdEmployeeInfo+"',iOtEnable,ei.vUserName,ei.vUserIp,ei.dEntryTime," +
-							" ei.iProbationPeriod,ei.vUnitId,ei.vUnitName,ei.vDepartmentId,ei.vDepartmentName,ei.vSectionId,ei.vSectionName "+
+							" ei.iProbationPeriod,ei.vUnitId,ei.vUnitName,ei.vDepartmentId,ei.vDepartmentName,ei.vSectionId,ei.vSectionName,mConveyanceAllowance "+
 							" from tbEmpOfficialPersonalInfo ei inner join "+
 							" tbEmpSalaryStructure es on ei.vEmployeeId = es.vEmployeeId where ei.vEmployeeId = '"+masterEmployeeId+"' and" +
 							" es.isCurrent = 1";
@@ -1054,8 +1050,9 @@ public class IncrementProcessMultiple extends Window{
 							"vNewDesignationId,vNewDesignationName,vNewEmployeeType,"+
 							"mNewBasic,mNewHouseRent,mNewMedicalAllowance,mNewMobile,"+
 							"vIncrementId,vIncrementType,vRemarks,vUserIP,vUserName,dEntryTime," +
-							"mPFPercentage,mPFAmount,mNewTotalSalary,mNewPFPercentage,mNewPFAmount) "+
-							"values("+txtSerialNo.getValue()+","+
+							"mPFPercentage,mPFAmount,mNewTotalSalary,mNewPFPercentage,mNewPFAmount,mConveyance) "+
+							"values(" +
+							""+txtSerialNo.getValue()+","+
 							"'"+dFormatSql.format(dIncrementDate.getValue())+"',"+
 							"'"+tblblempHidden.get(i).getValue()+"',"+
 							"'"+tblblEmpID.get(i).getValue().toString()+"',"+
@@ -1089,7 +1086,7 @@ public class IncrementProcessMultiple extends Window{
 							"'Remarks',"+
 							"'"+sessionBean.getUserIp()+"',"+
 							"'"+sessionBean.getUserName()+"',"+
-							"CURRENT_TIMESTAMP,'0','0','0','0','0' )";
+							"CURRENT_TIMESTAMP,'0','0','0','0','0','0' )";
 					System.out.println("InsertData: "+sql);
 					session.createSQLQuery(sql).executeUpdate();
 					
