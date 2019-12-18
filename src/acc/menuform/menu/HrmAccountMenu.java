@@ -442,6 +442,30 @@ public class HrmAccountMenu
 					showWindow(new RptSalaryIncomeTaxCertification(sessionBean, "RptSalaryAndIncomeTaxCertification"), event.getItem(), "RptSalaryAndIncomeTaxCertification","HRM MODULE","REPORT");
 				}
 				
+
+            	
+				if(event.getItem().toString().equalsIgnoreCase("BANK ADVICE WITH FORWARDING LETTER"))
+				{
+					showWindow(new RptBankStatement(sessionBean,"bankStatement"),event.getItem(),"bankStatement","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("OVER TIME BANK STATEMENT"))
+				{
+					showWindow(new RptOverTimeStatement(sessionBean,"RptOverTimeBankStatement"),event.getItem(),"RptOverTimeBankStatement","HRM MODULE","REPORT");
+				}
+				
+				if(event.getItem().toString().equalsIgnoreCase("NOTES REQUISITION"))
+				{
+					showWindow(new RptNotesRequisition(sessionBean,"RptNotesRequisition"),event.getItem(),"RptNotesRequisition","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("BONUS STATEMENT"))
+				{
+					showWindow(new RptBonusStatement(sessionBean,"RptBonusStatement"),event.getItem(),"RptBonusStatement","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("BONUS NOTES REQUISITION"))
+				{
+					showWindow(new RptBonusNotesRequisition(sessionBean,"RptBonusNotesRequisition"),event.getItem(),"RptBonusNotesRequisition","HRM MODULE","REPORT");
+				}
+				
 				//OT Report
 
 				/*if(event.getItem().toString().equalsIgnoreCase("MONTH WISE OT STATEMENT"))
@@ -495,28 +519,6 @@ public class HrmAccountMenu
 				{
 					showWindow(new hrm.common.reportform.RptOTNFridayEnable(sessionBean,"rptOtNFridayEnable"),event.getItem(),"rptOtNFridayEnable","HRM MODULE","REPORT");
 				}*/
-				                                                                                                                                                	
-				if(event.getItem().toString().equalsIgnoreCase("BANK ADVICE WITH FORWARDING LETTER"))
-				{
-					showWindow(new RptBankStatement(sessionBean,"bankStatement"),event.getItem(),"bankStatement","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("OVER TIME BANK STATEMENT"))
-				{
-					showWindow(new RptOverTimeStatement(sessionBean,"RptOverTimeBankStatement"),event.getItem(),"RptOverTimeBankStatement","HRM MODULE","REPORT");
-				}
-				
-				if(event.getItem().toString().equalsIgnoreCase("NOTES REQUISITION"))
-				{
-					showWindow(new RptNotesRequisition(sessionBean,"RptNotesRequisition"),event.getItem(),"RptNotesRequisition","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("BONUS STATEMENT"))
-				{
-					showWindow(new RptBonusStatement(sessionBean,"RptBonusStatement"),event.getItem(),"RptBonusStatement","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("BONUS NOTES REQUISITION"))
-				{
-					showWindow(new RptBonusNotesRequisition(sessionBean,"RptBonusNotesRequisition"),event.getItem(),"RptBonusNotesRequisition","HRM MODULE","REPORT");
-				}
 				
 				
 			}

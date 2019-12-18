@@ -79,23 +79,17 @@ public class IncrementProcessMultiple extends Window{
 	ArrayList<Label> tblblServiceLength=new ArrayList<Label>();
 	ArrayList<Label> tblblBasic=new ArrayList<Label>();
 	ArrayList<Label> tblblHouseRent=new ArrayList<Label>();
-	ArrayList<Label> tblblMedicalAllowance=new ArrayList<Label>();
 	ArrayList<Label> tblblMobile=new ArrayList<Label>();
 	ArrayList<Label> tblblTotal=new ArrayList<Label>();
-	/*ArrayList<Label> tblblPFpercentage=new ArrayList<Label>();
-	ArrayList<Label> tblblPFAmount=new ArrayList<Label>();*/
 	ArrayList<Label> tblblDesignationId=new ArrayList<Label>();
 	ArrayList<Label> tblblNewEmpID=new ArrayList<Label>();
 	ArrayList<Label> tblblNewEmpName=new ArrayList<Label>();
-	//ArrayList<Label> tblblNewJoiningDate=new ArrayList<Label>();
-	//ArrayList<Label> tblblNewPFAmount=new ArrayList<Label>();
 
 	ArrayList<ComboBox> tbCmbNewDesignation=new ArrayList<ComboBox>();
 	ArrayList<ComboBox> tbCmbNewEmpType=new ArrayList<ComboBox>();
 
 	ArrayList<AmountField> tbtxtNewBasic=new ArrayList<AmountField>();
 	ArrayList<AmountField> tbtxtNewHouseRent=new ArrayList<AmountField>();
-	ArrayList<AmountField> tbtxtNewMedicalAllowance=new ArrayList<AmountField>();
 	ArrayList<AmountField> tbtxtNewMobile=new ArrayList<AmountField>();
 	ArrayList<AmountField> tbtxtIncAmount=new ArrayList<AmountField>();
 	ArrayList<AmountField> tbtxtNewGross=new ArrayList<AmountField>();
@@ -197,7 +191,6 @@ public class IncrementProcessMultiple extends Window{
 				tblblServiceLength.get(ar).setValue("");
 				tblblBasic.get(ar).setValue("");
 				tblblHouseRent.get(ar).setValue("");
-				tblblMedicalAllowance.get(ar).setValue("");
 				tblblMobile.get(ar).setValue("");
 				tblblTotal.get(ar).setValue("");
 				tbtxtIncAmount.get(ar).setValue("");
@@ -208,7 +201,6 @@ public class IncrementProcessMultiple extends Window{
 				tbCmbNewEmpType.get(ar).setValue(null);
 				tbtxtNewBasic.get(ar).setValue("");
 				tbtxtNewHouseRent.get(ar).setValue("");
-				tbtxtNewMedicalAllowance.get(ar).setValue("");
 				tbtxtNewMobile.get(ar).setValue("");
 				
 
@@ -229,7 +221,6 @@ public class IncrementProcessMultiple extends Window{
 							tblblServiceLength.get(tbIndex).setValue(tblblServiceLength.get(tbIndex+1).getValue().toString().trim());
 							tblblBasic.get(tbIndex).setValue(tblblBasic.get(tbIndex+1).getValue().toString().trim());
 							tblblHouseRent.get(tbIndex).setValue(tblblHouseRent.get(tbIndex+1).getValue().toString().trim());
-							tblblMedicalAllowance.get(tbIndex).setValue(tblblMedicalAllowance.get(tbIndex+1).getValue().toString().trim());
 							tblblMobile.get(tbIndex).setValue(tblblMobile.get(tbIndex+1).getValue().toString().trim());
 							tblblTotal.get(tbIndex).setValue(tblblTotal.get(tbIndex+1).getValue().toString().trim());
 							
@@ -241,7 +232,6 @@ public class IncrementProcessMultiple extends Window{
 							tbCmbNewEmpType.get(tbIndex).setValue(tbCmbNewEmpType.get(tbIndex+1).getValue());
 							tbtxtNewBasic.get(tbIndex).setValue(tbtxtNewBasic.get(tbIndex+1).getValue());
 							tbtxtNewHouseRent.get(tbIndex).setValue(tbtxtNewHouseRent.get(tbIndex+1).getValue());
-							tbtxtNewMedicalAllowance.get(tbIndex).setValue(tbtxtNewMedicalAllowance.get(tbIndex+1).getValue());
 							tbtxtNewMobile.get(tbIndex).setValue(tbtxtNewMobile.get(tbIndex+1).getValue());
 							
 							
@@ -256,7 +246,6 @@ public class IncrementProcessMultiple extends Window{
 							tblblServiceLength.get(tbIndex+1).setValue("");
 							tblblBasic.get(tbIndex+1).setValue("");
 							tblblHouseRent.get(tbIndex+1).setValue("");
-							tblblMedicalAllowance.get(tbIndex+1).setValue("");
 							tblblMobile.get(tbIndex+1).setValue("");
 							tblblTotal.get(tbIndex+1).setValue("");
 							tbtxtIncAmount.get(tbIndex+1).setValue("");
@@ -267,7 +256,6 @@ public class IncrementProcessMultiple extends Window{
 							tbCmbNewEmpType.get(tbIndex+1).setValue(null);
 							tbtxtNewBasic.get(tbIndex+1).setValue("");
 							tbtxtNewHouseRent.get(tbIndex+1).setValue("");
-							tbtxtNewMedicalAllowance.get(tbIndex+1).setValue("");
 							tbtxtNewMobile.get(tbIndex+1).setValue("");
 							
 							index--;
@@ -309,9 +297,6 @@ public class IncrementProcessMultiple extends Window{
 
 		tblblHouseRent.add(new Label());
 		tblblHouseRent.get(ar).setWidth("100%");
-
-		tblblMedicalAllowance.add(new Label());
-		tblblMedicalAllowance.get(ar).setWidth("100%");
 
 		tblblMobile.add(new Label());
 		tblblMobile.get(ar).setWidth("100%");
@@ -382,9 +367,6 @@ public class IncrementProcessMultiple extends Window{
 		tbtxtNewHouseRent.add(new AmountField());
 		tbtxtNewHouseRent.get(ar).setWidth("100%");
 
-		tbtxtNewMedicalAllowance.add(new AmountField());
-		tbtxtNewMedicalAllowance.get(ar).setWidth("100%");
-
 		tbtxtNewMobile.add(new AmountField());
 		tbtxtNewMobile.get(ar).setWidth("100%");
 
@@ -393,12 +375,12 @@ public class IncrementProcessMultiple extends Window{
 				tblblempHidden.get(ar),tblblEmpID.get(ar),tblblEmpName.get(ar),
 				tblblDesignationId.get(ar),tblblDesignation.get(ar),tblblJoiningDate.get(ar),tblblJoiningDateSql.get(ar),
 				tblblEmpType.get(ar),tblblServiceLength.get(ar),tblblBasic.get(ar),
-				tblblHouseRent.get(ar),tblblMedicalAllowance.get(ar),tblblMobile.get(ar),
+				tblblHouseRent.get(ar),tblblMobile.get(ar),
 				tblblTotal.get(ar),
 				tbtxtIncAmount.get(ar),tbtxtNewGross.get(ar),
 				tblblNewEmpID.get(ar),tblblNewEmpName.get(ar),
 				tbCmbNewDesignation.get(ar),tbCmbNewEmpType.get(ar),
-				tbtxtNewBasic.get(ar),tbtxtNewHouseRent.get(ar),tbtxtNewMedicalAllowance.get(ar),
+				tbtxtNewBasic.get(ar),tbtxtNewHouseRent.get(ar),
 				tbtxtNewMobile.get(ar)},ar);
 	}
 	public void cmbEmployeeTypeDataLoad(int ar){
@@ -513,8 +495,7 @@ public class IncrementProcessMultiple extends Window{
 				tblblDesignationId.get(i).setValue(element[7].toString());
 				tblblDesignation.get(i).setValue(element[8].toString());
 				tblblBasic.get(i).setValue(df.format(element[15]).toString());
-				tblblHouseRent.get(i).setValue(df.format(element[16]).toString());
-				tblblMedicalAllowance.get(i).setValue(df.format(element[17]).toString());				
+				tblblHouseRent.get(i).setValue(df.format(element[16]).toString());			
 				tblblMobile.get(i).setValue(df.format(element[18]).toString());	
 				tblblJoiningDate.get(i).setValue(dFormatBD.format(element[12]).toString());
 				tblblJoiningDateSql.get(i).setValue(element[12]);
@@ -525,10 +506,8 @@ public class IncrementProcessMultiple extends Window{
 				tbCmbNewDesignation.get(i).setValue(element[22].toString());
 				tbCmbNewDesignation.get(i).setItemCaption(element[22],element[23].toString());
 				tbCmbNewEmpType.get(i).setValue(element[24]);
-				tbtxtNewMedicalAllowance.get(i).setValue(df.format(element[10]).toString());
 				tbtxtNewBasic.get(i).setValue(df.format(element[25]).toString());
 				tbtxtNewHouseRent.get(i).setValue(df.format(element[26]).toString());
-				tbtxtNewMedicalAllowance.get(i).setValue(df.format(element[27]).toString());
 				tbtxtNewMobile.get(i).setValue(df.format(element[28]).toString());
 				tbtxtIncAmount.get(i).setValue(df.format(element[10]).toString());
 				tbtxtNewGross.get(i).setValue(df.format(element[11]).toString());				
@@ -862,7 +841,6 @@ public class IncrementProcessMultiple extends Window{
 						tblblDesignation.get(index).setValue(element[7].toString());
 						tblblBasic.get(index).setValue(Double.parseDouble(element[8].toString()));
 						tblblHouseRent.get(index).setValue(Double.parseDouble(element[9].toString()));
-						tblblMedicalAllowance.get(index).setValue(Double.parseDouble(element[10].toString()));
 						tblblMobile.get(index).setValue(Double.parseDouble(element[11].toString()));
 						tblblJoiningDate.get(index).setValue(dFormatBD.format(element[13]).toString());	
 						tblblJoiningDateSql.get(index).setValue(element[13]);
@@ -912,7 +890,6 @@ public class IncrementProcessMultiple extends Window{
 			tblblServiceLength.get(ar).setValue("");
 			tblblBasic.get(ar).setValue("");
 			tblblHouseRent.get(ar).setValue("");
-			tblblMedicalAllowance.get(ar).setValue("");
 			tblblMobile.get(ar).setValue("");
 			tbtxtIncAmount.get(ar).setValue("");
 			tblblTotal.get(ar).setValue("");
@@ -923,7 +900,6 @@ public class IncrementProcessMultiple extends Window{
 			tbCmbNewEmpType.get(ar).setValue(null);
 			tbtxtNewBasic.get(ar).setValue("");
 			tbtxtNewHouseRent.get(ar).setValue("");
-			tbtxtNewMedicalAllowance.get(ar).setValue("");
 			tbtxtNewMobile.get(ar).setValue("");
 		}
 	}
@@ -1044,13 +1020,13 @@ public class IncrementProcessMultiple extends Window{
 
 					/*tbSalaryIncrement Start*/
 					sql="insert into tbSalaryIncrement(iSerialNo,dDate,vEmployeeId,employeeCode,vEmployeeName,"+
-							"vUnitId,vUnitName,vDepartmentId,vDepartmentName,vDesignationId,vDesignationName,mIncrementPercentage,"+
-							"mIncrementAmount,mNewGross,dJoiningDate,vEmployeeType,vServiceLength,mBasic,mHouseRent,"+
-							"mMedicalAllowance,mMobile,mTotalSalary,"+
+							"vUnitId,vUnitName,vDepartmentId,vDepartmentName,vDesignationId,vDesignationName,"+
+							"mIncrementAmount,dJoiningDate,vEmployeeType,vServiceLength,mBasic,mHouseRent,"+
+							"mMobile,mTotalSalary,"+
 							"vNewDesignationId,vNewDesignationName,vNewEmployeeType,"+
-							"mNewBasic,mNewHouseRent,mNewMedicalAllowance,mNewMobile,"+
+							"mNewBasic,mNewHouseRent,mNewMobile,"+
 							"vIncrementId,vIncrementType,vRemarks,vUserIP,vUserName,dEntryTime," +
-							"mPFPercentage,mPFAmount,mNewTotalSalary,mNewPFPercentage,mNewPFAmount,mConveyance) "+
+							"mNewTotalSalary) "+
 							"values(" +
 							""+txtSerialNo.getValue()+","+
 							"'"+dFormatSql.format(dIncrementDate.getValue())+"',"+
@@ -1063,15 +1039,12 @@ public class IncrementProcessMultiple extends Window{
 							"'"+cmbDepartment.getItemCaption(cmbDepartment.getValue().toString())+"',"+
 							"'"+tblblDesignationId.get(i).getValue()+"',"+
 							"'"+tblblDesignation.get(i).getValue().toString()+"'," +
-							"0,"+
 							"'"+tbtxtIncAmount.get(i).getValue().toString().replaceAll(",","")+"'," +
-							"'"+tbtxtNewGross.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblJoiningDateSql.get(i).getValue()+"',"+
 							"'"+tblblEmpType.get(i).getValue().toString()+"',"+
 							"'"+tblblServiceLength.get(i).getValue().toString()+"',"+
 							"'"+tblblBasic.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblHouseRent.get(i).getValue().toString().replaceAll(",","")+"',"+
-							"'"+tblblMedicalAllowance.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblMobile.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblTotal.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tbCmbNewDesignation.get(i).getValue()+"',"+
@@ -1079,14 +1052,13 @@ public class IncrementProcessMultiple extends Window{
 							"'"+tbCmbNewEmpType.get(i).getItemCaption(tbCmbNewEmpType.get(i).getValue())+"',"+
 							"'"+tbtxtNewBasic.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tbtxtNewHouseRent.get(i).getValue().toString().replaceAll(",","")+"',"+
-							"'"+tbtxtNewMedicalAllowance.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tbtxtNewMobile.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+cmbIncrementType.getValue()+"',"+
 							"'"+cmbIncrementType.getItemCaption(cmbIncrementType.getValue())+"',"+
 							"'Remarks',"+
 							"'"+sessionBean.getUserIp()+"',"+
 							"'"+sessionBean.getUserName()+"',"+
-							"CURRENT_TIMESTAMP,'0','0','0','0','0','0' )";
+							"CURRENT_TIMESTAMP,'"+tbtxtNewGross.get(i).getValue().toString().replaceAll(",","")+"' )";
 					System.out.println("InsertData: "+sql);
 					session.createSQLQuery(sql).executeUpdate();
 					
@@ -1098,13 +1070,13 @@ public class IncrementProcessMultiple extends Window{
 
 					/*tbUdSalaryIncrement Start*/
 					sql="insert into tbUdSalaryIncrement(iSerialNo,dDate,vEmployeeId,employeeCode,vEmployeeName,"+
-							"vUnitId,vUnitName,vDepartmentId,vDepartmentName,vDesignationId,vDesignationName,mIncrementPercentage,"+
-							"mIncrementAmount,mNewGross,dJoiningDate,vEmployeeType,vServiceLength,mBasic,mHouseRent,"+
-							"mMedicalAllowance,mMobile,mTotalSalary,"+
+							"vUnitId,vUnitName,vDepartmentId,vDepartmentName,vDesignationId,vDesignationName,"+
+							"mIncrementAmount,dJoiningDate,vEmployeeType,vServiceLength,mBasic,mHouseRent,"+
+							"mMobile,mTotalSalary,"+
 							"vNewDesignationId,vNewDesignationName,vNewEmployeeType,"+
-							"mNewBasic,mNewHouseRent,mNewMedicalAllowance,mNewMobile,"+
+							"mNewBasic,mNewHouseRent,mNewMobile,"+
 							"vIncrementId,vIncrementType,vRemarks,vUserIP,vUserName,dEntryTime,vUdFlag," +
-							"mPFPercentage,mPFAmount,mNewTotalSalary,mNewPFPercentage,mNewPFAmount) "+
+							"mNewTotalSalary) "+
 							"values("+txtSerialNo.getValue()+","+
 							"'"+dFormatSql.format(dIncrementDate.getValue())+"',"+
 							"'"+tblblempHidden.get(i).getValue()+"',"+
@@ -1116,15 +1088,12 @@ public class IncrementProcessMultiple extends Window{
 							"'"+cmbDepartment.getItemCaption(cmbDepartment.getValue().toString())+"',"+
 							"'"+tblblDesignationId.get(i).getValue()+"',"+
 							"'"+tblblDesignation.get(i).getValue().toString()+"'," +
-							"0,"+
 							"'"+tbtxtIncAmount.get(i).getValue().toString().replaceAll(",","")+"'," +
-							"'"+tbtxtNewGross.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblJoiningDateSql.get(i).getValue()+"',"+
 							"'"+tblblEmpType.get(i).getValue().toString()+"',"+
 							"'"+tblblServiceLength.get(i).getValue().toString()+"',"+
 							"'"+tblblBasic.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblHouseRent.get(i).getValue().toString().replaceAll(",","")+"',"+
-							"'"+tblblMedicalAllowance.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblMobile.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tblblTotal.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tbCmbNewDesignation.get(i).getValue()+"',"+
@@ -1132,14 +1101,14 @@ public class IncrementProcessMultiple extends Window{
 							"'"+tbCmbNewEmpType.get(i).getItemCaption(tbCmbNewEmpType.get(i).getValue())+"',"+
 							"'"+tbtxtNewBasic.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tbtxtNewHouseRent.get(i).getValue().toString().replaceAll(",","")+"',"+
-							"'"+tbtxtNewMedicalAllowance.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+tbtxtNewMobile.get(i).getValue().toString().replaceAll(",","")+"',"+
 							"'"+cmbIncrementType.getValue()+"',"+
 							"'"+cmbIncrementType.getItemCaption(cmbIncrementType.getValue())+"',"+
 							"'Remarks',"+
 							"'"+sessionBean.getUserIp()+"',"+
 							"'"+sessionBean.getUserName()+"',"+
-							"CURRENT_TIMESTAMP,'"+uDFlag+"','0','0','0','0','0' )";
+							"CURRENT_TIMESTAMP,'"+uDFlag+"'," +
+							"'"+tbtxtNewGross.get(i).getValue().toString().replaceAll(",","")+"' )";
 					
 					System.out.println("udDataInsert: "+sql);
 					
@@ -1156,7 +1125,6 @@ public class IncrementProcessMultiple extends Window{
 							+ "dChangeDate='"+dFormatSql.format(dIncrementDate.getValue())+"',"
 							+ "mBasic='"+tbtxtNewBasic.get(i).getValue().toString().replaceAll(",","")+"',"
 							+ "mHouseRent='"+tbtxtNewHouseRent.get(i).getValue().toString().replaceAll(",","")+"',"
-							+ "mMedicalAllowance='"+tbtxtNewMedicalAllowance.get(i).getValue().toString().replaceAll(",","")+"',"
 							+ "mMobileAllowance='"+tbtxtNewMobile.get(i).getValue().toString().replaceAll(",","")+"',"
 							+ "vUserName='"+sessionBean.getUserName()+"', "
 							+ "vUserIp='"+sessionBean.getUserIp()+"', "
@@ -1261,7 +1229,6 @@ public class IncrementProcessMultiple extends Window{
 		double incAmount=Double.parseDouble(tbtxtIncAmount.get(ar).getValue().toString().trim().replaceAll(",","").isEmpty()?"0":tbtxtIncAmount.get(ar).getValue().toString().trim().replaceAll(",",""));
 		basic=Double.parseDouble(tblblBasic.get(ar).getValue().toString().trim().replaceAll(",","").isEmpty()?"0":tblblBasic.get(ar).getValue().toString().trim().replaceAll(",",""));
 		house=Double.parseDouble(tblblHouseRent.get(ar).getValue().toString().trim().replaceAll(",","").isEmpty()?"0":tblblHouseRent.get(ar).getValue().toString().trim().replaceAll(",",""));
-		medical=Double.parseDouble(tblblMedicalAllowance.get(ar).getValue().toString().trim().replaceAll(",","").isEmpty()?"0":tblblMedicalAllowance.get(ar).getValue().toString().trim().replaceAll(",",""));
 		mobile=Double.parseDouble(tblblMobile.get(ar).getValue().toString().trim().replaceAll(",","").isEmpty()?"0":tblblMobile.get(ar).getValue().toString().trim().replaceAll(",",""));
 		if(incAmount>=0)
 		{
@@ -1269,7 +1236,6 @@ public class IncrementProcessMultiple extends Window{
 			
 			tbtxtNewBasic.get(ar).setValue(new CommaSeparator().setComma(basic));
 			tbtxtNewHouseRent.get(ar).setValue(new CommaSeparator().setComma(house));
-			tbtxtNewMedicalAllowance.get(ar).setValue(new CommaSeparator().setComma(medical));
 			tbtxtNewMobile.get(ar).setValue(new CommaSeparator().setComma(mobile));
 		}
 		
