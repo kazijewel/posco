@@ -75,6 +75,8 @@ public class RptSalaryIncomeTaxCertification extends Window
 	static String EmployeeId="";
 	static String EmployeeName="";
 	private PopupDateField dDate=new PopupDateField();
+	private ComboBox cmbSalaryYear;
+	private TextField txtMonth;
 	public RptSalaryIncomeTaxCertification(SessionBean sessionBean,String menuId)
 	{
 		this.sessionBean=sessionBean;
@@ -89,6 +91,7 @@ public class RptSalaryIncomeTaxCertification extends Window
 		authenticationCheck();
 		employeeSetData();
 		employeeApproved();
+		cmbYear();
 	}
 	private void authenticationCheck()
 	{
@@ -133,6 +136,32 @@ public class RptSalaryIncomeTaxCertification extends Window
 				Object[] element = (Object[]) iter.next();
 				cmbEmployeeName.addItem(element[0]);
 				cmbEmployeeName.setItemCaption(element[0], (element[1]+">>"+element[2]));
+			}
+			
+			
+		}
+		catch(Exception exp){
+			showNotification("employeeSetData",exp+"",Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
+	}
+	public void cmbYear()
+	{
+		cmbSalaryYear.removeAllItems();
+		
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String query = "select distinct vSalaryYear from tbMonthlySalary  order by vSalaryYear";
+			
+			System.out.println("query :"+query);
+			
+			List <?> list=session.createSQLQuery(query).list();
+			for(Iterator <?> iter=list.iterator();iter.hasNext();)
+			{
+				//Object[] element = (Object[]) iter.next();
+				cmbSalaryYear.addItem(iter.next());
 			}
 			
 			
@@ -232,11 +261,25 @@ public class RptSalaryIncomeTaxCertification extends Window
 					{
 						if(cmbDesignation.getValue()!=null) 
 						{
-							reportShow();
+							if(cmbSalaryYear.getValue()!=null)
+							{
+								if(!txtMonth.getValue().toString().isEmpty() && Integer.parseInt(txtMonth.getValue().toString())<=12)
+								{
+									reportShow();
+								}
+								else
+								{
+									showNotification("Warning","Give valid total month ",Notification.TYPE_WARNING_MESSAGE);
+								}
+							}
+							else
+							{
+								showNotification("Warning","Select Salary year",Notification.TYPE_WARNING_MESSAGE);
+							}
 						}
 						else
 						{
-							showNotification("Warning","Select Designation ",Notification.TYPE_WARNING_MESSAGE);
+							showNotification("Warning","Select Designation",Notification.TYPE_WARNING_MESSAGE);
 						}
 					}
 					else
@@ -269,7 +312,7 @@ public class RptSalaryIncomeTaxCertification extends Window
 			
 			String query = 
 			
-					"select * from funSalaryAIT('"+cmbEmployeeName.getValue()+"')";
+					"select * from funSalaryAIT('"+cmbEmployeeName.getValue()+"','"+cmbSalaryYear.getValue().toString()+"') where iMonth<='"+txtMonth.getValue().toString()+"'";
 			
 			
 			System.out.println("reportShow: "+query);
@@ -277,9 +320,6 @@ public class RptSalaryIncomeTaxCertification extends Window
 
 			if(queryValueCheck(query))
 			{
-				
-				
-				
 				HashMap <String,Object> hm = new HashMap <String,Object> ();
 				hm.put("company", sessionBean.getCompany());
 				hm.put("address", sessionBean.getCompanyAddress());
@@ -396,6 +436,24 @@ public class RptSalaryIncomeTaxCertification extends Window
 		cmbDesignation.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Designation : "),"top:150px; left:30.0px;");
 		mainLayout.addComponent(cmbDesignation, "top:148px; left:130.0px;");
+		
+		
+		cmbSalaryYear = new ComboBox();
+		cmbSalaryYear.setImmediate(true);
+		cmbSalaryYear.setWidth("100px");
+		cmbSalaryYear.setHeight("-1px");
+		cmbSalaryYear.setNullSelectionAllowed(true);
+		cmbSalaryYear.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Salary For :"),"top:180px; left:30.0px;");
+		mainLayout.addComponent(cmbSalaryYear, "top:178px; left:130.0px;");
+		
+		txtMonth=new TextField();
+		txtMonth.setWidth("70px");
+		txtMonth.setHeight("-1px");
+		txtMonth.setImmediate(true);
+		txtMonth.setMaxLength(2);
+		mainLayout.addComponent(new Label("Total Month :"),"top:180px; left:240px");
+		mainLayout.addComponent(txtMonth,"top:178px; left:320px");
 
 		
 
