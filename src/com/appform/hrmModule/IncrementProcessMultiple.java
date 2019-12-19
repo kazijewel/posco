@@ -1506,9 +1506,6 @@ public class IncrementProcessMultiple extends Window{
 		table.addContainerProperty("HR", Label.class, new Label());
 		table.setColumnWidth("HR", 60);
 
-		table.addContainerProperty("Medical", Label.class, new Label());
-		table.setColumnWidth("Medical", 45);
-
 		table.addContainerProperty("Mobile", Label.class, new Label());
 		table.setColumnWidth("Mobile",60);
 
@@ -1541,11 +1538,8 @@ public class IncrementProcessMultiple extends Window{
 		table.addContainerProperty("New HR",  AmountField.class, new AmountField());
 		table.setColumnWidth("New HR",60);
 
-		table.addContainerProperty("New Med.",  AmountField.class, new AmountField());
-		table.setColumnWidth("New Med.",60);
-
-		table.addContainerProperty("New Conv.",  AmountField.class, new AmountField());
-		table.setColumnWidth("New Conv.", 60);
+		table.addContainerProperty("New Mobile",  AmountField.class, new AmountField());
+		table.setColumnWidth("New Mobile",60);
 
 		table.setColumnCollapsingAllowed(true);
 		table.setColumnCollapsed("employee ID",true);
