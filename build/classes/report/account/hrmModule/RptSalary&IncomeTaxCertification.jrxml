@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptBankForwardingLetter" language="groovy" pageWidth="595" pageHeight="842" columnWidth="523" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36" isSummaryNewPage="true">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="361"/>
+	<property name="ireport.y" value="304"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
@@ -299,14 +299,6 @@ POSCO Engineering & Construction Co., Ltd.
 	<columnFooter>
 		<band/>
 	</columnFooter>
-	<pageFooter>
-		<band height="38">
-			<image onErrorType="Blank">
-				<reportElement x="0" y="1" width="523" height="36"/>
-				<imageExpression class="java.lang.String"><![CDATA["D:\\Tomcat 7.0\\webapps\\report\\posco\\PoscoFooter.jpg"]]></imageExpression>
-			</image>
-		</band>
-	</pageFooter>
 	<lastPageFooter>
 		<band height="38">
 			<image onErrorType="Blank">
