@@ -832,7 +832,7 @@ public class EmployeeInformation extends Window
 				double gross = (basic+house+medical+special+other+convence+mobile);
 				if(gross>0)
 				{
-					fifthTab.txtGrossAmount.setValue(new CommaSeparator().setComma(gross));
+					fifthTab.txtTotalGross.setValue(new CommaSeparator().setComma(gross));
 				}
 			}
 
@@ -1995,7 +1995,6 @@ public class EmployeeInformation extends Window
 
 	public void fifthTabClear()
 	{
-		fifthTab.txtGrossAmount.setValue("");
 		fifthTab.txtBasicAdd.setValue("");
 		fifthTab.txtHouseRentAdd.setValue("");
 		fifthTab.txtMedicalAllowanceAdd.setValue("");
@@ -2098,12 +2097,11 @@ public class EmployeeInformation extends Window
 			allComp.add(fourthTab.tblDateTo.get(i));
 			allComp.add(fourthTab.tblTxtMajorTask.get(i));
 		}
-		allComp.add(fifthTab.txtGrossAmount);
 		allComp.add(fifthTab.txtBasicAdd);
 		allComp.add(fifthTab.txtHouseRentAdd);
 		allComp.add(fifthTab.txtMedicalAllowanceAdd);
-	//allComp.add(fifthTab.txtClinicalAllowanceAdd);
-	//	allComp.add(fifthTab.txtNonPracticeAllowanceAdd);
+		//allComp.add(fifthTab.txtClinicalAllowanceAdd);
+		//allComp.add(fifthTab.txtNonPracticeAllowanceAdd);
 			
 		//allComp.add(fifthTab.txtDearnessAllowanceAdd);
 		allComp.add(fifthTab.txtConveyanceAllowanceAdd);

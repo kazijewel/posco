@@ -31,7 +31,7 @@ public class TabSalaryStructure extends VerticalLayout
 	public Label lblBranchName;
 	public Label lblAccountNo,lblRoutingNo;
 
-	public AmountCommaSeperator txtGrossAmount;
+	//public AmountCommaSeperator txtGrossAmount;
 	public AmountCommaSeperator txtBasicAdd;
 	public AmountCommaSeperator txtHouseRentAdd;
 	public AmountCommaSeperator txtMedicalAllowanceAdd;
@@ -141,124 +141,116 @@ public class TabSalaryStructure extends VerticalLayout
 
 	private void setEventAction()
 	{
-		txtGrossAmount.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				grossAmountCalculation();
-				totalSalaryCalculation();
-			}
-		});
 		txtBasicAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtHouseRentAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtMedicalAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtClinicalAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 	/*	txtNonPracticeAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});*/
 		txtOtherAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtDearnessAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtConveyanceAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtSpecialAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtRoomChargeLess.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtIncomeTaxLess.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtProvidentFundLess.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtKallanFundLess.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtKhichuriMealLess.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtAttendanceBonusAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		txtTiffinAllowanceAdd.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
-				totalSalaryCalculation();
+				grossAmountCalculation();
 			}
 		});
 		opgBank.addListener(new ValueChangeListener() {	
@@ -289,54 +281,13 @@ public class TabSalaryStructure extends VerticalLayout
 	}
 	private void grossAmountCalculation()
 	{
-		double gross = Double.parseDouble(txtGrossAmount.getValue().toString().isEmpty()?"0":txtGrossAmount.getValue().toString().replaceAll(",", "").trim());
-		if(!txtGrossAmount.getValue().isEmpty()){
-			double basic=0,house=0,medical=0,conv=0;
-			/*basic=(60/100)*gross;
-			house=(30/100)*gross;
-			medical=(6/100)*gross;
-			conv=(4/100)*gross;*/
-			
-			//basic=0.6*gross;
-			//house=0.3*gross;
-			//medical=0.06*gross;
-			//conv=0.04*gross;
-			
-			//txtBasicAdd.setValue(new CommaSeparator().setComma(basic));
-			//txtHouseRentAdd.setValue(new CommaSeparator().setComma(house));
-			//txtMedicalAllowanceAdd.setValue(new CommaSeparator().setComma(medical));
-			//txtConveyanceAllowanceAdd.setValue(new CommaSeparator().setComma(conv));
-			
-			System.out.println("txtGrossAmount: "+txtGrossAmount.getValue()+" basic: "+basic+" house: "+house+" medical: "+medical+" conv"+conv);
-			
-		}
+		double basic = Double.parseDouble(txtBasicAdd.getValue().toString().isEmpty()?"0":txtBasicAdd.getValue().toString().replaceAll(",", "").trim());
+		double house = Double.parseDouble(txtHouseRentAdd.getValue().toString().isEmpty()?"0":txtHouseRentAdd.getValue().toString().replaceAll(",", "").trim());
+		double mobile = Double.parseDouble(txtMobileAllowanceAdd.getValue().toString().isEmpty()?"0":txtMobileAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
+		double totalSalary=0.0;
+		totalSalary=basic+house+mobile;
+		txtTotalGross.setValue(totalSalary);
 		
-	}
-
-	private void totalSalaryCalculation()
-	{
-		//double basic = Double.parseDouble(txtBasicAdd.getValue().toString().isEmpty()?"0":txtBasicAdd.getValue().toString().replaceAll(",", "").trim());
-		//double house = Double.parseDouble(txtHouseRentAdd.getValue().toString().isEmpty()?"0":txtHouseRentAdd.getValue().toString().replaceAll(",", "").trim());
-		//double medical = Double.parseDouble(txtMedicalAllowanceAdd.getValue().toString().isEmpty()?"0":txtMedicalAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-		//double clinic = Double.parseDouble(txtClinicalAllowanceAdd.getValue().toString().isEmpty()?"0":txtClinicalAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-	//	double nonPrac = Double.parseDouble(txtNonPracticeAllowanceAdd.getValue().toString().isEmpty()?"0":txtNonPracticeAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-		//double special = Double.parseDouble(txtSpecialAllowanceAdd.getValue().toString().isEmpty()?"0":txtSpecialAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-		//double other = Double.parseDouble(txtOtherAllowanceAdd.getValue().toString().isEmpty()?"0":txtOtherAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-		//double dearness = Double.parseDouble(txtDearnessAllowanceAdd.getValue().toString().isEmpty()?"0":txtDearnessAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-		//double convence = Double.parseDouble(txtConveyanceAllowanceAdd.getValue().toString().isEmpty()?"0":txtConveyanceAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-		//double attenBonus = Double.parseDouble(txtAttendanceBonusAdd.getValue().toString().isEmpty()?"0":txtAttendanceBonusAdd.getValue().toString().replaceAll(",", "").trim());
-		//double tiffin = Double.parseDouble(txtTiffinAllowanceAdd.getValue().toString().isEmpty()?"0":txtTiffinAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-		//double mobile = Double.parseDouble(txtMobileAllowanceAdd.getValue().toString().isEmpty()?"0":txtMobileAllowanceAdd.getValue().toString().replaceAll(",", "").trim());
-
-		/*double room = Double.parseDouble(txtRoomChargeLess.getValue().toString().isEmpty()?"0":txtRoomChargeLess.getValue().toString().replaceAll(",", "").trim());
-		double income = Double.parseDouble(txtIncomeTaxLess.getValue().toString().isEmpty()?"0":txtIncomeTaxLess.getValue().toString().replaceAll(",", "").trim());
-		double provident = Double.parseDouble(txtProvidentFundLess.getValue().toString().isEmpty()?"0":txtProvidentFundLess.getValue().toString().replaceAll(",", "").trim());
-		double kallan = Double.parseDouble(txtKallanFundLess.getValue().toString().isEmpty()?"0":txtKallanFundLess.getValue().toString().replaceAll(",", "").trim());
-		double khichuri = Double.parseDouble(txtKhichuriMealLess.getValue().toString().isEmpty()?"0":txtKhichuriMealLess.getValue().toString().replaceAll(",", "").trim());*/
-
-		//double gross = (basic+house+medical+clinic+/*nonPrac+*/special+other+dearness+convence+attenBonus+tiffin);
-
-		txtTotalGross.setValue(new CommaSeparator().setComma(Double.parseDouble(txtGrossAmount.getValue().toString().isEmpty()?"0":txtGrossAmount.getValue().toString().replaceAll(",", ""))));
 	}
 
 /*	public void houseRentCalculation()
@@ -355,11 +306,6 @@ public class TabSalaryStructure extends VerticalLayout
 
 		setWidth("100%");
 		setHeight("100%");
-
-		txtGrossAmount = new AmountCommaSeperator();
-		txtGrossAmount.setImmediate(true);
-		txtGrossAmount.setWidth("120px");
-		txtGrossAmount.setHeight("-1px");
 
 		txtBasicAdd = new AmountCommaSeperator();
 		txtBasicAdd.setImmediate(true);
@@ -480,53 +426,16 @@ public class TabSalaryStructure extends VerticalLayout
 		txtTotalGross.setStyleName("tcoloum");
 
 		mainLayout.addComponent(new Label("<b><Font size='3px'><u>Addition</u></b></font>",Label.CONTENT_XHTML),"top:20.0px;left:140.0px;");
-
-		//Addition
-		mainLayout.addComponent(new Label("Gross :"),"top:50.0px;left:30.0px;");
-		mainLayout.addComponent(txtGrossAmount,"top:48.0px;left:187.0px;");
-		txtGrossAmount.setImmediate(true);
 		
-		mainLayout.addComponent(new Label("Basic :"),"top:75.0px;left:30.0px;");
-		mainLayout.addComponent(txtBasicAdd,"top:73.0px;left:187.0px;");
+		mainLayout.addComponent(new Label("Basic :"),"top:50.0px;left:30.0px;");
+		mainLayout.addComponent(txtBasicAdd,"top:48.0px;left:187.0px;");
 		//mainLayout.addComponent(new Label("60% of Gross :"),"top:75.0px;left:310.0px;");
 
-		mainLayout.addComponent(new Label("House Rent :"),"top:100.0px;left:30.0px;");
-		mainLayout.addComponent(txtHouseRentAdd,"top:98.0px;left:187.0px;");
-		//mainLayout.addComponent(new Label("30% of Gross :"),"top:100.0px;left:310.0px;");
-
-		/*mainLayout.addComponent(new Label("Medical Allowance :"),"top:125.0px;left:30.0px;");
-		mainLayout.addComponent(txtMedicalAllowanceAdd,"top:123.0px;left:187.0px;");*/
-		//mainLayout.addComponent(new Label("6% of Gross :"),"top:125.0px;left:310.0px;");
-
-	/*	mainLayout.addComponent(new Label("Clinical Allowance :"),"top:125.0px;left:30.0px;");
-		mainLayout.addComponent(txtClinicalAllowanceAdd,"top:123.0px;left:187.0px;");*/
-
-		/*mainLayout.addComponent(new Label("Non-Practice Allowance :"),"top:150.0px;left:30.0px;");
-		mainLayout.addComponent(txtNonPracticeAllowanceAdd,"top:148.0px;left:187.0px;");*/
-
-		/*mainLayout.addComponent(new Label("Conveyeance Allowance :"),"top:150.0px;left:30.0px;");
-		mainLayout.addComponent(txtConveyanceAllowanceAdd,"top:148.0px;left:187.0px;");*/
-		//mainLayout.addComponent(new Label("4% of Gross :"),"top:150.0px;left:310.0px;");
+		mainLayout.addComponent(new Label("House Rent :"),"top:75.0px;left:30.0px;");
+		mainLayout.addComponent(txtHouseRentAdd,"top:73.0px;left:187.0px;");
 		
-		mainLayout.addComponent(new Label("Mobile Allowance :"),"top:125.0px;left:30.0px;");
-		mainLayout.addComponent(txtMobileAllowanceAdd,"top:123.0px;left:187.0px;");
-		
-		/*mainLayout.addComponent(new Label("Mobile Allowance :"),"top:150.0px;left:30.0px;");
-		mainLayout.addComponent(txtMobileAllowanceAdd,"top:148.0px;left:187.0px;");*/
-		
-
-/*		mainLayout.addComponent(new Label("Dearness Allowance :"),"top:175.0px;left:30.0px;");
-		mainLayout.addComponent(txtDearnessAllowanceAdd,"top:173.0px;left:187.0px;");*/
-
-		/*mainLayout.addComponent(new Label("Special Allowance :"),"top:200.0px;left:30.0px;");
-		mainLayout.addComponent(txtSpecialAllowanceAdd,"top:198.0px;left:187.0px;");*/
-
-		//mainLayout.addComponent(new Label("Attendance Bonus :"),"top:200.0px;left:30.0px;");
-		//mainLayout.addComponent(txtAttendanceBonusAdd,"top:198.0px;left:187.0px;");
-
-		//mainLayout.addComponent(new Label("Tiffin Allowance :"),"top:225.0px;left:30.0px;");
-		//mainLayout.addComponent(txtTiffinAllowanceAdd,"top:226.0px;left:187.0px;");
-		
+		mainLayout.addComponent(new Label("Mobile Allowance :"),"top:100.0px;left:30.0px;");
+		mainLayout.addComponent(txtMobileAllowanceAdd,"top:98.0px;left:187.0px;");		
 		
 		//Deduction
 		mainLayout.addComponent(new Label("<b><Font size='3px'><u>Deduction</u></b></font>",Label.CONTENT_XHTML),"top:20.0px;left:530.0px;");
@@ -541,15 +450,6 @@ public class TabSalaryStructure extends VerticalLayout
 
 		mainLayout.addComponent(new Label("Provident Fund(%) :"),"top:75.0px;left:445.0px;");
 		mainLayout.addComponent(txtProvidentFundLess,"top:73.0px;left:570.0px;");
-
-	/*	mainLayout.addComponent(new Label("Kallan Fund :"),"top:125.0px;left:445.0px;");
-		mainLayout.addComponent(txtKallanFundLess,"top:123.0px;left:570.0px;");*/
-
-	/*	mainLayout.addComponent(new Label("Meal Charge :"),"top:100.0px;left:445.0px;");
-		mainLayout.addComponent(txtKhichuriMealLess,"top:98.0px;left:570.0px;");*/
-		
-		//mainLayout.addComponent(new Label("Mobile Ceiling :"),"top:100.0px;left:445.0px;");
-		//mainLayout.addComponent(txtMobileAllowanceAdd,"top:98.0px;left:570.0px;");
 		
 		mainLayout.addComponent(new Label("Payment Type : "),"top:100px; left:445px");
 		mainLayout.addComponent(opgBank,"top:100px; left:570px");
