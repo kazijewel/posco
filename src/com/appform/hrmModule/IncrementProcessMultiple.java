@@ -466,9 +466,9 @@ public class IncrementProcessMultiple extends Window{
 		try 
 		{
 			String sql = "select iSerialNo,dDate,vEmployeeId,employeeCode,vEmployeeName,vDepartmentId,vDepartmentName,vDesignationId,vDesignationName," +
-					"mIncrementPercentage,mIncrementAmount,mNewGross,dJoiningDate,vEmployeeType,vServiceLength,mBasic,mHouseRent,mMedicalAllowance," +
-					"mMobile,mTotalSalary,mPFPercentage,mPFAmount,vNewDesignationId,vNewDesignationName,vNewEmployeeType,mNewBasic,mNewHouseRent," +
-					"mNewMedicalAllowance,mNewMobile,mNewTotalSalary,mNewPFPercentage,mNewPFAmount,vIncrementId,vIncrementType,vUnitId,vUnitName " +
+					"mIncrementAmount,dJoiningDate,vEmployeeType,vServiceLength,mBasic,mHouseRent," +
+					"mMobile,mTotalSalary,vNewDesignationId,vNewDesignationName,vNewEmployeeType,mNewBasic,mNewHouseRent," +
+					"mNewMobile,mNewTotalSalary,vIncrementId,vIncrementType,vUnitId,vUnitName " +
 					"from tbSalaryIncrement " +
 					"where vEmployeeId='"+empId+"' and vIncrementId='"+incType+"' and YEAR(dDate)=YEAR('"+incDate+"')";
 			
@@ -481,36 +481,36 @@ public class IncrementProcessMultiple extends Window{
 				if(i==0){
 					txtSerialNo.setValue(element[0]);
 					dIncrementDate.setValue(element[1]);
-					cmbUnit.setValue(element[34].toString());
+					cmbUnit.setValue(element[26].toString());
 					cmbDepartment.setValue(element[5].toString());
-					cmbIncrementType.setValue(element[32]);
-					cmbIncrementType.setItemCaption(element[32], element[33].toString());
+					cmbIncrementType.setValue(element[24]);
+					cmbIncrementType.setItemCaption(element[24], element[25].toString());
 					cmbEmployee.setValue(element[2].toString());
 				}
 				
 				tblblempHidden.get(i).setValue(element[2].toString());
 				tblblEmpID.get(i).setValue(element[3].toString());
 				tblblEmpName.get(i).setValue(element[4].toString());
-				tblblEmpType.get(i).setValue(element[13].toString());
+				tblblEmpType.get(i).setValue(element[11].toString());
 				tblblDesignationId.get(i).setValue(element[7].toString());
 				tblblDesignation.get(i).setValue(element[8].toString());
-				tblblBasic.get(i).setValue(df.format(element[15]).toString());
-				tblblHouseRent.get(i).setValue(df.format(element[16]).toString());			
-				tblblMobile.get(i).setValue(df.format(element[18]).toString());	
-				tblblJoiningDate.get(i).setValue(dFormatBD.format(element[12]).toString());
-				tblblJoiningDateSql.get(i).setValue(element[12]);
-				tblblServiceLength.get(i).setValue(element[14].toString());
-				tblblTotal.get(i).setValue(df.format(element[19]).toString());
+				tblblBasic.get(i).setValue(df.format(element[13]).toString());
+				tblblHouseRent.get(i).setValue(df.format(element[14]).toString());			
+				tblblMobile.get(i).setValue(df.format(element[15]).toString());	
+				tblblJoiningDate.get(i).setValue(dFormatBD.format(element[10]).toString());
+				tblblJoiningDateSql.get(i).setValue(element[10]);
+				tblblServiceLength.get(i).setValue(element[12].toString());
+				tblblTotal.get(i).setValue(df.format(element[16]).toString());
 				tblblNewEmpID.get(i).setValue(element[3].toString());
 				tblblNewEmpName.get(i).setValue(element[4].toString());
-				tbCmbNewDesignation.get(i).setValue(element[22].toString());
-				tbCmbNewDesignation.get(i).setItemCaption(element[22],element[23].toString());
-				tbCmbNewEmpType.get(i).setValue(element[24]);
-				tbtxtNewBasic.get(i).setValue(df.format(element[25]).toString());
-				tbtxtNewHouseRent.get(i).setValue(df.format(element[26]).toString());
-				tbtxtNewMobile.get(i).setValue(df.format(element[28]).toString());
-				tbtxtIncAmount.get(i).setValue(df.format(element[10]).toString());
-				tbtxtNewGross.get(i).setValue(df.format(element[11]).toString());				
+				tbCmbNewDesignation.get(i).setValue(element[17].toString());
+				tbCmbNewDesignation.get(i).setItemCaption(element[17],element[18].toString());
+				tbCmbNewEmpType.get(i).setValue(element[19]);
+				tbtxtNewBasic.get(i).setValue(df.format(element[20]).toString());
+				tbtxtNewHouseRent.get(i).setValue(df.format(element[21]).toString());
+				tbtxtNewMobile.get(i).setValue(df.format(element[22]).toString());
+				tbtxtIncAmount.get(i).setValue(df.format(element[9]).toString());
+				tbtxtNewGross.get(i).setValue(df.format(element[23]).toString());
 				i++;
 			}
 

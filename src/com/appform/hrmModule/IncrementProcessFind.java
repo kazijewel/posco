@@ -24,8 +24,8 @@ public class IncrementProcessFind extends Window
 {
 	private AbsoluteLayout mainLayout=new AbsoluteLayout();
 	private Label IncrementDate,UnitID,lblUnitName,DepartmentID,lblDepartmentName,IncrementId,EmployeeNameId;
-	private ComboBox cmbUnitName,cmbDepartmentName;
-	private CheckBox chkDepartmentAll;
+	private ComboBox cmbUnitName,cmbDepartmentName,cmbEmployeeId;
+	private CheckBox chkDepartmentAll,chkEmployeeIdAll;
 	private Table table;
 	private ArrayList<Label> tblblSl = new ArrayList<Label>();
 	private ArrayList<Label> tblblUnitID = new ArrayList<Label>();
@@ -64,9 +64,7 @@ public class IncrementProcessFind extends Window
 		setContent(mainLayout);
 		tableInitialise();
 		setEventAction();
-		//DepartmentValueAdd();
 		UnitValueAdd();
-		//tableDataAdd();
 	}
 
 	public void setEventAction()
@@ -91,7 +89,7 @@ public class IncrementProcessFind extends Window
 				{
 					if(cmbDepartmentName.getValue()!=null)
 					{
-						tableDataAdd();
+						EmployeeValueAdd();
 					}
 				}
 			}
@@ -105,7 +103,7 @@ public class IncrementProcessFind extends Window
 					{
 						cmbDepartmentName.setValue(null);
 						cmbDepartmentName.setEnabled(false);
-						tableDataAdd();
+						EmployeeValueAdd();
 					}
 					else
 					{
@@ -114,6 +112,47 @@ public class IncrementProcessFind extends Window
 				}
 			}
 		});
+		
+
+		cmbEmployeeId.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event) 
+			{
+				tableclear();
+				if(cmbUnitName.getValue()!=null)
+				{
+					if(cmbDepartmentName.getValue()!=null || chkDepartmentAll.booleanValue())
+					{
+						if(cmbEmployeeId.getValue()!=null)
+						{
+							tableDataAdd();
+						}
+					}
+				}
+			}
+		});
+		chkEmployeeIdAll.addListener(new ValueChangeListener() {
+			public void valueChange(ValueChangeEvent event) 
+			{
+				tableclear();
+				if(cmbUnitName.getValue()!=null)
+				{
+					if(cmbDepartmentName.getValue()!=null || chkDepartmentAll.booleanValue())
+					{
+						cmbEmployeeId.setValue(null);
+						cmbEmployeeId.setEnabled(false);
+						tableDataAdd();
+					}
+					else
+					{
+						cmbEmployeeId.setEnabled(true);
+					}
+				}
+			}
+		});
+		
+		
+		
 
 		table.addListener(new ItemClickListener() 
 		{
@@ -185,13 +224,49 @@ public class IncrementProcessFind extends Window
 		finally{session.close();}
 	}
 
+	private void EmployeeValueAdd()
+	{
+		String unitId="%",department="%";
+		if(cmbUnitName.getValue()!=null)
+		{
+			unitId=cmbUnitName.getValue().toString();
+		}
+		if(cmbDepartmentName.getValue()!=null)
+		{
+			department=cmbDepartmentName.getValue().toString();
+		}
+		
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String query = "select distinct vEmployeeId,employeeCode,vEmployeeName from tbSalaryIncrement " +
+					"where vUnitId like '"+unitId+"' and vDepartmentID  like '"+department+"'";
+			List <?> lst = session.createSQLQuery(query).list();
+			if(!lst.isEmpty())
+			{
+				for(Iterator <?> itr = lst.iterator(); itr.hasNext();)
+				{
+					Object [] element = (Object [])itr.next();
+					cmbEmployeeId.addItem(element[0]);
+					cmbEmployeeId.setItemCaption(element[0], element[1]+"-"+element[2]);
+				}
+			}
+		}
+		catch (Exception exp)
+		{
+			showNotification("EmployeeValueAdd", exp.toString(), Notification.TYPE_WARNING_MESSAGE);
+		}
+		finally{session.close();}
+	}
+
 	private void tableDataAdd()
 	{
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
 		{
-			String unitId="%",DepartmentID = "%";
+			String unitId="%",DepartmentID = "%",EmployeeID = "%";
 			
 			if(cmbUnitName.getValue()!=null)
 			{
@@ -201,11 +276,16 @@ public class IncrementProcessFind extends Window
 			{
 				DepartmentID=cmbDepartmentName.getValue().toString();
 			}
+			if(!chkEmployeeIdAll.booleanValue())
+			{
+				EmployeeID=cmbEmployeeId.getValue().toString();
+			}
 			
-			String query ="select distinct vDepartmentID, vDepartmentName,employeeCode,"
-					+ "vEmployeeName,vEmployeeType,vIncrementType,dDate, CONVERT(varchar,DATENAME(MM,dDate)) vMonthName,"
-					+ " YEAR(dDate) iYear,vEmployeeId,vIncrementId,vUnitId,vUnitName from tbSalaryIncrement " +
-					" where vUnitId like '"+unitId+"' and vDepartmentID like '"+DepartmentID+"' order by dDate asc,vDepartmentName ";
+			String query ="select distinct vDepartmentID, vDepartmentName,employeeCode,vEmployeeName,vEmployeeType,vIncrementType,dDate," +
+					"CONVERT(varchar,DATENAME(MM,dDate)) vMonthName,YEAR(dDate) iYear,vEmployeeId,vIncrementId,vUnitId,vUnitName " +
+					"from tbSalaryIncrement " +
+					"where vUnitId like '"+unitId+"' and vDepartmentID like '"+DepartmentID+"' and vEmployeeId like '"+EmployeeID+"' " +
+					"order by dDate asc,vDepartmentName ";
 		      System.out.println("TableValueAdd: "+query);
 		      
 		      
@@ -372,6 +452,18 @@ public class IncrementProcessFind extends Window
 		chkDepartmentAll.setImmediate(true);
 		mainLayout.addComponent(chkDepartmentAll,"top:45.0px; left:525");
 		
+		cmbEmployeeId = new ComboBox();
+		cmbEmployeeId.setImmediate(true);
+		cmbEmployeeId.setWidth("260.0px");
+		cmbEmployeeId.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Employee ID: "), "top:75.0px; left:160.0px");
+		mainLayout.addComponent(cmbEmployeeId, "top:73.0px; left:265.0px;");
+		
+		chkEmployeeIdAll =new CheckBox("All");
+		chkEmployeeIdAll.setImmediate(true);
+		mainLayout.addComponent(chkEmployeeIdAll,"top:75.0px; left:525");
+		
+		
 		table = new Table();
 		table.setWidth("98%");
 		table.setHeight("300.0px");
@@ -435,7 +527,7 @@ public class IncrementProcessFind extends Window
 		table.setColumnCollapsed("Employee Type", true);
 		table.setColumnCollapsed("empID", true);
 		table.setColumnCollapsed("IncId", true);
-		mainLayout.addComponent(table, "top:90.0px; left:20.0px;");
+		mainLayout.addComponent(table, "top:120.0px; left:20.0px;");
 
 		return mainLayout;
 	}
