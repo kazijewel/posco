@@ -663,12 +663,10 @@ public class ReplacementLeaveApplication extends Window
 		int toMonth = toCal.get(Calendar.MONTH);
 		int toDay=toCal.get(Calendar.DATE);
 		int toYear=toCal.get(Calendar.YEAR);
-		System.out.println("dayFrom :"+fromDay+" monthFrom:"+fromMonth+" yearFrom:"+fromYear);
-		System.out.println("dayTo :"+toDay+" monthTo:"+toMonth+" yearTo:"+toYear);
 		
 		if(checkForm())
 		{
-			if((fromDate.compareTo(toDate)<0 && (fromMonth!=toMonth && fromYear==toYear))|| (fromMonth==toMonth && fromYear==toYear) || isFind)
+			if((fromDate.compareTo(toDate)<0) || (fromMonth==toMonth && fromYear==toYear) || isFind)
 			{
 				if(!fromDate.equals(toDate) ||  isFind)
 				{
