@@ -454,7 +454,7 @@ public class EditMonthlySalary extends Window
 						lblSalaryTaka.get(i).setValue(dfZero.format(element[7]));
 						lblPerDaySalary.get(i).setValue(dfZero.format(element[17]));
 						lblWorkingDayNetOTHr.get(i).setValue(dfZero.format(element[15]));
-						lblOTTaka.get(i).setValue(dfZero.format(element[16]));
+						lblHolidayNetOTHr.get(i).setValue(dfZero.format(element[16]));
 						lblOTTaka.get(i).setValue(dfZero.format(element[8]));
 						txtOtherEarning.get(i).setValue(dfZero.format(element[9]));
 						txtOtherDeduction.get(i).setValue(dfZero.format(element[10]));
@@ -667,8 +667,7 @@ public class EditMonthlySalary extends Window
 					session.clear();
 					
 					String query = "update tbMonthlySalary " +
-							"set iHolidayNetOTHr='"+(lblHolidayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblHolidayNetOTHr.get(i).getValue().toString().trim())+"'," + 
-							"iPresentDay='"+(txtWorkingDays.get(i).getValue().toString().trim().isEmpty()?0:txtWorkingDays.get(i).getValue().toString().trim())+"'," + 
+							"set iPresentDay='"+(txtWorkingDays.get(i).getValue().toString().trim().isEmpty()?0:txtWorkingDays.get(i).getValue().toString().trim())+"'," + 
 							"mPerDaySalary='"+(lblPerDaySalary.get(i).getValue().toString().trim().isEmpty()?0:lblPerDaySalary.get(i).getValue().toString().trim())+"'," + 
 							"mSalaryTaka='"+(lblSalaryTaka.get(i).getValue().toString().trim().isEmpty()?0:lblSalaryTaka.get(i).getValue().toString().trim())+"'," + 
 							"iWorkingDayNetOTHr='"+(lblWorkingDayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblWorkingDayNetOTHr.get(i).getValue().toString().trim())+"'," + 
@@ -1021,7 +1020,7 @@ public class EditMonthlySalary extends Window
 		double mOtherEarning = Double.parseDouble("0"+txtOtherEarning.get(ar).getValue().toString().replaceAll(",", ""));
 		double mOtherDeduction = Double.parseDouble("0"+txtOtherDeduction.get(ar).getValue().toString().replaceAll(",", ""));
 
-		double totalPayable =mSalaryTaka+mOtTaka+mOtherEarning-mOtherDeduction;	
+		double totalPayable =Math.round(mSalaryTaka+mOtTaka+mOtherEarning-mOtherDeduction);	
 		double netPayableTaka =0;
 		double mIncomeTax =0;
 
@@ -1199,11 +1198,11 @@ public class EditMonthlySalary extends Window
 		table.addContainerProperty("Salary Taka", Label.class, new Label());
 		table.setColumnWidth("Salary Taka", 70);
 
-		table.addContainerProperty("HolidayNetOTHr", Label.class, new Label());
-		table.setColumnWidth("HolidayNetOTHr", 65);
+		table.addContainerProperty("Holiday Net OTHr", Label.class, new Label());
+		table.setColumnWidth("Holiday Net OTHr", 65);
 		
-		table.addContainerProperty("WorkingDayNetOTHr", Label.class, new Label());
-		table.setColumnWidth("WorkingDayNetOTHr", 65);
+		table.addContainerProperty("Working Day Net OTHr", Label.class, new Label());
+		table.setColumnWidth("Working Day Net OTHr", 65);
 		
 		table.addContainerProperty("O.T Taka", Label.class, new Label());
 		table.setColumnWidth("O.T Taka", 65);
@@ -1232,8 +1231,8 @@ public class EditMonthlySalary extends Window
 		table.setColumnCollapsed("HR", true);
 		table.setColumnCollapsed("Mobile", true);
 		table.setColumnCollapsed("lblPerDaySalary", true);
-		table.setColumnCollapsed("HolidayNetOTHr", true);
-		table.setColumnCollapsed("WorkingDayNetOTHr", true);
+		table.setColumnCollapsed("Holiday Net OTHr", true);
+		table.setColumnCollapsed("Working Day Net OTHr", true);
 
 		mainLayout.addComponent(table,"top:150px; left:20.0px;");		
 		table.setStyleName("wordwrap-headers");
