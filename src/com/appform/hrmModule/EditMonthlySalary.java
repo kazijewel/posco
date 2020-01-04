@@ -69,6 +69,7 @@ public class EditMonthlySalary extends Window
 	private ArrayList<Label> lblHouseAll = new ArrayList<Label>();
 	private ArrayList<Label> lblMobileAll = new ArrayList<Label>();
 	private ArrayList<TextField> txtWorkingDays = new ArrayList<TextField>();
+	private ArrayList<Label> lblPerDaySalary = new ArrayList<Label>();
 	private ArrayList<Label> lblSalaryTaka = new ArrayList<Label>();
 	private ArrayList<Label> lblHolidayNetOTHr = new ArrayList<Label>();
 	private ArrayList<Label> lblWorkingDayNetOTHr = new ArrayList<Label>();
@@ -396,14 +397,16 @@ public class EditMonthlySalary extends Window
 
 			if(!checkList.isEmpty())
 			{				
-				String sql = "select vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,mBasic,mHouseRent,mMobileAllowance,mSalaryTaka,mOtTaka," +
-						"mOtherEarning,mOtherDeduction,mTotalPayable,mIncomeTax,mNetPayableTaka,iWorkingDay,iHolidayNetOTHr,iWorkingDayNetOTHr from tbMonthlySalary " +
-						"where vUnitId='"+cmbUnit.getValue().toString()+"' " +
-						"and vSalaryYear='"+FYear.format(cmbSalaryMonth.getValue())+"' and vSalaryMonth='"+FMonthName.format(cmbSalaryMonth.getValue())+"' " +
-						"and vSectionID like '"+(chkSectionAll.booleanValue()?"%":(cmbSection.getValue()==null?"%":cmbSection.getValue()))+"' " +
-						"and vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue()))+"' " +
-						"and vEmployeeID like '"+(chkEmployeeAll.booleanValue()?"%":(cmbEmployee.getValue()==null?"%":cmbEmployee.getValue()))+"' " +
-						" order by SUBSTRING(vEmployeeCode,3,50)";
+				String sql = "select vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,mBasic,mHouseRent,mMobileAllowance,mSalaryTaka,"
+						+ "mOtTaka,mOtherEarning,mOtherDeduction,mTotalPayable,mIncomeTax,mNetPayableTaka,iWorkingDay,iHolidayNetOTHr,"
+						+ "iWorkingDayNetOTHr,mPerDaySalary "
+						+ "from tbMonthlySalary "
+						+ "where vUnitId='"+cmbUnit.getValue().toString()+"' "
+						+ "and vSalaryYear='"+FYear.format(cmbSalaryMonth.getValue())+"' and vSalaryMonth='"+FMonthName.format(cmbSalaryMonth.getValue())+"' "
+						+ "and vSectionID like '"+(chkSectionAll.booleanValue()?"%":(cmbSection.getValue()==null?"%":cmbSection.getValue()))+"' "
+						+ "and vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue()))+"' "
+						+ "and vEmployeeID like '"+(chkEmployeeAll.booleanValue()?"%":(cmbEmployee.getValue()==null?"%":cmbEmployee.getValue()))+"' "
+						+ "order by SUBSTRING(vEmployeeCode,3,50)";
 
 				System.out.println("addTableData :" + sql);
 
@@ -449,6 +452,7 @@ public class EditMonthlySalary extends Window
 						lblMobileAll.get(i).setValue(dfZero.format(element[6]));
 						txtWorkingDays.get(i).setValue(dfZero.format(element[14]));
 						lblSalaryTaka.get(i).setValue(dfZero.format(element[7]));
+						lblPerDaySalary.get(i).setValue(dfZero.format(element[17]));
 						lblWorkingDayNetOTHr.get(i).setValue(dfZero.format(element[15]));
 						lblOTTaka.get(i).setValue(dfZero.format(element[16]));
 						lblOTTaka.get(i).setValue(dfZero.format(element[8]));
@@ -661,9 +665,15 @@ public class EditMonthlySalary extends Window
 					
 					session.createSQLQuery(udquery).executeUpdate();
 					session.clear();
-
+					
 					String query = "update tbMonthlySalary " +
-							"set mOtherEarning='"+(txtOtherEarning.get(i).getValue().toString().trim().isEmpty()?0:txtOtherEarning.get(i).getValue().toString().trim())+"'," + 
+							"set iHolidayNetOTHr='"+(lblHolidayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblHolidayNetOTHr.get(i).getValue().toString().trim())+"'," + 
+							"iPresentDay='"+(txtWorkingDays.get(i).getValue().toString().trim().isEmpty()?0:txtWorkingDays.get(i).getValue().toString().trim())+"'," + 
+							"mPerDaySalary='"+(lblPerDaySalary.get(i).getValue().toString().trim().isEmpty()?0:lblPerDaySalary.get(i).getValue().toString().trim())+"'," + 
+							"mSalaryTaka='"+(lblSalaryTaka.get(i).getValue().toString().trim().isEmpty()?0:lblSalaryTaka.get(i).getValue().toString().trim())+"'," + 
+							"WorkingDayNetOTHr='"+(lblWorkingDayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblWorkingDayNetOTHr.get(i).getValue().toString().trim())+"'," + 
+							"mOtTaka='"+(lblOTTaka.get(i).getValue().toString().trim().isEmpty()?0:lblOTTaka.get(i).getValue().toString().trim())+"'," + 
+							"mOtherEarning='"+(txtOtherEarning.get(i).getValue().toString().trim().isEmpty()?0:txtOtherEarning.get(i).getValue().toString().trim())+"'," + 
 							"mOtherDeduction='"+(txtOtherDeduction.get(i).getValue().toString().trim().isEmpty()?0:txtOtherDeduction.get(i).getValue().toString().trim())+"'," + 
 							"mTotalPayable='"+(lblTotalPayable.get(i).getValue().toString().trim().isEmpty()?0:lblTotalPayable.get(i).getValue().toString().trim())+"'," + 
 							"mIncomeTax='"+(lblIncomeTax.get(i).getValue().toString().trim().isEmpty()?0:lblIncomeTax.get(i).getValue().toString().trim())+"'," + 
@@ -757,6 +767,7 @@ public class EditMonthlySalary extends Window
 
 			lblMobileAll.get(i).setValue("");
 			txtWorkingDays.get(i).setValue("");
+			lblPerDaySalary.get(i).setValue("");
 			lblSalaryTaka.get(i).setValue("");
 			lblHolidayNetOTHr.get(i).setValue("");
 			lblWorkingDayNetOTHr.get(i).setValue("");
@@ -798,6 +809,7 @@ public class EditMonthlySalary extends Window
 				lblHouseAll.get(ar).setValue("");
 				lblMobileAll.get(ar).setValue("");
 				txtWorkingDays.get(ar).setValue("");
+				lblPerDaySalary.get(ar).setValue("");
 				lblSalaryTaka.get(ar).setValue("");
 				lblHolidayNetOTHr.get(ar).setValue("");
 				lblWorkingDayNetOTHr.get(ar).setValue("");
@@ -823,6 +835,7 @@ public class EditMonthlySalary extends Window
 							lblHouseAll.get(rowcount).setValue(lblHouseAll.get(rowcount+1).getValue().toString());
 							lblMobileAll.get(rowcount).setValue(lblMobileAll.get(rowcount+1).getValue().toString());
 							txtWorkingDays.get(rowcount).setValue(txtWorkingDays.get(rowcount+1).getValue().toString());
+							lblPerDaySalary.get(rowcount).setValue(lblPerDaySalary.get(rowcount+1).getValue().toString());
 							lblSalaryTaka.get(rowcount).setValue(lblSalaryTaka.get(rowcount+1).getValue().toString());
 							lblHolidayNetOTHr.get(rowcount).setValue(lblHolidayNetOTHr.get(rowcount+1).getValue().toString());
 							lblWorkingDayNetOTHr.get(rowcount).setValue(lblWorkingDayNetOTHr.get(rowcount+1).getValue().toString());
@@ -844,6 +857,7 @@ public class EditMonthlySalary extends Window
 							lblHouseAll.get(rowcount+1).setValue("");
 							lblMobileAll.get(rowcount+1).setValue("");
 							txtWorkingDays.get(rowcount+1).setValue("");
+							lblPerDaySalary.get(rowcount+1).setValue("");
 							lblSalaryTaka.get(rowcount+1).setValue("");
 							lblHolidayNetOTHr.get(rowcount+1).setValue("");
 							lblWorkingDayNetOTHr.get(rowcount+1).setValue("");
@@ -900,6 +914,9 @@ public class EditMonthlySalary extends Window
 				}			
 			}
 		});
+		
+		lblPerDaySalary.add(ar, new Label());
+		lblPerDaySalary.get(ar).setWidth("100%");
 
 		lblSalaryTaka.add(ar, new Label());
 		lblSalaryTaka.get(ar).setWidth("100%");
@@ -965,7 +982,7 @@ public class EditMonthlySalary extends Window
 		//TotalCalculation(ar);
 
 		table.addItem(new Object[]{btnDel.get(ar),lblsa.get(ar),lblAutoEmployeeID.get(ar),lblEmployeeID.get(ar),lblEmployeeName.get(ar),lblDesignation.get(ar),
-				lblBasic.get(ar),lblHouseAll.get(ar),lblMobileAll.get(ar),txtWorkingDays.get(ar),lblSalaryTaka.get(ar),lblHolidayNetOTHr.get(ar),lblWorkingDayNetOTHr.get(ar),
+				lblBasic.get(ar),lblHouseAll.get(ar),lblMobileAll.get(ar),txtWorkingDays.get(ar),lblPerDaySalary.get(ar),lblSalaryTaka.get(ar),lblHolidayNetOTHr.get(ar),lblWorkingDayNetOTHr.get(ar),
 				lblOTTaka.get(ar),txtOtherEarning.get(ar),txtOtherDeduction.get(ar),
 				lblTotalPayable.get(ar),lblIncomeTax.get(ar),lblNetPayableTaka.get(ar)},ar);
 	}
@@ -979,6 +996,8 @@ public class EditMonthlySalary extends Window
 		double mWorkingDays = Double.parseDouble("0"+txtWorkingDays.get(ar).getValue().toString().replaceAll(",", ""));
 		
 		double mPerDaySalary=mBasic/26;
+		
+		
 		double mSalaryTaka=0;
 		mSalaryTaka=Math.round((mPerDaySalary*(mWorkingDays)));
 		
@@ -995,6 +1014,7 @@ public class EditMonthlySalary extends Window
 		
 
 
+		lblPerDaySalary.get(ar).setValue(mPerDaySalary);
 		lblSalaryTaka.get(ar).setValue(mSalaryTaka);
 		lblOTTaka.get(ar).setValue(mOtTaka);
 		
@@ -1173,6 +1193,9 @@ public class EditMonthlySalary extends Window
 		table.addContainerProperty("Working Days", TextField.class, new TextField());
 		table.setColumnWidth("Working Days", 50);
 		
+		table.addContainerProperty("lblPerDaySalary", Label.class, new Label());
+		table.setColumnWidth("lblPerDaySalary", 70);
+		
 		table.addContainerProperty("Salary Taka", Label.class, new Label());
 		table.setColumnWidth("Salary Taka", 70);
 
@@ -1208,6 +1231,7 @@ public class EditMonthlySalary extends Window
 		table.setColumnCollapsed("System ID", true);
 		table.setColumnCollapsed("HR", true);
 		table.setColumnCollapsed("Mobile", true);
+		table.setColumnCollapsed("lblPerDaySalary", true);
 		table.setColumnCollapsed("HolidayNetOTHr", true);
 		table.setColumnCollapsed("WorkingDayNetOTHr", true);
 
