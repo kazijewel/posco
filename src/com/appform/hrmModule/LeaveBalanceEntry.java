@@ -34,7 +34,6 @@ import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings("serial")
 public class LeaveBalanceEntry extends Window 
@@ -62,7 +61,6 @@ public class LeaveBalanceEntry extends Window
 
 	private Table table = new Table();
 	private ArrayList<Label> tblblSl = new ArrayList<Label>();
-	private ArrayList<Label> tblblUnitName = new ArrayList<Label>();
 	
 	private ArrayList<Label> tblblEmployeeID = new ArrayList<Label>();
 	private ArrayList<Label> tblblEmployeeCode = new ArrayList<Label>();
@@ -105,17 +103,17 @@ public class LeaveBalanceEntry extends Window
 		cm.checkFormAction(menuId);
 		if(!sessionBean.isSuperAdmin())
 		{
-		if(!sessionBean.isAdmin())
-		{
-			if(!cm.isSave)
-			{button.btnSave.setVisible(false);}
-			if(!cm.isEdit)
-			{button.btnEdit.setVisible(false);}
-			if(!cm.isDelete)
-			{button.btnDelete.setVisible(false);}
-			if(!cm.isPreview)
-			{button.btnPreview.setVisible(false);}
-		}
+			if(!sessionBean.isAdmin())
+			{
+				if(!cm.isSave)
+				{button.btnSave.setVisible(false);}
+				if(!cm.isEdit)
+				{button.btnEdit.setVisible(false);}
+				if(!cm.isDelete)
+				{button.btnDelete.setVisible(false);}
+				if(!cm.isPreview)
+				{button.btnPreview.setVisible(false);}
+			}
 		}
 	}
 
@@ -201,12 +199,9 @@ public class LeaveBalanceEntry extends Window
 						tableClear();
 						addDepartmentData();
 				}
-				/*else
-				{
-					showNotification("Warning","Provide Unit Name!!!", Notification.TYPE_WARNING_MESSAGE);
-				}*/
 			}
 		});
+		
 		cmbDepartment.addListener(new ValueChangeListener() 
 		{
 			public void valueChange(ValueChangeEvent event) 
@@ -219,6 +214,7 @@ public class LeaveBalanceEntry extends Window
 				
 			}
 		});
+		
 		chkDepartmentAll.addListener(new ValueChangeListener() 
 		{
 			public void valueChange(ValueChangeEvent event) 
@@ -239,6 +235,7 @@ public class LeaveBalanceEntry extends Window
 				}
 			}
 		});
+		
 		cmbSectioName.addListener(new ValueChangeListener() 
 		{
 			public void valueChange(ValueChangeEvent event) 
@@ -260,6 +257,7 @@ public class LeaveBalanceEntry extends Window
 				}
 			}
 		});
+		
 		chkSectionAll.addListener(new ValueChangeListener() 
 		{
 			public void valueChange(ValueChangeEvent event) 
@@ -285,22 +283,7 @@ public class LeaveBalanceEntry extends Window
 				}
 			}
 		});
-/*		cmbSectioName.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
 		
-				if(cmbSectioName.getValue()!=null)		
-					addUnitData();
-				if(isFind==false)
-				{
-					tableClear();
-					tableDataAdd();
-				}
-
-			}
-		});
-*/
 		txtCasualLeave.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -381,12 +364,10 @@ public class LeaveBalanceEntry extends Window
 			if(sum>0)
 			{
 				setLeaveToAll();
-				//tableEnable();
 			}
 			else
 			{
 				LeaveClearAll();
-				//tableEnable();
 			}
 		}
 	}
@@ -419,30 +400,6 @@ public class LeaveBalanceEntry extends Window
 			}
 		}
 	}
-
-	/*private void tableEnable()
-	{
-		for(int i = 0; i<tblblEmployeeID.size(); i++)
-		{
-			if(!tblblEmployeeID.get(i).getValue().toString().isEmpty())
-			{
-				if(Double.parseDouble(txtCasualLeave.getValue().toString().trim().isEmpty()?"0":txtCasualLeave.getValue().toString().trim())>0)
-					tbTxtCasualLeave.get(i).setEnabled(false);
-				else
-					tbTxtCasualLeave.get(i).setEnabled(true);
-
-				if(Double.parseDouble(txtSickLeave.getValue().toString().trim().isEmpty()?"0":txtSickLeave.getValue().toString().trim())>0)
-					tbTxtSickLeave.get(i).setEnabled(false);
-				else
-					tbTxtSickLeave.get(i).setEnabled(true);
-
-				if(Double.parseDouble(txtEarnLeave.getValue().toString().trim().isEmpty()?"0":txtEarnLeave.getValue().toString().trim())>0)
-					tbTxtEarnLeave.get(i).setEnabled(false);
-				else
-					tbTxtEarnLeave.get(i).setEnabled(true);
-			}
-		}
-	}*/
 	private void addUnitData()
 	{
 		cmbUnitName.removeAllItems();
@@ -484,9 +441,7 @@ public class LeaveBalanceEntry extends Window
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
-		{	
-		/*	String query = "select vSectionId,vSectionName from tbSectionInfo where isActive = 1 order by vSectionName";*/
-			
+		{
 			String query = "select distinct vDepartmentId,vDepartmentName from tbEmpOfficialPersonalInfo "
 					+ "where vUnitId ='"+cmbUnitName.getValue().toString()+"'  order by vDepartmentName " ;
 					
@@ -514,9 +469,7 @@ public class LeaveBalanceEntry extends Window
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
-		{	
-		/*	String query = "select vSectionId,vSectionName from tbSectionInfo where isActive = 1 order by vSectionName";*/
-			
+		{
 			String query = "select distinct vSectionId,vSectionName from tbEmpOfficialPersonalInfo "
 					+ "where vUnitId ='"+cmbUnitName.getValue().toString()+"' and vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"'  order by vSectionName " ;
 					
@@ -782,9 +735,7 @@ public class LeaveBalanceEntry extends Window
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		Transaction tx = session.beginTransaction();
 		try
-		{ 
-			String Updatedata=""; 
-			
+		{
 			if(!tblblEmployeeID.get(0).getValue().toString().isEmpty())
 			{
 				String insertLeave = " update tbEmpLeaveInfo set " +
@@ -863,11 +814,7 @@ public class LeaveBalanceEntry extends Window
 		tblblSl.get(ar).setWidth("100%");
 		tblblSl.get(ar).setHeight("-1px");
 		tblblSl.get(ar).setValue(ar+1);
-
-		/*tblblUnitName.add(ar, new Label());
-		tblblUnitName.get(ar).setImmediate(true);
-		tblblUnitName.get(ar).setWidth("100%");
-*/
+		
 		tblblEmployeeID.add(ar, new Label());
 		tblblEmployeeID.get(ar).setImmediate(true);
 		tblblEmployeeID.get(ar).setWidth("100%");
@@ -1087,7 +1034,6 @@ public class LeaveBalanceEntry extends Window
 		mainLayout.addComponent(chkSectionAll, "top:95px;left:380.0px;");
 
 		lblCommon = new Label("CL :");
-		//mainLayout.addComponent(lblCommon, "top:90.0px;left:530.0px;");
 
 		txtCasualLeave = new AmountField();
 		txtCasualLeave.setImmediate(true);
@@ -1096,7 +1042,6 @@ public class LeaveBalanceEntry extends Window
 		mainLayout.addComponent(txtCasualLeave, "top:110.0px;left:530.0px;");
 
 		lblCommon = new Label("SL :");
-		//mainLayout.addComponent(lblCommon, "top:95.0px;left:295.0px;");
 
 		txtSickLeave = new AmountField();
 		txtSickLeave.setImmediate(true);
@@ -1105,7 +1050,6 @@ public class LeaveBalanceEntry extends Window
 		mainLayout.addComponent(txtSickLeave, "top:110.0px;left:575.0px;");
 
 		lblCommon = new Label("AL/EL :");
-		//mainLayout.addComponent(lblCommon, "top:95.0px;left:380.0px;");
 
 		txtEarnLeave = new AmountField();
 		txtEarnLeave.setImmediate(true);
@@ -1125,9 +1069,6 @@ public class LeaveBalanceEntry extends Window
 
 		table.addContainerProperty("Emp Id", Label.class, new Label());
 		table.setColumnWidth("Emp Id", 70);
-		
-		/*table.addContainerProperty("Unit Name", Label.class, new Label());
-		table.setColumnWidth("Unit Name", 100);*/
 
 		table.addContainerProperty("Emp. Id", Label.class, new Label());
 		table.setColumnWidth("Emp. Id", 55);

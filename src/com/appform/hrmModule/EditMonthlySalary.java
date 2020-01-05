@@ -671,7 +671,7 @@ public class EditMonthlySalary extends Window
 							"iPresentDay='"+(txtWorkingDays.get(i).getValue().toString().trim().isEmpty()?0:txtWorkingDays.get(i).getValue().toString().trim())+"'," + 
 							"mPerDaySalary='"+(lblPerDaySalary.get(i).getValue().toString().trim().isEmpty()?0:lblPerDaySalary.get(i).getValue().toString().trim())+"'," + 
 							"mSalaryTaka='"+(lblSalaryTaka.get(i).getValue().toString().trim().isEmpty()?0:lblSalaryTaka.get(i).getValue().toString().trim())+"'," + 
-							"WorkingDayNetOTHr='"+(lblWorkingDayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblWorkingDayNetOTHr.get(i).getValue().toString().trim())+"'," + 
+							"iWorkingDayNetOTHr='"+(lblWorkingDayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblWorkingDayNetOTHr.get(i).getValue().toString().trim())+"'," + 
 							"mOtTaka='"+(lblOTTaka.get(i).getValue().toString().trim().isEmpty()?0:lblOTTaka.get(i).getValue().toString().trim())+"'," + 
 							"mOtherEarning='"+(txtOtherEarning.get(i).getValue().toString().trim().isEmpty()?0:txtOtherEarning.get(i).getValue().toString().trim())+"'," + 
 							"mOtherDeduction='"+(txtOtherDeduction.get(i).getValue().toString().trim().isEmpty()?0:txtOtherDeduction.get(i).getValue().toString().trim())+"'," + 
