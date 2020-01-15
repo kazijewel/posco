@@ -543,7 +543,7 @@ public class RptShortViewOfOvertime extends Window{
 						this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
 						this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
 						this.getWindow().getApplication().getURL()+"VAADIN/applet",RadioBtn.Radio);
-
+				
 				win.setCaption("Project Report");
 				this.getParent().getWindow().addWindow(win);
 			}
