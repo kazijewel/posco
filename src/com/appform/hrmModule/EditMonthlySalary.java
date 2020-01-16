@@ -68,11 +68,14 @@ public class EditMonthlySalary extends Window
 	private ArrayList<Label> lblBasic = new ArrayList<Label>();
 	private ArrayList<Label> lblHouseAll = new ArrayList<Label>();
 	private ArrayList<Label> lblMobileAll = new ArrayList<Label>();
-	private ArrayList<TextField> txtWorkingDays = new ArrayList<TextField>();
+	private ArrayList<TextField> txtWorkingDays = new ArrayList<TextField>(); 
 	private ArrayList<Label> lblPerDaySalary = new ArrayList<Label>();
 	private ArrayList<Label> lblSalaryTaka = new ArrayList<Label>();
+	private ArrayList<Label> lblHolidayOTHr = new ArrayList<Label>();
+	private ArrayList<Label> lblReplaceOTHr = new ArrayList<Label>();
 	private ArrayList<Label> lblHolidayNetOTHr = new ArrayList<Label>();
 	private ArrayList<Label> lblWorkingDayNetOTHr = new ArrayList<Label>();
+	private ArrayList<Label> lblPerHrOtRate = new ArrayList<Label>();
 	private ArrayList<Label> lblOTTaka = new ArrayList<Label>();
 
 	private ArrayList<TextField> txtOtherEarning = new ArrayList<TextField>();
@@ -397,49 +400,35 @@ public class EditMonthlySalary extends Window
 
 			if(!checkList.isEmpty())
 			{				
-				String sql = "select vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,mBasic,mHouseRent,mMobileAllowance,mSalaryTaka,"
-						+ "mOtTaka,mOtherEarning,mOtherDeduction,mTotalPayable,mIncomeTax,mNetPayableTaka,iWorkingDay,iHolidayNetOTHr,"
-						+ "iWorkingDayNetOTHr,mPerDaySalary "
+				String sql = "select vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,mBasic,mHouseRent,mMobileAllowance,iPresentDay,"
+						+ "mPerDaySalary,mSalaryTaka,iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate,mOtTaka,"
+						+ "mOtherDeduction,mOtherEarning,mTotalPayable,mIncomeTax,mNetPayableTaka "
 						+ "from tbMonthlySalary "
-						+ "where vUnitId='"+cmbUnit.getValue().toString()+"' "
-						+ "and vSalaryYear='"+FYear.format(cmbSalaryMonth.getValue())+"' and vSalaryMonth='"+FMonthName.format(cmbSalaryMonth.getValue())+"' "
-						+ "and vSectionID like '"+(chkSectionAll.booleanValue()?"%":(cmbSection.getValue()==null?"%":cmbSection.getValue()))+"' "
+						+ "where vUnitId='"+cmbUnit.getValue().toString()+"' and vSalaryYear='"+FYear.format(cmbSalaryMonth.getValue())+"' "
+						+ "and vSalaryMonth='"+FMonthName.format(cmbSalaryMonth.getValue())+"' and vSectionID like '"+(chkSectionAll.booleanValue()?"%":(cmbSection.getValue()==null?"%":cmbSection.getValue()))+"' "
 						+ "and vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue()))+"' "
 						+ "and vEmployeeID like '"+(chkEmployeeAll.booleanValue()?"%":(cmbEmployee.getValue()==null?"%":cmbEmployee.getValue()))+"' "
 						+ "order by SUBSTRING(vEmployeeCode,3,50)";
-
 				System.out.println("addTableData :" + sql);
-
-				
 				List <?> lst = session.createSQLQuery(sql).list();
-
-				for (Iterator <?> iter = lst.iterator(); iter.hasNext();) 
-				{
-					if(i==lblEmployeeName.size()-1)
-					{
+				for (Iterator <?> iter = lst.iterator(); iter.hasNext();) {
+					if(i==lblEmployeeName.size()-1)	{
 						tableRowAdd(i+1);
 					}
-
 					Object[] element = (Object[]) iter.next();
-
-					for(int j=0;j<lblAutoEmployeeID.size();j++)
-					{
-						if(lblAutoEmployeeID.get(j).getValue().toString().trim().isEmpty())
-						{
+					for(int j=0;j<lblAutoEmployeeID.size();j++) {
+						if(lblAutoEmployeeID.get(j).getValue().toString().trim().isEmpty())	{
 							i=j;
 							t=true;
 							break;
 						}
-						if(!lblAutoEmployeeID.get(j).getValue().toString().trim().isEmpty())
-						{
-							if(lblAutoEmployeeID.get(j).getValue().toString().equals(element[0].toString()))
-							{
+						if(!lblAutoEmployeeID.get(j).getValue().toString().trim().isEmpty()) {
+							if(lblAutoEmployeeID.get(j).getValue().toString().equals(element[0].toString())) {
 								t=false;
 								break;
 							}
 						}
 					}
-
 					if(t)
 					{
 						lblAutoEmployeeID.get(i).setValue(element[0]);
@@ -450,17 +439,21 @@ public class EditMonthlySalary extends Window
 						lblBasic.get(i).setValue(dfZero.format(element[4]));
 						lblHouseAll.get(i).setValue(dfZero.format(element[5]));
 						lblMobileAll.get(i).setValue(dfZero.format(element[6]));
-						txtWorkingDays.get(i).setValue(dfZero.format(element[14]));
-						lblSalaryTaka.get(i).setValue(dfZero.format(element[7]));
-						lblPerDaySalary.get(i).setValue(dfZero.format(element[17]));
-						lblWorkingDayNetOTHr.get(i).setValue(dfZero.format(element[15]));
-						lblHolidayNetOTHr.get(i).setValue(dfZero.format(element[16]));
-						lblOTTaka.get(i).setValue(dfZero.format(element[8]));
-						txtOtherEarning.get(i).setValue(dfZero.format(element[9]));
-						txtOtherDeduction.get(i).setValue(dfZero.format(element[10]));
-						lblTotalPayable.get(i).setValue(dfZero.format(element[11]));
-						lblIncomeTax.get(i).setValue(dfZero.format(element[12]));
-						lblNetPayableTaka.get(i).setValue(dfZero.format(element[13]));
+						txtWorkingDays.get(i).setValue(dfZero.format(element[7]));
+						lblPerDaySalary.get(i).setValue(dfZero.format(element[8]));
+						lblSalaryTaka.get(i).setValue(dfZero.format(element[9]));
+
+						lblHolidayOTHr.get(i).setValue(dfZero.format(element[10]));
+						lblReplaceOTHr.get(i).setValue(dfZero.format(element[11]));
+						lblHolidayNetOTHr.get(i).setValue(dfZero.format(element[12]));
+						lblWorkingDayNetOTHr.get(i).setValue(dfZero.format(element[13]));
+						lblPerHrOtRate.get(i).setValue(dfZero.format(element[14]));
+						lblOTTaka.get(i).setValue(dfZero.format(element[15]));
+						txtOtherEarning.get(i).setValue(dfZero.format(element[16]));
+						txtOtherDeduction.get(i).setValue(dfZero.format(element[17]));
+						lblTotalPayable.get(i).setValue(dfZero.format(element[18]));
+						lblIncomeTax.get(i).setValue(dfZero.format(element[19]));
+						lblNetPayableTaka.get(i).setValue(dfZero.format(element[20]));
 						
 						i++;
 					}
@@ -668,9 +661,17 @@ public class EditMonthlySalary extends Window
 					
 					String query = "update tbMonthlySalary " +
 							"set iPresentDay='"+(txtWorkingDays.get(i).getValue().toString().trim().isEmpty()?0:txtWorkingDays.get(i).getValue().toString().trim())+"'," + 
+							"mBasic='"+(lblBasic.get(i).getValue().toString().trim().isEmpty()?0:lblBasic.get(i).getValue().toString().trim())+"'," + 
+							"mHouseRent='"+(lblHouseAll.get(i).getValue().toString().trim().isEmpty()?0:lblHouseAll.get(i).getValue().toString().trim())+"'," + 
+							"mMobileAllowance='"+(lblMobileAll.get(i).getValue().toString().trim().isEmpty()?0:lblMobileAll.get(i).getValue().toString().trim())+"'," + 
+							
 							"mPerDaySalary='"+(lblPerDaySalary.get(i).getValue().toString().trim().isEmpty()?0:lblPerDaySalary.get(i).getValue().toString().trim())+"'," + 
 							"mSalaryTaka='"+(lblSalaryTaka.get(i).getValue().toString().trim().isEmpty()?0:lblSalaryTaka.get(i).getValue().toString().trim())+"'," + 
+							"iHolidayOTHr='"+(lblHolidayOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblHolidayOTHr.get(i).getValue().toString().trim())+"'," + 
+							"iReplaceOTHr='"+(lblReplaceOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblReplaceOTHr.get(i).getValue().toString().trim())+"'," + 
+							"iHolidayNetOTHr='"+(lblHolidayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblHolidayNetOTHr.get(i).getValue().toString().trim())+"'," + 
 							"iWorkingDayNetOTHr='"+(lblWorkingDayNetOTHr.get(i).getValue().toString().trim().isEmpty()?0:lblWorkingDayNetOTHr.get(i).getValue().toString().trim())+"'," + 
+							"mPerHrOTRate='"+(lblPerHrOtRate.get(i).getValue().toString().trim().isEmpty()?0:lblPerHrOtRate.get(i).getValue().toString().trim())+"'," + 
 							"mOtTaka='"+(lblOTTaka.get(i).getValue().toString().trim().isEmpty()?0:lblOTTaka.get(i).getValue().toString().trim())+"'," + 
 							"mOtherEarning='"+(txtOtherEarning.get(i).getValue().toString().trim().isEmpty()?0:txtOtherEarning.get(i).getValue().toString().trim())+"'," + 
 							"mOtherDeduction='"+(txtOtherDeduction.get(i).getValue().toString().trim().isEmpty()?0:txtOtherDeduction.get(i).getValue().toString().trim())+"'," + 
@@ -761,21 +762,22 @@ public class EditMonthlySalary extends Window
 			lblEmployeeID.get(i).setValue("");
 			lblEmployeeName.get(i).setValue("");
 			lblDesignation.get(i).setValue("");
+			
 			lblBasic.get(i).setValue("");
 			lblHouseAll.get(i).setValue("");
-
 			lblMobileAll.get(i).setValue("");
 			txtWorkingDays.get(i).setValue("");
 			lblPerDaySalary.get(i).setValue("");
 			lblSalaryTaka.get(i).setValue("");
+			lblHolidayOTHr.get(i).setValue("");
+			lblReplaceOTHr.get(i).setValue("");
 			lblHolidayNetOTHr.get(i).setValue("");
 			lblWorkingDayNetOTHr.get(i).setValue("");
-			lblOTTaka.get(i).setValue("");
-			
+			lblPerHrOtRate.get(i).setValue("");
+			lblOTTaka.get(i).setValue("");			
 			txtOtherEarning.get(i).setValue("");
 			txtOtherDeduction.get(i).setValue("");
-			lblTotalPayable.get(i).setValue("");
-			
+			lblTotalPayable.get(i).setValue("");			
 			lblIncomeTax.get(i).setValue("");
 			lblNetPayableTaka.get(i).setValue("");
 		}
@@ -810,9 +812,12 @@ public class EditMonthlySalary extends Window
 				txtWorkingDays.get(ar).setValue("");
 				lblPerDaySalary.get(ar).setValue("");
 				lblSalaryTaka.get(ar).setValue("");
+				lblHolidayOTHr.get(ar).setValue("");
+				lblReplaceOTHr.get(ar).setValue("");
 				lblHolidayNetOTHr.get(ar).setValue("");
 				lblWorkingDayNetOTHr.get(ar).setValue("");
 				lblOTTaka.get(ar).setValue("");
+				lblPerHrOtRate.get(ar).setValue("");
 				txtOtherEarning.get(ar).setValue("");
 				txtOtherDeduction.get(ar).setValue("");
 				lblTotalPayable.get(ar).setValue("");
@@ -836,9 +841,12 @@ public class EditMonthlySalary extends Window
 							txtWorkingDays.get(rowcount).setValue(txtWorkingDays.get(rowcount+1).getValue().toString());
 							lblPerDaySalary.get(rowcount).setValue(lblPerDaySalary.get(rowcount+1).getValue().toString());
 							lblSalaryTaka.get(rowcount).setValue(lblSalaryTaka.get(rowcount+1).getValue().toString());
+							lblHolidayOTHr.get(rowcount).setValue(lblHolidayOTHr.get(rowcount+1).getValue().toString());
+							lblReplaceOTHr.get(rowcount).setValue(lblReplaceOTHr.get(rowcount+1).getValue().toString());
 							lblHolidayNetOTHr.get(rowcount).setValue(lblHolidayNetOTHr.get(rowcount+1).getValue().toString());
 							lblWorkingDayNetOTHr.get(rowcount).setValue(lblWorkingDayNetOTHr.get(rowcount+1).getValue().toString());
 
+							lblPerHrOtRate.get(rowcount).setValue(lblPerHrOtRate.get(rowcount+1).getValue().toString());
 							lblOTTaka.get(rowcount).setValue(lblOTTaka.get(rowcount+1).getValue().toString());
 							txtOtherEarning.get(rowcount).setValue(txtOtherEarning.get(rowcount+1).getValue().toString());
 							txtOtherDeduction.get(rowcount).setValue(txtOtherDeduction.get(rowcount+1).getValue().toString());
@@ -858,8 +866,11 @@ public class EditMonthlySalary extends Window
 							txtWorkingDays.get(rowcount+1).setValue("");
 							lblPerDaySalary.get(rowcount+1).setValue("");
 							lblSalaryTaka.get(rowcount+1).setValue("");
+							lblHolidayOTHr.get(rowcount+1).setValue("");
+							lblReplaceOTHr.get(rowcount+1).setValue("");
 							lblHolidayNetOTHr.get(rowcount+1).setValue("");
 							lblWorkingDayNetOTHr.get(rowcount+1).setValue("");
+							lblPerHrOtRate.get(rowcount+1).setValue("");
 							lblOTTaka.get(rowcount+1).setValue("");
 							txtOtherEarning.get(rowcount+1).setValue("");
 							txtOtherDeduction.get(rowcount+1).setValue("");
@@ -920,11 +931,20 @@ public class EditMonthlySalary extends Window
 		lblSalaryTaka.add(ar, new Label());
 		lblSalaryTaka.get(ar).setWidth("100%");
 
+		lblHolidayOTHr.add(ar, new Label());
+		lblHolidayOTHr.get(ar).setWidth("100%");
+
+		lblReplaceOTHr.add(ar, new Label());
+		lblReplaceOTHr.get(ar).setWidth("100%");
+
 		lblHolidayNetOTHr.add(ar, new Label());
 		lblHolidayNetOTHr.get(ar).setWidth("100%");
 
 		lblWorkingDayNetOTHr.add(ar, new Label());
 		lblWorkingDayNetOTHr.get(ar).setWidth("100%");
+
+		lblPerHrOtRate.add(ar, new Label());
+		lblPerHrOtRate.get(ar).setWidth("100%");
 
 		lblOTTaka.add(ar, new Label());
 		lblOTTaka.get(ar).setWidth("100%");
@@ -981,8 +1001,9 @@ public class EditMonthlySalary extends Window
 		//TotalCalculation(ar);
 
 		table.addItem(new Object[]{btnDel.get(ar),lblsa.get(ar),lblAutoEmployeeID.get(ar),lblEmployeeID.get(ar),lblEmployeeName.get(ar),lblDesignation.get(ar),
-				lblBasic.get(ar),lblHouseAll.get(ar),lblMobileAll.get(ar),txtWorkingDays.get(ar),lblPerDaySalary.get(ar),lblSalaryTaka.get(ar),lblHolidayNetOTHr.get(ar),lblWorkingDayNetOTHr.get(ar),
-				lblOTTaka.get(ar),txtOtherEarning.get(ar),txtOtherDeduction.get(ar),
+				lblBasic.get(ar),lblHouseAll.get(ar),lblMobileAll.get(ar),txtWorkingDays.get(ar),lblPerDaySalary.get(ar),
+				lblSalaryTaka.get(ar),lblHolidayOTHr.get(ar),lblReplaceOTHr.get(ar),lblHolidayNetOTHr.get(ar),lblWorkingDayNetOTHr.get(ar),
+				lblPerHrOtRate.get(ar),lblOTTaka.get(ar),txtOtherEarning.get(ar),txtOtherDeduction.get(ar),
 				lblTotalPayable.get(ar),lblIncomeTax.get(ar),lblNetPayableTaka.get(ar)},ar);
 	}
 
@@ -990,31 +1011,25 @@ public class EditMonthlySalary extends Window
 	{
 
 		double mBasic = Double.parseDouble("0"+lblBasic.get(ar).getValue().toString().replaceAll(",", ""));
-		
-
 		double mWorkingDays = Double.parseDouble("0"+txtWorkingDays.get(ar).getValue().toString().replaceAll(",", ""));
 		
 		double mPerDaySalary=mBasic/26;
 		
-		
-		double mSalaryTaka=0;
-		mSalaryTaka=Math.round((mPerDaySalary*(mWorkingDays)));
-		
-		double mPerHrOTRate=mBasic/260;
+		double mSalaryTaka=Math.round((mPerDaySalary*(mWorkingDays)));
 		
 
+		double mHolidayOTHr = Double.parseDouble("0"+lblHolidayOTHr.get(ar).getValue().toString().replaceAll(",", ""));
+		double mReplace= Double.parseDouble("0"+lblReplaceOTHr.get(ar).getValue().toString().replaceAll(",", ""));
+		
 		double mHolidayNetOTHr = Double.parseDouble("0"+lblHolidayNetOTHr.get(ar).getValue().toString().replaceAll(",", ""));
 		double mWorkingDayNetOTHr = Double.parseDouble("0"+lblWorkingDayNetOTHr .get(ar).getValue().toString().replaceAll(",", ""));
 		
-		double mOtTaka=(mPerHrOTRate*((mHolidayNetOTHr*2)+(mWorkingDayNetOTHr*2)));
+		double mPerHrOTRate=mBasic/260;
+		double mOtTaka=Math.round(mPerHrOTRate*((mHolidayNetOTHr*2)+(mWorkingDayNetOTHr*2)));
 		
-		
-		
-		
-
-
 		lblPerDaySalary.get(ar).setValue(mPerDaySalary);
 		lblSalaryTaka.get(ar).setValue(mSalaryTaka);
+		lblPerHrOtRate.get(ar).setValue(mPerHrOTRate);
 		lblOTTaka.get(ar).setValue(mOtTaka);
 		
 		double mOtherEarning = Double.parseDouble("0"+txtOtherEarning.get(ar).getValue().toString().replaceAll(",", ""));
@@ -1050,7 +1065,7 @@ public class EditMonthlySalary extends Window
 			mIncomeTax=250;
 		}
 
-		netPayableTaka =totalPayable-mIncomeTax;
+		netPayableTaka =Math.round(totalPayable-mIncomeTax);
 		
 		// Calculate IncomeTax End
 
@@ -1181,7 +1196,7 @@ public class EditMonthlySalary extends Window
 		table.setColumnWidth("Designation", 150);
 
 		table.addContainerProperty("Gross Salary", Label.class, new Label());
-		table.setColumnWidth("Gross Salary", 70);
+		table.setColumnWidth("Gross Salary", 50);
 
 		table.addContainerProperty("HR", Label.class, new Label());
 		table.setColumnWidth("HR", 70);
@@ -1192,20 +1207,29 @@ public class EditMonthlySalary extends Window
 		table.addContainerProperty("Working Days", TextField.class, new TextField());
 		table.setColumnWidth("Working Days", 50);
 		
-		table.addContainerProperty("lblPerDaySalary", Label.class, new Label());
-		table.setColumnWidth("lblPerDaySalary", 70);
+		table.addContainerProperty("PerDay Salary", Label.class, new Label());
+		table.setColumnWidth("PerDay Salary", 70);
 		
 		table.addContainerProperty("Salary Taka", Label.class, new Label());
-		table.setColumnWidth("Salary Taka", 70);
-
-		table.addContainerProperty("Holiday Net OTHr", Label.class, new Label());
-		table.setColumnWidth("Holiday Net OTHr", 65);
+		table.setColumnWidth("Salary Taka", 60);
 		
-		table.addContainerProperty("Working Day Net OTHr", Label.class, new Label());
-		table.setColumnWidth("Working Day Net OTHr", 65);
+		table.addContainerProperty("Holiday OT Hr", Label.class, new Label());
+		table.setColumnWidth("Holiday OT Hr", 70);
+		
+		table.addContainerProperty("Replace", Label.class, new Label());
+		table.setColumnWidth("Replace", 40);
+
+		table.addContainerProperty("HD OT", Label.class, new Label());
+		table.setColumnWidth("HD OT", 25);
+		
+		table.addContainerProperty("WD OT", Label.class, new Label());
+		table.setColumnWidth("WD OT", 25);
+		
+		table.addContainerProperty("Per Hr OT Rate", Label.class, new Label());
+		table.setColumnWidth("Per Hr OT Rate", 65);
 		
 		table.addContainerProperty("O.T Taka", Label.class, new Label());
-		table.setColumnWidth("O.T Taka", 65);
+		table.setColumnWidth("O.T Taka", 45);
 
 		table.addContainerProperty("Other Earning", TextField.class, new TextField());
 		table.setColumnWidth("Other Earning", 55);
@@ -1214,25 +1238,22 @@ public class EditMonthlySalary extends Window
 		table.setColumnWidth("Other Deduction", 55);
 
 		table.addContainerProperty("Total Payable", Label.class, new Label());
-		table.setColumnWidth("Total Payable", 65);
+		table.setColumnWidth("Total Payable", 55);
 
 		table.addContainerProperty("Tax/AIT Deduct", Label.class, new Label());
-		table.setColumnWidth("Tax/AIT Deduct", 55);
+		table.setColumnWidth("Tax/AIT Deduct", 45);
 
 		table.addContainerProperty("Net Payable Taka", Label.class, new Label());
 		table.setColumnWidth("Net Payable Taka", 70);
 
-		/*table.setColumnAlignments(new String[] {Table.ALIGN_CENTER,Table.ALIGN_CENTER,Table.ALIGN_LEFT,Table.ALIGN_LEFT,Table.ALIGN_LEFT, Table.ALIGN_LEFT,
-				Table.ALIGN_LEFT, Table.ALIGN_RIGHT, Table.ALIGN_RIGHT,	Table.ALIGN_RIGHT, Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,
-				Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,Table.ALIGN_RIGHT,Table.ALIGN_RIGHT, 
-				Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER, Table.ALIGN_CENTER,Table.ALIGN_LEFT,Table.ALIGN_CENTER,Table.ALIGN_RIGHT});*/
-
 		table.setColumnCollapsed("System ID", true);
 		table.setColumnCollapsed("HR", true);
 		table.setColumnCollapsed("Mobile", true);
-		table.setColumnCollapsed("lblPerDaySalary", true);
-		table.setColumnCollapsed("Holiday Net OTHr", true);
-		table.setColumnCollapsed("Working Day Net OTHr", true);
+		
+		table.setColumnCollapsed("Replace", true);
+		table.setColumnCollapsed("PerDay Salary", true);
+		table.setColumnCollapsed("Holiday OT Hr", true);
+		table.setColumnCollapsed("Per Hr OT Rate", true);
 
 		mainLayout.addComponent(table,"top:150px; left:20.0px;");		
 		table.setStyleName("wordwrap-headers");
