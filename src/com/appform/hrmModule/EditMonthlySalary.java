@@ -892,24 +892,31 @@ public class EditMonthlySalary extends Window
 
 		lblAutoEmployeeID.add(ar, new Label());
 		lblAutoEmployeeID.get(ar).setWidth("100%");
+		lblAutoEmployeeID.get(ar).setImmediate(true);
 
 		lblEmployeeID.add(ar, new Label());
 		lblEmployeeID.get(ar).setWidth("100%");
+		lblEmployeeID.get(ar).setImmediate(true);
 
 		lblEmployeeName.add(ar,new Label());
 		lblEmployeeName.get(ar).setWidth("100%");
+		lblEmployeeName.get(ar).setImmediate(true);
 
 		lblDesignation.add(ar, new Label());
 		lblDesignation.get(ar).setWidth("100%");
+		lblDesignation.get(ar).setImmediate(true);
 
 		lblBasic.add(ar, new Label());
 		lblBasic.get(ar).setWidth("100%");
+		lblBasic.get(ar).setImmediate(true);
 
 		lblHouseAll.add(ar, new Label());
 		lblHouseAll.get(ar).setWidth("100%");
+		lblHouseAll.get(ar).setImmediate(true);
 
 		lblMobileAll.add(ar, new Label());
 		lblMobileAll.get(ar).setWidth("100%");
+		lblMobileAll.get(ar).setImmediate(true);
 
 		txtWorkingDays.add(ar, new TextField());
 		txtWorkingDays.get(ar).setWidth("100%");
@@ -927,27 +934,35 @@ public class EditMonthlySalary extends Window
 		
 		lblPerDaySalary.add(ar, new Label());
 		lblPerDaySalary.get(ar).setWidth("100%");
+		lblPerDaySalary.get(ar).setImmediate(true);
 
 		lblSalaryTaka.add(ar, new Label());
 		lblSalaryTaka.get(ar).setWidth("100%");
+		lblSalaryTaka.get(ar).setImmediate(true);
 
 		lblHolidayOTHr.add(ar, new Label());
 		lblHolidayOTHr.get(ar).setWidth("100%");
+		lblHolidayOTHr.get(ar).setImmediate(true);
 
 		lblReplaceOTHr.add(ar, new Label());
 		lblReplaceOTHr.get(ar).setWidth("100%");
+		lblReplaceOTHr.get(ar).setImmediate(true);
 
 		lblHolidayNetOTHr.add(ar, new Label());
 		lblHolidayNetOTHr.get(ar).setWidth("100%");
+		lblHolidayNetOTHr.get(ar).setImmediate(true);
 
 		lblWorkingDayNetOTHr.add(ar, new Label());
 		lblWorkingDayNetOTHr.get(ar).setWidth("100%");
+		lblWorkingDayNetOTHr.get(ar).setImmediate(true);
 
 		lblPerHrOtRate.add(ar, new Label());
 		lblPerHrOtRate.get(ar).setWidth("100%");
+		lblPerHrOtRate.get(ar).setImmediate(true);
 
 		lblOTTaka.add(ar, new Label());
 		lblOTTaka.get(ar).setWidth("100%");
+		lblOTTaka.get(ar).setImmediate(true);
 
 		txtOtherEarning.add(ar, new TextField());
 		txtOtherEarning.get(ar).setWidth("100%");
@@ -979,6 +994,7 @@ public class EditMonthlySalary extends Window
 
 		lblTotalPayable.add(ar, new Label());
 		lblTotalPayable.get(ar).setWidth("100%");
+		lblTotalPayable.get(ar).setImmediate(true);
 
 		lblIncomeTax.add(ar, new Label());
 		lblIncomeTax.get(ar).setWidth("100%");
