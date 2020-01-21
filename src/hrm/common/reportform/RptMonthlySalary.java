@@ -43,9 +43,7 @@ public class RptMonthlySalary extends Window {
 	private AbsoluteLayout mainLayout;
 
 	
-	private ComboBox cmbServiceType,cmbUnit;
-
-	private ComboBox cmbSectionName,cmbDepartmentName;
+	private ComboBox cmbUnit,cmbDepartmentName,cmbSectionName,cmbServiceType;
 	private CheckBox chkSectionAll,chkDepartmentAll;
 	private CheckBox chkServiceTypeAll;
 	private ComboBox cmbMonth;
@@ -203,10 +201,13 @@ public class RptMonthlySalary extends Window {
 
 		catch(Exception exp)
 		{
-			showNotification("addDepartmentData : ",exp.toString(),Notification.TYPE_ERROR_MESSAGE);
+			showNotification("addSectionData : ",exp.toString(),Notification.TYPE_ERROR_MESSAGE);
 		}
 		finally{session.close();}
 	}
+
+	
+	
 
 	public void addServiceType()
 	{
@@ -220,29 +221,31 @@ public class RptMonthlySalary extends Window {
 		{
 			secId=cmbSectionName.getValue().toString();
 		}
-		Session session = SessionFactoryUtil.getInstance().openSession();
+		Session session=SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
-		
 		try
 		{
-			String query = "select distinct vServiceType from tbMonthlySalary " +
+			String query = "select distinct vServiceType,0 from tbMonthlySalary " +
 					"where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
 					"and vUnitId='"+cmbUnit.getValue().toString()+"' and vDepartmentId like '"+dept+"' and vSectionId like '"+secId+"' " +
 					"order by vServiceType";
 			System.out.println("addServiceType: "+query);
-			
-			List <?> list = session.createSQLQuery(query).list();
-			for(Iterator <?> iter=list.iterator();iter.hasNext();)
+
+			Iterator <?> itr=session.createSQLQuery(query).list().iterator();
+			while(itr.hasNext())
 			{
-				cmbServiceType.addItem(iter.next().toString());
+				Object [] element=(Object[])itr.next();
+				cmbServiceType.addItem(element[0]);
 			}
 		}
+
 		catch(Exception exp)
 		{
-			showNotification("addServiceType",exp+"",Notification.TYPE_ERROR_MESSAGE);
+			showNotification("addServiceType : ",exp.toString(),Notification.TYPE_ERROR_MESSAGE);
 		}
 		finally{session.close();}
 	}
+	
 	public void setEventAction()
 	{
 		cmbMonth.addListener(new ValueChangeListener()
@@ -653,12 +656,11 @@ public class RptMonthlySalary extends Window {
 		mainLayout.addComponent(chkSectionAll,"top:120.0px; left:395px");
 
 
-		cmbServiceType = new ComboBox();
-		cmbServiceType.setImmediate(false);
-		cmbServiceType.setWidth("260px");
-		cmbServiceType.setHeight("-1px");
-		cmbServiceType.setNullSelectionAllowed(true);
+		cmbServiceType=new ComboBox();
 		cmbServiceType.setImmediate(true);
+		cmbServiceType.setWidth("260.0px");
+		cmbServiceType.setHeight("24.0px");
+		cmbServiceType.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Employee Type :"), "top:150px; left:30.0px;");
 		mainLayout.addComponent(cmbServiceType, "top:148.0px; left:130.0px;");
 

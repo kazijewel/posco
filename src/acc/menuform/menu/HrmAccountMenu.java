@@ -180,7 +180,7 @@ public class HrmAccountMenu
 		}
 	}
 	private void addsalaryReport(Object salaryReport) {
-		if(isValidMenu("monthlySalary"))
+		if(isValidMenu("RptMonthlySalary"))
 		{
 			addCaptionedItem("MONTHLY SALARY", salaryReport);
 		}
@@ -408,7 +408,7 @@ public class HrmAccountMenu
 
 				if(event.getItem().toString().equalsIgnoreCase("MONTHLY SALARY"))
 				{
-					showWindow(new RptMonthlySalary(sessionBean,"monthlySalary"),event.getItem(),"monthlySalary","HRM MODULE","REPORT");
+					showWindow(new RptMonthlySalary(sessionBean,"RptMonthlySalary"),event.getItem(),"RptMonthlySalary","HRM MODULE","REPORT");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("MONTHLY HOUSE ALLOWANCE SHEET"))
 				{

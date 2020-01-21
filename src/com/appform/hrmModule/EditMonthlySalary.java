@@ -402,7 +402,7 @@ public class EditMonthlySalary extends Window
 			{				
 				String sql = "select vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,mBasic,mHouseRent,mMobileAllowance,iPresentDay,"
 						+ "mPerDaySalary,mSalaryTaka,iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate,mOtTaka,"
-						+ "mOtherDeduction,mOtherEarning,mTotalPayable,mIncomeTax,mNetPayableTaka "
+						+ "mOtherEarning,mOtherDeduction,mTotalPayable,mIncomeTax,mNetPayableTaka "
 						+ "from tbMonthlySalary "
 						+ "where vUnitId='"+cmbUnit.getValue().toString()+"' and vSalaryYear='"+FYear.format(cmbSalaryMonth.getValue())+"' "
 						+ "and vSalaryMonth='"+FMonthName.format(cmbSalaryMonth.getValue())+"' and vSectionID like '"+(chkSectionAll.booleanValue()?"%":(cmbSection.getValue()==null?"%":cmbSection.getValue()))+"' "
