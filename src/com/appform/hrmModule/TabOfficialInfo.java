@@ -133,7 +133,7 @@ public class TabOfficialInfo extends VerticalLayout
 	private static final List<String> sex = Arrays.asList(new String[] {"M", "F"});
 	private static final List<String> employeeType =Arrays.asList( new String[] { "Regular","Temporary"});
 	private static final List<String> status =Arrays.asList( new String[] {"On Duty", "Discontinue","Resignation", "Retired", "Dismiss", "Terminated","Retrenchment"});
-	private static final List<String> ServiceType =Arrays.asList( new String[] {"Management", "Officer", "Staff"});
+	private static final List<String> ServiceType =Arrays.asList( new String[] {"Engineer/Officer", "Supervisor", "Worker"});
 	public static final List<String> UnitType = Arrays.asList(new String[] {"CEEL Corporate Office Employees", "Corporate Office Employees" });
 
 	String employeeImage = "0";
