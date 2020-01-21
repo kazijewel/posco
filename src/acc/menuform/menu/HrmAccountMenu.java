@@ -220,10 +220,6 @@ public class HrmAccountMenu
 		{
 			addCaptionedItem("NOTES REQUISITION", salaryReport);
 		}
-		if(isValidMenu("RptOverTimeBankStatement"))
-		{
-			addCaptionedItem("OVER TIME BANK STATEMENT", salaryReport);
-		}
 		if(isValidMenu("RptSalaryAndIncomeTaxCertification"))
 		{
 			addCaptionedItem("SALARY AND INCOME TAX CERTIFICATION", salaryReport);
@@ -447,10 +443,6 @@ public class HrmAccountMenu
 				if(event.getItem().toString().equalsIgnoreCase("BANK ADVICE WITH FORWARDING LETTER"))
 				{
 					showWindow(new RptBankStatement(sessionBean,"bankStatement"),event.getItem(),"bankStatement","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("OVER TIME BANK STATEMENT"))
-				{
-					showWindow(new RptOverTimeStatement(sessionBean,"RptOverTimeBankStatement"),event.getItem(),"RptOverTimeBankStatement","HRM MODULE","REPORT");
 				}
 				
 				if(event.getItem().toString().equalsIgnoreCase("NOTES REQUISITION"))
