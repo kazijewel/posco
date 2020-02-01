@@ -487,10 +487,10 @@ public class HrmMenu
 		{
 			addCaptionedItem("SHORT VIEW OF ATTENDANCE", attendanceReport);
 		}
-		if(isValidMenu("RptMonthlyAttendanceSummaryDevice"))
+		/*if(isValidMenu("RptMonthlyAttendanceSummaryDevice"))
 		{
 			addCaptionedItem("MONTHLY ATTENDANCE SUMMARY.", attendanceReport);
-		}
+		}*/
 		
 		
 		
@@ -827,15 +827,15 @@ public class HrmMenu
 		{
 			addCaptionedItem("OVER TIME REQUEST", otReport);
 		}
-		if(isValidMenu("RptMonthWiseOtStatement"))
-		{
-			addCaptionedItem("MONTH WISE OT STATEMENT", otReport);
-		}
 		if(isValidMenu("RptShortViewOfOvertime"))
 		{
 			addCaptionedItem("SHORT VIEW OF OVERTIME", otReport);
 		}
-		
+
+		/*if(isValidMenu("RptMonthWiseOtStatement"))
+		{
+			addCaptionedItem("MONTH WISE OT STATEMENT", otReport);
+		}*/
 		/*if(isValidMenu("rptMonthlyFridayAllowance"))
 		{
 			addCaptionedItem("MONTHLY HOLIDAY ALLOWANCE", otReport);
@@ -1181,10 +1181,10 @@ public class HrmMenu
 				{
 					showWindow(new RptShortViewOfAttendance(sessionBean,"RptShortViewOfAttendance"),event.getItem(),"RptShortViewOfAttendance","HRM MODULE","REPORT");
 				}
-				if(event.getItem().toString().equalsIgnoreCase("MONTHLY ATTENDANCE SUMMARY."))
+				/*if(event.getItem().toString().equalsIgnoreCase("MONTHLY ATTENDANCE SUMMARY."))
 				{
 					showWindow(new RptMonthlyAttendanceSummaryDevice(sessionBean,"RptMonthlyAttendanceSummaryDevice"),event.getItem(),"RptMonthlyAttendanceSummaryDevice","HRM MODULE","REPORT");
-				}
+				}*/
 				
 				//OT Report
 				if(event.getItem().toString().equalsIgnoreCase("MONTH_WISE_OT"))
@@ -1274,14 +1274,16 @@ public class HrmMenu
 				{
 					showWindow(new RptOverTimeRequest(sessionBean,"RptOverTimeRequest"),event.getItem(),"RptOverTimeRequest","HRM MODULE","REPORT");
 				}
-				if(event.getItem().toString().equalsIgnoreCase("MONTH WISE OT STATEMENT"))
-				{
-					showWindow(new RptMonthWiseOtStatement(sessionBean,"RptMonthWiseOtStatement"),event.getItem(),"RptMonthWiseOtStatement","HRM MODULE","REPORT");
-				}
+				
 				if(event.getItem().toString().equalsIgnoreCase("SHORT VIEW OF OVERTIME"))
 				{
 					showWindow(new RptShortViewOfOvertime(sessionBean,"RptShortViewOfOvertime"),event.getItem(),"RptShortViewOfOvertime","HRM MODULE","REPORT");
 				}
+				
+				/*if(event.getItem().toString().equalsIgnoreCase("MONTH WISE OT STATEMENT"))
+				{
+					showWindow(new RptMonthWiseOtStatement(sessionBean,"RptMonthWiseOtStatement"),event.getItem(),"RptMonthWiseOtStatement","HRM MODULE","REPORT");
+				}*/
 				/*if(event.getItem().toString().equalsIgnoreCase("MONTHLY HOLIDAY ALLOWANCE"))
 				{
 					showWindow(new rptMonthlyFridayAllowance(sessionBean,"rptMonthlyFridayAllowance"),event.getItem(),"rptMonthlyFridayAllowance","HRM MODULE","REPORT");
