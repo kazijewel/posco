@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-        <property name="hibernate.connection.databaseName">POSCO14-01-2020</property>
+        <property name="hibernate.connection.databaseName">POSCO06-02-2020</property>
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
         <property name="hibernate.connection.password">123</property>
         <property name="hibernate.connection.url">jdbc:sqlserver://esl8;</property>

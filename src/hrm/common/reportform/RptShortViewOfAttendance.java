@@ -20,18 +20,15 @@ import com.common.share.SessionFactoryUtil;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbsoluteLayout;
+import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
-import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.AbstractSelect.Filtering;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Window.Notification;
 
 public class RptShortViewOfAttendance extends Window{
 	private SessionBean sessionBean;
@@ -51,9 +48,8 @@ public class RptShortViewOfAttendance extends Window{
 	CommonButton cButton=new CommonButton("", "", "", "", "", "", "", "Preview", "", "Exit");
 	private ReportDate reportTime = new ReportDate();
 
-	private SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat dfDay=new SimpleDateFormat("dd");
 	private SimpleDateFormat dfMonth=new SimpleDateFormat("MM");
-	private SimpleDateFormat dfYear=new SimpleDateFormat("yyyy");
 	SimpleDateFormat dfMonthYear = new SimpleDateFormat("MMMMM-yyyy");
 
 	private OptionGroup RadioBtnGroup;
@@ -228,31 +224,6 @@ public class RptShortViewOfAttendance extends Window{
 				}
 			}
 		});
-
-		/*chkSectionAll.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(chkSectionAll.booleanValue())
-				{
-					cmbSectionName.setValue(null);
-					cmbSectionName.setEnabled(false);
-					if(cmbDate.getValue()!=null)
-					{
-						if(cmbUnit.getValue()!=null)
-						{
-							cmbEmployee.removeAllItems();
-							addEmployeeName();
-						}
-					}
-				}
-				else
-					cmbSectionName.setEnabled(true);
-			}
-		});	
-		*/
-		
-		
 		chkEmployeeAll.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -455,38 +426,20 @@ public class RptShortViewOfAttendance extends Window{
 			empId=cmbEmployee.getValue().toString();
 		}
 		
-		if(dfMonth.format(cmbDate.getValue()).equalsIgnoreCase("02"))
-		{
-			int year=0;
-			year=Integer.parseInt(dfYear.format(cmbDate.getValue()));
-			if(year%4 == 0)
-		    {
-		        if( year%100 == 0)
-		        {
-		            if ( year%400 == 0)
-		            {
-				    	report="report/account/hrmModule/RptShortViewOfAttendance29.jasper";
-					}
-		            else
-		            {
-				    	report="report/account/hrmModule/RptShortViewOfAttendance28.jasper";
-					}
-		        }
-		        else
-		        {
-			    	report="report/account/hrmModule/RptShortViewOfAttendance28.jasper";
-				}
-		    }
-		    else			
-			{
-		    	report="report/account/hrmModule/RptShortViewOfAttendance28.jasper";
-			}
-		}
-		
-		
-		else if(dfMonth.format(cmbDate.getValue()).equalsIgnoreCase("01"))
+		if(dfMonth.format(cmbDate.getValue()).equalsIgnoreCase("01"))
 		{
 			report="report/account/hrmModule/RptShortViewOfAttendance31.jasper";
+		}
+		else if(dfMonth.format(cmbDate.getValue()).equalsIgnoreCase("02"))
+		{
+			if(dfDay.format(cmbDate.getValue()).equalsIgnoreCase("28"))
+			{
+				report="report/account/hrmModule/RptShortViewOfAttendance28.jasper";
+			}
+			if(dfDay.format(cmbDate.getValue()).equalsIgnoreCase("29"))
+			{
+				report="report/account/hrmModule/RptShortViewOfAttendance29.jasper";
+			}
 		}
 		else if(dfMonth.format(cmbDate.getValue()).equalsIgnoreCase("03"))
 		{
@@ -512,7 +465,6 @@ public class RptShortViewOfAttendance extends Window{
 		{
 			report="report/account/hrmModule/RptShortViewOfAttendance31.jasper";
 		}
-		
 		else 
 		{
 			report="report/account/hrmModule/RptShortViewOfAttendance30.jasper";
