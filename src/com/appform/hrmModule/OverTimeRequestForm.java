@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import org.hibernate.Session;
@@ -33,6 +34,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.InlineDateField;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
@@ -1405,7 +1407,8 @@ public class OverTimeRequestForm extends Window
 		dTimeTotal.setHeight("-1px");
 		dTimeTotal.setDateFormat("hh:mm:ss");
 		dTimeTotal.setValue(null);
-		dTimeTotal.setResolution(InlineDateField.RESOLUTION_MIN);
+		dTimeTotal.setLocale(new Locale("fi", "FI"));
+		dTimeTotal.setResolution(DateField.RESOLUTION_SEC);
 		mainLayout.addComponent(new Label("Total Time :"), "top:190px; left:430px;");
 		mainLayout.addComponent(dTimeTotal, "top:188px; left:531px;");
 		dTimeTotal.setEnabled(false);
