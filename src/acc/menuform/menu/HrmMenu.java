@@ -11,9 +11,11 @@ import hrm.common.reportform.RptDailyLateIn;
 import hrm.common.reportform.RptDateAndMonthWiseLeave;
 import hrm.common.reportform.RptDesignationList;
 import hrm.common.reportform.RptEditEmployeeInformation;
+import hrm.common.reportform.RptEmployeeAgreement;
 import hrm.common.reportform.RptEmployeeClearenceFrom;
 import hrm.common.reportform.RptEmployeeConfirmation;
 import hrm.common.reportform.RptEmployeeIDCard;
+import hrm.common.reportform.RptEmployeeJoiningLetter;
 import hrm.common.reportform.RptEmployeeList;
 import hrm.common.reportform.RptEmployeeRequisitionForm;
 import hrm.common.reportform.RptEmployeeSeparationform;
@@ -26,11 +28,13 @@ import hrm.common.reportform.RptLeaveApplication;
 import hrm.common.reportform.RptLeaveRegister;
 import hrm.common.reportform.RptLeaveRegisterIndividual;
 import hrm.common.reportform.RptManPower;
+import hrm.common.reportform.RptMaterialReturnForm;
 import hrm.common.reportform.RptMonthWiseOtStatement;
 import hrm.common.reportform.RptMonthlyAttendanceManually;
 import hrm.common.reportform.RptMonthlyAttendanceSummary;
 import hrm.common.reportform.RptMonthlyAttendanceSummaryDevice;
 import hrm.common.reportform.RptNoticeInfo;
+import hrm.common.reportform.RptOfferLetter;
 import hrm.common.reportform.RptOverTimeRequest;
 import hrm.common.reportform.RptPFIndividualLoanStatement;
 import hrm.common.reportform.RptPFLoanApplication;
@@ -396,6 +400,22 @@ public class HrmMenu
 		if(isValidMenu("RptManPower"))
 		{
 			addCaptionedItem("MAN POWER", setupReport);
+		}
+		if(isValidMenu("RptEmployeeJoiningLetter"))
+		{
+			addCaptionedItem("EMPLOYEE JOINING LETTER", setupReport);
+		}
+		if(isValidMenu("RptOfferLetter"))
+		{
+			addCaptionedItem("OFFER LETTER", setupReport);
+		}
+		if(isValidMenu("RptMaterialReturnForm"))
+		{
+			addCaptionedItem("MATERIAL RETURN FORM(NOC)", setupReport);
+		}
+		if(isValidMenu("RptEmployeeAgreement"))
+		{
+			addCaptionedItem("EMPLOYMENT AGREEMENT", setupReport);
 		}
 
 	}
@@ -1401,6 +1421,24 @@ public class HrmMenu
 				{
 					showWindow(new RptManPower(sessionBean,"RptManPower"),event.getItem(),"EmployeeList","HRM MODULE","REPORT");
 				}
+
+				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE JOINING LETTER"))
+				{
+					showWindow(new RptEmployeeJoiningLetter(sessionBean,"RptEmployeeJoiningLetter"),event.getItem(),"RptEmployeeJoiningLetter","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("OFFER LETTER"))
+				{
+					showWindow(new RptOfferLetter(sessionBean,"RptOfferLetter"),event.getItem(),"RptOfferLetter","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("MATERIAL RETURN FORM(NOC)"))
+				{
+					showWindow(new RptMaterialReturnForm(sessionBean,"RptMaterialReturnForm"),event.getItem(),"RptMaterialReturnForm","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("EMPLOYMENT AGREEMENT"))
+				{
+					showWindow(new RptEmployeeAgreement(sessionBean,"RptEmployeeAgreement"),event.getItem(),"RptEmployeeAgreement","HRM MODULE","REPORT");
+				}
+				
 				if(event.getItem().toString().equalsIgnoreCase("NEW EMPLOYEE LIST"))
 				{
 					showWindow(new NewEmployeeList(sessionBean,"NewEmployeeList"),event.getItem(),"NewEmployeeList","HRM MODULE","REPORT");
