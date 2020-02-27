@@ -66,7 +66,7 @@ public class RptEmployeeAgreement extends Window
 	public RptEmployeeAgreement(SessionBean sessionBean,String menuId)
 	{
 		this.sessionBean=sessionBean;
-		this.setCaption("EMPLOYMENT AGREEMENT :: "+sessionBean.getCompany());
+		this.setCaption("EMPLOYEE OFFER LETTER :: "+sessionBean.getCompany());
 		this.setResizable(false);
 		cm = new CommonMethod(sessionBean);
 		this.menuId = menuId;
@@ -380,7 +380,7 @@ public class RptEmployeeAgreement extends Window
 		try{
 			String sql="select distinct vDepartmentId,vDepartmentName from tbEmpOfficialPersonalInfo " +
 					"where vUnitId like '"+unitId+"' order by vDepartmentName";
-			System.out.println("cmbDepartmentDataLoad: "+sql);
+			//System.out.println("cmbDepartmentDataLoad: "+sql);
 			
 			Iterator<?> iter=dbService(sql);
 			while(iter.hasNext())
@@ -408,7 +408,7 @@ public class RptEmployeeAgreement extends Window
 		try{
 			String sql="select distinct vSectionId,vSectionName from tbEmpOfficialPersonalInfo " +
 					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"'  order by vSectionName";
-			System.out.println("cmbSectionDataLoad: "+sql);
+			//System.out.println("cmbSectionDataLoad: "+sql);
 			
 			Iterator<?> iter=dbService(sql);			
 			while(iter.hasNext())
@@ -443,7 +443,7 @@ public class RptEmployeeAgreement extends Window
 			String sql="select distinct vDesignationId,vDesignationName from tbEmpOfficialPersonalInfo " +
 					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' " +
 					"order by vDesignationName";
-			System.out.println("cmbDesignationDataLoad: "+sql);
+			//System.out.println("cmbDesignationDataLoad: "+sql);
 			
 			Iterator<?> iter=dbService(sql);
 			while(iter.hasNext())
@@ -484,7 +484,7 @@ public class RptEmployeeAgreement extends Window
 					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' " +
 					"and vDesignationId like '"+desId+"' order by vEmployeeCode";
 			
-			System.out.println("cmbEmployeeNameDataAdd: "+query);
+			//System.out.println("cmbEmployeeNameDataAdd: "+query);
 			
 			Iterator<?> iter=dbService(query);
 
@@ -536,36 +536,23 @@ public class RptEmployeeAgreement extends Window
 	{
 		String rptName="";
 		String query=null;
-
-		String deptId="%",secId="%",empId="%",desId="%",unitId="%";
-		if(!chkDepartment.booleanValue())
-		{
-			deptId=cmbDepartment.getValue().toString();
-		}
-		if(!chkSectionAll.booleanValue())
-		{
-			secId=cmbSection.getValue().toString();
-		}
+		String empId="%";
+		
 		if(!chkEmployeeAll.booleanValue())
 		{
 			empId=cmbEmployee.getValue().toString();
 		}
-		if(!chkDesignationAll.booleanValue())
-		{
-			desId=cmbDesignation.getValue().toString();
-		}
-		if(!chkUnitAll.booleanValue())
-		{
-			unitId=cmbUnit.getValue().toString();
-		}
 		try
 		{
-			query = "select a.vEmployeeName,vPermanentAddress,vContactNo,vEmailAddress,dJoiningDate,dValidDate,vDesignationName,mBasic "
+			query = "select dJoiningDate,a.vEmployeeName,vFatherName,REPLACE(vPermanentAddress,'#','''')vPermanentAddress,vNationalIdNo,vContactNo,vEmailAddress,dValidDate,"
+					+ "vDesignationName,mBasic,round(((mBasic/3)*2),0)mEightHrTotal,(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr,dbo.number(ROUND((mBasic),0))mBasicInWord "
 					+ "from tbEmpOfficialPersonalInfo a "
 					+ "inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId "
 					+ "where a.vEmployeeId like '"+empId+"'";
+			
+			System.out.println("reportView: "+query);
 
-			rptName="RptOfferLetter.jasper";
+			rptName="RptEmployeeAgreement.jasper";
 
 			if(queryValueCheck(query))
 			{

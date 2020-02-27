@@ -186,6 +186,8 @@ public class EmployeeInformation extends Window
 		tabSheet.addTab(thirdTab,"Education");
 		tabSheet.addTab(fourthTab,"Experience");
 		tabSheet.addTab(fifthTab,"Salary Structure");
+
+		thirdTab.setImmediate(true);
 	}
 
 	private void addFindEmployee(String findString)
@@ -422,13 +424,6 @@ public class EmployeeInformation extends Window
 				isFind = false;
 				isUpdate = false;
 				
-
-				/*firstTab.setEnabled(false);
-				secondTab.setEnabled(false);
-				thirdTab.setEnabled(false);
-				fourthTab.setEnabled(false);  
-				fifthTab.setEnabled(false);*/
-				
 			}
 		});
 
@@ -450,12 +445,6 @@ public class EmployeeInformation extends Window
 					btnInit(false);
 					tabInit(true);
 					firstTab.dJoiningDate.setEnabled(false);
-					
-					/*firstTab.setEnabled(true);
-					secondTab.setEnabled(true);
-					thirdTab.setEnabled(true);
-					fourthTab.setEnabled(true);  
-					fifthTab.setEnabled(true);*/
 				}
 				else
 				{
@@ -480,6 +469,19 @@ public class EmployeeInformation extends Window
 				{
 					isFind = true;
 					isEdit = true;
+
+
+					secondTabClear();
+					thirdTabClear();
+					forthTabClear();
+					fifthTabClear();
+					sixTabClear();
+					
+					firstTab.setEnabled(true);
+					secondTab.setEnabled(true);
+					thirdTab.setEnabled(true);
+					fourthTab.setEnabled(true);  
+					fifthTab.setEnabled(true);
 
 					selectEmployeeInformation(ListSearch.getValue().toString());
 					firstTab.dJoiningDate.setEnabled(false);
