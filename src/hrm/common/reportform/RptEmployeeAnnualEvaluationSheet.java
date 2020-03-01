@@ -751,7 +751,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		
 		txtReviewerTital = new TextField();
 		txtReviewerTital.setImmediate(true);
-		txtReviewerTital.setWidth("210.0px");
+		txtReviewerTital.setWidth("250.0px");
 		txtReviewerTital.setHeight("-1px");
 		mainLayout.addComponent(new Label("Reviewer Tital"),"top:190px; left:30px");
 		mainLayout.addComponent(txtReviewerTital, "top:188px; left:120.0px;");
