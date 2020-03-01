@@ -1,5 +1,6 @@
 package hrm.common.reportform;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,7 +13,6 @@ import com.common.share.CommonButton;
 import com.common.share.CommonMethod;
 import com.common.share.FocusMoveByEnter;
 import com.common.share.ReportDate;
-import com.common.share.ReportOption;
 import com.common.share.ReportViewer;
 import com.common.share.SessionBean;
 import com.common.share.SessionFactoryUtil;
@@ -20,6 +20,9 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -28,9 +31,6 @@ import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings("serial")
 public class RptEmployeeAnnualEvaluationSheet extends Window
@@ -42,25 +42,16 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 	private OptionGroup opgReport;
 
 	private ComboBox cmbEmployee,cmbUnit;
-	private ComboBox cmbSection,cmbDepartment,cmbDesignation;
+	private ComboBox cmbSection,cmbDepartment,cmbDesignation,cmbReviewer;
 	private CheckBox chkDepartment = new CheckBox("All");
 	private CheckBox chkSectionAll = new CheckBox("All");
 	private CheckBox chkEmployeeAll = new CheckBox("All");
 	private CheckBox chkDesignationAll = new CheckBox("All");
 	private CheckBox chkUnitAll = new CheckBox("All");
-	
-	private TextField txtWarningLetter;
-	
-	private String stAIctive = "";
-	
-	
-
+	private TextField txtWarningLetter,txtReviewerTital;
 	private PopupDateField dDate;
-
-
-	//private OptionGroup opgStatus = new OptionGroup();
-
 	
+	public SimpleDateFormat dFdmy = new SimpleDateFormat("dd-MMM-yyyy");
 
 	private Label lblComboLabel ;
 
@@ -86,6 +77,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		setBtnAction();
 		setContent(mainLayout);
 		cmbUnitDataLoad();
+		cmManagerDataLoad();
 		focusMove();
 		cmbUnit.focus();
 		cmbDepartment.setEnabled(false);
@@ -94,6 +86,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		cmbEmployee.setEnabled(false);
 		authenticationCheck();
 	}
+	
 	private void authenticationCheck()
 	{
 		cm.checkFormAction(menuId);
@@ -120,6 +113,49 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		allComp.add(cmbEmployee);
 		allComp.add(cButton.btnPreview);
 		new FocusMoveByEnter(this,allComp);
+	}
+	private void cmManagerDataLoad() {
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String sql = "select distinct vEmployeeId,vEmployeeName from tbEmpOfficialPersonalInfo where vEmployeeCode like '%PK%' order by vEmployeeName";
+			List<?> list = session.createSQLQuery(sql).list();
+			cmbReviewer.removeAllItems();
+			for(Iterator<?> iter = list.iterator();iter.hasNext();)
+			{
+				Object element[] = (Object[]) iter.next();
+				cmbReviewer.addItem(element[0].toString());
+				cmbReviewer.setItemCaption(element[0].toString(), element[1].toString());
+			}
+		}
+		catch(Exception exp)
+		{
+			showNotification(exp+"cmManagerDataLoad",Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
+	}
+	
+	public void cmbReviewerDataLoad()
+	{
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String sql = "select distinct vDesignationId,vDesignationName from tbEmpOfficialPersonalInfo where vEmployeeId='"+cmbEmployee.getValue()+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			txtReviewerTital.setValue("");
+			for(Iterator<?> iter = list.iterator();iter.hasNext();)
+			{
+				Object element[] = (Object[]) iter.next();
+				txtReviewerTital.setValue(element[1].toString());
+			}
+		}
+		catch(Exception exp)
+		{
+			showNotification(exp+"cmbReviewerDataLoad",Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
 	}
 	private void cmbUnitDataLoad() {
 		Session session = SessionFactoryUtil.getInstance().openSession();
@@ -158,8 +194,21 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 							{
 								if(cmbEmployee.getValue()!=null || chkEmployeeAll.booleanValue()==true)
 								{
-
-									reportView();
+									if(cmbReviewer.getValue()!=null)
+									{
+										if(!txtWarningLetter.getValue().toString().isEmpty())
+										{
+											reportView();
+										}
+										else
+										{
+											getParent().showNotification("Please Select Provide Worning Letter", Notification.TYPE_WARNING_MESSAGE);
+										}
+									}
+									else
+									{
+										getParent().showNotification("Please Select Reviewer", Notification.TYPE_WARNING_MESSAGE);
+									}
 								}
 								else
 								{
@@ -381,7 +430,16 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 				}
 			}
 		});
-		
+		cmbReviewer.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(cmbReviewer.getValue()!=null)
+				{
+					cmbReviewerDataLoad();
+				}
+			}
+		});
 	}
 	private void cmbDepartmentDataLoad()
 	{
@@ -393,7 +451,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		try{
 			String sql="select distinct vDepartmentId,vDepartmentName from tbEmpOfficialPersonalInfo " +
 					"where vUnitId like '"+unitId+"' order by vDepartmentName";
-			System.out.println("cmbDepartmentDataLoad: "+sql);
+			//System.out.println("cmbDepartmentDataLoad: "+sql);
 			
 			Iterator<?> iter=dbService(sql);
 			while(iter.hasNext())
@@ -421,7 +479,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		try{
 			String sql="select distinct vSectionId,vSectionName from tbEmpOfficialPersonalInfo " +
 					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"'  order by vSectionName";
-			System.out.println("cmbSectionDataLoad: "+sql);
+			//System.out.println("cmbSectionDataLoad: "+sql);
 			
 			Iterator<?> iter=dbService(sql);			
 			while(iter.hasNext())
@@ -456,7 +514,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 			String sql="select distinct vDesignationId,vDesignationName from tbEmpOfficialPersonalInfo " +
 					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' " +
 					"order by vDesignationName";
-			System.out.println("cmbDesignationDataLoad: "+sql);
+			//System.out.println("cmbDesignationDataLoad: "+sql);
 			
 			Iterator<?> iter=dbService(sql);
 			while(iter.hasNext())
@@ -490,14 +548,14 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		if(cmbUnit.getValue()!=null)
 		{
 			unitId=cmbUnit.getValue().toString();
-		}		
+		}
 		try
 		{
 			query="select vEmployeeId,vEmployeeCode,vEmployeeName from tbEmpOfficialPersonalInfo " +
 					"where vUnitId like '"+unitId+"' and vDepartmentId like '"+deptId+"' and vSectionId like '"+secId+"' " +
 					"and vDesignationId like '"+desId+"' order by vEmployeeCode";
 			
-			System.out.println("cmbEmployeeNameDataAdd: "+query);
+			//System.out.println("cmbEmployeeNameDataAdd: "+query);
 			
 			Iterator<?> iter=dbService(query);
 
@@ -526,6 +584,85 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		}
 		return iter;
 	}
+	private boolean queryValueCheck(String sql)
+	{
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try 
+		{
+			Iterator <?> iter = session.createSQLQuery(sql).list().iterator();
+			if (iter.hasNext()) 
+			{
+				return true;
+			}
+		} 
+		catch (Exception ex) 
+		{
+			System.out.print(ex);
+		}
+		finally{session.close();}
+		return false;
+	}
+	private void reportView()
+	{
+		String rptName="";
+		String query=null;
+		String empId="%";
+		
+		if(!chkEmployeeAll.booleanValue())
+		{
+			empId=cmbEmployee.getValue().toString();
+		}
+		try
+		{
+			query = "select * from funEmployeeAnnualEvaluationSheet "
+					+ "("
+						+ "'"+sessionBean.dfDb.format(dDate.getValue())+"',"
+						+ "'"+empId+"'" 
+					+ ")";
+			
+			System.out.println("reportView: "+query);
+
+			rptName="RptEmployeeAnnualEvaluationSheet.jasper";
+
+			if(queryValueCheck(query))
+			{
+				HashMap <String, Object> hm = new HashMap <String, Object> ();
+				hm.put("company", sessionBean.getCompany());
+				hm.put("address", sessionBean.getCompanyAddress());
+				hm.put("phone", sessionBean.getCompanyContact());
+				hm.put("logo", sessionBean.getCompanyLogo());
+				hm.put("dDate",dFdmy.format(dDate.getValue()));
+				hm.put("WarningLetter", txtWarningLetter.getValue());
+				hm.put("Reviewer", cmbReviewer.getItemCaption(cmbReviewer.getValue()));
+				hm.put("ReviewerTital", txtReviewerTital.getValue());
+				hm.put("developer", sessionBean.getDeveloperAddress());
+				hm.put("UserName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
+				hm.put("SysDate",reportTime.getTime);
+				
+				hm.put("sql", query);
+				
+				Window win = new ReportViewer(hm,"report/account/hrmModule/"+rptName,
+						this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
+						this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
+						this.getWindow().getApplication().getURL()+"VAADIN/applet",true);
+
+				win.setCaption("Project Report");
+				this.getParent().getWindow().addWindow(win);
+			}
+			else
+			{
+				showNotification("Warning..","No data found!",Notification.TYPE_WARNING_MESSAGE);
+			}
+		}
+
+		catch(Exception exp)
+		{
+			this.getParent().showNotification("Error",exp.toString(),Notification.TYPE_ERROR_MESSAGE);
+			System.out.println(exp);
+		}
+	}
+
 	private AbsoluteLayout buildMainLayout()
 	{
 		mainLayout = new AbsoluteLayout();
@@ -533,7 +670,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		mainLayout.setMargin(false);
 
 		setWidth("500px");
-		setHeight("350px");
+		setHeight("370px");
 
 		cmbUnit=new ComboBox();
 		cmbUnit.setWidth("250.0px");
@@ -604,128 +741,48 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		mainLayout.addComponent(chkEmployeeAll,"top:130px; left:370px;");
 		chkEmployeeAll.setVisible(false);
 		
+		cmbReviewer = new ComboBox();
+		cmbReviewer.setImmediate(true);
+		cmbReviewer.setWidth("250.0px");
+		cmbReviewer.setHeight("-1px");
+		mainLayout.addComponent(new Label("Reviewer"),"top:160px; left:30px");
+		mainLayout.addComponent(cmbReviewer, "top:158px; left:120.0px;");
+		cmbReviewer.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		
+		txtReviewerTital = new TextField();
+		txtReviewerTital.setImmediate(true);
+		txtReviewerTital.setWidth("210.0px");
+		txtReviewerTital.setHeight("-1px");
+		mainLayout.addComponent(new Label("Reviewer Tital"),"top:190px; left:30px");
+		mainLayout.addComponent(txtReviewerTital, "top:188px; left:120.0px;");
+		txtReviewerTital.setEnabled(false);
 
+		txtWarningLetter = new TextField();
+		txtWarningLetter.setImmediate(true);
+		txtWarningLetter.setWidth("60.0px");
+		txtWarningLetter.setHeight("-1px");
+		mainLayout.addComponent(new Label("Warning Letter"),"top:220px; left:30px");
+		mainLayout.addComponent(txtWarningLetter, "top:218px; left:120.0px;");
+		
 		dDate=new PopupDateField();
 		dDate.setImmediate(true);
 		dDate.setWidth("110px");
 		dDate.setResolution(PopupDateField.RESOLUTION_DAY);
 		dDate.setDateFormat("dd-MM-yyyy");
 		dDate.setValue(new java.util.Date());
-		mainLayout.addComponent(new Label("Date: "),"top:160px; left:30.0px;");
-		mainLayout.addComponent(dDate, "top:158px; left:120.0px;");
-		
-		txtWarningLetter=new TextField();
-		txtWarningLetter.setImmediate(true);
-		txtWarningLetter.setWidth("60.0px");
-		txtWarningLetter.setHeight("-1px");
-		mainLayout.addComponent(new Label("Warning Letter"),"top:190px; left:30px");
-		mainLayout.addComponent(txtWarningLetter, "top:188px; left:120.0px;");
+		mainLayout.addComponent(new Label("Date: "),"top:250px; left:30.0px;");
+		mainLayout.addComponent(dDate, "top:248px; left:120.0px;");
 
 		opgReport = new OptionGroup("",type1);
 		opgReport.setImmediate(true);
 		opgReport.setStyleName("horizontal");
 		opgReport.setValue("PDF");
-		mainLayout.addComponent(opgReport, "top:200px;left:200.0px;");
+		mainLayout.addComponent(opgReport, "top:270px;left:250.0px;");
 		opgReport.setVisible(false);
 
 		cButton.btnPreview.setImmediate(true);
-		mainLayout.addComponent(cButton, "bottom:15px; left:160.0px;");
+		mainLayout.addComponent(cButton, "bottom:15px; left:170.0px;");
 
 		return mainLayout;
-	}
-	private boolean queryValueCheck(String sql)
-	{
-		Session session = SessionFactoryUtil.getInstance().openSession();
-		session.beginTransaction();
-		try 
-		{
-			Iterator <?> iter = session.createSQLQuery(sql).list().iterator();
-			if (iter.hasNext()) 
-			{
-				return true;
-			}
-		} 
-		catch (Exception ex) 
-		{
-			System.out.print(ex);
-		}
-		finally{session.close();}
-		return false;
-	}
-	private void reportView()
-	{
-
-		
-		String rptName="";
-		String query=null;
-
-		
-
-		String deptId="%",secId="%",empId="%",desId="%",unitId="%";
-		if(!chkDepartment.booleanValue())
-		{
-			deptId=cmbDepartment.getValue().toString();
-		}
-		if(!chkSectionAll.booleanValue())
-		{
-			secId=cmbSection.getValue().toString();
-		}
-		if(!chkEmployeeAll.booleanValue())
-		{
-			empId=cmbEmployee.getValue().toString();
-		}
-		if(!chkDesignationAll.booleanValue())
-		{
-			desId=cmbDesignation.getValue().toString();
-		}
-		if(!chkUnitAll.booleanValue())
-		{
-			unitId=cmbUnit.getValue().toString();
-		}
-		try
-		{
-			query = "select vEmployeeId,vEmployeeName,vEmployeeCode,vDesignationName, vDepartmentName,dJoiningDate,vStatusDate " +
-					"from tbEmpOfficialPersonalInfo " +
-					"where vEmployeeId='"+empId+"'";
-
-		
-			rptName="RptEmployeeAnnualEvaluationSheet.jasper";
-			
-
-			if(queryValueCheck(query))
-			{
-				HashMap <String, Object> hm = new HashMap <String, Object> ();
-				hm.put("company", sessionBean.getCompany());
-				hm.put("address", sessionBean.getCompanyAddress());
-				hm.put("phone", sessionBean.getCompanyContact());
-				hm.put("dDate", sessionBean.dfBd.format(dDate.getValue()));
-				hm.put("logo", sessionBean.getCompanyLogo());
-				hm.put("developer", sessionBean.getDeveloperAddress());
-				hm.put("UserName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
-				hm.put("SysDate",reportTime.getTime);
-				
-				hm.put("sql", query);
-				
-				
-				
-				Window win = new ReportViewer(hm,"report/account/hrmModule/"+rptName,
-						this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
-						this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
-						this.getWindow().getApplication().getURL()+"VAADIN/applet",true);
-
-				win.setCaption("Project Report");
-				this.getParent().getWindow().addWindow(win);
-			}
-			else
-			{
-				showNotification("Warning..","No data found!",Notification.TYPE_WARNING_MESSAGE);
-			}
-		}
-
-		catch(Exception exp)
-		{
-			this.getParent().showNotification("Error",exp.toString(),Notification.TYPE_ERROR_MESSAGE);
-			System.out.println(exp);
-		}
 	}
 }
