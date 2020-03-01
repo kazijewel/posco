@@ -12,6 +12,7 @@ import hrm.common.reportform.RptDateAndMonthWiseLeave;
 import hrm.common.reportform.RptDesignationList;
 import hrm.common.reportform.RptEditEmployeeInformation;
 import hrm.common.reportform.RptEmployeeAgreement;
+import hrm.common.reportform.RptEmployeeAnnualEvaluationSheet;
 import hrm.common.reportform.RptEmployeeClearenceFrom;
 import hrm.common.reportform.RptEmployeeConfirmation;
 import hrm.common.reportform.RptEmployeeIDCard;
@@ -416,6 +417,10 @@ public class HrmMenu
 		if(isValidMenu("RptEmployeeAgreement"))
 		{
 			addCaptionedItem("EMPLOYMENT AGREEMENT", setupReport);
+		}
+		if(isValidMenu("RptEmployeeAnnualEvaluationSheet"))
+		{
+			addCaptionedItem("EMPLOYEE ANNUAL EVLUATION SHEET", setupReport);
 		}
 
 	}
@@ -1437,6 +1442,10 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYMENT AGREEMENT"))
 				{
 					showWindow(new RptEmployeeAgreement(sessionBean,"RptEmployeeAgreement"),event.getItem(),"RptEmployeeAgreement","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE ANNUAL EVLUATION SHEET"))
+				{
+					showWindow(new RptEmployeeAnnualEvaluationSheet(sessionBean,"RptEmployeeAnnualEvaluationSheet"),event.getItem(),"RptEmployeeAnnualEvaluationSheet","HRM MODULE","REPORT");
 				}
 				
 				if(event.getItem().toString().equalsIgnoreCase("NEW EMPLOYEE LIST"))
