@@ -487,23 +487,20 @@ public class OverTimeRequestApproval extends Window
 		{
 			String leaveId=tbLblReference.get(deleteId).getValue().toString();
 			
-			String deleteData = "insert into tbUdEmpLeaveApplicationInfo (vLeaveId,vLeaveTypeId,vLeaveTypeName,vEmployeeId,vEmployeeName,"
-					+ "vUnitId,vUnitName,dLeaveDate,vPaymentFlag,iApprovedFlag,vAdjustedType,vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,"
-					+ "iFinal,iHR,dEntitleFromDate,dEntitleToDate,vELType,vUdFlag,vUserId,vUserName,vUserIp,dEntryTime) "
-					+ "select vLeaveId,vLeaveTypeId,vLeaveTypeName,vEmployeeId,vEmployeeName,vUnitId,vUnitName,dLeaveDate,vPaymentFlag,"
-					+ "iApprovedFlag,vAdjustedType,vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,iFinal,iHR,dEntitleFromDate,dEntitleToDate,"
-					+ "vELType,'DELETE','"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP "
-					+ "from tbEmpLeaveApplicationDetails where vLeaveId ='"+leaveId+"' ";
+			String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+					+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
+					+ "dReplaceHoliday,dReplaceWorking,iFinal,'DELETE' "
+					+ "from tbOTRequest where vTransactionId ='"+leaveId+"' ";
 			
 			System.out.println("deleteData: "+deleteData);
 			session.createSQLQuery(deleteData).executeUpdate();
 			
-
-			// delete data from main table to insert update data
-			String deleteInfo = "delete from tbEmpLeaveApplicationInfo where vLeaveId = '"+leaveId+"'";
+			String deleteInfo = "delete from tbOTRequest where vTransactionId = '"+leaveId+"'";
 			session.createSQLQuery(deleteInfo).executeUpdate();
-			String deleteDetails = "delete from tbEmpLeaveApplicationDetails where vLeaveId = '"+leaveId+"'";
-			session.createSQLQuery(deleteDetails).executeUpdate();
 			tx.commit();
 			
 		}

@@ -224,14 +224,6 @@ public class LeaveApproveFinal extends Window
 		session.beginTransaction();
 		try
 		{
-			/*String query=" select distinct vDepartmentId,(select vDepartmentName from tbDepartmentInfo si where" +
-					" si.vDepartmentId=li.vDepartmentId) vDepartmentName from tbEmpLeaveApplicationInfo li" +
-					" where iPrimary = 0 order by vDepartmentName ";*/
-			
-			/*String query="select distinct vUnitId,(select vUnitName from tbUnitInfo si where "
-					+ "si.vUnitId=li.vUnitId) vUnitName from tbEmpLeaveApplicationInfo li where"
-					+ " iPrimary = 0 order by vUnitName ";*/
-			
 			String query=" select epo.vUnitId,epo.vUnitName from tbEmpOfficialPersonalInfo epo inner join "
 					+ " tbEmpLeaveApplicationInfo eli on epo.vEmployeeId=eli.vEmployeeId  where eli.iPrimary=1 and eli.iHR=1 and eli.iFinal=0 "
 					+ " order by epo.vUnitName";
@@ -267,15 +259,9 @@ public class LeaveApproveFinal extends Window
 		session.beginTransaction();
 		try
 		{
-			/*String query=" select distinct vDepartmentId,(select vDepartmentName from tbDepartmentInfo si where" +
-					" si.vDepartmentId=li.vDepartmentId) vDepartmentName  and vUnitId = '"+cmbUnit.getValue().toString()+"'"
-							+ " from tbEmpLeaveApplicationInfo li" +
-					" where iPrimary = 0 order by vDepartmentName "*/;
-		
-			
-	String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbEmpLeaveApplicationInfo "
-			+ " eli on epo.vEmployeeId=eli.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and eli.iPrimary =0 and eli.iHR=0 and eli.iFinal=0 "
-			+ " and epo.vDepartmentId in (select vDepartmentId from tbLeaveApprovalMapping where vDesignationIdPrimary='"+sessionBean.getDesignationId()+"' ) "
+			String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbEmpLeaveApplicationInfo "
+			+ " eli on epo.vEmployeeId=eli.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and eli.iPrimary =1 and eli.iHR=1 and eli.iFinal=0 "
+			+ " and epo.vDepartmentId in (select vDepartmentId from tbLeaveApprovalMapping where vDesignationIdFinal='"+sessionBean.getDesignationId()+"' ) "
 			+ " order by epo.vDepartmentName";
 			
 	

@@ -1,72 +1,15 @@
 package acc.menuform.menu;
 
-import hrm.common.reportform.RptEditMonthlySalary;
-import hrm.common.reportform.RptEmployeeList;
-import hrm.common.reportform.RptHolidays;
-import hrm.common.reportform.RptIndividualEmployeeDetails;
-import hrm.common.reportform.RptIndividualLoanStatement;
-import hrm.common.reportform.RptIndividualOt;
-import hrm.common.reportform.RptJoinConfirm;
-import hrm.common.reportform.RptLeaveApplication;
-import hrm.common.reportform.RptLeaveRegister;
-import hrm.common.reportform.RptLeaveRegisterIndividual;
-import hrm.common.reportform.RptLoanApplication;
-import hrm.common.reportform.RptLoanRegister;
-import hrm.common.reportform.RptMonthWiseOt;
-import hrm.common.reportform.RptMonthlyAttendance;
-import hrm.common.reportform.RptDailyAbsent;
-import hrm.common.reportform.RptDailyAttendance;
-import hrm.common.reportform.RptMonthlyAttendanceSummary;
-import hrm.common.reportform.RptMonthlySalary;
-import hrm.common.reportform.RptMonthlySalaryByEmployeeType;
-//import hrm.common.setup.DesignationSerialInfo;
-
-
-
-
-
-
-
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.hibernate.Session;
 
-
-
-
-
-import com.appform.hrmModule.DesignationInformation;
-import com.appform.hrmModule.DesignationSectionSerialInfo;
-import com.appform.hrmModule.EditEmployeeAttendance;
-import com.appform.hrmModule.EditMonthlySalary;
-import com.appform.hrmModule.EmployeeAttendanceUploadSingleDevice;
-import com.appform.hrmModule.EmployeeInformation;
-import com.appform.hrmModule.GradeInformation;
-import com.appform.hrmModule.GradeShiftInformation;
-import com.appform.hrmModule.IncrementType;
 import com.appform.hrmModule.LeaveApplicationForm;
-import com.appform.hrmModule.LeaveApprove;
-import com.appform.hrmModule.LeaveBalanceEntry;
-import com.appform.hrmModule.LeaveCancleFrom;
-import com.appform.hrmModule.LeaveTypeInfo;
 import com.appform.hrmModule.LoanApplicationForm;
-import com.appform.hrmModule.LoanRecoveryForm;
-import com.appform.hrmModule.MealChargeInformation;
-import com.appform.hrmModule.MonthlySalaryGenerate;
 import com.appform.hrmModule.OverTimeRequestForm;
-import com.appform.hrmModule.PayScaleInformation;
-import com.appform.hrmModule.PresentBonusInformation;
 import com.appform.hrmModule.ReplacementLeaveApplication;
-import com.appform.hrmModule.SalaryRegisterInformation;
-import com.appform.hrmModule.SectionInformation;
-import com.appform.hrmModule.SectionWiseAttendance;
-import com.appform.hrmModule.accessEmployeeLeave;
-import com.appform.hrmModule.accessHrmReports;
-import com.appform.hrmModule.accessHrmSetup;
 import com.appform.hrmModule.accessHrmTrans;
-import com.appform.hrmModule.attendanceManually;
-import com.appform.hrmModule.holidayDeclare;
 import com.common.share.SessionBean;
 import com.common.share.SessionFactoryUtil;
 import com.vaadin.data.Item;
@@ -78,6 +21,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Tree;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
+//import hrm.common.setup.DesignationSerialInfo;
 
 public class publicMenu
 {

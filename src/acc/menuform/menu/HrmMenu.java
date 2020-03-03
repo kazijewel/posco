@@ -1051,7 +1051,6 @@ public class HrmMenu
 				}
 				if(event.getItem().toString().equalsIgnoreCase("ITEM INFORMATION"))
 				{
-				
 					showWindow(new ItemTypeInformation(sessionBean,"ItemTypeInformation"),event.getItem(),"ItemTypeInformation","HRM MODULE","TRANSACTION");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("ITEM DISTRIBUTION"))

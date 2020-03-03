@@ -256,13 +256,7 @@ public class LeaveApprovePrimary extends Window
 		session.beginTransaction();
 		try
 		{
-			/*String query=" select distinct vDepartmentId,(select vDepartmentName from tbDepartmentInfo si where" +
-					" si.vDepartmentId=li.vDepartmentId) vDepartmentName  and vUnitId = '"+cmbUnit.getValue().toString()+"'"
-							+ " from tbEmpLeaveApplicationInfo li" +
-					" where iPrimary = 0 order by vDepartmentName "*/;
-		
-			
-	String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbEmpLeaveApplicationInfo "
+			String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbEmpLeaveApplicationInfo "
 			+ " eli on epo.vEmployeeId=eli.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and eli.iPrimary =0 and eli.iHR=0 and eli.iFinal=0 "
 			+ " and epo.vDepartmentId in (select vDepartmentId from tbLeaveApprovalMapping where vDesignationIdPrimary='"+sessionBean.getDesignationId()+"' ) "
 			+ " order by epo.vDepartmentName";
@@ -434,7 +428,7 @@ public class LeaveApprovePrimary extends Window
 					+" epo.vEmployeeId,epo.vEmployeeCode from tbEmpLeaveApplicationInfo eli inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=eli.vEmployeeId "
 					+" where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"'" 
 					+" and epo.vDepartmentId in (select vDepartmentId from tbLeaveApprovalMapping where vDesignationIdPrimary='"+sessionBean.getDesignationId()+"' ) "
-					+" and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"' and iPrimary = 0  order by eli.dApplicationDate";
+					+" and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"' and iPrimary =0 and iHR=0 and iFinal=0  order by eli.dApplicationDate";
 			List <?> list = session.createSQLQuery(sql).list();
 			System.out.println("Find Query :" + sql);
 			tableClear();
