@@ -30,10 +30,8 @@ import hrm.common.reportform.RptLeaveRegister;
 import hrm.common.reportform.RptLeaveRegisterIndividual;
 import hrm.common.reportform.RptManPower;
 import hrm.common.reportform.RptMaterialReturnForm;
-import hrm.common.reportform.RptMonthWiseOtStatement;
 import hrm.common.reportform.RptMonthlyAttendanceManually;
 import hrm.common.reportform.RptMonthlyAttendanceSummary;
-import hrm.common.reportform.RptMonthlyAttendanceSummaryDevice;
 import hrm.common.reportform.RptNoticeInfo;
 import hrm.common.reportform.RptOfferLetter;
 import hrm.common.reportform.RptOverTimeRequest;
@@ -59,7 +57,6 @@ import com.appform.hrmModule.EditEmployeeAttendanceMachine;
 import com.appform.hrmModule.EmployeeAttendanceUploadSingleDevice;
 import com.appform.hrmModule.EmployeeInformation;
 import com.appform.hrmModule.EmployeeRequsitionForm;
-import com.appform.hrmModule.FestivalBonus;
 import com.appform.hrmModule.GetEmployeeAttendance;
 import com.appform.hrmModule.GradeInformation;
 import com.appform.hrmModule.IncrementProcessMultiple;
@@ -72,7 +69,8 @@ import com.appform.hrmModule.LeaveApprove;
 import com.appform.hrmModule.LeaveApproveFinal;
 import com.appform.hrmModule.LeaveApproveHR;
 import com.appform.hrmModule.LeaveApprovePrimary;
-import com.appform.hrmModule.LeaveBalanceEntry;
+import com.appform.hrmModule.LeaveBalanceGenerate;
+import com.appform.hrmModule.LeaveEntitlement;
 import com.appform.hrmModule.LeaveTypeInfo;
 import com.appform.hrmModule.MealChargeInformation;
 import com.appform.hrmModule.NoticeInfo;
@@ -565,15 +563,22 @@ public class HrmMenu
 			addCaptionedItem("LEAVE TYPE ENTRY", leaveTransaction);
 		}
 
-		if(isValidMenu("leaveBalanceEntry"))
+		if(isValidMenu("LeaveEntitlement"))
 		{
 			addCaptionedItem("LEAVE ENTITLEMENT", leaveTransaction);
 		}
-
 		if(isValidMenu("leaveApplication"))
 		{
 			addCaptionedItem("LEAVE APPLICATION", leaveTransaction);
+		}			
+		if(isValidMenu("LeaveBalanceGenerate"))
+		{
+			addCaptionedItem("LEAVE BALANCE GENERATE", leaveTransaction);
 		}
+		
+		
+		
+		
 		/*if(isValidMenu("leaveCancel"))
 		{
 			addCaptionedItem("LEAVE CANCEL", leaveTransaction);
@@ -1072,11 +1077,15 @@ public class HrmMenu
 				}
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE ENTITLEMENT"))
 				{
-					showWindow(new LeaveBalanceEntry(sessionBean,"leaveBalanceEntry"),event.getItem(),"leaveBalanceEntry","HRM MODULE","TRANSACTION");
+					showWindow(new LeaveEntitlement(sessionBean,"LeaveEntitlement"),event.getItem(),"LeaveEntitlement","HRM MODULE","TRANSACTION");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPLICATION"))
 				{
 					showWindow(new LeaveApplicationForm(sessionBean,"leaveApplication",false),event.getItem(),"leaveApplication","HRM MODULE","TRANSACTION");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("LEAVE BALANCE GENERATE"))
+				{
+					showWindow(new LeaveBalanceGenerate(sessionBean,"LeaveBalanceGenerate"),event.getItem(),"LeaveBalanceGenerate","HRM MODULE","TRANSACTION");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVE"))
 				{

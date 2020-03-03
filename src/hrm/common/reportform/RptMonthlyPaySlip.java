@@ -419,33 +419,14 @@ public class RptMonthlyPaySlip extends Window
 		String report = "";
 		try
 		{
-			
-			
-			String query = 
-			
-					" select b.vEmployeeId,b.vEmployeeCode,b.vEmployeeName,a.vDesignationName,"+
-					" b.dJoiningDate,a.vUnitName,a.vDepartmentName,a.vEmployeeType,a.vBankName,a.vBranchName,"+
-					" a.vAccountNo,a.vRoutingNo,mBasic,mPerDaySalary,mOtTaka,mHouseRent,mMobileAllowance,mOtherEarning,"+
-					" mIncomeTax,mOtherDeduction,mNetPayableTaka,iWorkingDay,iHoliday,iLeaveDay,iLeaveWithoutPay,"+
-					" iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate,"+
-					" (select TOP(1)iCasualLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iCasualLeave,"+
-					" (select TOP(1)iSickLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iSickLeave,"+
-					" (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='1' "+
-					" and iPrimary=1 and iFinal=1 and iHR=1)iCLEnjoyed,"+
-					" (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='2' "+
-					" and iPrimary=1 and iFinal=1 and iHR=1)iSLEnjoyed "+
-					" from tbMonthlySalary a inner join tbEmpOfficialPersonalInfo b on a.vEmployeeID=b.vEmployeeId"+
-					" where a.vUnitId='"+cmbUnit.getValue().toString()+"' "+
-					" and a.vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' "+
-					" and a.vSectionId like '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"' "+
-					" and YEAR(dSalaryDate)=YEAR('"+dFormat.format(cmbSalaryMonth.getValue())+"') " +
-					" and MONTH(dSalaryDate)=MONTH('"+dFormat.format(cmbSalaryMonth.getValue())+"') " +
-					" and b.vEmployeeId like '"+(chkEmployeeName.booleanValue()?"%":cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"' "+
-					" order by b.vEmployeeName";
-			
-			
+			String query = "select * from funPaySlip ("
+					+ "'"+dFormat.format(cmbSalaryMonth.getValue())+"',"
+					+ "'"+cmbUnit.getValue().toString()+"',"
+					+ "'"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"',"
+					+ "'"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"',"
+					+ "'"+(chkEmployeeName.booleanValue()?"%":cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"') "
+					+ "order by vEmployeeCode";
 			System.out.println("reportShow: "+query);
-			
 
 			if(queryValueCheck(query))
 			{
@@ -464,8 +445,7 @@ public class RptMonthlyPaySlip extends Window
 						this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
 						this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
 						this.getWindow().getApplication().getURL()+"VAADIN/applet",true);
-
-
+				
 				win.setCaption("Project Report");
 				this.getParent().getWindow().addWindow(win);
 			}

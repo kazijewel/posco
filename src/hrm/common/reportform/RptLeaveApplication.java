@@ -615,24 +615,9 @@ public class RptLeaveApplication extends Window
 	private void reportpreview()
 	{
 		Session session=SessionFactoryUtil.getInstance().openSession();
-		String deptId="%",secId="%",subQuery="",unitId="%";
+		String deptId="%",secId="%",unitId="%";
 		try
 		{
-			System.out.println("start 1");
-			HashMap <String,Object> hm = new HashMap <String,Object> ();
-			hm.put("company", sessionBean.getCompany());
-			hm.put("address", sessionBean.getCompanyAddress());
-			hm.put("phone", sessionBean.getCompanyContact());
-			hm.put("userName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
-			hm.put("path", "report/account/hrmModule/");
-			hm.put("SysDate",reportTime.getTime);
-			hm.put("logo", sessionBean.getCompanyLogo());
-			hm.put("Unit",cmbUnit.getItemCaption(cmbUnit.getValue()));
-			hm.put("developer", sessionBean.getDeveloperAddress());
-
-			System.out.println("0");
-
-
 			if(cmbDepartment.getValue()!=null)
 			{
 				deptId=cmbDepartment.getValue().toString();
@@ -645,32 +630,30 @@ public class RptLeaveApplication extends Window
 			{
 				unitId=cmbUnit.getValue().toString();
 			}
-
-			String query = " select * from funLeaveApplication('"+cmbAppDate.getValue()+"','"+cmbEmployee.getValue()+"','%')";
-
-			subQuery="select * from funLeaveBalanceDetails('%','"+cmbEmployee.getValue()+"',"
-					+ "'"+sessionBean.dfDb.format(new Date())+"')";
-			System.out.println("Sub : "+subQuery);
-			//	showNotification("",""+subQuery,Notification.TYPE_WARNING_MESSAGE);
+			String query = " select * from funLeaveApplicationReport('"+cmbAppDate.getValue()+"','"+cmbEmployee.getValue()+"')";
+			System.out.println("reportpreview: "+query);
+			
 			if(queryValueCheck(query))
 			{
-				if(queryValueCheck(subQuery))
-				{
-					hm.put("sql", query);
-					hm.put("subsql", subQuery);
+				HashMap <String,Object> hm = new HashMap <String,Object> ();
+				hm.put("company", sessionBean.getCompany());
+				hm.put("address", sessionBean.getCompanyAddress());
+				hm.put("phone", sessionBean.getCompanyContact());
+				hm.put("userName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
+				hm.put("path", "report/account/hrmModule/");
+				hm.put("SysDate",reportTime.getTime);
+				hm.put("logo", sessionBean.getCompanyLogo());
+				hm.put("Unit",sessionBean.getCompany());
+				hm.put("developer", sessionBean.getDeveloperAddress());
+				hm.put("sql", query);
 
-					Window win = new ReportViewer(hm,"report/account/hrmModule/rptLeaveApplicationFormPOSCO.jasper",
-							this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
-							this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
-							this.getWindow().getApplication().getURL()+"VAADIN/applet",true);
+				Window win = new ReportViewer(hm,"report/account/hrmModule/rptLeaveApplicationFormPOSCO.jasper",
+						this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
+						this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
+						this.getWindow().getApplication().getURL()+"VAADIN/applet",true);
 
-					win.setCaption("Project Report");
-					this.getParent().getWindow().addWindow(win);
-				}
-				else
-				{
-					showNotification("There are no data",Notification.TYPE_WARNING_MESSAGE);
-				}
+				win.setCaption("Project Report");
+				this.getParent().getWindow().addWindow(win);
 			}
 			else
 			{

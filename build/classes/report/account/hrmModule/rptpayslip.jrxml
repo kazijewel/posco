@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" columnCount="2" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="493" leftMargin="11" rightMargin="11" topMargin="11" bottomMargin="14">
-	<property name="ireport.zoom" value="1.2100000000000046"/>
+	<property name="ireport.zoom" value="2.143588810000009"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="76"/>
+	<property name="ireport.y" value="443"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
 	<parameter name="email" class="java.lang.String"/>
@@ -12,7 +12,7 @@
 	<parameter name="phone" class="java.lang.String"/>
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select b.vEmployeeId,b.vEmployeeCode,b.vEmployeeName,b.vDesignationName, b.dJoiningDate,b.vUnitName,b.vDepartmentName,b.vEmployeeType,a.vBankName,a.vBranchName, a.vAccountNo,a.vRoutingNo,mBasic,mPerDaySalary,mOtTaka,mHouseRent,mMobileAllowance,mOtherEarning, mIncomeTax,mOtherDeduction,mNetPayableTaka,iWorkingDay,iHoliday,iLeaveDay,iLeaveWithoutPay, iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate, (select TOP(1)iCasualLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iCasualLeave, (select TOP(1)iSickLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iSickLeave, (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='1'  and iPrimary=1 and iFinal=1 and iHR=1)iCLEnjoyed, (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='2'  and iPrimary=1 and iFinal=1 and iHR=1)iSLEnjoyed  from tbMonthlySalary a inner join tbEmpOfficialPersonalInfo b on a.vEmployeeID=b.vEmployeeId where MONTH(a.dSalaryDate)=MONTH('2019-10-01') and YEAR(a.dSalaryDate)=YEAR('2019-10-01') and b.vUnitId like '%' and b.vDepartmentId like '%' and b.vSectionId like '%' and b.vEmployeeId like '%'"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select * from funPaySlip ('2020-01-18','%','%','%','%')"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="username" class="java.lang.String"/>
 	<parameter name="userIp" class="java.lang.String"/>
@@ -62,8 +62,10 @@
 	<field name="mPerHrOTRate" class="java.math.BigDecimal"/>
 	<field name="iCasualLeave" class="java.lang.Integer"/>
 	<field name="iSickLeave" class="java.lang.Integer"/>
+	<field name="iEarnLeave" class="java.lang.Integer"/>
 	<field name="iCLEnjoyed" class="java.lang.Integer"/>
 	<field name="iSLEnjoyed" class="java.lang.Integer"/>
+	<field name="iELEnjoyed" class="java.lang.Integer"/>
 	<title>
 		<band splitType="Stretch"/>
 	</title>
@@ -401,16 +403,6 @@
 				<text><![CDATA[Casual Leave]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="217" width="239" height="15"/>
-				<box leftPadding="2" rightPadding="1">
-					<topPen lineWidth="0.5"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Sick Leave]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="7" y="232" width="239" height="15"/>
 				<box leftPadding="2" rightPadding="1">
 					<topPen lineWidth="0.5"/>
@@ -421,7 +413,17 @@
 				<text><![CDATA[Earn Leave]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="247" width="239" height="15"/>
+				<reportElement x="7" y="217" width="239" height="15"/>
+				<box leftPadding="2" rightPadding="1">
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sick Leave]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="247" width="238" height="15"/>
 				<box rightPadding="1">
 					<topPen lineWidth="0.5"/>
 				</box>
@@ -521,7 +523,7 @@
 				<text><![CDATA[Income Tax]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="397" width="239" height="15"/>
+				<reportElement x="7" y="397" width="239" height="14"/>
 				<box leftPadding="2" rightPadding="1">
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.0"/>
@@ -572,7 +574,7 @@
 				<text><![CDATA[LWP Days]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="77" y="188" width="56" height="14"/>
+				<reportElement x="78" y="188" width="54" height="14"/>
 				<box leftPadding="2" rightPadding="1">
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -596,7 +598,7 @@
 				<text><![CDATA[Enjoyed]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="189" y="188" width="57" height="14"/>
+				<reportElement x="190" y="188" width="54" height="14"/>
 				<box leftPadding="2" rightPadding="1">
 					<topPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -822,7 +824,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iCLEnjoyed}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
-				<reportElement x="189" y="202" width="57" height="15">
+				<reportElement x="190" y="202" width="54" height="15">
 					<printWhenExpression><![CDATA[($F{iCasualLeave}-$F{iCLEnjoyed})!=0]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="2">
@@ -852,7 +854,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iSLEnjoyed}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
-				<reportElement x="189" y="217" width="57" height="15">
+				<reportElement x="190" y="217" width="54" height="15">
 					<printWhenExpression><![CDATA[($F{iSickLeave}-$F{iSLEnjoyed})!=0]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="2">
@@ -1123,6 +1125,36 @@
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="77" y="232" width="56" height="15">
+					<printWhenExpression><![CDATA[$F{iEarnLeave}!=0]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="2">
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iEarnLeave}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="133" y="232" width="56" height="15">
+					<printWhenExpression><![CDATA[$F{iELEnjoyed}!=0]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="2">
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iELEnjoyed}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
+				<reportElement x="190" y="232" width="54" height="15">
+					<printWhenExpression><![CDATA[($F{iSickLeave}-$F{iSLEnjoyed})!=0]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="2">
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iEarnLeave}-$F{iELEnjoyed}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>

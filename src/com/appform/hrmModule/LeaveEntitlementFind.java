@@ -3,7 +3,10 @@ package com.appform.hrmModule;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.hibernate.Session;
+
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 import com.common.share.SessionBean;
@@ -28,11 +31,8 @@ public class LeaveEntitlementFind extends Window
 	private SessionBean sessionBean;
 	private AbsoluteLayout mainLayout;
 
-	private Label lbYear;
-	private InlineDateField dYear;
-
 	private Label lbUnitName;
-	private ComboBox cmbUnitName,cmbDepartment;
+	private ComboBox cmbUnitName,cmbDepartment,cmbLeaveType;
 
 	private Label lbSectionName;
 	private ComboBox cmbSectionName;
@@ -47,6 +47,8 @@ public class LeaveEntitlementFind extends Window
 	private TextRead empID = new TextRead();
 
 	private SimpleDateFormat dfYear = new SimpleDateFormat("yyyy");
+	private SimpleDateFormat dFromatBangla = new SimpleDateFormat("dd-MM-yyyy");
+	DecimalFormat df=new DecimalFormat("#");
 
 	private Table table = new Table();
 
@@ -55,9 +57,10 @@ public class LeaveEntitlementFind extends Window
 	private ArrayList<Label> lbAutoEmployeeID = new ArrayList<Label>();
 	private ArrayList<Label> lbEmployeeID = new ArrayList<Label>();
 	private ArrayList<Label> lbEmployeeName = new ArrayList<Label>();
-	private ArrayList<Label> amtCL = new ArrayList<Label>();
-	private ArrayList<Label> amtSL = new ArrayList<Label>();
-	private ArrayList<Label> amtAL = new ArrayList<Label>();
+	private ArrayList<Label> dEntitleFromDate = new ArrayList<Label>();
+	private ArrayList<Label> dEntitleToDate = new ArrayList<Label>();
+	private ArrayList<Label> lbLeaveType = new ArrayList<Label>();
+	private ArrayList<Label> leaveBalance = new ArrayList<Label>();
 
 	public LeaveEntitlementFind(SessionBean sessionBean, TextRead findId, TextRead empID)
 	{
@@ -78,16 +81,6 @@ public class LeaveEntitlementFind extends Window
 
 	private void eventAction()
 	{
-		dYear.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event) 
-			{
-				if(dYear.getValue()!=null)
-				{
-					cmbUnitDataLoad();
-				}
-			}
-		});
 		cmbUnitName.addListener(new ValueChangeListener() 
 		{
 			public void valueChange(ValueChangeEvent event) 
@@ -97,10 +90,6 @@ public class LeaveEntitlementFind extends Window
 						tableclear();
 						cmbDepartmentDataLoad();
 				}
-				/*else
-				{
-					showNotification("Warning","Provide Unit Name!!!", Notification.TYPE_WARNING_MESSAGE);
-				}*/
 			}
 		});
 		cmbDepartment.addListener(new ValueChangeListener() 
@@ -110,8 +99,7 @@ public class LeaveEntitlementFind extends Window
 				if(cmbDepartment.getValue()!=null )
 				{
 					cmbSectionDataLoad();
-				}
-				
+				}				
 			}
 		});
 		chkDepartmentAll.addListener(new ValueChangeListener() 
@@ -140,7 +128,7 @@ public class LeaveEntitlementFind extends Window
 				tableclear();
 				if(cmbSectionName.getValue()!=null )
 				{
-					tableDataAdding();
+					entitleYearDataLoad();
 				}
 				else
 				{
@@ -157,7 +145,7 @@ public class LeaveEntitlementFind extends Window
 				{
 					if(chkSectionAll.booleanValue() )
 					{
-						tableDataAdding();
+						entitleYearDataLoad();
 					
 						cmbSectionName.setValue(null);
 						cmbSectionName.setEnabled(false);
@@ -167,6 +155,31 @@ public class LeaveEntitlementFind extends Window
 						tableclear();
 						cmbSectionName.setEnabled(true);
 					}
+				}
+			}
+		});
+
+		cmbLeaveType.addListener(new ValueChangeListener() 
+		{
+			public void valueChange(ValueChangeEvent event) 
+			{
+				tableclear();
+				if(cmbLeaveType.getValue()!=null )
+				{
+					if(cmbUnitName.getValue()!=null)
+					{
+						if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+						{
+							if(cmbSectionName.getValue()!=null || chkSectionAll.booleanValue())
+							{
+								tableDataAdding();
+							}
+						}
+					}
+				}
+				else
+				{
+					tableclear();
 				}
 			}
 		});
@@ -219,7 +232,33 @@ public class LeaveEntitlementFind extends Window
 			}
 		});
 	}
+	
+	private void cmbUnitDataLoad()
+	{
+		cmbUnitName.removeAllItems();
 
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+
+		try
+		{
+			String query = "select distinct a.vUnitId,a.vUnitName from tbEmpOfficialPersonalInfo a " +
+					"inner join tbLeaveEntitlement b on a.vEmployeeId=b.vEmployeeId order by a.vUnitName";
+			List <?> list = session.createSQLQuery(query).list();
+			for (Iterator <?> iter = list.iterator(); iter.hasNext();)
+			{
+				Object[] element =  (Object[]) iter.next();	
+				cmbUnitName.addItem(element[0]);
+				cmbUnitName.setItemCaption(element[0], element[1].toString());
+			}
+		}
+		catch(Exception ex)
+		{
+			showNotification("Error", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
+	}
+	
 	public void cmbDepartmentDataLoad()
 	{
 		cmbDepartment.removeAllItems();
@@ -227,9 +266,8 @@ public class LeaveEntitlementFind extends Window
 		session.beginTransaction();
 		try {
 			String sql="select distinct a.vDepartmentId,a.vDepartmentName from tbEmpOfficialPersonalInfo a " +
-					"inner join tbEmpLeaveInfo b on a.vEmployeeId=b.vEmployeeId " +
-					"where vYear='"+dfYear.format(dYear.getValue())+"' " +
-					"and a.vUnitId like '"+(cmbUnitName.getValue()!=null?cmbUnitName.getValue():"%")+"' " +
+					"inner join tbLeaveEntitlement b on a.vEmployeeId=b.vEmployeeId " +
+					"where a.vUnitId like '"+(cmbUnitName.getValue()!=null?cmbUnitName.getValue():"%")+"' " +
 					"order by a.vDepartmentName ";
 			System.out.println("cmbSectionDataLoad: "+sql);
 			List<?>list=session.createSQLQuery(sql).list();
@@ -256,9 +294,8 @@ public class LeaveEntitlementFind extends Window
 		session.beginTransaction();
 		try {
 			String sql="select distinct a.vSectionId,a.vSectionName from tbEmpOfficialPersonalInfo a " +
-					"inner join tbEmpLeaveInfo b on a.vSectionId=b.vSectionId " +
-					"where vYear='"+dfYear.format(dYear.getValue())+"' " +
-					"and a.vUnitId like '"+(cmbUnitName.getValue()!=null?cmbUnitName.getValue():"%")+"' " +
+					"inner join tbLeaveEntitlement b on a.vEmployeeId=b.vEmployeeId " +
+					"where a.vUnitId like '"+(cmbUnitName.getValue()!=null?cmbUnitName.getValue():"%")+"' " +
 					"and a.vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue():"%")+"' " +
 					"order by a.vSectionName ";
 			System.out.println("cmbSectionDataLoad: "+sql);
@@ -279,33 +316,36 @@ public class LeaveEntitlementFind extends Window
 		}
 		finally	{	session.close();}
 	}
-	private void cmbUnitDataLoad()
+	public void entitleYearDataLoad()
 	{
-		cmbUnitName.removeAllItems();
-
-		Session session = SessionFactoryUtil.getInstance().openSession();
+		cmbLeaveType.removeAllItems();
+		Session session=SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
-
-		try
-		{
-			String query = "select distinct a.vUnitId,a.vUnitName from tbEmpOfficialPersonalInfo a " +
-					"inner join tbEmpLeaveInfo b on a.vUnitId=b.vUnitId " +
-					"where vYear='"+dfYear.format(dYear.getValue())+"' " +
-					"order by a.vUnitName";
-			List <?> list = session.createSQLQuery(query).list();
-			for (Iterator <?> iter = list.iterator(); iter.hasNext();)
+		try {
+			String sql="select distinct vLeaveTypeId,vLeaveTypeName from tbLeaveEntitlement " +
+					"where vUnitId like '"+(cmbUnitName.getValue()!=null?cmbUnitName.getValue():"%")+"' " +
+					"and vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue():"%")+"' " +
+					"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue():"%")+"' " +
+					"order by vLeaveTypeName ";
+			System.out.println("entitleYearDataLoad: "+sql);
+			List<?>list=session.createSQLQuery(sql).list();
+			if(!list.isEmpty())
 			{
-				Object[] element =  (Object[]) iter.next();	
-				cmbUnitName.addItem(element[0]);
-				cmbUnitName.setItemCaption(element[0], element[1].toString());
+				for(Iterator<?> iter=list.iterator();iter.hasNext();)
+				{
+					Object[] element =(Object[]) iter.next();
+					cmbLeaveType.addItem(element[0]);
+					cmbLeaveType.setItemCaption(element[0], element[1]+"");
+				}
 			}
+			else { this.getParent().showNotification("Warning!","No data found.", Notification.TYPE_WARNING_MESSAGE);}
+		} 
+		catch (Exception exp) {
+			this.getParent().showNotification(exp.toString(),Notification.TYPE_ERROR_MESSAGE);
 		}
-		catch(Exception ex)
-		{
-			showNotification("Error", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
-		}
-		finally{session.close();}
+		finally	{	session.close();}
 	}
+	
 
 	private void tableclear()
 	{
@@ -315,9 +355,10 @@ public class LeaveEntitlementFind extends Window
 			lbAutoEmployeeID.get(i).setValue("");
 			lbEmployeeID.get(i).setValue("");
 			lbEmployeeName.get(i).setValue("");
-			amtCL.get(i).setValue("");
-			amtSL.get(i).setValue("");
-			amtAL.get(i).setValue("");
+			dEntitleFromDate.get(i).setValue("");
+			dEntitleToDate.get(i).setValue("");
+			leaveBalance.get(i).setValue("");
+			lbLeaveType.get(i).setValue("");
 		}
 	}
 
@@ -327,12 +368,13 @@ public class LeaveEntitlementFind extends Window
 		session.beginTransaction();
 		try
 		{
-			String query = "select vLeaveId,a.vEmployeeId,vEmployeeCode,a.vEmployeeName,iCasualLeave,iSickLeave,iEarnLeave from tbEmpOfficialPersonalInfo a " +
-					"inner join tbEmpLeaveInfo b on a.vEmployeeId=b.vEmployeeId " +
-					"where vYear='"+dfYear.format(dYear.getValue())+"' " +
-					"and a.vUnitId like '"+cmbUnitName.getValue()+"' " +
-					"and a.vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue().toString():"%")+"' " +
-			        "and a.vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' ";
+			String query = "select vLeaveId,vEmployeeId,vEmployeeCode,vEmployeeName,mEntitleDays,dEntitleFromDate,dEntitleToDate,vLeaveTypeName "
+					+ "from tbLeaveEntitlement "
+					+ "where vUnitId like '"+cmbUnitName.getValue()+"' "
+					+ "and vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue().toString():"%")+"' "
+					+ "and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' "
+					+ "and vLeaveTypeId='"+cmbLeaveType.getValue()+"' and vStatus=1 "
+					+ "order by vEmployeeCode,dEntitleFromDate desc";
 			
 			System.out.println("query : "+query);
 			List <?> list = session.createSQLQuery(query).list();
@@ -346,9 +388,10 @@ public class LeaveEntitlementFind extends Window
 					lbAutoEmployeeID.get(i).setValue(element[1]);
 					lbEmployeeID.get(i).setValue(element[2]);
 					lbEmployeeName.get(i).setValue(element[3]);
-					amtCL.get(i).setValue(element[4]);
-					amtSL.get(i).setValue(element[5]);
-					amtAL.get(i).setValue(element[6]);
+					leaveBalance.get(i).setValue(df.format(element[4]));
+					dEntitleFromDate.get(i).setValue(dFromatBangla.format(element[5]));
+					dEntitleToDate.get(i).setValue(dFromatBangla.format(element[6]));
+					lbLeaveType.get(i).setValue(element[7]);
 
 					if((i)==lbEmployeeID.size()-1) 
 					{
@@ -384,22 +427,25 @@ public class LeaveEntitlementFind extends Window
 		table.setColumnWidth("Leave Id",70);
 
 		table.addContainerProperty("Employee ID", Label.class, new Label());
-		table.setColumnWidth("Employee ID",130);
+		table.setColumnWidth("Employee ID",70);
 
-		table.addContainerProperty("EMP Code", Label.class, new Label());
-		table.setColumnWidth("EMP Code",120);
+		table.addContainerProperty("EMP ID", Label.class, new Label());
+		table.setColumnWidth("EMP ID",50);
 
 		table.addContainerProperty("Employee Name", Label.class , new Label());
-		table.setColumnWidth("Employee Name",260);
+		table.setColumnWidth("Employee Name",200);
 
-		table.addContainerProperty("CL", Label.class , new Label());
-		table.setColumnWidth("CL",33);	
+		table.addContainerProperty("Type", Label.class , new Label());
+		table.setColumnWidth("Type",90);
 
-		table.addContainerProperty("SL", Label.class , new Label());
-		table.setColumnWidth("SL",33);
+		table.addContainerProperty("Bal.", Label.class , new Label());
+		table.setColumnWidth("Bal.",30);	
 
-		table.addContainerProperty("AL", Label.class , new Label());
-		table.setColumnWidth("AL",33);
+		table.addContainerProperty("Entitle From", Label.class , new Label());
+		table.setColumnWidth("Entitle From",70);
+
+		table.addContainerProperty("Entitle To", Label.class , new Label());
+		table.setColumnWidth("Entitle To",70);
 
 		table.setColumnCollapsed("Leave Id", true);
 		
@@ -438,20 +484,24 @@ public class LeaveEntitlementFind extends Window
 		lbEmployeeName.get(ar).setWidth("100%");
 		lbEmployeeName.get(ar).setImmediate(true);
 
-		amtCL.add(ar, new Label());
-		amtCL.get(ar).setWidth("100%");
-		amtCL.get(ar).setImmediate(true);
+		lbLeaveType.add(ar, new Label());
+		lbLeaveType.get(ar).setWidth("100%");
+		lbLeaveType.get(ar).setImmediate(true);
 
-		amtSL.add(ar, new Label());
-		amtSL.get(ar).setWidth("100%");
-		amtSL.get(ar).setImmediate(true);
+		leaveBalance.add(ar, new Label());
+		leaveBalance.get(ar).setWidth("100%");
+		leaveBalance.get(ar).setImmediate(true);
 
-		amtAL.add(ar, new Label());
-		amtAL.get(ar).setWidth("100%");
-		amtAL.get(ar).setImmediate(true);
+		dEntitleFromDate.add(ar, new Label());
+		dEntitleFromDate.get(ar).setWidth("100%");
+		dEntitleFromDate.get(ar).setImmediate(true);
+
+		dEntitleToDate.add(ar, new Label());
+		dEntitleToDate.get(ar).setWidth("100%");
+		dEntitleToDate.get(ar).setImmediate(true);
 
 		table.addItem(new Object[]{lbSl.get(ar),lblLeaveId.get(ar),lbAutoEmployeeID.get(ar),lbEmployeeID.get(ar),
-				lbEmployeeName.get(ar),amtCL.get(ar),amtSL.get(ar),amtAL.get(ar)},ar);
+				lbEmployeeName.get(ar),lbLeaveType.get(ar),leaveBalance.get(ar),dEntitleFromDate.get(ar),dEntitleToDate.get(ar)},ar);
 	}
 
 
@@ -460,67 +510,61 @@ public class LeaveEntitlementFind extends Window
 		mainLayout = new AbsoluteLayout();
 		mainLayout.setImmediate(true);
 
-		setWidth("650px");
+		setWidth("660px");
 		setHeight("455px");
-
-		lbYear = new Label("Year :");
-		lbYear.setImmediate(true);
-		lbYear.setWidth("-1px");
-		lbYear.setHeight("-1px");
-		mainLayout.addComponent(lbYear, "top:20.0px;left:20.0px;");
-
-		dYear = new InlineDateField();
-		dYear.setImmediate(true);
-		dYear.setValue(new java.util.Date());
-		dYear.setWidth("-1px");
-		dYear.setHeight("-1px");
-		dYear.setResolution(InlineDateField.RESOLUTION_YEAR);
-		mainLayout.addComponent(dYear, "top:18.0px;left:100.0px;");
 		
 		lbUnitName = new Label("Project :");
 		lbUnitName.setImmediate(true);
 		lbUnitName.setWidth("-1px");
 		lbUnitName.setHeight("-1px");
-		mainLayout.addComponent(lbUnitName, "top:45.0px;left:20.0px;");
+		mainLayout.addComponent(lbUnitName, "top:10.0px;left:20.0px;");
 
 		cmbUnitName = new ComboBox();
 		cmbUnitName.setImmediate(true);
 		cmbUnitName.setWidth("220px");
 		cmbUnitName.setHeight("-1px");
 		cmbUnitName.setNewItemsAllowed(false);
-		mainLayout.addComponent(cmbUnitName, "top:43.0px;left:100.0px;");
+		mainLayout.addComponent(cmbUnitName, "top:08.0px;left:100.0px;");
 		
-		mainLayout.addComponent(new Label("Department :"), "top:70.0px;left:20.0px;");
+		mainLayout.addComponent(new Label("Department :"), "top:35.0px;left:20.0px;");
 
 		cmbDepartment = new ComboBox();
 		cmbDepartment.setImmediate(true);
 		cmbDepartment.setWidth("220px");
 		cmbDepartment.setHeight("-1px");
 		cmbDepartment.setNewItemsAllowed(false);
-		mainLayout.addComponent(cmbDepartment, "top:68.0px;left:100.0px;");
+		mainLayout.addComponent(cmbDepartment, "top:33.0px;left:100.0px;");
 		
 		chkDepartmentAll =new CheckBox("All");
 		chkDepartmentAll.setImmediate(true);
-		mainLayout.addComponent(chkDepartmentAll,"top:70.0px;left:320.0px;");
+		mainLayout.addComponent(chkDepartmentAll,"top:35.0px;left:320.0px;");
 		
 		lbSectionName = new Label("Section :");
 		lbSectionName.setImmediate(true);
 		lbSectionName.setWidth("-1px");
 		lbSectionName.setHeight("-1px");
-		mainLayout.addComponent(lbSectionName, "top:95px;left:20.0px;");
+		mainLayout.addComponent(lbSectionName, "top:60px;left:20.0px;");
 
 		cmbSectionName = new ComboBox();
 		cmbSectionName.setImmediate(true);
 		cmbSectionName.setWidth("220px");
 		cmbSectionName.setHeight("-1px");
 		cmbSectionName.setNewItemsAllowed(false);
-		mainLayout.addComponent(cmbSectionName, "top:93px;left:100.0px;");
+		mainLayout.addComponent(cmbSectionName, "top:58px;left:100.0px;");
 		
 		chkSectionAll =new CheckBox("All");
 		chkSectionAll.setImmediate(true);
-		mainLayout.addComponent(chkSectionAll,"top:95px;left:320.0px;");
+		mainLayout.addComponent(chkSectionAll,"top:60px;left:320.0px;");
 
-		mainLayout.addComponent(table, "top:130px;left:20.0px;");
+		cmbLeaveType = new ComboBox();
+		cmbLeaveType.setImmediate(true);
+		cmbLeaveType.setWidth("220px");
+		cmbLeaveType.setHeight("-1px");
+		cmbLeaveType.setNewItemsAllowed(false);
+		mainLayout.addComponent(new Label("Leave Type"), "top:85px;left:20.0px;");
+		mainLayout.addComponent(cmbLeaveType, "top:83px;left:100.0px;");
+
+		mainLayout.addComponent(table, "top:125px;left:20.0px;");
 
 		return mainLayout;
 	}

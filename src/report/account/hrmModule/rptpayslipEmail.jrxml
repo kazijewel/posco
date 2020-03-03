@@ -12,7 +12,7 @@
 	<parameter name="phone" class="java.lang.String"/>
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select b.vEmployeeId,b.vEmployeeCode,b.vEmployeeName,b.vDesignationName, b.dJoiningDate,b.vUnitName,b.vDepartmentName,b.vEmployeeType,a.vBankName,a.vBranchName, a.vAccountNo,a.vRoutingNo,mBasic,mPerDaySalary,mOtTaka,mHouseRent,mMobileAllowance,mOtherEarning, mIncomeTax,mOtherDeduction,mNetPayableTaka,iWorkingDay,iHoliday,iLeaveDay,iLeaveWithoutPay, iHolidayOTHr,iReplaceOTHr,iHolidayNetOTHr,iWorkingDayNetOTHr,mPerHrOTRate, (select TOP(1)iCasualLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iCasualLeave, (select TOP(1)iSickLeave from tbEmpLeaveInfo where vEmployeeId=b.vEmployeeId)iSickLeave, (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='1'  and iPrimary=1 and iFinal=1 and iHR=1)iCLEnjoyed, (select COUNT(*) from tbEmpLeaveApplicationDetails where vEmployeeId=b.vEmployeeId and vLeaveTypeId='2'  and iPrimary=1 and iFinal=1 and iHR=1)iSLEnjoyed  from tbMonthlySalary a inner join tbEmpOfficialPersonalInfo b on a.vEmployeeID=b.vEmployeeId where MONTH(a.dSalaryDate)=MONTH('2019-10-01') and YEAR(a.dSalaryDate)=YEAR('2019-10-01') and b.vUnitId like '%' and b.vDepartmentId like '%' and b.vSectionId like '%' and b.vEmployeeId like '%'"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select * from funPaySlip ('2020-01-18','%','%','%','%')"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="username" class="java.lang.String"/>
 	<parameter name="userIp" class="java.lang.String"/>
@@ -62,8 +62,10 @@
 	<field name="mPerHrOTRate" class="java.math.BigDecimal"/>
 	<field name="iCasualLeave" class="java.lang.Integer"/>
 	<field name="iSickLeave" class="java.lang.Integer"/>
+	<field name="iEarnLeave" class="java.lang.Integer"/>
 	<field name="iCLEnjoyed" class="java.lang.Integer"/>
 	<field name="iSLEnjoyed" class="java.lang.Integer"/>
+	<field name="iELEnjoyed" class="java.lang.Integer"/>
 	<title>
 		<band splitType="Stretch"/>
 	</title>
@@ -860,8 +862,8 @@
 				<box rightPadding="2">
 					<leftPen lineWidth="0.0"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iEarnLeave}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
 				<reportElement x="171" y="283" width="56" height="15"/>
@@ -869,15 +871,17 @@
 					<leftPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iELEnjoyed}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)" isBlankWhenNull="true">
-				<reportElement x="227" y="283" width="57" height="15"/>
+				<reportElement x="227" y="283" width="57" height="15">
+					<printWhenExpression><![CDATA[($F{iEarnLeave}-$F{iELEnjoyed})!=0]]></printWhenExpression>
+				</reportElement>
 				<box rightPadding="2">
 					<leftPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{iEarnLeave}-$F{iELEnjoyed}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)">
 				<reportElement x="446" y="238" width="77" height="15">

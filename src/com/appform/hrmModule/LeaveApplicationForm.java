@@ -1,9 +1,12 @@
 package com.appform.hrmModule;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -57,23 +60,14 @@ public class LeaveApplicationForm extends Window
 	private ComboBox cmbSection,cmbDepartment;
 	private CheckBox chkAllSection;
 	private CheckBox chkDepartmentAll;
-	private OptionGroup ogSelectEmployee;
-	private List<String> lst = Arrays.asList(new String[]{"Employee ID","Finger ID","Employee Name"});
-
 	private Label lblEmployeeName;
 	private ComboBox cmbEmployeeName;
-
-	private Label lblFingerId;
-	private TextRead txtFingerId;
-
-	private Label lblProximityId;
-	private TextRead txtProximityId;
 
 	private Label lblDesignation;
 	private TextRead txtDesignation;
 
 	private Label lblJoiningDate;
-	private PopupDateField dJoiningDate;
+	private PopupDateField dJoiningDate,dEntitleFromDate,dEntitleToDate;
 
 	private Label lblConfirmationDate;
 	private PopupDateField dConfirmationDate;
@@ -116,6 +110,7 @@ public class LeaveApplicationForm extends Window
 	private Label lblMobileNo;
 	private TextField txtMobileNo;
 
+
 	private Label lblDuration;
 	private TextRead txtDuration;
 	private Label lblDays;
@@ -151,6 +146,7 @@ public class LeaveApplicationForm extends Window
 
 	private SimpleDateFormat dbMonthFormat = new SimpleDateFormat("MM");
 	private SimpleDateFormat dbYearFormat = new SimpleDateFormat("yyyy");
+	DecimalFormat dcFormat=new DecimalFormat("#");
 	
 	
 	public LeaveApplicationForm(SessionBean sessionBean,String menuId,boolean switchUser) 
@@ -200,7 +196,7 @@ public class LeaveApplicationForm extends Window
 		}
 	}
 
-	private boolean chkSalary(String query)
+	private boolean chkData(String query)
 	{
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
@@ -214,7 +210,7 @@ public class LeaveApplicationForm extends Window
 		}
 		catch (Exception exp)
 		{
-			showNotification("chkSalary", exp.toString(), Notification.TYPE_WARNING_MESSAGE);
+			showNotification("chkData", exp.toString(), Notification.TYPE_WARNING_MESSAGE);
 		}
 		finally{session.close();}
 		return false;
@@ -274,9 +270,9 @@ public class LeaveApplicationForm extends Window
 															"or (MONTH(dSalaryDate) = '"+dbMonthFormat.format(dLeaveTo.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dLeaveTo.getValue())+"'))";
 													System.out.println("Check Salary: "+query);
 													
-													if(!chkSalary(query))
+													if(!chkData(query))
 													{
-														if(isDelete())
+														if(isDelete("DELETE"))
 														{
 															txtInit(true);
 															btnIni(true);
@@ -311,7 +307,6 @@ public class LeaveApplicationForm extends Window
 			public void buttonClick(ClickEvent event)
 			{
 				updateButtonAction();
-				//cmbSection.setEnabled(false);
 			}
 		});
 
@@ -348,6 +343,134 @@ public class LeaveApplicationForm extends Window
 				close();
 			}
 		});
+
+		dApplicationDate.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				getLeaveId();
+				cmbUnit.setValue(null);
+				cmbDepartment.setValue(null);
+				cmbEmployeeName.setValue(null);
+			}
+		});
+
+		cmbLeaveType.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(cmbLeaveType.getValue()!=null && cmbEmployeeName.getValue()!=null)
+				{
+					dLeaveTo.setEnabled(true);
+					if(dLeaveFrom.getValue()!=null && dLeaveTo.getValue()!=null)
+					{
+						try
+						{
+							findDayDiffernce();
+						}
+						catch (Exception e)
+						{/*System.out.println("Error "+e);*/}
+					}
+					
+					if(cmbLeaveType.getValue()!=null && isFind==false)
+					{
+						if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
+						{
+							int iELeave=0;
+							iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
+							System.out.println("cmbLeaveType iELeave: "+iELeave);
+							
+							if(iELeave>0)
+							{
+								cmbELType.setValue("Advance");
+							}
+							else
+							{
+								cmbELType.setValue("Current");
+							}
+						}
+						else
+						{
+							cmbELType.setValue(null);
+						}
+					}
+					
+				}
+			}
+		});
+
+		dLeaveFrom.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				tableClear();
+				cmbEmployeeName.setValue(null);
+				if(dLeaveFrom.getValue()!=null && dLeaveTo.getValue()!=null && cmbEmployeeName.getValue()!=null)
+				{
+					if(cmbLeaveType.getValue()!=null && isFind==false)
+					{
+						if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
+						{
+							selectLeaveDays();
+							int iELeave=0,iDuration;
+							iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
+							iDuration=Integer.parseInt(txtDuration.getValue()+"");
+							
+							if(iELeave<iDuration)
+							{
+								cmbELType.setValue("Advance");
+							}
+							else
+							{
+								cmbELType.setValue("Current");
+							}
+						}
+						else
+						{
+							cmbELType.setValue(null);
+						}
+					}
+				}
+			}
+		});
+
+		dLeaveTo.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				tableClear();
+				System.out.println("dLeaveTo");
+				cmbEmployeeName.setValue(null);
+				
+				if(dLeaveFrom.getValue()!=null && dLeaveTo.getValue()!=null && cmbEmployeeName.getValue()!=null)
+				{
+					if(cmbLeaveType.getValue()!=null && isFind==false)
+					{
+						if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
+						{
+							selectLeaveDays();
+							int iELeave=0,iDuration;
+							iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
+							iDuration=Integer.parseInt(txtDuration.getValue()+"");
+							
+							if(iELeave<iDuration)
+							{
+								cmbELType.setValue("Advance");
+							}
+							else
+							{
+								cmbELType.setValue("Current");
+							}
+						}
+						else
+						{
+							cmbELType.setValue(null);
+						}
+					}
+				}
+			}
+		});
+		
 		cmbUnit.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -362,6 +485,7 @@ public class LeaveApplicationForm extends Window
 				
 			}
 		});
+		
 		cmbDepartment.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -376,6 +500,7 @@ public class LeaveApplicationForm extends Window
 				
 			}
 		});
+		
 		chkDepartmentAll.addListener(new ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				cmbSection.removeAllItems();
@@ -406,66 +531,44 @@ public class LeaveApplicationForm extends Window
 				}
 			}
 		});
-
+		
+		chkAllSection.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				cmbEmployeeName.removeAllItems();
+				if(chkAllSection.booleanValue())
+				{
+					cmbSection.setValue(null);
+					cmbSection.setEnabled(false);
+					cmbEmployeeNameDataAdd();
+				}
+				else
+				{
+					cmbSection.setEnabled(true);
+				}
+			}
+		});
+		
 		cmbEmployeeName.addListener(new ValueChangeListener()
 		{	
 			public void valueChange(ValueChangeEvent event)
 			{
-				if(cmbEmployeeName.getValue()!=null)				
+				if(cmbEmployeeName.getValue()!=null && dLeaveFrom.getValue()!=null && dLeaveTo.getValue()!=null )				
 				{
-					//txtClear();
 					employeeData();
-					cmbELType.setValue(null);
-					
-				}
-			}
-		});
-
-		ogSelectEmployee.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				cmbEmployeeNameDataAdd();
-			}
-		});
-
-
-
-		dApplicationDate.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				getLeaveId();
-			}
-		});
-		
-		cmbLeaveType.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(cmbLeaveType.getValue()!=null)
-				{
-					dLeaveTo.setEnabled(true);
-					if(dLeaveFrom.getValue()!=null && dLeaveTo.getValue()!=null)
-					{
-						try
-						{
-							findDayDiffernce();//dateDayAddTable();
-						}
-						catch (Exception e)
-						{/*System.out.println("Error "+e);*/}
-					}
+					tableClear();
+					selectLeaveDays();
 					
 					if(cmbLeaveType.getValue()!=null && isFind==false)
 					{
 						if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
-						{						
-							cmbELType.setEnabled(true);
-							int iELeave=0;
+						{
+							int iELeave=0,iDuration;
 							iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
-							System.out.println("cmbLeaveType iELeave: "+iELeave);
+							iDuration=Integer.parseInt(txtDuration.getValue()+"");
 							
-							if(iELeave>0)
+							if(iELeave<iDuration)
 							{
 								cmbELType.setValue("Advance");
 							}
@@ -477,93 +580,23 @@ public class LeaveApplicationForm extends Window
 						else
 						{
 							cmbELType.setValue(null);
-							cmbELType.setEnabled(false);
 						}
 					}
 					
 				}
 			}
 		});
-
-		dLeaveFrom.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				tableClear();
-				selectLeaveDays();
-
-				if(cmbLeaveType.getValue()!=null && isFind==false)
-				{
-					if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
-					{						
-						cmbELType.setEnabled(true);
-						int iELeave=0,iDuration;
-						iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
-						iDuration=Integer.parseInt(txtDuration.getValue()+"");
-						
-						if(iELeave<iDuration)
-						{
-							cmbELType.setValue("Advance");
-						}
-						else
-						{
-							cmbELType.setValue("Current");
-						}
-					}
-					else
-					{
-						cmbELType.setValue(null);
-						cmbELType.setEnabled(false);
-					}
-				}
-			}
-		});
-
-		dLeaveTo.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				tableClear();
-				System.out.println("dLeaveTo");
-				selectLeaveDays();
-
-				if(cmbLeaveType.getValue()!=null && isFind==false)
-				{
-					if(cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).equals("Annual Leave"))
-					{						
-						cmbELType.setEnabled(true);
-						int iELeave=0,iDuration;
-						iELeave=Integer.parseInt(txtAnualLeave.getValue()+"");
-						iDuration=Integer.parseInt(txtDuration.getValue()+"");
-						
-						if(iELeave<iDuration)
-						{
-							cmbELType.setValue("Advance");
-						}
-						else
-						{
-							cmbELType.setValue("Current");
-						}
-					}
-					else
-					{
-						cmbELType.setValue(null);
-						cmbELType.setEnabled(false);
-					}
-				}
-			}
-		});
-
+		
 		ogPaymentType.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
 				LeaveTypeChange();
-				if(dLeaveFrom.getValue()!=null && dLeaveTo.getValue()!=null)
+				if(dLeaveFrom.getValue()!=null && dLeaveTo.getValue()!=null && cmbEmployeeName.getValue()!=null)
 				{
 					try
 					{
-						findDayDiffernce(); //dateDayAddTable();
+						findDayDiffernce();
 					}
 					catch (Exception e)
 					{/*System.out.println("Error "+e);*/}
@@ -585,50 +618,27 @@ public class LeaveApplicationForm extends Window
 				}
 			}
 		});
-
-		chkAllSection.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				cmbEmployeeName.removeAllItems();
-				if(chkAllSection.booleanValue())
-				{
-					cmbSection.setValue(null);
-					cmbSection.setEnabled(false);
-
-					cmbEmployeeNameDataAdd();
-				}
-				else
-				{
-					cmbSection.setEnabled(true);
-				}
-			}
-		});
+		
 		txtMobileNo.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
 				if(!txtMobileNo.toString().isEmpty())					
 				{
-					String MobileNumber=txtMobileNo.getValue().toString();
-					
+					String MobileNumber=txtMobileNo.getValue().toString();					
 					int Lentgh=MobileNumber.length();
-					if(Lentgh<11){
-						
+					if(Lentgh<11)
+					{						
 						showNotification("Mobile Number Must be  Give Eleven Digit !!");
 						txtMobileNo.setValue("");
 					}
 				}
-			
 			}
 		});
-
 	}
 
 	private void LeaveTypeChange()
 	{
-		//"Without Pay","Special"
-		
 		dLeaveFrom.setValue(new Date());
 		dLeaveTo.setValue(null);
 		tableClear();
@@ -644,6 +654,7 @@ public class LeaveApplicationForm extends Window
 			cmbLeaveType.setVisible(false);
 			txtLeaveType.setValue("Without Pay");
 			txtLeaveType.setVisible(true);
+			cmbELType.setValue(null);
 		}
 		/*else if(ogPaymentType.getValue()=="Special")
 		{
@@ -660,10 +671,7 @@ public class LeaveApplicationForm extends Window
 		session.beginTransaction();
 		try
 		{
-			
 			String query="select distinct vUnitId,vUnitName from tbEmpOfficialPersonalInfo where bStatus=1  order by vUnitName";
-
-			
 			System.out.println("unit"+query);
 			
 			List <?> lst=session.createSQLQuery(query).list();
@@ -692,9 +700,7 @@ public class LeaveApplicationForm extends Window
 		try
 		{
 			String query="select distinct vDepartmentId,vDepartmentName from tbEmpOfficialPersonalInfo where bStatus=1 and vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue())+"' order by vDepartmentName";
-		
 			System.out.println("section"+query);
-			
 			List <?> lst=session.createSQLQuery(query).list();
 			if(!lst.isEmpty())
 			{
@@ -719,9 +725,7 @@ public class LeaveApplicationForm extends Window
 		session.beginTransaction();
 		try
 		{
-			
 			String query="select distinct vSectionId,vSectionName from tbEmpOfficialPersonalInfo where vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue())+"' and vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' and  bStatus=1 order by vSectionName";
-		
 			System.out.println("section"+query);
 			
 			List <?> lst=session.createSQLQuery(query).list();
@@ -749,11 +753,7 @@ public class LeaveApplicationForm extends Window
 		try
 		{
 			String query = "select vLeaveTypeId,vLeaveTypeName from tbLeaveType order by iAutoId";
-		
-			
-			List <?> lst=session.createSQLQuery(query).list();
-
-			
+			List <?> lst=session.createSQLQuery(query).list();			
 			if(!lst.isEmpty())
 			{
 				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
@@ -781,7 +781,7 @@ public class LeaveApplicationForm extends Window
 		{
 			if(cmbEmployeeName.getValue()!=null)
 			{
-				showNotification("Warning!",""+(cmbEmployeeName.getItemCaption(cmbEmployeeName.getValue()).toString())+"" +
+				showNotification("Warning!",""+(cmbEmployeeName.getItemCaption(cmbEmployeeName.getValue()))+"" +
 						" has a pending leave.",Notification.TYPE_WARNING_MESSAGE);
 				cmbEmployeeName.setValue(null);
 			}
@@ -791,14 +791,13 @@ public class LeaveApplicationForm extends Window
 	private boolean checkPendingLeave()
 	{
 		boolean ret = false;
-
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try 
 		{
-			String query = "select * from tbEmpLeaveApplicationInfo where vEmployeeId =" +
-					" '"+(cmbEmployeeName.getValue()==null?"":cmbEmployeeName.getValue().toString().toString())+"'" +
-					" and iApprovedFlag=0";
+			String query = "select * from tbEmpLeaveApplicationInfo "
+					+ "where vEmployeeId ='"+(cmbEmployeeName.getValue()==null?"":cmbEmployeeName.getValue().toString())+"' "
+					+ "and iApprovedFlag=0";
 
 			Iterator <?> iter = session.createSQLQuery(query).list().iterator();
 			if(!iter.hasNext() || isFind)
@@ -811,7 +810,6 @@ public class LeaveApplicationForm extends Window
 			System.out.print(ex);
 		}
 		finally{session.close();}
-
 		return ret;
 	}
 
@@ -917,7 +915,7 @@ public class LeaveApplicationForm extends Window
 				tbdDate.get(i).setValue(sessionBean.dfBd.format(element[1]));
 				tbllblWeekDay.get(i).setValue(element[2]);
 				tblAdjustedType.get(i).setValue(element[3]);
-				tbdEntryDate.get(i).setValue(sessionBean.dfBd.format(element[4]));
+				tbdEntryDate.get(i).setValue(element[4]);
 				
 				if(i==tbllblEmployeeName.size()-1)
 				{
@@ -950,11 +948,36 @@ public class LeaveApplicationForm extends Window
 										"where vEmployeeID='"+cmbEmployeeName.getValue()+"' " +
 										"and ((MONTH(dSalaryDate) = '"+dbMonthFormat.format(dLeaveFrom.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dLeaveFrom.getValue())+"') " +
 										"or (MONTH(dSalaryDate) = '"+dbMonthFormat.format(dLeaveTo.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dLeaveTo.getValue())+"'))";
-								System.out.println("Check Salary: "+query);
+								System.out.println("Check Salary: "+query);								
 								
-								if(!chkSalary(query))
+								if(!chkData(query))
 								{
-								    saveButtonAction();
+
+									if(ogPaymentType.getValue()=="With Pay")
+									{
+										SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd");
+										
+										String checkDate = "select vEmployeeId from tbLeaveEntitlement where "
+												+ "'"+sqlFormat.format(dLeaveFrom.getValue())+"' between dEntitleFromDate and dEntitleToDate and "
+												+ "'"+sqlFormat.format(dLeaveTo.getValue())+"' between dEntitleFromDate and dEntitleToDate "
+												+ "and vEmployeeId='"+cmbEmployeeName.getValue()+"' and vLeaveTypeId='"+cmbLeaveType.getValue()+"' and vStatus=1 ";
+										System.out.println("Check Date: "+checkDate);
+										
+										if(chkData(checkDate))
+										{
+											saveButtonAction();
+										}
+										else
+										{
+											showNotification("Warning", "Leave date must be within Entile date!!!", Notification.TYPE_WARNING_MESSAGE);
+										}
+									}
+									else
+									{
+										saveButtonAction();
+									}
+									
+																    
 								}
 								else
 								{
@@ -1015,8 +1038,6 @@ public class LeaveApplicationForm extends Window
 					" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"' order by dLeaveDate";
 		
 			System.out.println("existLeave"+query);
-			
-			
 			List <?> lst=session.createSQLQuery(query).list();
 			if(!lst.isEmpty())
 			{
@@ -1034,13 +1055,11 @@ public class LeaveApplicationForm extends Window
 			showNotification("cmbSectionDataAdd", exp.toString(), Notification.TYPE_ERROR_MESSAGE);
 		}
 		finally{session.close();}
-
 		return true;
 	}
 
 	private String selectMaxId()
 	{
-	
 		String maxId = "";
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
@@ -1067,67 +1086,27 @@ public class LeaveApplicationForm extends Window
 	private void cmbEmployeeNameDataAdd()
 	{
 		cmbEmployeeName.removeAllItems();
-
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
 		{
-			
-			String query ="select vEmployeeId,vFingerId,vEmployeeCode,vEmployeeName,vUnitId,vUnitName from tbEmpOfficialPersonalInfo "
-					+ " where vUnitId ='"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue())+"' and vSectionId like "
-			        + " '"+(cmbSection.getValue()==null?"%":cmbSection.getValue())+"' and vDepartmentId like '"+(chkDepartmentAll.booleanValue()==true?"%":cmbDepartment.getValue())+"' "
-			        + " and bStatus = 1 order by vEmployeeName";
-
-		
+			String query ="select a.vEmployeeId,a.vFingerId,a.vEmployeeCode,a.vEmployeeName "
+					+ "from tbEmpOfficialPersonalInfo a "
+					+ "inner join tbLeaveEntitlement b on a.vEmployeeId=b.vEmployeeId "
+					+ "where a.vUnitId ='"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue())+"' "
+					+ "and a.vSectionId like '"+(cmbSection.getValue()==null?"%":cmbSection.getValue())+"' "
+					+ "and a.vDepartmentId like '"+(chkDepartmentAll.booleanValue()==true?"%":cmbDepartment.getValue())+"' "
+			        + "and bStatus = 1 order by vEmployeeName";
 			System.out.println("employeeNameAdd"+query);
 			
 			List <?> lst = session.createSQLQuery(query).list();
 			if(!lst.isEmpty())
 			{
-				if(ogSelectEmployee.getValue().toString().equals("Finger ID"))
+				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
 				{
-					for(Iterator <?> itr=lst.iterator();itr.hasNext();)
-					{
-						Object [] element=(Object[])itr.next();
-						lblFingerId.setValue("Employee Name : ");
-						txtFingerId.setWidth("250px");
-						lblEmployeeName.setValue("Finger ID : ");
-						cmbEmployeeName.setWidth("140px");
-						lblProximityId.setValue("Employee ID : ");
-						txtProximityId.setWidth("140px");
-						cmbEmployeeName.addItem(element[0].toString());
-						cmbEmployeeName.setItemCaption(element[0].toString(), element[1].toString());
-					}
-				}
-				if(ogSelectEmployee.getValue().toString().equals("Employee ID"))
-				{
-					for(Iterator <?> itr=lst.iterator();itr.hasNext();)
-					{
-						Object [] element=(Object[])itr.next();
-						lblFingerId.setValue("Employee Name : ");
-						txtFingerId.setWidth("250px");
-						lblEmployeeName.setValue("Employee ID : ");
-						cmbEmployeeName.setWidth("140px");
-						lblProximityId.setValue("Finger ID : ");
-						txtProximityId.setWidth("140px");
-						cmbEmployeeName.addItem(element[0].toString());
-						cmbEmployeeName.setItemCaption(element[0].toString(), element[2].toString());
-					}
-				}
-				if(ogSelectEmployee.getValue().toString().equals("Employee Name"))
-				{
-					for(Iterator <?> itr=lst.iterator();itr.hasNext();)
-					{
-						Object [] element=(Object[])itr.next();
-						lblFingerId.setValue("Finger ID : ");
-						txtFingerId.setWidth("140px");
-						lblEmployeeName.setValue("Employee Name : ");
-						cmbEmployeeName.setWidth("250px");
-						lblProximityId.setValue("Employee ID : ");
-						txtProximityId.setWidth("140px");
-						cmbEmployeeName.addItem(element[0].toString()); 
-						cmbEmployeeName.setItemCaption(element[0].toString(), element[3].toString());
-					}
+					Object [] element=(Object[])itr.next();
+					cmbEmployeeName.addItem(element[0].toString());
+					cmbEmployeeName.setItemCaption(element[0].toString(), element[2]+"-"+element[3]);
 				}
 			}
 		}
@@ -1136,7 +1115,6 @@ public class LeaveApplicationForm extends Window
 			showNotification("cmbEmployeeNameDataAdd", exp.toString(), Notification.TYPE_ERROR_MESSAGE);
 		}
 		finally{session.close();}
-	
 	}
 
 	private void cmbEmployeeRelatedData()
@@ -1145,12 +1123,14 @@ public class LeaveApplicationForm extends Window
 		session.beginTransaction();
 		try
 		{
-			String query = " select vEmployeeId,vEmployeeName,vFingerId,vDesignation,dJoiningDate,vConfirmDate,iCasualLeaveBalance," +
-					" iSickLeaveBalance,iEarnLeaveBalance,vDesignationId,vEmployeeType,vUnitId,vUnitName,vContactNo  from funLeaveBalanceDetails(" +
-					" '%','"+(cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"',"
-					+ "'"+sessionBean.dfDb.format(dApplicationDate.getValue())+"')";
-
-			System.out.println("empRelatedData "+query);
+			String query = " select vEmployeeId,vEmployeeName,vFingerId,vDesignation,dJoiningDate,vConfirmDate,iCasualLeaveBalance,"
+					+ "iSickLeaveBalance,iEarnLeaveBalance,vDesignationId,vEmployeeType,vUnitId,vUnitName,vContactNo,"
+					+ "dEntitleFromDate,dEntitleToDate "
+					+ "from funGetLeaveBalance ("
+					+ "'"+(cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"',"
+					+ "'"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'"
+					+ ")";
+			System.out.println("cmbEmployeeRelatedData "+query);
 			
 			List <?> lst=session.createSQLQuery(query).list();
 			if(!lst.isEmpty())
@@ -1158,25 +1138,7 @@ public class LeaveApplicationForm extends Window
 				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
 				{
 					Object [] element=(Object[])itr.next();
-					if(ogSelectEmployee.getValue()=="Employee ID")
-					{
-						txtFingerId.setValue(element[1]);
-						txtProximityId.setValue(element[2]);
-						txtDesignation.setValue(element[3]);
-					}
-					if(ogSelectEmployee.getValue()=="Finger ID")
-					{
-						txtFingerId.setValue(element[1]);
-						txtProximityId.setValue(element[0]);
-						txtDesignation.setValue(element[3]);
-					}
-					if(ogSelectEmployee.getValue()=="Employee Name")
-					{
-						txtFingerId.setValue(element[2]);
-						txtProximityId.setValue(element[0]);
-						txtDesignation.setValue(element[3]);
-					}
-
+					txtDesignation.setValue(element[3]);
 					dJoiningDate.setReadOnly(false);
 					dJoiningDate.setValue(element[4]);
 					dJoiningDate.setReadOnly(true);
@@ -1193,10 +1155,18 @@ public class LeaveApplicationForm extends Window
 
 					txtCasualLeave.setValue(element[6].toString());
 					txtSickLeave.setValue(element[7].toString());
-					txtAnualLeave.setValue(element[8].toString());
+					txtAnualLeave.setValue(dcFormat.format(element[8]));
 
 					designationId = element[9].toString();
 					txtMobileNo.setValue(element[13]);
+
+					dEntitleFromDate.setReadOnly(false);
+					dEntitleFromDate.setValue(element[14]);
+					dEntitleFromDate.setReadOnly(true);
+
+					dEntitleToDate.setReadOnly(false);
+					dEntitleToDate.setValue(element[15]);
+					dEntitleToDate.setReadOnly(true);
 				}
 			}
 		}
@@ -1228,7 +1198,6 @@ public class LeaveApplicationForm extends Window
 				}
 				else
 				{
-					//dLeaveTo.setValue(null);
 					showNotification("Warning!","Select leave type.",Notification.TYPE_WARNING_MESSAGE);
 					cmbLeaveType.focus();
 				}
@@ -1250,7 +1219,6 @@ public class LeaveApplicationForm extends Window
 	{
 		if(!isFind)
 		{
-
 			Session session = SessionFactoryUtil.getInstance().openSession();
 			session.beginTransaction();
 			try
@@ -1275,7 +1243,6 @@ public class LeaveApplicationForm extends Window
 						{
 							if (cmbLeaveType.getValue().toString().trim().equalsIgnoreCase("1"))
 							{
-								
 								checkLeaveBalance = Integer.parseInt(txtCasualLeave.getValue().toString());
 								if(totalDays<=checkLeaveBalance)
 								{
@@ -1306,17 +1273,6 @@ public class LeaveApplicationForm extends Window
 							{
 								checkLeaveBalance = Integer.parseInt(txtAnualLeave.getValue().toString());
 								leaveValidation(totalDays,applyDateFrom,applyDateTo);
-								
-								//21-09-2019 Because the enjoy EL Before Confirmation
-								/*if(totalDays<=checkLeaveBalance)
-								{
-									leaveValidation(totalDays,applyDateFrom,applyDateTo);
-								}
-								else
-								{
-									showNotification("Warning", "Leave Balance Exceeded!!", Notification.TYPE_WARNING_MESSAGE);
-									dLeaveTo.setValue(null);
-								}*/
 							}
 							
 							else if(cmbLeaveType.getValue().toString().trim().equalsIgnoreCase("4"))
@@ -1447,18 +1403,10 @@ public class LeaveApplicationForm extends Window
 				System.out.println("findDayName1 : "+date.toString());
 				String dna = findDayName(date.toString());
 				String empName = "";
-				if(ogSelectEmployee.getValue()=="Employee ID")
-				{
-					empName = txtFingerId.getValue().toString().trim();
-				}
-				if(ogSelectEmployee.getValue()=="Finger ID")
-				{
-					empName=txtFingerId.getValue().toString().trim();
-				}
-				if(ogSelectEmployee.getValue()=="Employee Name")
-				{
-					empName=cmbEmployeeName.getItemCaption(cmbEmployeeName.getValue());
-				}
+
+
+				empName=cmbEmployeeName.getItemCaption(cmbEmployeeName.getValue());
+				
 
 				tbllblEmployeeName.get(ind).setValue(empName);
 
@@ -1509,7 +1457,7 @@ public class LeaveApplicationForm extends Window
 				"or (MONTH(dSalaryDate) = '"+dbMonthFormat.format(dLeaveTo.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dLeaveTo.getValue())+"'))";
 		System.out.println("Check Salary: "+query);
 		
-		if(!chkSalary(query))
+		if(!chkData(query))
 		{
 			if(isUpdate)
 			{
@@ -1520,7 +1468,7 @@ public class LeaveApplicationForm extends Window
 					{
 						if(buttonType == ButtonType.YES)
 						{
-							if(isDelete())
+							if(isDelete("UPDATE"))
 							{
 								insertData();
 							}
@@ -1568,60 +1516,42 @@ public class LeaveApplicationForm extends Window
 		
 	}
 
-	private boolean isDelete()
+	private boolean isDelete(String vUdFlag)
 	{
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		Transaction tx = session.beginTransaction();
 		String leaveId = txtReferenceNo.getValue().toString();
 		try
 		{
-			String empName = "";
-			if(ogSelectEmployee.getValue()=="Employee ID")
+			for(int i = 0; i<tbllblWeekDay.size(); i++)
 			{
-				empName = txtFingerId.getValue().toString().trim();
+				if(tbdDate.get(i).getValue()!=null)
+				{
+					String deleteData = "insert into tbUdEmpLeaveApplicationInfo (vLeaveId,vLeaveTypeId,vLeaveTypeName,"
+							+ "vEmployeeId,vEmployeeName,vUnitId,vUnitName,dLeaveDate,vPaymentFlag,iApprovedFlag,vAdjustedType,"
+							+ "vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,iFinal,iHR,dEntitleFromDate,dEntitleToDate,vELType,"
+							+ "vUdFlag,vUserId,vUserName,vUserIp,dEntryTime) values (" +
+							" '"+leaveId+"'," +
+							" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getValue().toString():txtLeaveType.getValue().toString())+"'," +
+							" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).toString():txtLeaveType.getValue().toString())+"'," +
+							" '"+cmbEmployeeName.getValue().toString()+"'," +
+							" (select distinct vEmployeeName from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
+							" (select distinct vUnitId from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
+							" (select distinct vUnitName from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
+							" '"+tbdEntryDate.get(i).getValue()+"'," +
+							" '"+ogPaymentType.getValue().toString()+"'," +
+							" '0'," +
+							" '"+tblAdjustedType.get(i).getValue().toString()+"'," +
+							" '','','','',0,0,0,"
+							+ "'"+sessionBean.dfDb.format(dEntitleFromDate.getValue())+"',"
+							+ "'"+sessionBean.dfDb.format(dEntitleToDate.getValue())+"',"
+							+ "'"+(cmbELType.getValue()==null?"":cmbELType.getValue().toString())+"','"+vUdFlag+"',"
+							+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP) ";
+					
+					System.out.println("deleteData: "+deleteData);
+					session.createSQLQuery(deleteData).executeUpdate();
+				}
 			}
-			if(ogSelectEmployee.getValue()=="Finger ID")
-			{
-				empName=txtFingerId.getValue().toString().trim();
-			}
-			if(ogSelectEmployee.getValue()=="Employee Name")
-			{
-				empName=cmbEmployeeName.getItemCaption(cmbEmployeeName.getValue());
-			}
-
-			String InsertUpdate = "INSERT into tbUdEmpLeaveApplicationInfo (vLeaveId,dApplicationDate,vUnitId,vUnitName,vSectionId,vSectionName," +
-					" vDesignationId,vDesignation,vEmployeeType,vEmployeeId,vEmployeeName,vLeaveTypeId,vLeaveType,dLeaveFrom,dLeaveTo," +
-					" vLeavePupose,vLeaveAddress,dSanctionFrom,dSanctionTo,mTotalDays,mFridays,mAdjustDays,vPaymentFlag,iApprovedFlag,"+
-					" vApprovedBy,vMobileNo,vUdFlag,vUserName,vUserIp,dEntryTime) values (" +
-					" '"+leaveId+"'," +
-					" '"+sessionBean.dfDb.format(dApplicationDate.getValue())+"'," +
-					" '"+cmbUnit.getValue().toString()+"'," +
-					" '"+(cmbUnit.getItemCaption(cmbUnit.getValue()).toString())+"'," +
-					" '"+cmbSection.getValue().toString()+"'," +
-					" '"+(cmbSection.getItemCaption(cmbSection.getValue()).toString())+"'," +
-					" '"+designationId+"'," +
-					" '"+txtDesignation.getValue().toString()+"'," +
-					" '"+txtEmployeeType.getValue().toString()+"'," +
-					" '"+cmbEmployeeName.getValue().toString()+"'," +
-					" '"+empName+"'," +
-					" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getValue().toString():txtLeaveType.getValue().toString())+"'," +
-					" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).toString():txtLeaveType.getValue().toString())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
-					" '"+(txtPurposeOfLeave.getValue().toString().isEmpty()?"":txtPurposeOfLeave.getValue().toString())+"'," +
-					" '"+(txtLeaveAddress.getValue().toString().isEmpty()?"":txtLeaveAddress.getValue().toString())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
-					" '"+txtDuration.getValue().toString()+"'," +
-					" '"+(txtFriday.getValue().toString().isEmpty()?"0":txtFriday.getValue().toString())+"'," +
-					" '0'," +
-					" '"+ogPaymentType.getValue().toString()+"'," +
-					" '0'," +
-					" ''," +
-					" '"+(txtMobileNo.getValue().toString().isEmpty()?"0":txtMobileNo.getValue().toString())+"'," +
-					" 'DELETE'," +
-					" '"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP) ";
-			session.createSQLQuery(InsertUpdate).executeUpdate();
 
 			// delete data from main table to insert update data
 			String deleteInfo = "delete from tbEmpLeaveApplicationInfo where vLeaveId = '"+leaveId+"'";
@@ -1656,62 +1586,67 @@ public class LeaveApplicationForm extends Window
 
 		try
 		{
-			String Insert = "INSERT into tbEmpLeaveApplicationInfo (vLeaveId,dApplicationDate,vSectionId,"+
-					" vSectionName,vDesignationId,vDesignation,vEmployeeType,vEmployeeId,vEmployeeName,vLeaveTypeId,vLeaveType,dLeaveFrom,"+
-					" dLeaveTo,vLeavePupose,vLeaveAddress,dSanctionFrom,dSanctionTo,mTotalDays,mFridays,mAdjustDays,vPaymentFlag,iApprovedFlag,"+
-					" vApprovedBy,vMobileNo,vUserName,vUserIp,dEntryTime,vUnitId,vUnitName,iPrimary,iFinal,iHR) values (" +
-					" '"+leaveId+"'," +
-					" '"+sessionBean.dfDb.format(dApplicationDate.getValue())+"'," +
-			     	" ''," +
-					" ''," +
-					" '"+designationId+"'," +
-					" '"+txtDesignation.getValue().toString()+"'," +
-					" '"+txtEmployeeType.getValue().toString()+"'," +
-					" '"+cmbEmployeeName.getValue().toString()+"'," +
-					" (select vEmployeeName from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
-					" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getValue().toString():txtLeaveType.getValue().toString())+"'," +
-					" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).toString():txtLeaveType.getValue().toString())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
-					" '"+(txtPurposeOfLeave.getValue().toString().isEmpty()?"":txtPurposeOfLeave.getValue().toString())+"'," +
-					" '"+(txtLeaveAddress.getValue().toString().isEmpty()?"":txtLeaveAddress.getValue().toString())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
-					" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
-					" '"+txtDuration.getValue().toString()+"'," +
-					" '"+(txtFriday.getValue().toString().isEmpty()?"0":txtFriday.getValue().toString())+"'," +
-					" '0'," +
-					" '"+ogPaymentType.getValue().toString()+"'," +
-					" '0'," +
-					" ''," +
-					" '"+(txtMobileNo.getValue().toString().isEmpty()?"0":txtMobileNo.getValue().toString())+"'," +
-					" '"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP, "+
-					" '','',0,0,0)" ;
+			String Insert = "insert into tbEmpLeaveApplicationInfo (vLeaveId,dApplicationDate,vSectionId,vSectionName,vDesignationId,vDesignation,"
+			+ "vEmployeeType,vEmployeeId,vEmployeeName,vLeaveTypeId,vLeaveType,dLeaveFrom,dLeaveTo,vLeavePupose,vLeaveAddress,dSanctionFrom,"
+			+ "dSanctionTo,mTotalDays,mFridays,mAdjustDays,vPaymentFlag,iApprovedFlag,vApprovedBy,vMobileNo,dEntitleFromDate,dEntitleToDate,"
+			+ "vUserName,vUserIp,dEntryTime,vUnitId,vUnitName,iPrimary,iFinal,iHR,vELType) "
+			+ "values ("
+			+ "'"+leaveId+"','"+sessionBean.dfDb.format(dApplicationDate.getValue())+"'," +
+	     	" '',''," +
+			" '"+designationId+"'," +
+			" '"+txtDesignation.getValue().toString()+"'," +
+			" '"+txtEmployeeType.getValue().toString()+"'," +
+			" '"+cmbEmployeeName.getValue().toString()+"'," +
+			" (select distinct vEmployeeName from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
+			" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getValue().toString():txtLeaveType.getValue().toString())+"'," +
+			" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).toString():txtLeaveType.getValue().toString())+"'," +
+			" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
+			" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
+			" '"+(txtPurposeOfLeave.getValue().toString().isEmpty()?"":txtPurposeOfLeave.getValue().toString())+"'," +
+			" '"+(txtLeaveAddress.getValue().toString().isEmpty()?"":txtLeaveAddress.getValue().toString())+"'," +
+			" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
+			" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
+			" '"+txtDuration.getValue().toString()+"'," +
+			" '"+(txtFriday.getValue().toString().isEmpty()?"0":txtFriday.getValue().toString())+"'," +
+			" '0'," +
+			" '"+ogPaymentType.getValue().toString()+"'," +
+			" '0'," +
+			" ''," +
+			" '"+(txtMobileNo.getValue().toString().isEmpty()?"0":txtMobileNo.getValue().toString())+"'," +
+			" '"+sessionBean.dfDb.format(dEntitleFromDate.getValue())+"'," +
+			" '"+sessionBean.dfDb.format(dEntitleToDate.getValue())+"'," +
+			" '"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP, "+
+			" '','',0,0,0,"
+			+ "'"+(cmbELType.getValue()==null?"":cmbELType.getValue().toString())+"')" ;
 
-			System.out.println("inser11-1"+Insert);
-			
+			System.out.println("Insert: "+Insert);			
 			session.createSQLQuery(Insert).executeUpdate();
+			
 			for(int i = 0; i<tbllblWeekDay.size(); i++)
 			{
 				if(tbdDate.get(i).getValue()!=null)
 				{
-					String InsertTable = "INSERT into tbEmpLeaveApplicationDetails (vLeaveId,vLeaveTypeId,vLeaveTypeName," +
-							" vEmployeeId,vEmployeeName,vUnitId,vUnitName,dLeaveDate,vPaymentFlag,iApprovedFlag,vAdjustedType,vAuthorisedBy," +
-							" vRemarks,vCancelBy,vPcIp,iPrimary,iFinal,iHR) values (" +
+					String InsertTable = "insert into tbEmpLeaveApplicationDetails (vLeaveId,vLeaveTypeId,vLeaveTypeName,"
+							+ "vEmployeeId,vEmployeeName,vUnitId,vUnitName,dLeaveDate,vPaymentFlag,iApprovedFlag,vAdjustedType,"
+							+ "vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,iFinal,iHR,dEntitleFromDate,dEntitleToDate,vELType) values (" +
 							" '"+leaveId+"'," +
 							" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getValue().toString():txtLeaveType.getValue().toString())+"'," +
 							" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).toString():txtLeaveType.getValue().toString())+"'," +
 							" '"+cmbEmployeeName.getValue().toString()+"'," +
-							" (select vEmployeeName from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
-							" ''," +
-							" ''," +
+							" (select distinct vEmployeeName from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
+							" (select distinct vUnitId from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
+							" (select distinct vUnitName from tbEmpOfficialPersonalInfo where vEmployeeId = '"+cmbEmployeeName.getValue().toString()+"')," +
 							" '"+tbdEntryDate.get(i).getValue()+"'," +
 							" '"+ogPaymentType.getValue().toString()+"'," +
 							" '0'," +
 							" '"+tblAdjustedType.get(i).getValue().toString()+"'," +
-							" '','','','',0,0,0) ";
-					session.createSQLQuery(InsertTable).executeUpdate();
+							" '','','','',0,0,0,"
+							+ "'"+sessionBean.dfDb.format(dEntitleFromDate.getValue())+"',"
+							+ "'"+sessionBean.dfDb.format(dEntitleToDate.getValue())+"',"
+							+ "'"+(cmbELType.getValue()==null?"":cmbELType.getValue().toString())+"') ";
 					
-					System.out.println("insertt2"+InsertTable);
+					System.out.println("InsertTable: "+InsertTable);
+					session.createSQLQuery(InsertTable).executeUpdate();
 				}
 			}
 
@@ -1725,7 +1660,7 @@ public class LeaveApplicationForm extends Window
 		finally{session.close();}
 	}
 
-private void tableRowAdd( final int ar)
+	private void tableRowAdd( final int ar)
 	{
 		tbllblSerial.add(ar,new Label());
 		tbllblSerial.get(ar).setWidth("100%");
@@ -1755,390 +1690,6 @@ private void tableRowAdd( final int ar)
 		
 	}
 
-	private AbsoluteLayout buildMainLayout() 
-	{
-		mainLayout = new AbsoluteLayout();
-		mainLayout.setImmediate(false);
-		mainLayout.setWidth("780.0px");
-		mainLayout.setHeight("620.0px");
-		mainLayout.setMargin(false);
-
-		lblappdate = new Label("Application Date :");
-		lblappdate.setWidth("-1px");
-		lblappdate.setHeight("-1px");
-		mainLayout.addComponent(lblappdate,"top:15.0px;left:30.0px");
-
-		dApplicationDate = new PopupDateField();
-		dApplicationDate.setImmediate(true);
-		dApplicationDate.setWidth("110px");
-		dApplicationDate.setHeight("-1px");
-		dApplicationDate.setDateFormat("dd-MM-yyyy");
-		dApplicationDate.setValue(new java.util.Date());
-		dApplicationDate.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainLayout.addComponent(dApplicationDate,"top:13.0px;left:140.0px");
-
-		lblUnit = new Label("Project Name :");
-		lblUnit.setWidth("-1px");
-		lblUnit.setHeight("-1px");
-		mainLayout.addComponent(lblUnit,"top:42.0px;left:30.0px");
-
-		cmbUnit = new ComboBox();
-		cmbUnit.setImmediate(true);
-		cmbUnit.setWidth("220px");
-		cmbUnit.setHeight("-1px");
-		mainLayout.addComponent(cmbUnit,"top:40.0px;left:140.0px");
-
-		
-		mainLayout.addComponent(new Label("Department :"),"top:70.0px;left:30.0px");
-
-		cmbDepartment = new ComboBox();
-		cmbDepartment.setImmediate(true);
-		cmbDepartment.setWidth("220px");
-		cmbDepartment.setHeight("-1px");
-		mainLayout.addComponent(cmbDepartment,"top:68.0px;left:140.0px");
-
-		chkDepartmentAll = new CheckBox("All");
-		chkDepartmentAll.setImmediate(true);
-		chkDepartmentAll.setHeight("-1px");
-		chkDepartmentAll.setWidth("-1px");
-		mainLayout.addComponent(chkDepartmentAll, "top:70.0px;left:365.0px");
-		
-		lblSection = new Label("Section Name :");
-		lblSection.setWidth("-1px");
-		lblSection.setHeight("-1px");
-		mainLayout.addComponent(lblSection,"top:100px;left:30.0px");
-		
-		cmbSection = new ComboBox();
-		cmbSection.setImmediate(true);
-		cmbSection.setWidth("220px");
-		cmbSection.setHeight("-1px");
-		mainLayout.addComponent(cmbSection,"top:98px;left:140.0px");
-
-		chkAllSection = new CheckBox("All");
-		chkAllSection.setImmediate(true);
-		chkAllSection.setHeight("-1px");
-		chkAllSection.setWidth("-1px");
-		mainLayout.addComponent(chkAllSection, "top:100px;left:365.0px");
-
-		ogSelectEmployee = new OptionGroup("",lst);
-		ogSelectEmployee.setImmediate(true);
-		ogSelectEmployee.setStyleName("horizontal");
-		ogSelectEmployee.select("Employee ID");
-		mainLayout.addComponent(ogSelectEmployee, "top:125px;left:25.0px;");
-
-		lblEmployeeName = new Label("Employee Name :");
-		lblEmployeeName.setImmediate(false);
-		lblEmployeeName.setWidth("-1px");
-		lblEmployeeName.setHeight("-1px");
-		mainLayout.addComponent(lblEmployeeName, "top:150px; left:30.0px;");
-
-		cmbEmployeeName = new ComboBox();
-		cmbEmployeeName.setImmediate(true);
-		cmbEmployeeName.setWidth("250px");
-		cmbEmployeeName.setHeight("-1px");
-		cmbEmployeeName.setNullSelectionAllowed(true);
-		cmbEmployeeName.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
-		mainLayout.addComponent(cmbEmployeeName, "top:148px; left:140.0px;");
-
-		lblFingerId = new Label("Finger Id :");
-		lblFingerId.setImmediate(false);
-		lblFingerId.setWidth("-1px");
-		lblFingerId.setHeight("-1px");
-		mainLayout.addComponent(lblFingerId, "top:175px;left:30.0px;");
-
-		txtFingerId = new TextRead();
-		txtFingerId.setImmediate(false);
-		txtFingerId.setWidth("140.0px");
-		txtFingerId.setHeight("22px");
-		mainLayout.addComponent(txtFingerId, "top:173px;left:140.0px;");
-
-		lblProximityId = new Label("Employee ID :");
-		lblProximityId.setImmediate(false);
-		lblProximityId.setWidth("-1px");
-		lblProximityId.setHeight("-1px");
-		mainLayout.addComponent(lblProximityId, "top:200px; left:30.0px;");
-
-		txtProximityId = new TextRead();
-		txtProximityId.setImmediate(true);
-		txtProximityId.setWidth("140px");
-		txtProximityId.setHeight("22px");
-		mainLayout.addComponent(txtProximityId, "top:198px; left:140.0px;");
-
-		lblDesignation = new Label("Designation :");
-		lblDesignation.setImmediate(false);
-		lblDesignation.setWidth("-1px");
-		lblDesignation.setHeight("-1px");
-		mainLayout.addComponent(lblDesignation, "top:225px; left:30.0px;");
-
-		txtDesignation = new TextRead();
-		txtDesignation.setImmediate(true);
-		txtDesignation.setWidth("250px");
-		txtDesignation.setHeight("22px");
-		mainLayout.addComponent(txtDesignation, "top:223px; left:141.0px;");
-
-		lblJoiningDate = new Label("Joining Date : ");
-		lblJoiningDate.setImmediate(false);
-		lblJoiningDate.setWidth("-1px");
-		lblJoiningDate.setHeight("-1px");
-		mainLayout.addComponent(lblJoiningDate, "top:250px; left:30.0px;");
-
-		dJoiningDate = new PopupDateField();
-		dJoiningDate.setImmediate(true);
-		dJoiningDate.setWidth("110px");
-		dJoiningDate.setHeight("-1px");
-		dJoiningDate.setReadOnly(true);
-		dJoiningDate.setDateFormat("dd-MM-yyyy");
-		dJoiningDate.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainLayout.addComponent(dJoiningDate, "top:248px; left:140.0px;");
-
-		lblConfirmationDate = new Label("Confirmation Date : ");
-		lblConfirmationDate.setImmediate(false);
-		lblConfirmationDate.setWidth("-1px");
-		lblConfirmationDate.setHeight("-1px");
-		//mainLayout.addComponent(lblConfirmationDate, "top:275px; left:30.0px;");
-
-		dConfirmationDate = new PopupDateField();
-		dConfirmationDate.setImmediate(true);
-		dConfirmationDate.setWidth("110px");
-		dConfirmationDate.setReadOnly(true);
-		dConfirmationDate.setHeight("-1px");
-		dConfirmationDate.setDateFormat("dd-MM-yyyy");
-		dConfirmationDate.setResolution(PopupDateField.RESOLUTION_DAY);
-		//mainLayout.addComponent(dConfirmationDate,"top:273px; left:140.0px;");
-		
-		lblEmployeeType = new Label("Employee Type :");
-		lblEmployeeType.setImmediate(false);
-		lblEmployeeType.setWidth("-1px");
-		lblEmployeeType.setHeight("-1px");
-		mainLayout.addComponent(lblEmployeeType, "top:300px; left:30.0px;");
-
-		txtEmployeeType = new TextRead();
-		txtEmployeeType.setImmediate(true);
-		txtEmployeeType.setWidth("140px");
-		txtEmployeeType.setHeight("22px");
-		mainLayout.addComponent(txtEmployeeType, "top:298px; left:140.0px;");
-
-		lblLeaveBalance = new Label("<html> <b><u>Leave Balance</u></b></html>",Label.CONTENT_XHTML);
-		lblLeaveBalance.setImmediate(false);
-		lblLeaveBalance.setWidth("-1px");
-		lblLeaveBalance.setHeight("-1px");
-		mainLayout.addComponent(lblLeaveBalance, "top:325px; left:140.0px;");
-
-		lblCasualLeave = new Label("CL :");
-		lblCasualLeave.setImmediate(false);
-		lblCasualLeave.setWidth("-1px");
-		lblCasualLeave.setHeight("-1px");
-		mainLayout.addComponent(lblCasualLeave, "top:350px; left:30.0px;");
-
-		txtCasualLeave = new TextRead();
-		txtCasualLeave.setImmediate(true);
-		txtCasualLeave.setWidth("35px");
-		txtCasualLeave.setStyleName("txtRightcoloum");
-		txtCasualLeave.setHeight("22px");
-		mainLayout.addComponent(txtCasualLeave, "top:350px; left:55.0px;");
-
-		lblSickLeave = new Label("SL :");
-		lblSickLeave.setImmediate(false);
-		lblSickLeave.setWidth("-1px");
-		lblSickLeave.setHeight("-1px");
-		mainLayout.addComponent(lblSickLeave, "top:350px; left:95.0px;");
-
-		txtSickLeave = new TextRead();
-		txtSickLeave.setImmediate(true);
-		txtSickLeave.setWidth("35px");
-		txtSickLeave.setStyleName("txtRightcoloum");
-		txtSickLeave.setHeight("22px");
-		mainLayout.addComponent(txtSickLeave, "top:350px; left:120.0px;");
-
-		lblAnualLeave = new Label("AL/EL :");
-		lblAnualLeave.setImmediate(false);
-		lblAnualLeave.setWidth("-1px");
-		lblAnualLeave.setHeight("-1px");
-		mainLayout.addComponent(lblAnualLeave, "top:350px; left:165.0px;");
-
-		txtAnualLeave = new TextRead();
-		txtAnualLeave.setImmediate(true);
-		txtAnualLeave.setWidth("35px");
-		txtAnualLeave.setStyleName("txtRightcoloum");
-		txtAnualLeave.setHeight("22px");
-		mainLayout.addComponent(txtAnualLeave, "top:350px; left:207.0px;");
-
-		lblLeaveType = new Label("Reference No :");
-		lblLeaveType.setImmediate(false);
-		lblLeaveType.setWidth("-1px");
-		lblLeaveType.setHeight("-1px");
-		mainLayout.addComponent(lblLeaveType, "top:20.0px; left:430.0px;");
-
-		txtReferenceNo = new TextRead();
-		txtReferenceNo.setImmediate(true);
-		txtReferenceNo.setWidth("150px");
-		txtReferenceNo.setHeight("22px");
-		mainLayout.addComponent(txtReferenceNo, "top:18.0px; left:530.5px;");
-
-		lblPaymentType = new Label("Type : ");
-		lblPaymentType.setImmediate(false);
-		lblPaymentType.setWidth("-1px");
-		lblPaymentType.setHeight("-1px");
-		mainLayout.addComponent(lblPaymentType, "top:45.0px; left:430.0px;");
-
-		ogPaymentType = new OptionGroup("",paymentTypeName);
-		ogPaymentType.setStyleName("horizontal");
-		ogPaymentType.setImmediate(true);
-		ogPaymentType.setValue("With Pay");
-		mainLayout.addComponent(ogPaymentType, "top:43.0px; left:530.0px;");
-
-		lblLeaveType = new Label("Leave Type :");
-		mainLayout.addComponent(lblLeaveType, "top:70.0px; left:430.0px;");
-
-		cmbLeaveType = new ComboBox();
-		cmbLeaveType.setImmediate(true);
-		cmbLeaveType.setWidth("130px");
-		cmbLeaveType.setHeight("-1px");
-		mainLayout.addComponent(cmbLeaveType, "top:68.0px; left:530.0px;");
-
-		cmbELType = new ComboBox();
-		cmbELType.setImmediate(true);
-		cmbELType.setWidth("100px");
-		cmbELType.setHeight("-1px");
-		mainLayout.addComponent(cmbELType, "top:68.0px; left:670.0px;");
-		cmbELType.addItem("Advance");
-		cmbELType.addItem("Current");
-
-		txtLeaveType = new TextField();
-		txtLeaveType.setImmediate(true);
-		txtLeaveType.setWidth("130px");
-		txtLeaveType.setVisible(false);
-		mainLayout.addComponent(txtLeaveType, "top:68.0px; left:530.0px;");
-
-		lblLeaveFrom = new Label("Leave From :");
-		lblLeaveFrom.setImmediate(false);
-		lblLeaveFrom.setWidth("-1px");
-		lblLeaveFrom.setHeight("-1px");
-		mainLayout.addComponent(lblLeaveFrom, "top:95.0px; left:430.0px;");
-
-		dLeaveFrom = new PopupDateField();
-		dLeaveFrom.setImmediate(true);
-		dLeaveFrom.setWidth("110px");
-		dLeaveFrom.setHeight("-1px");
-		dLeaveFrom.setValue(new java.util.Date());
-		dLeaveFrom.setDateFormat("dd-MM-yyyy");
-		dLeaveFrom.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainLayout.addComponent(dLeaveFrom, "top:93.0px; left:530.0px;");
-
-		lblLeaveTo = new Label("Leave To :");
-		lblLeaveTo.setImmediate(false);
-		lblLeaveTo.setWidth("-1px");
-		lblLeaveTo.setHeight("-1px");
-		mainLayout.addComponent(lblLeaveTo, "top:120.0px; left:430.0px;");
-
-		dLeaveTo = new PopupDateField();
-		dLeaveTo.setImmediate(true);
-		dLeaveTo.setWidth("110px");
-		dLeaveTo.setHeight("-1px");
-		dLeaveTo.setDateFormat("dd-MM-yyyy");
-		dLeaveTo.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainLayout.addComponent(dLeaveTo, "top:118.0px; left:530.0px;");
-
-		lblPurposeOfLeave = new Label("Leave Purpose :");
-		lblPurposeOfLeave.setImmediate(true);
-		lblPurposeOfLeave.setWidth("-1px");
-		lblPurposeOfLeave.setHeight("-1px");
-		mainLayout.addComponent(lblPurposeOfLeave, "top:147.0px; left:430.0px;");
-
-		txtPurposeOfLeave = new TextField();
-		txtPurposeOfLeave.setImmediate(true);
-		txtPurposeOfLeave.setWidth("220px");
-		txtPurposeOfLeave.setHeight("60px");
-		mainLayout.addComponent(txtPurposeOfLeave, "top:143.0px; left:530.0px;");
-
-		lblLeaveAddress = new Label("Leave address :");
-		lblLeaveAddress.setImmediate(false);
-		lblLeaveAddress.setWidth("-1px");
-		lblLeaveAddress.setHeight("-1px");
-		mainLayout.addComponent(lblLeaveAddress, "top:208.0px; left:430.0px;");
-
-		txtLeaveAddress = new TextField();
-		txtLeaveAddress.setImmediate(true);
-		txtLeaveAddress.setWidth("220px");
-		txtLeaveAddress.setHeight("60px");
-		mainLayout.addComponent(txtLeaveAddress, "top:204.0px; left:530.0px;");
-
-		lblMobileNo = new Label("Mobile No :");
-		lblMobileNo.setImmediate(false);
-		lblMobileNo.setWidth("-1px");
-		lblMobileNo.setHeight("-1px");
-		mainLayout.addComponent(lblMobileNo, "top:268.0px; left:430.0px;");
-
-		txtMobileNo = new TextField();
-		txtMobileNo.setImmediate(true);
-		txtMobileNo.setMaxLength(11);	
-		txtMobileNo.setWidth("150px");
-		txtMobileNo.setHeight("-1px");
-		mainLayout.addComponent(txtMobileNo, "top:265.0px; left:530.0px;");
-
-		lblDuration = new Label("Duration :");
-		lblDuration.setImmediate(true);
-		lblDuration.setWidth("-1px");
-		lblDuration.setHeight("-1px");
-		mainLayout.addComponent(lblDuration, "top:293.0px; left:430.0px;");
-
-		txtDuration = new TextRead();
-		txtDuration.setImmediate(true);
-		txtDuration.setWidth("60px");
-		txtDuration.setHeight("22px");
-		txtDuration.setStyleName("txtRightcoloum");
-		mainLayout.addComponent(txtDuration, "top:291.0px; left:530.0px;");
-
-		lblDays = new Label("Days");
-		lblDays.setImmediate(false);
-		lblDays.setWidth("-1px");
-		lblDays.setHeight("-1px");
-		mainLayout.addComponent(lblDays, "top:293.0px; left:595.0px;");
-
-		lblFriday = new Label("No of Friday :");
-		lblFriday.setImmediate(false);
-		lblFriday.setWidth("-1px");
-		lblFriday.setHeight("-1px");
-		mainLayout.addComponent(lblFriday, "top:318.0px; left:430.0px;");
-	
-		txtFriday = new TextRead();
-		txtFriday.setImmediate(true);
-		txtFriday.setWidth("60px");
-		txtFriday.setHeight("22px");
-		txtFriday.setStyleName("txtFriday");	
-		mainLayout.addComponent(txtFriday, "top:316px; left:530.0px;");
-
-		table.setWidth("598px");
-		table.setHeight("190px");
-		table.setColumnCollapsingAllowed(true);
-
-		table.addContainerProperty("SL#", Label.class , new Label());
-		table.setColumnWidth("SL#",35);
-
-		table.addContainerProperty("Employee Name", Label.class , new Label());
-		table.setColumnWidth("Employee Name",170);
-
-		table.addContainerProperty("Date", Label.class , new Label());
-		table.setColumnWidth("Date",85);
-
-		table.addContainerProperty("Entry Date", Label.class , new Label());
-		table.setColumnWidth("Entry Date",85);
-
-		table.addContainerProperty("Day", Label.class , new Label());
-		table.setColumnWidth("Day",70);
-
-		table.addContainerProperty("Adjusted Type", Label.class , new Label());
-		table.setColumnWidth("Adjusted Type",140);
-
-		table.setColumnCollapsed("Entry Date", true);
-		mainLayout.addComponent(table,"top:375px;left:90.0px;");
-		
-		table.setStyleName("wordwrap-headers");
-		
-		mainLayout.addComponent(cButton, "top:580.0px; left:50.0px;");
-
-		return mainLayout;
-	}
 
 	private void btnIni(boolean t)
 	{
@@ -2159,11 +1710,8 @@ private void tableRowAdd( final int ar)
 		chkDepartmentAll.setEnabled(!t);
 		cmbSection.setEnabled(!t);
 		chkAllSection.setEnabled(!t);
-		ogSelectEmployee.setEnabled(!t);
 
 		cmbEmployeeName.setEnabled(!t);
-		txtFingerId.setEnabled(!t);
-		txtProximityId.setEnabled(!t);
 		txtDesignation.setEnabled(!t);
 		dJoiningDate.setEnabled(!t);
 		dConfirmationDate.setEnabled(!t);
@@ -2175,7 +1723,6 @@ private void tableRowAdd( final int ar)
 
 		txtReferenceNo.setEnabled(!t);
 		cmbLeaveType.setEnabled(!t);
-		cmbELType.setEnabled(!t);
 		txtLeaveType.setEnabled(!t);
 		ogPaymentType.setEnabled(!t);
 		dLeaveFrom.setEnabled(!t);
@@ -2204,8 +1751,6 @@ private void tableRowAdd( final int ar)
 	private void txtClear()
 	{
 		dApplicationDate.setValue(new Date());
-		txtFingerId.setValue("");
-		txtProximityId.setValue("");
 		txtDesignation.setValue("");
 		txtCasualLeave.setValue("");
 		txtAnualLeave.setValue("");
@@ -2244,22 +1789,19 @@ private void tableRowAdd( final int ar)
 
 	private void focusEnter()
 	{
+		allComp.add(dApplicationDate);
+		allComp.add(cmbLeaveType);
+		allComp.add(ogPaymentType);
+		allComp.add(dLeaveFrom);
+		allComp.add(dLeaveTo);
 		allComp.add(cmbUnit);
 		allComp.add(cmbDepartment);
 		allComp.add(cmbSection);
-		allComp.add(ogSelectEmployee);
 		allComp.add(cmbEmployeeName);
-
-		allComp.add(cmbLeaveType);
-		allComp.add(ogPaymentType);
-
-		allComp.add(dLeaveFrom);
-		allComp.add(dLeaveTo);
-
+		allComp.add(txtMobileNo);
 		allComp.add(txtPurposeOfLeave);
 		allComp.add(txtLeaveAddress);
 	
-		allComp.add(txtMobileNo);
 
 		allComp.add(cButton.btnSave);
 		new FocusMoveByEnter(this,allComp);
@@ -2268,6 +1810,9 @@ private void tableRowAdd( final int ar)
 	private void reportPreview()
 	{
 		ReportDate reportTime = new ReportDate();
+		String sql = " select * from funLeaveApplicationReport('"+txtReferenceNo.getValue()+"','"+cmbEmployeeName.getValue()+"') "
+				+ "order by vEmployeeId ";
+		System.out.println(sql);
 		
 		try
 		{
@@ -2280,14 +1825,8 @@ private void tableRowAdd( final int ar)
 			hm.put("path", "./report/account/hrmModule/");
 			hm.put("SysDate",reportTime.getTime);
 			hm.put("logo", sessionBean.getCompanyLogo());
-	//		hm.put("developer", sessionBean.getDeveloperAddress());
-			String subReportQuery="select * from funLeaveBalanceDetails('%','"+cmbEmployeeName.getValue().toString()+"','"+sessionBean.dfDb.format(new Date())+"')";
-			System.out.println(subReportQuery);
-			hm.put("subsql", subReportQuery);
-
-			String str1 = " select * from funLeaveApplication('"+txtReferenceNo.getValue().toString()+"','%','%') order by vEmployeeId ";
-			System.out.println(str1);
-			hm.put("sql", str1);
+			hm.put("developer", sessionBean.getDeveloperAddress());
+			hm.put("sql", sql);
 
 			Window win = new ReportViewer(hm,"report/account/hrmModule/rptLeaveApplicationFormPOSCO.jasper",
 					this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
@@ -2302,5 +1841,378 @@ private void tableRowAdd( final int ar)
 		{
 			showNotification("Error",exp.toString(),Notification.TYPE_ERROR_MESSAGE);
 		}
+	}
+	
+
+	private AbsoluteLayout buildMainLayout() 
+	{
+		mainLayout = new AbsoluteLayout();
+		mainLayout.setImmediate(false);
+		mainLayout.setWidth("780.0px");
+		mainLayout.setHeight("620.0px");
+		mainLayout.setMargin(false);
+
+		lblappdate = new Label("Application Date :");
+		lblappdate.setWidth("-1px");
+		lblappdate.setHeight("-1px");
+		mainLayout.addComponent(lblappdate,"top:15.0px;left:30.0px");
+
+		dApplicationDate = new PopupDateField();
+		dApplicationDate.setImmediate(true);
+		dApplicationDate.setWidth("110px");
+		dApplicationDate.setHeight("-1px");
+		dApplicationDate.setDateFormat("dd-MM-yyyy");
+		dApplicationDate.setValue(new java.util.Date());
+		dApplicationDate.setResolution(PopupDateField.RESOLUTION_DAY);
+		mainLayout.addComponent(dApplicationDate,"top:13.0px;left:140.0px");
+		
+		
+		
+		lblPaymentType = new Label("Type : ");
+		lblPaymentType.setImmediate(false);
+		lblPaymentType.setWidth("-1px");
+		lblPaymentType.setHeight("-1px");
+		mainLayout.addComponent(lblPaymentType, "top:40.0px; left:30.0px;");
+
+		ogPaymentType = new OptionGroup("",paymentTypeName);
+		ogPaymentType.setStyleName("horizontal");
+		ogPaymentType.setImmediate(true);
+		ogPaymentType.setValue("With Pay");
+		mainLayout.addComponent(ogPaymentType, "top:38.0px; left:140.0px;");
+
+		lblLeaveType = new Label("Leave Type :");
+		mainLayout.addComponent(lblLeaveType, "top:65.0px; left:30.0px;");
+
+		cmbLeaveType = new ComboBox();
+		cmbLeaveType.setImmediate(true);
+		cmbLeaveType.setWidth("130px");
+		cmbLeaveType.setHeight("-1px");
+		mainLayout.addComponent(cmbLeaveType, "top:63.0px; left:140.0px;");
+
+		cmbELType = new ComboBox();
+		cmbELType.setImmediate(true);
+		cmbELType.setWidth("100px");
+		cmbELType.setHeight("-1px");
+		mainLayout.addComponent(cmbELType, "top:63.0px; left:270.0px;");
+		cmbELType.addItem("Advance");
+		cmbELType.addItem("Current");
+		cmbELType.setEnabled(false);
+
+		txtLeaveType = new TextField();
+		txtLeaveType.setImmediate(true);
+		txtLeaveType.setWidth("130px");
+		txtLeaveType.setVisible(false);
+		mainLayout.addComponent(txtLeaveType, "top:63.0px; left:140.0px;");
+
+		lblLeaveFrom = new Label("Leave From :");
+		lblLeaveFrom.setImmediate(false);
+		lblLeaveFrom.setWidth("-1px");
+		lblLeaveFrom.setHeight("-1px");
+		mainLayout.addComponent(lblLeaveFrom, "top:90.0px; left:30.0px;");
+
+		dLeaveFrom = new PopupDateField();
+		dLeaveFrom.setImmediate(true);
+		dLeaveFrom.setWidth("110px");
+		dLeaveFrom.setHeight("-1px");
+		dLeaveFrom.setValue(new java.util.Date());
+		dLeaveFrom.setDateFormat("dd-MM-yyyy");
+		dLeaveFrom.setResolution(PopupDateField.RESOLUTION_DAY);
+		mainLayout.addComponent(dLeaveFrom, "top:88.0px; left:140.0px;");
+
+		lblLeaveTo = new Label("Leave To :");
+		lblLeaveTo.setImmediate(false);
+		lblLeaveTo.setWidth("-1px");
+		lblLeaveTo.setHeight("-1px");
+		mainLayout.addComponent(lblLeaveTo, "top:115.0px; left:30.0px;");
+
+		dLeaveTo = new PopupDateField();
+		dLeaveTo.setImmediate(true);
+		dLeaveTo.setWidth("110px");
+		dLeaveTo.setHeight("-1px");
+		dLeaveTo.setDateFormat("dd-MM-yyyy");
+		dLeaveTo.setResolution(PopupDateField.RESOLUTION_DAY);
+		mainLayout.addComponent(dLeaveTo, "top:113.0px; left:140.0px;");
+		
+		lblUnit = new Label("Project Name :");
+		lblUnit.setWidth("-1px");
+		lblUnit.setHeight("-1px");
+		mainLayout.addComponent(lblUnit,"top:140.0px;left:30.0px");
+
+		cmbUnit = new ComboBox();
+		cmbUnit.setImmediate(true);
+		cmbUnit.setWidth("220px");
+		cmbUnit.setHeight("-1px");
+		mainLayout.addComponent(cmbUnit,"top:138.0px;left:140.0px");
+
+		
+		mainLayout.addComponent(new Label("Department :"),"top:165.0px;left:30.0px");
+
+		cmbDepartment = new ComboBox();
+		cmbDepartment.setImmediate(true);
+		cmbDepartment.setWidth("220px");
+		cmbDepartment.setHeight("-1px");
+		mainLayout.addComponent(cmbDepartment,"top:163.0px;left:140.0px");
+
+		chkDepartmentAll = new CheckBox("All");
+		chkDepartmentAll.setImmediate(true);
+		chkDepartmentAll.setHeight("-1px");
+		chkDepartmentAll.setWidth("-1px");
+		mainLayout.addComponent(chkDepartmentAll, "top:165.0px;left:365.0px");
+		
+		lblSection = new Label("Section Name :");
+		lblSection.setWidth("-1px");
+		lblSection.setHeight("-1px");
+		mainLayout.addComponent(lblSection,"top:190px;left:30.0px");
+		
+		cmbSection = new ComboBox();
+		cmbSection.setImmediate(true);
+		cmbSection.setWidth("220px");
+		cmbSection.setHeight("-1px");
+		mainLayout.addComponent(cmbSection,"top:188px;left:140.0px");
+
+		chkAllSection = new CheckBox("All");
+		chkAllSection.setImmediate(true);
+		chkAllSection.setHeight("-1px");
+		chkAllSection.setWidth("-1px");
+		mainLayout.addComponent(chkAllSection, "top:190px;left:365.0px");
+		
+		lblEmployeeName = new Label("Employee Name :");
+		lblEmployeeName.setImmediate(false);
+		lblEmployeeName.setWidth("-1px");
+		lblEmployeeName.setHeight("-1px");
+		mainLayout.addComponent(lblEmployeeName, "top:215px; left:30.0px;");
+
+		cmbEmployeeName = new ComboBox();
+		cmbEmployeeName.setImmediate(true);
+		cmbEmployeeName.setWidth("250px");
+		cmbEmployeeName.setHeight("-1px");
+		cmbEmployeeName.setNullSelectionAllowed(true);
+		cmbEmployeeName.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(cmbEmployeeName, "top:213px; left:140.0px;");
+		
+		lblDesignation = new Label("Designation :");
+		lblDesignation.setImmediate(false);
+		lblDesignation.setWidth("-1px");
+		lblDesignation.setHeight("-1px");
+		mainLayout.addComponent(lblDesignation, "top:240px; left:30.0px;");
+
+		txtDesignation = new TextRead();
+		txtDesignation.setImmediate(true);
+		txtDesignation.setWidth("250px");
+		txtDesignation.setHeight("22px");
+		mainLayout.addComponent(txtDesignation, "top:238px; left:141.0px;");
+
+		lblJoiningDate = new Label("Joining Date : ");
+		lblJoiningDate.setImmediate(false);
+		lblJoiningDate.setWidth("-1px");
+		lblJoiningDate.setHeight("-1px");
+		mainLayout.addComponent(lblJoiningDate, "top:265px; left:30.0px;");
+
+		dJoiningDate = new PopupDateField();
+		dJoiningDate.setImmediate(true);
+		dJoiningDate.setWidth("110px");
+		dJoiningDate.setHeight("-1px");
+		dJoiningDate.setReadOnly(true);
+		dJoiningDate.setDateFormat("dd-MM-yyyy");
+		dJoiningDate.setResolution(PopupDateField.RESOLUTION_DAY);
+		mainLayout.addComponent(dJoiningDate, "top:263px; left:140.0px;");
+
+		lblConfirmationDate = new Label("Confirmation Date : ");
+		lblConfirmationDate.setImmediate(false);
+		lblConfirmationDate.setWidth("-1px");
+		lblConfirmationDate.setHeight("-1px");
+		//mainLayout.addComponent(lblConfirmationDate, "top:275px; left:30.0px;");
+
+		dConfirmationDate = new PopupDateField();
+		dConfirmationDate.setImmediate(true);
+		dConfirmationDate.setWidth("110px");
+		dConfirmationDate.setReadOnly(true);
+		dConfirmationDate.setHeight("-1px");
+		dConfirmationDate.setDateFormat("dd-MM-yyyy");
+		dConfirmationDate.setResolution(PopupDateField.RESOLUTION_DAY);
+		//mainLayout.addComponent(dConfirmationDate,"top:273px; left:140.0px;");
+		
+		lblEmployeeType = new Label("Employee Type :");
+		lblEmployeeType.setImmediate(false);
+		lblEmployeeType.setWidth("-1px");
+		lblEmployeeType.setHeight("-1px");
+		mainLayout.addComponent(lblEmployeeType, "top:290px; left:30.0px;");
+
+		txtEmployeeType = new TextRead();
+		txtEmployeeType.setImmediate(true);
+		txtEmployeeType.setWidth("140px");
+		txtEmployeeType.setHeight("22px");
+		mainLayout.addComponent(txtEmployeeType, "top:288px; left:140.0px;");
+		
+		lblLeaveBalance = new Label("<html> <b><u>Leave Balance</u></b></html>",Label.CONTENT_XHTML);
+		lblLeaveBalance.setImmediate(false);
+		lblLeaveBalance.setWidth("-1px");
+		lblLeaveBalance.setHeight("-1px");
+		mainLayout.addComponent(lblLeaveBalance, "top:325px; left:140.0px;");
+
+		lblCasualLeave = new Label("CL :");
+		lblCasualLeave.setImmediate(false);
+		lblCasualLeave.setWidth("-1px");
+		lblCasualLeave.setHeight("-1px");
+		txtCasualLeave = new TextRead();
+		txtCasualLeave.setImmediate(true);
+		txtCasualLeave.setWidth("35px");
+		txtCasualLeave.setStyleName("txtRightcoloum");
+		txtCasualLeave.setHeight("22px");
+		mainLayout.addComponent(lblCasualLeave, "top:350px; left:30.0px;");
+		mainLayout.addComponent(txtCasualLeave, "top:350px; left:55.0px;");
+
+		lblSickLeave = new Label("SL :");
+		lblSickLeave.setImmediate(false);
+		lblSickLeave.setWidth("-1px");
+		lblSickLeave.setHeight("-1px");
+		txtSickLeave = new TextRead();
+		txtSickLeave.setImmediate(true);
+		txtSickLeave.setWidth("35px");
+		txtSickLeave.setStyleName("txtRightcoloum");
+		txtSickLeave.setHeight("22px");
+		mainLayout.addComponent(lblSickLeave, "top:350px; left:95.0px;");
+		mainLayout.addComponent(txtSickLeave, "top:350px; left:120.0px;");
+
+		lblAnualLeave = new Label("AL/EL :");
+		lblAnualLeave.setImmediate(false);
+		lblAnualLeave.setWidth("-1px");
+		lblAnualLeave.setHeight("-1px");
+		txtAnualLeave = new TextRead();
+		txtAnualLeave.setImmediate(true);
+		txtAnualLeave.setWidth("35px");
+		txtAnualLeave.setStyleName("txtRightcoloum");
+		txtAnualLeave.setHeight("22px");
+		mainLayout.addComponent(lblAnualLeave, "top:350px; left:165.0px;");
+		mainLayout.addComponent(txtAnualLeave, "top:350px; left:207.0px;");
+
+		lblLeaveType = new Label("Reference No :");
+		lblLeaveType.setImmediate(false);
+		lblLeaveType.setWidth("-1px");
+		lblLeaveType.setHeight("-1px");
+		txtReferenceNo = new TextRead();
+		txtReferenceNo.setImmediate(true);
+		txtReferenceNo.setWidth("150px");
+		txtReferenceNo.setHeight("22px");
+		mainLayout.addComponent(lblLeaveType, "top:15.0px; left:430.0px;");
+		mainLayout.addComponent(txtReferenceNo, "top:13.0px; left:530.5px;");
+
+		lblMobileNo = new Label("Mobile No :");
+		lblMobileNo.setImmediate(false);
+		lblMobileNo.setWidth("-1px");
+		lblMobileNo.setHeight("-1px");
+		txtMobileNo = new TextField();
+		txtMobileNo.setImmediate(true);
+		txtMobileNo.setMaxLength(11);	
+		txtMobileNo.setWidth("150px");
+		txtMobileNo.setHeight("-1px");
+		mainLayout.addComponent(lblMobileNo, "top:40.0px; left:430.0px;");
+		mainLayout.addComponent(txtMobileNo, "top:38.0px; left:530.0px;");
+		
+		lblPurposeOfLeave = new Label("Leave Purpose :");
+		lblPurposeOfLeave.setImmediate(true);
+		lblPurposeOfLeave.setWidth("-1px");
+		lblPurposeOfLeave.setHeight("-1px");
+		txtPurposeOfLeave = new TextField();
+		txtPurposeOfLeave.setImmediate(true);
+		txtPurposeOfLeave.setWidth("220px");
+		txtPurposeOfLeave.setHeight("60px");
+		mainLayout.addComponent(lblPurposeOfLeave, "top:65.0px; left:430.0px;");
+		mainLayout.addComponent(txtPurposeOfLeave, "top:63.0px; left:530.0px;");
+
+		lblLeaveAddress = new Label("Leave address :");
+		lblLeaveAddress.setImmediate(false);
+		lblLeaveAddress.setWidth("-1px");
+		lblLeaveAddress.setHeight("-1px");
+		txtLeaveAddress = new TextField();
+		txtLeaveAddress.setImmediate(true);
+		txtLeaveAddress.setWidth("220px");
+		txtLeaveAddress.setHeight("60px");
+		mainLayout.addComponent(lblLeaveAddress, "top:127.0px; left:430.0px;");
+		mainLayout.addComponent(txtLeaveAddress, "top:125.0px; left:530.0px;");
+
+		lblDuration = new Label("Duration :");
+		lblDuration.setImmediate(true);
+		lblDuration.setWidth("-1px");
+		lblDuration.setHeight("-1px");
+		txtDuration = new TextRead();
+		txtDuration.setImmediate(true);
+		txtDuration.setWidth("60px");
+		txtDuration.setHeight("22px");
+		txtDuration.setStyleName("txtRightcoloum");
+		mainLayout.addComponent(lblDuration, "top:190.0px; left:430.0px;");
+		mainLayout.addComponent(txtDuration, "top:188.0px; left:530.0px;");
+
+		lblDays = new Label("Days");
+		lblDays.setImmediate(false);
+		lblDays.setWidth("-1px");
+		lblDays.setHeight("-1px");
+		mainLayout.addComponent(lblDays, "top:190.0px; left:595.0px;");
+
+		lblFriday = new Label("No of Friday :");
+		lblFriday.setImmediate(false);
+		lblFriday.setWidth("-1px");
+		lblFriday.setHeight("-1px");	
+		txtFriday = new TextRead();
+		txtFriday.setImmediate(true);
+		txtFriday.setWidth("60px");
+		txtFriday.setHeight("22px");
+		txtFriday.setStyleName("txtFriday");
+		mainLayout.addComponent(lblFriday, "top:215.0px; left:430.0px;");
+		mainLayout.addComponent(txtFriday, "top:213px; left:530.0px;");
+
+
+
+		dEntitleFromDate = new PopupDateField();
+		dEntitleFromDate.setImmediate(true);
+		dEntitleFromDate.setWidth("110px");
+		dEntitleFromDate.setHeight("-1px");
+		dEntitleFromDate.setReadOnly(true);
+		dEntitleFromDate.setDateFormat("dd-MM-yyyy");
+		dEntitleFromDate.setResolution(PopupDateField.RESOLUTION_DAY);
+		mainLayout.addComponent(new Label("Entitle Year"), "top:240.0px; left:430.0px;");
+		mainLayout.addComponent(dEntitleFromDate, "top:238.0px; left:530.0px;");
+
+		
+		dEntitleToDate = new PopupDateField();
+		dEntitleToDate.setImmediate(true);
+		dEntitleToDate.setWidth("110px");
+		dEntitleToDate.setHeight("-1px");
+		dEntitleToDate.setReadOnly(true);
+		dEntitleToDate.setDateFormat("dd-MM-yyyy");
+		dEntitleToDate.setResolution(PopupDateField.RESOLUTION_DAY);
+		mainLayout.addComponent(new Label("To"), "top:240.0px; left:610.0px;");
+		mainLayout.addComponent(dEntitleToDate, "top:238.0px; left:630.0px;");
+		
+		table.setWidth("598px");
+		table.setHeight("190px");
+		table.setColumnCollapsingAllowed(true);
+
+		table.addContainerProperty("SL#", Label.class , new Label());
+		table.setColumnWidth("SL#",35);
+
+		table.addContainerProperty("Employee Name", Label.class , new Label());
+		table.setColumnWidth("Employee Name",170);
+
+		table.addContainerProperty("Date", Label.class , new Label());
+		table.setColumnWidth("Date",85);
+
+		table.addContainerProperty("Entry Date", Label.class , new Label());
+		table.setColumnWidth("Entry Date",85);
+
+		table.addContainerProperty("Day", Label.class , new Label());
+		table.setColumnWidth("Day",70);
+
+		table.addContainerProperty("Adjusted Type", Label.class , new Label());
+		table.setColumnWidth("Adjusted Type",140);
+
+		table.setColumnCollapsed("Entry Date", true);
+		mainLayout.addComponent(table,"top:375px;left:90.0px;");
+		
+		table.setStyleName("wordwrap-headers");
+		
+		mainLayout.addComponent(cButton, "top:580.0px; left:50.0px;");
+
+		return mainLayout;
 	}
 }
