@@ -496,8 +496,7 @@ public class RptLeaveRegisterIndividual extends Window
 			
 			System.out.println("Preview Query :" +subQueryEL);
 
-			String query=" select * from funIndividualLeaveRegister('"+cmbYear.getValue()+"','"+(chkSectionAll.booleanValue()?"%":cmbSectionName.getValue())+"','"+cmbEmployeeName.getValue()+"')"
-					+ " where vUnitId='"+cmbUnit.getValue().toString()+"' ";
+			String query=" select * from funIndividualLeaveRegister('"+cmbYear.getValue()+"','"+cmbEmployeeName.getValue()+"') ";
 			
 			System.out.println("Preview Query :" +query);
 

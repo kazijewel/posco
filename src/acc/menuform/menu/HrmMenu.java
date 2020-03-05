@@ -13,12 +13,10 @@ import hrm.common.reportform.RptDesignationList;
 import hrm.common.reportform.RptEditEmployeeInformation;
 import hrm.common.reportform.RptEmployeeAgreement;
 import hrm.common.reportform.RptEmployeeAnnualEvaluationSheet;
-import hrm.common.reportform.RptEmployeeClearenceFrom;
 import hrm.common.reportform.RptEmployeeConfirmation;
 import hrm.common.reportform.RptEmployeeIDCard;
 import hrm.common.reportform.RptEmployeeJoiningLetter;
 import hrm.common.reportform.RptEmployeeList;
-import hrm.common.reportform.RptEmployeeRequisitionForm;
 import hrm.common.reportform.RptEmployeeSeparationform;
 import hrm.common.reportform.RptHolidays;
 import hrm.common.reportform.RptIncrementProposal;
@@ -355,18 +353,9 @@ public class HrmMenu
 		{
 			addCaptionedItem("EMPLOYEE CONFIRMATION", setupReport);
 		}
-		if(isValidMenu("RptEmployeeClearenceFrom"))
-		{
-			addCaptionedItem("EMPLOYEE CLEARENCE FORM",setupReport);
-		}
 		if(isValidMenu("editemployeeinformation"))
 		{
 			addCaptionedItem("EDIT EMPLOYEE INFORMATION", setupReport);
-		}
-
-		if(isValidMenu("appointmentletter"))
-		{
-			addCaptionedItem("APPLICATION AND APPOINTMENT LETTER", setupReport);
 		}
 		if(isValidMenu("rptOtNFridayEnable"))
 		{
@@ -391,10 +380,6 @@ public class HrmMenu
 		if(isValidMenu("RptSalaryStructure"))
 		{
 			addCaptionedItem("SALARY STRUCTURE",setupReport);
-		}
-		if(isValidMenu("RptEmployeeRequisitionStatement"))
-		{
-			addCaptionedItem("EMPLOYEE REQUISITION STATEMENT",setupReport);
 		}
 		if(isValidMenu("RptManPower"))
 		{
@@ -820,12 +805,6 @@ public class HrmMenu
 			addCaptionedItem("SALARY INCREMENT REPORT",OthersReport);
 		}
 	}
-	
-	
-	
-	
-	
-	
 	private void addOTChild(Object ot)
 	{
 		
@@ -861,106 +840,7 @@ public class HrmMenu
 		{
 			addCaptionedItem("SHORT VIEW OF OVERTIME", otReport);
 		}
-
-		/*if(isValidMenu("RptMonthWiseOtStatement"))
-		{
-			addCaptionedItem("MONTH WISE OT STATEMENT", otReport);
-		}*/
-		/*if(isValidMenu("rptMonthlyFridayAllowance"))
-		{
-			addCaptionedItem("MONTHLY HOLIDAY ALLOWANCE", otReport);
-		}*/
-		
-		/*if(isValidMenu("RptOverTimeBankStatement"))
-		{
-			addCaptionedItem("OVER TIME BANK STATEMENT", otReport);
-		}*/
-		/*if(isValidMenu("RptHolidayBankStatement"))
-		{
-			addCaptionedItem("HOLIDAY BANK STATEMENT", reportOt);
-		}*/
 	}
-	/*private void addIncomeTax(Object hrmIncomeTax) {
-		if(isValidMenu("incomeTaxTransaction"))
-		{
-			incomeTaxTransaction = addCaptionedItem("TRANSACTION", hrmIncomeTax);
-			addIncomeTaxTransactionChild(incomeTaxTransaction);
-		}
-		if(isValidMenu("setupReport"))
-		{
-			incomeTaxReport = addCaptionedItem("REPORT", hrmIncomeTax);
-			addIncomeTaxReportChild(incomeTaxReport);
-		}
-	}*/
-	/*private void addIncomeTaxTransactionChild(Object incomeTaxTransaction) {
-		if(isValidMenu("CheckDetailsEntry"))
-		{
-			addCaptionedItem("CHEQUE DETAILS ENTRY", incomeTaxTransaction);
-		}
-		if(isValidMenu("IncomeTax"))
-		{
-			addCaptionedItem("TAX ASSESSMENT", incomeTaxTransaction);
-		}
-	}
-	private void addIncomeTaxReportChild(Object incomeTaxReport) {
-		if(isValidMenu("RptIndivitualIncomeTax"))
-		{
-			addCaptionedItem("INCOME TAX INDIVITUAL",incomeTaxReport);
-		}
-		if(isValidMenu("RptIncomeTaxStatement"))
-		{
-			addCaptionedItem("INCOME TAX STATEMENT",incomeTaxReport);
-		}
-	}
-	private void addHrmOthers(Object hrmOthers) {
-		if(isValidMenu("OthersTransaction"))
-		{
-			othersTransaction = addCaptionedItem("TRANSACTION", hrmOthers);
-			addOthersTransactionChild(othersTransaction);
-		}
-		if(isValidMenu("OthersReport"))
-		{
-			othersReport = addCaptionedItem("REPORT", hrmOthers);
-			addOthersReportChild(othersReport);
-		}
-	}*/
-	/*private void addOthersTransactionChild(Object OthersTransaction) {
-		if(isValidMenu("salaryIncrementProcess"))
-		{
-			addCaptionedItem("SALARY INCREMENT PROCESS", OthersTransaction);
-		}
-		if(isValidMenu("FestivalBonus"))
-		{
-			addCaptionedItem("FESTIVAL BONUS",OthersTransaction);
-		}
-		if(isValidMenu("EmployeeRequsitionForm"))
-		{
-			addCaptionedItem("EMPLOYEE REQUSITION FORM",OthersTransaction);
-		}
-	}*/
-	/*private void addOthersReportChild(Object OthersReport) {
-		if(isValidMenu("RptEmployeeBonus"))
-		{
-			addCaptionedItem("FESTIVAL BONUS REPORT",OthersReport);
-		}
-		if(isValidMenu("RptIncrementProposal"))
-		{
-			addCaptionedItem("SALARY INCREMENT REPORT",OthersReport);
-		}
-		if(isValidMenu("RptBonusStatement"))
-		{
-			addCaptionedItem("BONUS STATEMENT",OthersReport);
-		}
-		if(isValidMenu("RptBonusNotesRequisition"))
-		{
-			addCaptionedItem("BONUS NOTES REQUISITION",OthersReport);
-		}
-		
-		if(isValidMenu("RptEmployeeRequisitionStatement"))
-		{
-			addCaptionedItem("EMPLOYEE REQUISITION STATEMENT",OthersReport);
-		}
-	}*/
 
 
 	private Object addCaptionedItem(String caption, Object parent) 
@@ -1184,10 +1064,6 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE CONFIRMATION"))
 				{
 					showWindow(new RptEmployeeConfirmation(sessionBean,"EmployeeConfirmation"),event.getItem(),"EmployeeConfirmation","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE CLEARENCE FORM"))
-				{
-					showWindow(new RptEmployeeClearenceFrom(sessionBean, "RptEmployeeClearenceFrom"), event.getItem(), "RptEmployeeClearenceFrom","HRM MODULE","REPORT");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("EDIT EMPLOYEE INFORMATION"))
 				{
@@ -1468,17 +1344,9 @@ public class HrmMenu
 				{
 					showWindow(new RptEmployeeIDCard(sessionBean,"EmployeeIdCard"),event.getItem(),"EmployeeIdCard","HRM MODULE","REPORT");
 				}
-				if(event.getItem().toString().equalsIgnoreCase("APPLICATION AND APPOINTMENT LETTER"))
-				{
-					showWindow(new hrm.common.reportform.RptAppointmentLetter(sessionBean,"appointmentletter"),event.getItem(),"appointmentletter","HRM MODULE","REPORT");
-				}
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE AGE AS ON DATE"))
 				{
 					showWindow(new RptAgeAsOnDate(sessionBean,"EmployeeAgeAsOnDate"),event.getItem(),"EmployeeAgeAsOnDate","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE REQUISITION STATEMENT"))
-				{
-					showWindow(new RptEmployeeRequisitionForm(sessionBean, "RptEmployeeRequisitionStatement"), event.getItem(), "RptEmployeeRequisitionStatement","HRM MODULE","REPORT");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("SALARY STRUCTURE"))
 				{

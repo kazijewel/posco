@@ -333,6 +333,7 @@ public class RptSalaryIncomeTaxCertification extends Window
 				hm.put("name",EmployeeName);
 				hm.put("Date", sessionBean.dfBd.format(dDate.getValue()));
 				hm.put("logo", sessionBean.getCompanyLogo());
+				hm.put("totalMonth", txtMonth.getValue());
 				hm.put("sql", query);
 
 				Window win = new ReportViewer(hm,"report/account/hrmModule/RptSalary&IncomeTaxCertification.jasper",
