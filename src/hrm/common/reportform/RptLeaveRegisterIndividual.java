@@ -546,7 +546,7 @@ public class RptLeaveRegisterIndividual extends Window
 		mainLayout.setMargin(false);
 
 		setWidth("500px");
-		setHeight("290px");
+		setHeight("240px");
 
 		cmbUnit=new ComboBox();
 		cmbUnit.setWidth("250.0px");
@@ -604,8 +604,6 @@ public class RptLeaveRegisterIndividual extends Window
 		mainLayout.addComponent(chkEmployeeAll,"top:100px; left:370px;");
 		chkEmployeeAll.setVisible(false);
 		
-		
-
 		opgReport = new OptionGroup("",type1);
 		opgReport.setImmediate(true);
 		opgReport.setStyleName("horizontal");

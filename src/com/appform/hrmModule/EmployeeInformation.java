@@ -657,7 +657,7 @@ public class EmployeeInformation extends Window
 					" vServiceType,bPhysicallyDisable,dApplicationDate,dInterviewDate,dJoiningDate,vConfirmationDate," +
 					" vPayScaleId,vEmployeeStatus,convert(date,vStatusDate)vStatusDate,vEmployeePhoto,vAttachBirth,vAttachNid," +
 					" vAttachApplication,vAttachJoining,vAttachConfirmation,vFatherName,vMotherName,vPresentAddress," +
-					" vPermanentAddress,vBloodGroup,vMaritalStatus,vMarriageDate,ISNULL(vSpouseName,''),ISNULL(vSpouseOccupation,''),"+
+					" vPermanentAddress,vBloodGroup,vMaritalStatus,vMarriageDate,ISNULL(vSpouseName,'')vSpouseName,ISNULL(vSpouseOccupation,'')vSpouseOccupation,"+
 					" iNumberOfChild," +
 					" vBankId,vBranchId,vAccountNo,iOtEnable,vUnitName,"+
 					" iProbationPeriod,FridayStatus,vBankId,vBankName,"+
@@ -665,18 +665,22 @@ public class EmployeeInformation extends Window
 					" vGivenName,vLevelOfEnglish,vDepartmentId,vDepartmentName,"+
 					" dValidDate,iContactPeriod, "+
 					" vUnitId,vUnitName,ISNULL(vSectionId,'')vSectionId,ISNULL(vSectionName,'')vSectionName,"+
-					" vDesignationId,vDesignationName,ISNULL(vGradeId,''),ISNULL(vGradeName,''),"+
-					" ISNULL(vShiftId,''),ISNULL(vShiftName,''),ISNULL(vCareerPeriod,'0'),ISNULL(vAttachServiceAgreement,'0')vServiceAgreement," +
+					" vDesignationId,vDesignationName,ISNULL(vGradeId,'')vGradeId,ISNULL(vGradeName,'')vGradeName,"+
+					" ISNULL(vShiftId,'')vShiftId,ISNULL(vShiftName,'')vShiftName,ISNULL(vCareerPeriod,'0')vCareerPeriod,ISNULL(vAttachServiceAgreement,'0')vAttachServiceAgreement," +
 					" ISNULL(vRoutingNo,'')vRoutingNo "+
 					" from tbEmpOfficialPersonalInfo where vEmployeeId = '"+employeeId+"' ";
 			
-			System.out.println("selectEmployeeInformation: "+sqlOfficial);
+			System.out.println("sqlOfficial: "+sqlOfficial);
 			
 			List<?> listOfficial = session.createSQLQuery(sqlOfficial).list();	
 			for(Iterator<?> iterEmployee = listOfficial.iterator(); iterEmployee.hasNext();)
 			{
 				Object[] element = (Object[]) iterEmployee.next();
 
+				firstTab.txtCareerPeriod.setValue(element[67]);
+				
+				System.out.println("Ok Boss: "+element[67]);
+				
 				firstTab.txtEmployeeID.setValue(element[0].toString());
 				firstTab.txtEmployeeCode.setValue(element[1].toString());
 				firstTab.txtFingerId.setValue(element[2].toString());
@@ -754,7 +758,6 @@ public class EmployeeInformation extends Window
 				firstTab.cmbDesignation.setValue(element[61]);
 				//firstTab.cmbGrade.setValue(element[63]);
 				//firstTab.cmbShift.setValue(element[65]);
-				firstTab.txtCareerPeriod.setValue(element[67].toString());
 				serviceAgreementImageLoc=element[68].toString();
 				
 				secondTab.txtFatherName.setValue(element[28].toString());
@@ -1169,67 +1172,10 @@ public class EmployeeInformation extends Window
 					" '"+(firstTab.txtCareerPeriod.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriod.getValue().toString().replaceAll("'", "#"))+"'," +
 					" '"+imagePathServiceAgreement+"','"+(fifthTab.txtRoutingNo.getValue().toString().isEmpty()?"":(fifthTab.txtRoutingNo.getValue()))+"') ";
 			
-			
-	
 			System.out.println("officialQuery :"+officialQuery);
 			
 			session.createSQLQuery(officialQuery).executeUpdate();
-
-			/*String sectionQuery = "insert into tbEmpSectionInfo (dChangeDate,vEmployeeId,vEmployeeName,vSectionId," +
-					" vSectionName,isCurrent,vUserName,vUserIp,dEntryTime) VALUES (" +
-					" CURRENT_TIMESTAMP, "+
-					" '"+masterEmployeeId+"', " +
-					" '"+firstTab.txtEmployeeName.getValue().toString().trim()+"', " +
-					" '"+firstTab.cmbSection.getValue().toString()+"', " +
-					" '"+firstTab.cmbSection.getItemCaption(firstTab.cmbSection.getValue()).toString()+"', " +
-					" '1','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP) ";
-			System.out.println("sectionQuery :"+sectionQuery);
-
-			session.createSQLQuery(sectionQuery).executeUpdate();
-
-			String designationQuery = "insert into tbEmpDesignationInfo (dChangeDate,vEmployeeId,vEmployeeName,vDesignationId," +
-					" vDesignation,isCurrent,vUserName,vUserIp,dEntryTime) VALUES (" +
-					" CURRENT_TIMESTAMP, "+
-					" '"+masterEmployeeId+"', " +
-					" '"+firstTab.txtEmployeeName.getValue().toString().trim()+"', " +
-					" '"+firstTab.cmbDesignation.getValue().toString()+"', " +
-					" '"+firstTab.cmbDesignation.getItemCaption(firstTab.cmbDesignation.getValue()).toString()+"', " +
-					" '1','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP) ";
-			System.out.println("designationQuery :"+designationQuery);
-			session.createSQLQuery(designationQuery).executeUpdate();*/
-
-			/**Insert table nominee**/
-			/*for(int i = 0; i<sixTab.tbltxtNomineeName.size(); i++)
-			{
-				
-				if(!sixTab.tbltxtNomineeName.get(i).getValue().toString().isEmpty() &&
-						!sixTab.tbltxtRelation.get(i).getValue().toString().isEmpty() &&
-						!sixTab.tblamtAge.get(i).getValue().toString().isEmpty() &&
-						!sixTab.tblamtPercent.get(i).getValue().toString().isEmpty())
-				{
-					String imagePathPf = sixTab.nomineePath(1,masterEmployeeId+"#"+i,i)==null? pfImageLoc:sixTab.nomineePath(1,masterEmployeeId+"#"+i,i);
-					String experienceQuery = "insert into tbEmpNomineeInfo " +
-							"(vPfId,vEmployeeId,vEmployeeName,vNomineeName,vNomineeRelation,iNomineeAge,mPercentage,dPfStartDate," +
-							"iEntitlementYear,vImage,vBasedOn,vUserId,vUserName,vUserIp,dEntryTime) " +
-							"VALUES (" +
-							" '"+sixTab.txtPFID.getValue()+"', " +
-							" '"+masterEmployeeId+"', " +
-							" '"+firstTab.txtEmployeeName.getValue().toString().trim()+"', " +
-							" '"+sixTab.tbltxtNomineeName.get(i).getValue()+"', " +
-							" '"+sixTab.tbltxtRelation.get(i).getValue().toString()+"', " +
-							" '"+sixTab.tblamtAge.get(i).getValue()+"', " +
-							" '"+sixTab.tblamtPercent.get(i).getValue()+"', " +
-							" '"+sessionBean.dfDb.format(sixTab.dPfStartDate.getValue())+"', " +
-							" '"+sixTab.txtYear.getValue()+"', " +
-							" '"+imagePathPf+"', " +
-							" '"+sixTab.opgDateType.getValue()+"', " +
-							" '"+sessionBean.getUserId()+"', " +
-							" '"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP) ";
-					System.out.println("Nominee: "+experienceQuery);
-					session.createSQLQuery(experienceQuery).executeUpdate();
-				}
-			}*/
-
+			
 			for(int i = 0; i<thirdTab.tblTxtExam.size(); i++)
 			{
 				if(!thirdTab.tblTxtExam.get(i).getValue().toString().isEmpty() &&
@@ -1452,34 +1398,7 @@ public class EmployeeInformation extends Window
 			
 			System.out.println("updateOfficial : "+updateOfficial);
 			session.createSQLQuery(updateOfficial).executeUpdate();
-
-			/*String updateSection = "update tbEmpSectionInfo set " +
-					" dChangeDate = CURRENT_TIMESTAMP," +
-					" vEmployeeName = '"+firstTab.txtEmployeeName.getValue().toString().trim()+"'," +
-					" vSectionId = '"+firstTab.cmbSection.getValue().toString()+"'," +
-					" vSectionName = '"+firstTab.cmbSection.getItemCaption(firstTab.cmbSection.getValue()).toString()+"'," +
-					" vUserName = '"+sessionBean.getUserName()+"'," +
-					" vUserIp = '"+sessionBean.getUserIp()+"'," +
-					" dEntryTime = CURRENT_TIMESTAMP"+
-					" where vEmployeeId = '"+masterEmployeeId+"' and isCurrent = 1 ";
-
-			System.out.println("updateSection :"+updateSection);
-			session.createSQLQuery(updateSection).executeUpdate();
-
-			String updateDesig = "update tbEmpDesignationInfo set " +
-					" dChangeDate = CURRENT_TIMESTAMP," +
-					" vEmployeeName = '"+firstTab.txtEmployeeName.getValue().toString().trim()+"'," +
-					" vDesignationId = '"+firstTab.cmbDesignation.getValue().toString()+"'," +
-					" vDesignation = '"+firstTab.cmbDesignation.getItemCaption(firstTab.cmbDesignation.getValue()).toString()+"'," +
-					" vUserName = '"+sessionBean.getUserName()+"'," +
-					" vUserIp = '"+sessionBean.getUserIp()+"'," +
-					" dEntryTime = CURRENT_TIMESTAMP"+
-					" where vEmployeeId = '"+masterEmployeeId+"' and isCurrent = 1 ";
-
-			System.out.println("updateDesig :"+updateDesig);
 			
-			session.createSQLQuery(updateDesig).executeUpdate();*/
-
 			String updateSalary = "update tbEmpSalaryStructure set" +
 					" dChangeDate = CURRENT_TIMESTAMP," +
 					" vEmployeeName = '"+firstTab.txtEmployeeName.getValue().toString().trim()+"'," +
@@ -1524,67 +1443,6 @@ public class EmployeeInformation extends Window
 			//System.out.println("deleteExperience : "+deleteExperience);
 			session.createSQLQuery(deleteExperience).executeUpdate();
 			
-			
-
-			/*for(int i = 0; i<sixTab.tbltxtNomineeName.size(); i++)
-			{
-				if(!sixTab.tbltxtNomineeName.get(i).getValue().toString().isEmpty())
-				{
-					String imagePathPf = sixTab.nomineePath(1,masterEmployeeId+"#"+i,i)==null? pfImageLoc:sixTab.nomineePath(1,masterEmployeeId+"#"+i,i);
-					String udNomineeQuery = "insert into tbUdEmpNomineeInfo (vPfId,vEmployeeId,vEmployeeName,vNomineeName,vNomineeRelation," +
-							" iNomineeAge,mPercentage,vFlag,dPfStartDate,iEntitlementYear,vImage,vBasedOn,vUserId,vUserName,vUserIp,dEntryTime) VALUES (" +
-							" '"+sixTab.txtPFID.getValue().toString()+"', '"+masterEmployeeId+"'," +
-							" '"+firstTab.txtEmployeeName.getValue().toString().trim().replaceAll("'", "#")+"', " +
-							" '"+sixTab.tbltxtNomineeName.get(i).getValue().toString().replaceAll("'", "#")+"', " +
-							" '"+sixTab.tbltxtRelation.get(i).getValue().toString().replaceAll("'", "#")+"', " +
-							" '"+sixTab.tblamtAge.get(i).getValue().toString()+"', " +
-							" '"+sixTab.tblamtPercent.get(i).getValue().toString()+"', " +
-							" '"+udFlag+"', " +
-							" '"+sessionBean.dfDb.format(sixTab.dPfStartDate.getValue())+"',"+
-							" '"+(sixTab.txtYear.getValue().toString().isEmpty()?"0":sixTab.txtYear.getValue())+"',"+
-							" '"+imagePathPf+"',"+
-							" '"+sixTab.opgDateType.getValue()+"',"+
-							" '"+sessionBean.getUserId()+"',"+
-							" '"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP) ";
-					System.out.println("UdnomineeQuery :"+udNomineeQuery);
-					//session.createSQLQuery(udNomineeQuery).executeUpdate();
-				}
-			}*/
-			
-			//String deletePF = "delete from tbEmpNomineeInfo where vEmployeeId = '"+masterEmployeeId+"'";
-			//System.out.println("deletePF : "+deletePF);
-			//session.createSQLQuery(deletePF).executeUpdate();
-			
-			/*for(int i = 0; i<sixTab.tbltxtNomineeName.size(); i++)
-			{
-				
-				if(!sixTab.tbltxtNomineeName.get(i).getValue().toString().isEmpty() &&
-						!sixTab.tbltxtRelation.get(i).getValue().toString().isEmpty() &&
-						!sixTab.tblamtAge.get(i).getValue().toString().isEmpty() &&
-						!sixTab.tblamtPercent.get(i).getValue().toString().isEmpty())
-				{
-					String imagePathPf = sixTab.nomineePath(1,masterEmployeeId+"#"+i,i)==null? pfImageLoc:sixTab.nomineePath(1,masterEmployeeId+"#"+i,i);
-					String experienceQuery = "insert into tbEmpNomineeInfo " +
-							"(vPfId,vEmployeeId,vEmployeeName,vNomineeName,vNomineeRelation,iNomineeAge,mPercentage,dPfStartDate," +
-							"iEntitlementYear,vImage,vBasedOn,vUserId,vUserName,vUserIp,dEntryTime) " +
-							"VALUES (" +
-							" '"+PfId+"', " +
-							" '"+masterEmployeeId+"', " +
-							" '"+firstTab.txtEmployeeName.getValue().toString().trim()+"', " +
-							" '"+sixTab.tbltxtNomineeName.get(i).getValue()+"', " +
-							" '"+sixTab.tbltxtRelation.get(i).getValue().toString()+"', " +
-							" '"+sixTab.tblamtAge.get(i).getValue()+"', " +
-							" '"+sixTab.tblamtPercent.get(i).getValue()+"', " +
-							" '"+sessionBean.dfDb.format(sixTab.dPfStartDate.getValue())+"', " +
-							" '"+sixTab.txtYear.getValue()+"', " +
-							" '"+imagePathPf+"', " +
-							" '"+sixTab.opgDateType.getValue()+"', " +
-							" '"+sessionBean.getUserId()+"', " +
-							" '"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP) ";
-					System.out.println("Nominee: "+experienceQuery);
-					session.createSQLQuery(experienceQuery).executeUpdate();
-				}
-			}*/
 			for(int i = 0; i<thirdTab.tblTxtExam.size(); i++)
 			{
 				if(!thirdTab.tblTxtExam.get(i).getValue().toString().isEmpty() &&
