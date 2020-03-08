@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptOfferLetter" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="25" rightMargin="25" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.3310000000000006"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="229"/>
+	<property name="ireport.zoom" value="1.9487171000000025"/>
+	<property name="ireport.x" value="3"/>
+	<property name="ireport.y" value="328"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -34,7 +34,7 @@
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA["select vEmployeeName,convert(varchar, dJoiningDate, 106)dJoiningDate,vDesignationName,vContactNo from tbEmpOfficialPersonalInfo where vEmployeeId like 'EMP-88'"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[" select a.vEmployeeName,vPermanentAddress,vContactNo,vEmailAddress,dJoiningDate,dValidDate,vDesignationName,mBasic, round(((mBasic/3)*2),0)mEightHrTotal, (mBasic-round(((mBasic/3)*2),0))mExtraTwoHr from tbEmpOfficialPersonalInfo a inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="UserName" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -47,9 +47,15 @@
 		<![CDATA[$P!{sql}]]>
 	</queryString>
 	<field name="vEmployeeName" class="java.lang.String"/>
-	<field name="dJoiningDate" class="java.lang.String"/>
-	<field name="vDesignationName" class="java.lang.String"/>
+	<field name="vPermanentAddress" class="java.lang.String"/>
 	<field name="vContactNo" class="java.lang.String"/>
+	<field name="vEmailAddress" class="java.lang.String"/>
+	<field name="dJoiningDate" class="java.sql.Date"/>
+	<field name="dValidDate" class="java.sql.Date"/>
+	<field name="vDesignationName" class="java.lang.String"/>
+	<field name="mBasic" class="java.math.BigDecimal"/>
+	<field name="mEightHrTotal" class="java.math.BigDecimal"/>
+	<field name="mExtraTwoHr" class="java.math.BigDecimal"/>
 	<variable name="sl" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{sl}+1]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -61,7 +67,7 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="570">
+		<band height="724">
 			<textField>
 				<reportElement x="0" y="3" width="545" height="17" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="2"/>
@@ -91,28 +97,14 @@
 				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="0" y="54" width="545" height="16"/>
+				<reportElement x="0" y="50" width="545" height="16"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[JOINING LETTER]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="30" y="536" width="186" height="13"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["( "+$F{vEmployeeName}+" )"]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="67" y="237" width="3" height="13"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[:]]></text>
+				<text><![CDATA[OFFER LETTER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="118" width="22" height="13"/>
+				<reportElement x="0" y="72" width="22" height="13"/>
 				<box leftPadding="0"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10" isBold="false"/>
@@ -120,99 +112,440 @@
 				<text><![CDATA[Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="237" width="37" height="13"/>
-				<box leftPadding="0"/>
+				<reportElement x="23" y="72" width="3" height="13"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Subject]]></text>
+				<text><![CDATA[:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="30" y="132" width="151" height="13"/>
-				<box leftPadding="0"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[To]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="30" y="146" width="151" height="13"/>
-				<box leftPadding="0"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[The Project Manager]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="30" y="160" width="151" height="13"/>
-				<box leftPadding="0"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[POSCO E&C]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="30" y="174" width="151" height="13"/>
-				<box leftPadding="0"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Matarbari USCCFPP,]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="30" y="189" width="151" height="13"/>
-				<box leftPadding="0"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Moheshkhali, Cox’s Bazar]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="30" y="204" width="151" height="13"/>
-				<box leftPadding="0"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="10" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Bangladesh]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="70" y="237" width="280" height="13"/>
+			<textField pattern="">
+				<reportElement x="26" y="72" width="112" height="13" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[JOINING LETTER.]]></text>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{dDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="91" width="545" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Employee’s name: "+$F{vEmployeeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="105" width="545" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Employee’s address: "+$F{vPermanentAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="120" width="545" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Contact No: "+$F{vContactNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="135" width="545" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["E-mail: "+$F{vEmailAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="161" width="545" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Dear "+$F{vEmployeeName}+","]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="191" width="504" height="47"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["We are pleased to appoint you as 12 (Twelve) months base periodic contract you from "+$F{dJoiningDate}+" as an "+$F{vDesignationName}+" for Matarbari Ultra Super Critical Coal-Fired Power Project under the following terms & conditions:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="191" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="52" y="118" width="3" height="13"/>
+				<reportElement x="24" y="239" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[2.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="41" y="239" width="64" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Basic salary:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="299" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[3.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="41" y="299" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Office hours / working hours."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="58" y="313" width="12" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[a.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="71" y="313" width="474" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Working hours: 07:00 AM ~ 18:00 PM (1 hour for lunch and break)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="71" y="327" width="474" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Start and end times are adjusted according to site conditions."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="58" y="327" width="12" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[b.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="41" y="347" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Overtime allowance: Applicable. Overtime can be replaced by vacation."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="362" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Accommodation / Transportation: Provided by POSCO E&C."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="376" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Meals: Included in salary."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="391" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Leave: Please comply with local laws."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="406" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Internship period: 3 months. At the end of the internship period, you can sign the contract."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="420" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["The period is the same as the intern period."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="434" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Other: Recharging 500 BDT / Month of Mobile Phone."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="449" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Contact period: One year from the date of signature."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="41" y="464" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["You will be abide by our Office rules and regulation."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="347" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[4.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="362" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[5.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="376" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[6.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="391" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[7.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="406" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[8.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="420" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[9.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="434" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[10.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="449" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[11.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="464" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[12.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="478" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[13.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="41" y="478" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["You will be entitled to take leave as per Management decision under the Company rules & practice."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="492" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[14.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="41" y="492" width="504" height="31"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Either party can terminate the contract by given 1 (one) month notice in written. Provided that if the Company terminate your service without any prior notice, you shall be entitled to receive 30 days salary in lieu of the notice."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="524" width="15" height="13"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[15.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="41" y="524" width="504" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["15.	The contract will remain valid 12(Twelve) months from "+$F{dJoiningDate}+" to "+$F{dValidDate}+"."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2" y="564" width="543" height="81"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Please return one copy of this employment contract upon signing as a token of your acceptance of the above terms and conditions.\n\n\nThanking you,"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="70" y="692" width="105" height="13"/>
+				<box leftPadding="0">
+					<topPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Signed by Employee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="692" width="105" height="13"/>
+				<box leftPadding="0">
+					<topPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Signed by Employer]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="58" y="253" width="167" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["For 8 Hours Work/Day"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="58" y="267" width="167" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["For 2 Hours Extra Work/day"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="225" y="253" width="3" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="225" y="267" width="3" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="58" y="281" width="295" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.75"/>
+				</graphicElement>
+			</line>
+			<textField pattern="#,##0">
+				<reportElement x="228" y="253" width="55" height="13"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mEightHrTotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="228" y="267" width="55" height="13"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mExtraTwoHr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="253" width="64" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["BDT/Month"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="267" width="64" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["BDT/Month"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="228" y="283" width="55" height="13"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mBasic}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="58" y="283" width="167" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Total 10 Hours Work/Day"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="225" y="283" width="3" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="30" y="268" width="467" height="226"/>
-				<box leftPadding="0"/>
-				<textElement textAlignment="Justified" verticalAlignment="Top">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Dear Sir,\nI, "+$F{vEmployeeName}+", am pleased to accept your offer and I have the honor to inform you that I am joining the company from "+$F{dJoiningDate}+" as a "+$F{vDesignationName}+" in respect to your appointment letter. As we discussed, my starting salary will be as mentioned in the agreement letter. I understand and accept the terms and conditions of employment that you explained in your agreement letter.\n \nThe position is ideally suited to my educational, experience and interests. I confidently feel that I can make a significant contribution to your company and I am grateful for the opportunity you have given me. I humbly request you to accept my joining letter.\n \n \nSincerely yours,"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="30" y="549" width="186" height="13"/>
-				<box leftPadding="0"/>
-				<textElement verticalAlignment="Middle">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Contact: "+$F{vContactNo}]]></textFieldExpression>
-			</textField>
-			<textField pattern="">
-				<reportElement x="55" y="118" width="112" height="13" isPrintWhenDetailOverflows="true"/>
-				<box leftPadding="2"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="283" y="283" width="64" height="13"/>
+				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{dDate}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["BDT/Month"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="239" width="405" height="13"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" BDT / Month (This Salary included 2 hours extra work/day)"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="105" y="239" width="35" height="13"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mBasic}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
