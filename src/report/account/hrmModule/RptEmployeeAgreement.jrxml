@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptEmployeeAgreement" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="25" rightMargin="25" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.4641000000000044"/>
-	<property name="ireport.x" value="3"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1440"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -34,7 +34,7 @@
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA["select dJoiningDate,a.vEmployeeName,vFatherName,vPermanentAddress,vNationalIdNo,vContactNo,vEmailAddress,dValidDate,vDesignationName,mBasic, round(((mBasic/3)*2),0)mEightHrTotal,(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr,dbo.number(ROUND((mBasic),0))mBasicInWord  from tbEmpOfficialPersonalInfo a  inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId  where a.vEmployeeId like 'EMP-156'"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select dJoiningDate,a.vEmployeeName,vFatherName,vPermanentAddress,vNationalIdNo,vContactNo,vEmailAddress,dValidDate,vDesignationName,mBasic, round(((mBasic/3)*2),0)mEightHrTotal,(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr,dbo.number(ROUND((mBasic),0))mBasicInWord,mMobileAllowance,vAccommodation  from tbEmpOfficialPersonalInfo a  inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId  where a.vEmployeeId like 'EMP-156'"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="UserName" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -59,6 +59,8 @@
 	<field name="mEightHrTotal" class="java.math.BigDecimal"/>
 	<field name="mExtraTwoHr" class="java.math.BigDecimal"/>
 	<field name="mBasicInWord" class="java.lang.String"/>
+	<field name="mMobileAllowance" class="java.math.BigDecimal"/>
+	<field name="vAccommodation" class="java.lang.String"/>
 	<variable name="sl" class="java.lang.Number">
 		<variableExpression><![CDATA[$V{sl}+1]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -133,10 +135,11 @@
 			</staticText>
 			<textField>
 				<reportElement x="99" y="80" width="297" height="14"/>
+				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vEmailAddress}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vFatherName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="13" y="95" width="83" height="14"/>
@@ -147,6 +150,7 @@
 			</textField>
 			<textField>
 				<reportElement x="99" y="95" width="297" height="14"/>
+				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
@@ -161,6 +165,7 @@
 			</staticText>
 			<textField>
 				<reportElement x="99" y="110" width="297" height="14"/>
+				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
@@ -189,6 +194,7 @@
 			</staticText>
 			<textField>
 				<reportElement x="99" y="125" width="297" height="14"/>
+				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
@@ -371,34 +377,34 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Employer can order the Employee to work on other trade different from the above stated work trade upon mutual agreement between both parties if required."]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd-MM-yyyy">
+			<textField pattern="dd-MMMM-yyyy">
 				<reportElement x="391" y="316" width="100" height="14"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dJoiningDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="388" y="8" width="90" height="14"/>
+				<reportElement x="382" y="8" width="90" height="14"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["by and between"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="13" y="8" width="296" height="14"/>
+				<reportElement x="13" y="8" width="290" height="14"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["This EMPLOYMENT AGREEMENT is made on the date of "]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd-MM-yyyy">
-				<reportElement x="309" y="8" width="79" height="14"/>
+			<textField pattern="dd-MMMM-yyyy">
+				<reportElement x="303" y="8" width="79" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dJoiningDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="478" y="8" width="50" height="14"/>
+				<reportElement x="472" y="8" width="50" height="14"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
@@ -426,7 +432,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="11"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mEightHrTotal}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mMobileAllowance}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="294" y="278" width="64" height="14"/>
@@ -626,21 +632,23 @@
 				<text><![CDATA[A]]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="297" width="489" height="29"/>
+				<reportElement x="36" y="297" width="489" height="30">
+					<printWhenExpression><![CDATA[$F{vAccommodation}.equals('No')?false:true]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Employer will provide accommodation to the employee; the Employee will be compensated by the rate. Food will not provide by the Employer to the Employee."]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Employer will provide accommodation to the employee; the Employee will be compensated by the rate."]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="67" y="332" width="458" height="14"/>
+				<reportElement x="67" y="335" width="458" height="14"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["EXTRA OVERTIME ALLOWANCE"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="51" y="332" width="16" height="14"/>
+				<reportElement x="51" y="335" width="16" height="14"/>
 				<box leftPadding="0"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="true"/>
@@ -648,28 +656,28 @@
 				<text><![CDATA[B]]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="69" y="352" width="456" height="16"/>
+				<reportElement x="69" y="355" width="456" height="16"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["  Overtime Allowance (Overtime hours exceeding 10 hours/day) x (200% of Hourly Wage)"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="69" y="370" width="456" height="16"/>
+				<reportElement x="69" y="373" width="456" height="16"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["  Hourly Wage (Basic Salary/ Wage Hours for 260 actual working hours)"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="69" y="387" width="456" height="16"/>
+				<reportElement x="69" y="390" width="456" height="16"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["  Public Holiday (200% of Hourly Wage) x (Working Hours)"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="409" width="24" height="14"/>
+				<reportElement x="10" y="429" width="24" height="14"/>
 				<box leftPadding="0"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
@@ -677,14 +685,14 @@
 				<text><![CDATA[4.5]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="409" width="489" height="61"/>
+				<reportElement x="36" y="429" width="489" height="61"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["If Employee’s overtime work is on working day from 06:00pm to 06:00am, on next day he/she   will get time to take rest from 07:00am to 12:30pm. Thereafter, he/she will join the work at 01:00pm (If the day is working day) or Employee may replace the next working day from his/her earned overtime for taking full day rest if required."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="474" width="24" height="14"/>
+				<reportElement x="10" y="494" width="24" height="14"/>
 				<box leftPadding="0"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
@@ -692,14 +700,14 @@
 				<text><![CDATA[4.6]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="474" width="489" height="33"/>
+				<reportElement x="36" y="494" width="489" height="33"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Public Holiday Work may be replaced by another working day as leave in according to the  	management decision."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="606" width="24" height="14"/>
+				<reportElement x="10" y="626" width="24" height="14"/>
 				<box leftPadding="0"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
@@ -707,14 +715,14 @@
 				<text><![CDATA[5.2]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="559" width="489" height="45"/>
+				<reportElement x="36" y="579" width="489" height="45"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Employee shall be responsible for his/her personal income tax and other taxes whatever in nature imposed by the government of People’s Republic of Bangladesh."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="559" width="24" height="14"/>
+				<reportElement x="10" y="579" width="24" height="14"/>
 				<box leftPadding="0"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
@@ -722,18 +730,27 @@
 				<text><![CDATA[5.1]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="36" y="606" width="489" height="37"/>
+				<reportElement x="36" y="626" width="489" height="37"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Employer shall have the right to deduct the amount of such taxes, if any, from Employee's salary for the payment of taxes and duties on behalf of Employee according to the local law."]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="10" y="526" width="515" height="14"/>
+				<reportElement x="10" y="546" width="515" height="14"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Clause 5 - TAXES & DUTIES"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="36" y="297" width="489" height="15">
+					<printWhenExpression><![CDATA[$F{vAccommodation}.equals('Yes')?false:true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SansSerif" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Food will not provide by the Employer to the Employee."]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="711">

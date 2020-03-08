@@ -545,7 +545,7 @@ public class RptEmployeeAgreement extends Window
 		try
 		{
 			query = "select dJoiningDate,a.vEmployeeName,vFatherName,REPLACE(vPermanentAddress,'#','''')vPermanentAddress,vNationalIdNo,vContactNo,vEmailAddress,dValidDate,"
-					+ "vDesignationName,mBasic,round(((mBasic/3)*2),0)mEightHrTotal,(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr,dbo.number(ROUND((mBasic),0))mBasicInWord "
+					+ "vDesignationName,mBasic,round(((mBasic/3)*2),0)mEightHrTotal,(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr,dbo.number(ROUND((mBasic),0))mBasicInWord,mMobileAllowance,vAccommodation "
 					+ "from tbEmpOfficialPersonalInfo a "
 					+ "inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId "
 					+ "where a.vEmployeeId like '"+empId+"'";

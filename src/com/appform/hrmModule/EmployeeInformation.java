@@ -315,17 +315,26 @@ public class EmployeeInformation extends Window
 															{
 																if(firstTab.cmbDesignation.getValue()!=null)
 																{	
-																	if(firstTab.cmbStatus.getValue()!=null)
-																	{
-																		if(checkBank())
+																	if(firstTab.cmbAccommodation.getValue()!=null)
+																	{	
+																		if(firstTab.cmbStatus.getValue()!=null)
 																		{
-																			SaveButtonAction();
+																			if(checkBank())
+																			{
+																				SaveButtonAction();
+																			}
 																		}
+																		else
+																		{
+																			showNotification("Warning!","Select Status at Official Information.",Notification.TYPE_WARNING_MESSAGE);
+																			firstTab.cmbStatus.focus();
+																		}
+																	
 																	}
 																	else
 																	{
-																		showNotification("Warning!","Select Status at Official Information.",Notification.TYPE_WARNING_MESSAGE);
-																		firstTab.cmbStatus.focus();
+																		showNotification("Warning!","Select Accommodation at Official Informationat.",Notification.TYPE_WARNING_MESSAGE);
+																		firstTab.cmbAccommodation.focus();
 																	}
 																
 																}
@@ -665,7 +674,7 @@ public class EmployeeInformation extends Window
 					" vGivenName,vLevelOfEnglish,vDepartmentId,vDepartmentName,"+
 					" dValidDate,iContactPeriod, "+
 					" vUnitId,vUnitName,ISNULL(vSectionId,'')vSectionId,ISNULL(vSectionName,'')vSectionName,"+
-					" vDesignationId,vDesignationName,ISNULL(vGradeId,'')vGradeId,ISNULL(vGradeName,'')vGradeName,"+
+					" vDesignationId,vAccommodation,ISNULL(vGradeId,'')vGradeId,ISNULL(vGradeName,'')vGradeName,"+
 					" ISNULL(vShiftId,'')vShiftId,ISNULL(vShiftName,'')vShiftName,ISNULL(vCareerPeriod,'0')vCareerPeriod,ISNULL(vAttachServiceAgreement,'0')vAttachServiceAgreement," +
 					" ISNULL(vRoutingNo,'')vRoutingNo "+
 					" from tbEmpOfficialPersonalInfo where vEmployeeId = '"+employeeId+"' ";
@@ -756,6 +765,8 @@ public class EmployeeInformation extends Window
 				//firstTab.cmbUnitName.setItemCaption(element[57], element[58].toString());
 				firstTab.cmbSection.setValue(element[59]);
 				firstTab.cmbDesignation.setValue(element[61]);
+				firstTab.cmbAccommodation.setValue(element[62]);
+				
 				//firstTab.cmbGrade.setValue(element[63]);
 				//firstTab.cmbShift.setValue(element[65]);
 				serviceAgreementImageLoc=element[68].toString();
@@ -1101,7 +1112,7 @@ public class EmployeeInformation extends Window
 					" vBankId,vBankName,vBranchId,vBranchName,vAccountNo,iOtEnable,vUserName,vUserIp,dEntryTime,vGradeId,vGradeName,"+
 					" vUnitId,vUnitName,vDepartmentId,vDepartmentName,FridayStatus,iHolidayStatus,vShiftId,vShiftName,"+
 					" iProbationPeriod,vMoneyTransferType,vFamilyName,vGivenName,vLevelOfEnglish,vSectionId,vSectionName,dValidDate,"+
-					" iContactPeriod,vDesignationId,vDesignationName,vCareerPeriod,vAttachServiceAgreement,vRoutingNo) values (" +
+					" iContactPeriod,vDesignationId,vDesignationName,vAccommodation,vCareerPeriod,vAttachServiceAgreement,vRoutingNo) values (" +
 					" '"+masterEmployeeId+"', " +
 					" '"+(firstTab.txtEmployeeCode.getValue().toString().isEmpty()?"":firstTab.txtEmployeeCode.getValue().toString())+"', " +
 					" '"+(firstTab.txtFingerId.getValue().toString().isEmpty()?"":firstTab.txtFingerId.getValue().toString())+"', " +
@@ -1169,7 +1180,8 @@ public class EmployeeInformation extends Window
 			        " '"+(firstTab.txtValidYear.getValue().toString().isEmpty()?"0":firstTab.txtValidYear.getValue().toString())+"'," +
 			        " '"+(firstTab.cmbDesignation.getValue()==null?"":firstTab.cmbDesignation.getValue())+"'," +
 			        " '"+(firstTab.cmbDesignation.getValue()==null?"":(firstTab.cmbDesignation.getItemCaption(firstTab.cmbDesignation.getValue())))+"'," +
-					" '"+(firstTab.txtCareerPeriod.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriod.getValue().toString().replaceAll("'", "#"))+"'," +
+			        " '"+(firstTab.cmbAccommodation.getValue()==null?"":firstTab.cmbAccommodation.getValue())+"'," +
+			        " '"+(firstTab.txtCareerPeriod.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriod.getValue().toString().replaceAll("'", "#"))+"'," +
 					" '"+imagePathServiceAgreement+"','"+(fifthTab.txtRoutingNo.getValue().toString().isEmpty()?"":(fifthTab.txtRoutingNo.getValue()))+"') ";
 			
 			System.out.println("officialQuery :"+officialQuery);
@@ -1390,6 +1402,7 @@ public class EmployeeInformation extends Window
 					" iContactPeriod = '"+(firstTab.txtValidYear.getValue().toString().isEmpty()?"0":firstTab.txtValidYear.getValue().toString())+"'," +
 					" vDesignationId = '"+(firstTab.cmbDesignation.getValue()==null?"":(firstTab.cmbDesignation.getValue()))+"'," +
 					" vDesignationName = '"+(firstTab.cmbDesignation.getValue()==null?"":(firstTab.cmbDesignation.getItemCaption(firstTab.cmbDesignation.getValue())))+"'," +
+					" vAccommodation = '"+(firstTab.cmbAccommodation.getValue()==null?"":(firstTab.cmbAccommodation.getValue()))+"'," +
 					" vCareerPeriod = '"+(firstTab.txtCareerPeriod.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriod.getValue().toString().replaceAll("'","#"))+"'," +
 					" vAttachServiceAgreement = '"+imagePathServiceAgreement+"'" +
 					" where vEmployeeId = '"+masterEmployeeId+"' ";
@@ -1793,6 +1806,7 @@ public class EmployeeInformation extends Window
 		firstTab.dStatusDate.setValue(null);
 		firstTab.cmbSection.setValue(null);
 		firstTab.cmbDesignation.setValue(null);
+		firstTab.cmbAccommodation.setValue(null);
 		firstTab.cmbGrade.setValue(null);
 		firstTab.cmbDepartment.setValue(null);
 		firstTab.cmbStatus.setValue(null);
@@ -1922,6 +1936,7 @@ public class EmployeeInformation extends Window
 		allComp.add(firstTab.cmbDepartment);
 		allComp.add(firstTab.cmbSection);
 		allComp.add(firstTab.cmbDesignation);
+		allComp.add(firstTab.cmbAccommodation);
 		//allComp.add(firstTab.cmbEmployeeShiftGroup);
 		allComp.add(firstTab.cmbGrade);
 		allComp.add(firstTab.cmbStatus);

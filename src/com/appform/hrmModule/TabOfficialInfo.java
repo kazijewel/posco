@@ -52,7 +52,7 @@ public class TabOfficialInfo extends VerticalLayout
 
 	public ComboBox cmbSection;
 	public ComboBox cmbUnitName;
-	public ComboBox cmbDesignation;
+	public ComboBox cmbDesignation,cmbAccommodation;
 	public ComboBox cmbEmployeeShiftGroup;
 	public ComboBox cmbGrade;
 	public ComboBox cmbDepartment;
@@ -1193,6 +1193,11 @@ public class TabOfficialInfo extends VerticalLayout
 		btnPlusDesignation.setImmediate(true);
 		btnPlusDesignation.setWidth("28px");
 		btnPlusDesignation.setHeight("24px");
+		
+		cmbAccommodation = new ComboBox();
+		cmbAccommodation.setImmediate(true);
+		cmbAccommodation.setWidth("164px");
+		cmbAccommodation.setHeight("-1px");
 
 		cmbEmployeeShiftGroup = new ComboBox();
 		cmbEmployeeShiftGroup.setImmediate(true);
@@ -1421,6 +1426,11 @@ public class TabOfficialInfo extends VerticalLayout
 		mainLayout.addComponent(new Label("<b><Font Color='#CD0606' size='3px'>*</Font></b>Designation :",Label.CONTENT_XHTML), "top:275px; left:353.0px;");
 		mainLayout.addComponent(cmbDesignation, "top:273px;left:480.0px;");
 		mainLayout.addComponent(btnPlusDesignation, "top:273px;left:648.0px;");
+		
+		mainLayout.addComponent(new Label("<b><Font Color='#CD0606' size='3px'>*</Font></b>Accommodation :",Label.CONTENT_XHTML), "top:300px; left:353.0px;");
+		mainLayout.addComponent(cmbAccommodation, "top:298px;left:480.0px;");
+		cmbAccommodation.addItem("Yes");
+		cmbAccommodation.addItem("No");
 
 	//	mainLayout.addComponent(new Label("<b><Font Color='#CD0606' size='3px'>*</Font></b>Grade : ",Label.CONTENT_XHTML), "top:300px; left:353.0px;");
 		mainLayout.addComponent(cmbGrade, "top:298px; left:480.0px;"); // was salary register
