@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptEmployeeAgreement" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="25" rightMargin="25" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.4641000000000044"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1440"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -34,7 +34,7 @@
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA["select dJoiningDate,a.vEmployeeName,vFatherName,vPermanentAddress,vNationalIdNo,vContactNo,vEmailAddress,dValidDate,vDesignationName,mBasic, round(((mBasic/3)*2),0)mEightHrTotal,(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr,dbo.number(ROUND((mBasic),0))mBasicInWord,mMobileAllowance,vAccommodation  from tbEmpOfficialPersonalInfo a  inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId  where a.vEmployeeId like 'EMP-156'"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select dJoiningDate,a.vEmployeeName,vFatherName,vPresentAddress,vNationalIdNo,vContactNo,vEmailAddress,dValidDate,vDesignationName,mBasic, round(((mBasic/3)*2),0)mEightHrTotal,(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr,dbo.number(ROUND((mBasic),0))mBasicInWord,mMobileAllowance,vAccommodation  from tbEmpOfficialPersonalInfo a  inner join tbEmpSalaryStructure b on a.vEmployeeId=b.vEmployeeId  where a.vEmployeeId like 'EMP-156'"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="UserName" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -49,7 +49,7 @@
 	<field name="dJoiningDate" class="java.sql.Date"/>
 	<field name="vEmployeeName" class="java.lang.String"/>
 	<field name="vFatherName" class="java.lang.String"/>
-	<field name="vPermanentAddress" class="java.lang.String"/>
+	<field name="vPresentAddress" class="java.lang.String"/>
 	<field name="vNationalIdNo" class="java.lang.String"/>
 	<field name="vContactNo" class="java.lang.String"/>
 	<field name="vEmailAddress" class="java.lang.String"/>
@@ -149,12 +149,12 @@
 				<textFieldExpression class="java.lang.String"><![CDATA["Mailing Address"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="99" y="95" width="297" height="14"/>
+				<reportElement x="99" y="95" width="429" height="14"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vPermanentAddress}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vPresentAddress}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="96" y="95" width="3" height="14"/>
@@ -383,7 +383,7 @@
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dJoiningDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="382" y="8" width="90" height="14"/>
+				<reportElement x="388" y="8" width="90" height="14"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
@@ -397,14 +397,14 @@
 				<textFieldExpression class="java.lang.String"><![CDATA["This EMPLOYMENT AGREEMENT is made on the date of "]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd-MMMM-yyyy">
-				<reportElement x="303" y="8" width="79" height="14"/>
+				<reportElement x="303" y="8" width="85" height="14"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dJoiningDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="472" y="8" width="50" height="14"/>
+				<reportElement x="478" y="8" width="50" height="14"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
@@ -638,7 +638,7 @@
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="SansSerif" size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Employer will provide accommodation to the employee; the Employee will be compensated by the rate."]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Employer will provide accommodation to the employee; the Employee will be compensated by the rate. Food will not provide by the Employer to the Employee."]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="67" y="335" width="458" height="14"/>

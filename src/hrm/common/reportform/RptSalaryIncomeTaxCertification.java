@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import org.hibernate.Session;
 
+import com.common.share.AmountField;
 import com.common.share.CommonButton;
 import com.common.share.CommonMethod;
 import com.common.share.FocusMoveByEnter;
@@ -76,7 +77,7 @@ public class RptSalaryIncomeTaxCertification extends Window
 	static String EmployeeName="";
 	private PopupDateField dDate=new PopupDateField();
 	private ComboBox cmbSalaryYear;
-	private TextField txtMonth;
+	private AmountField txtMonth;
 	public RptSalaryIncomeTaxCertification(SessionBean sessionBean,String menuId)
 	{
 		this.sessionBean=sessionBean;
@@ -308,16 +309,11 @@ public class RptSalaryIncomeTaxCertification extends Window
 		String report = "";
 		try
 		{
-			
-			
-			String query = 
-			
-					"select * from funSalaryAIT('"+cmbEmployeeName.getValue()+"','"+cmbSalaryYear.getValue().toString()+"') where iMonth<='"+txtMonth.getValue().toString()+"'";
-			
+			String query ="select *,replace((dbo.number('"+txtMonth.getValue()+"')),'Taka ','')inWord from funSalaryAIT('"+cmbEmployeeName.getValue()+"','"+cmbSalaryYear.getValue().toString()+"') "
+					+ "where iMonth<='"+txtMonth.getValue().toString()+"'";
 			
 			System.out.println("reportShow: "+query);
 			
-
 			if(queryValueCheck(query))
 			{
 				HashMap <String,Object> hm = new HashMap <String,Object> ();
@@ -448,7 +444,7 @@ public class RptSalaryIncomeTaxCertification extends Window
 		mainLayout.addComponent(new Label("Salary For :"),"top:180px; left:30.0px;");
 		mainLayout.addComponent(cmbSalaryYear, "top:178px; left:130.0px;");
 		
-		txtMonth=new TextField();
+		txtMonth=new AmountField();
 		txtMonth.setWidth("70px");
 		txtMonth.setHeight("-1px");
 		txtMonth.setImmediate(true);
