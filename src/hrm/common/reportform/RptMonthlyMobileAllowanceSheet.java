@@ -102,7 +102,7 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,dSalaryDate)+1,0)) dSalaryDate,CONVERT(varchar,DATENAME(MONTH,dSalaryDate)+'-'+DATENAME(YEAR,dSalaryDate))monthyear from tbMonthlySalary order by dSalaryDate desc";
+			String query="select distinct DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,dDate)+1,0)) dDate,CONVERT(varchar,DATENAME(MONTH,dDate)+'-'+DATENAME(YEAR,dDate))monthyear from tbMonthlyMobileAllowance order by dDate desc";
 			System.out.println("cmbMonthDataLoad: "+query);
 			
 			List <?> list = session.createSQLQuery(query).list();
@@ -127,8 +127,8 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct vUnitId,vUnitName from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') " +
-					"and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') order by vUnitName ";
+			String query="select distinct vUnitId,vUnitName from tbMonthlyMobileAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') " +
+					"and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') order by vUnitName ";
 
 			Iterator <?> itr=session.createSQLQuery(query).list().iterator();
 			while(itr.hasNext())
@@ -151,8 +151,8 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct vDepartmentId,vDepartmentName from tbMonthlySalary " +
-					" where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') "+
+			String query="select distinct vDepartmentId,vDepartmentName from tbMonthlyMobileAllowance " +
+					" where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') "+
 					" and vUnitId='"+cmbUnit.getValue().toString()+"' "+
 					" order by vDepartmentName";
 			System.out.println("addDepartmentData: "+query);
@@ -183,7 +183,7 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct vSectionId,vSectionName from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') "+
+			String query="select distinct vSectionId,vSectionName from tbMonthlyMobileAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') "+
 					" and vUnitId='"+cmbUnit.getValue().toString()+"' and vDepartmentId like'"+dept+"' "+
 					" order by vSectionName";
 			System.out.println("addSectionData: "+query);
@@ -221,8 +221,8 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 		
 		try
 		{
-			String query = "select distinct vEmployeeType from tbMonthlySalary " +
-					"where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
+			String query = "select distinct vEmployeeType from tbMonthlyMobileAllowance " +
+					"where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') " +
 					"and vUnitId='"+cmbUnit.getValue().toString()+"' and vDepartmentId like '"+dept+"' and vSectionId like '"+secId+"' " +
 					"order by vEmployeeType";
 			System.out.println("addEmployeeType: "+query);
@@ -419,7 +419,7 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 		
 		try
 		{
-			query= "select vEmployeeId from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
+			query= "select vEmployeeId from tbMonthlyMobileAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') " +
 					"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
 					"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 					"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
@@ -432,13 +432,14 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 
 			if(queryValueCheck(query))
 			{
-				query= "select vEmployeeCode,vEmployeeName,vDesignationName,vDepartmentName,dJoiningDate,mMobileAllowance,vSalaryMonth,vSalaryYear " +
-						"from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
-						"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
-						"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
-						"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-						"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' and mMobileAllowance>0 " +
-						"order by vUnitId,vDepartmentName,vSectionName,SUBSTRING(vEmployeeCode,3,15)";
+				query= "select vEmployeeCode,vEmployeeName,vDesignationName,vDepartmentName,dJoiningDate,mMobileAllowance,"
+						+ "MONTH(dDate)vSalaryMonth,YEAR(dDate)vSalaryYear "
+						+ "from tbMonthlyMobileAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') "
+						+ "and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' "
+						+ "and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' "
+						+ "and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' "
+						+ "and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' and mMobileAllowance>0 "
+						+ "order by vUnitId,vDepartmentName,vSectionName,SUBSTRING(vEmployeeCode,3,15)";
 				
 				System.out.println("reportShow: "+query);
 				
@@ -448,17 +449,17 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 					String loc = getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/themes/temp/attendanceFolder";
 					String fname = "MonthlySalary.xls";
 					String url = getWindow().getApplication().getURL()+"VAADIN/themes/temp/attendanceFolder/"+fname;
-					String strColName[]={"SL#","Code","Grade","Name","Designation","Joining Date","WD","HD","PD","LvD","Abs","LWP","NPD","LateD","Basic","House Rent","Conveyance","Medical Allowance","Mobile Allowance","Special Allowance","Gross Total","Attn. Bonus","Total Earning","Loan Amount","Advance Deduction","Late Attn. Deduction","Income Tex","Total Deduction","Net Pay","Signature"};
+					String strColName[]={"SL#","Code","Grade","Name","Designation","Joining Date","WD","HD","PD","LvD","Abs","LWP","NPD","LateD","Basic","Mobile Rent","Conveyance","Medical Allowance","Mobile Allowance","Special Allowance","Gross Total","Attn. Bonus","Total Earning","Loan Amount","Advance Deduction","Late Attn. Deduction","Income Tex","Total Deduction","Net Pay","Signature"};
 					String Header="For the Month Of: "+cmbMonth.getItemCaption(cmbMonth.getValue());
 					String exelSql="";
 					
-					exelSql = "select distinct vSectionName,vEmployeeType,vSectionID,vUnitId,vDepartmentName,vDepartmentId from tbMonthlySalary " +
+					exelSql = "select distinct vSectionName,vEmployeeType,vSectionID,vUnitId,vDepartmentName,vDepartmentId from tbMonthlyMobileAllowance " +
 							"where vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
 							"and vUnitId like '"+cmbUnit.getValue().toString()+"' " +
 							"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 							"and vSectionID like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-							"and MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') " +
-							"and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
+							"and MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') " +
+							"and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') " +
 							"order by vSectionID,vEmployeeType,vUnitId";
 					
 					System.out.println("exelSql: "+exelSql);
@@ -481,7 +482,7 @@ public class RptMonthlyMobileAllowanceSheet extends Window {
 						
 							detailQuery[countInd]="select vEmployeeCode,vGradeName,vEmployeeName,vDesignation,dJoiningDate," +
 									"iWorkingDay,totalHoliday,iPresentDay,iLeaveDay,iAbsentDay,iLeaveWithoutPay,iNetPayableDays,iLateDay," +
-									"CAST(ISNULL(mBasic,0) as FLOAT)mBasic,CAST(ISNULL(mHouseRent,0) as FLOAT)mHouseRent,CAST(ISNULL(mConveyance,0) as FLOAT)mConveyance," +
+									"CAST(ISNULL(mBasic,0) as FLOAT)mBasic,CAST(ISNULL(mMobileAllowance,0) as FLOAT)mMobileAllowance,CAST(ISNULL(mConveyance,0) as FLOAT)mConveyance," +
 									"CAST(ISNULL(mMedicalAllowance,0) as FLOAT)mMedicalAllowance,CAST(ISNULL(mOtherAllowance,0) as FLOAT)mOtherAllowance," +
 									"CAST(ISNULL(mSpecialAllowance,0) as FLOAT)mSpecialAllowance,CAST(ISNULL(Gross,0) as FLOAT)Gross,CAST(ISNULL(PresentBonus,0) as FLOAT)PresentBonus," +
 									"CAST(ISNULL(totalEarning,0) as FLOAT)totalEarning,CAST(ISNULL(mLoanAmount,0)  as FLOAT)mLoanAmount, " +

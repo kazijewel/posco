@@ -16,6 +16,7 @@
 		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SysDate" class="java.util.Date"/>
+	<parameter name="Month" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[$P!{sql}]]>
 	</queryString>
@@ -116,13 +117,6 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="32" y="70" width="192" height="15"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vSalaryMonth}+"-"+$F{vSalaryYear}]]></textFieldExpression>
-			</textField>
 			<image>
 				<reportElement x="1" y="2" width="73" height="42"/>
 				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
@@ -206,6 +200,13 @@
 				</textElement>
 				<text><![CDATA[PM]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="32" y="70" width="192" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{Month}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

@@ -102,7 +102,7 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,dSalaryDate)+1,0)) dSalaryDate,CONVERT(varchar,DATENAME(MONTH,dSalaryDate)+'-'+DATENAME(YEAR,dSalaryDate))monthyear from tbMonthlySalary order by dSalaryDate desc";
+			String query="select distinct DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,dDate)+1,0)) dDate,CONVERT(varchar,DATENAME(MONTH,dDate)+'-'+DATENAME(YEAR,dDate))monthyear from tbMonthlyHouseAllowance order by dDate desc";
 			System.out.println("cmbMonthDataLoad: "+query);
 			
 			List <?> list = session.createSQLQuery(query).list();
@@ -127,8 +127,8 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct vUnitId,vUnitName from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') " +
-					"and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') order by vUnitName ";
+			String query="select distinct vUnitId,vUnitName from tbMonthlyHouseAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') " +
+					"and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') order by vUnitName ";
 
 			Iterator <?> itr=session.createSQLQuery(query).list().iterator();
 			while(itr.hasNext())
@@ -151,8 +151,8 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct vDepartmentId,vDepartmentName from tbMonthlySalary " +
-					" where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') "+
+			String query="select distinct vDepartmentId,vDepartmentName from tbMonthlyHouseAllowance " +
+					" where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') "+
 					" and vUnitId='"+cmbUnit.getValue().toString()+"' "+
 					" order by vDepartmentName";
 			System.out.println("addDepartmentData: "+query);
@@ -183,7 +183,7 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 		session.beginTransaction();
 		try
 		{
-			String query="select distinct vSectionId,vSectionName from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') "+
+			String query="select distinct vSectionId,vSectionName from tbMonthlyHouseAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') "+
 					" and vUnitId='"+cmbUnit.getValue().toString()+"' and vDepartmentId like'"+dept+"' "+
 					" order by vSectionName";
 			System.out.println("addSectionData: "+query);
@@ -221,8 +221,8 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 		
 		try
 		{
-			String query = "select distinct vEmployeeType from tbMonthlySalary " +
-					"where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
+			String query = "select distinct vEmployeeType from tbMonthlyHouseAllowance " +
+					"where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') " +
 					"and vUnitId='"+cmbUnit.getValue().toString()+"' and vDepartmentId like '"+dept+"' and vSectionId like '"+secId+"' " +
 					"order by vEmployeeType";
 			System.out.println("addEmployeeType: "+query);
@@ -419,7 +419,7 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 		
 		try
 		{
-			query= "select vEmployeeId from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
+			query= "select vEmployeeId from tbMonthlyHouseAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') " +
 					"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
 					"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 					"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
@@ -432,13 +432,14 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 
 			if(queryValueCheck(query))
 			{
-				query= "select vEmployeeCode,vEmployeeName,vDesignationName,vDepartmentName,dJoiningDate,mHouseRent,vSalaryMonth,vSalaryYear " +
-						"from tbMonthlySalary where MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
-						"and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' " +
-						"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
-						"and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-						"and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' and mHouseRent>0 " +
-						"order by vUnitId,vDepartmentName,vSectionName,SUBSTRING(vEmployeeCode,3,15)";
+				query= "select vEmployeeCode,vEmployeeName,vDesignationName,vDepartmentName,dJoiningDate,mHouseRent,"
+						+ "MONTH(dDate)vSalaryMonth,YEAR(dDate)vSalaryYear "
+						+ "from tbMonthlyHouseAllowance where MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') "
+						+ "and vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue().toString():"%")+"' "
+						+ "and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' "
+						+ "and vSectionId like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' "
+						+ "and vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' and mHouseRent>0 "
+						+ "order by vUnitId,vDepartmentName,vSectionName,SUBSTRING(vEmployeeCode,3,15)";
 				
 				System.out.println("reportShow: "+query);
 				
@@ -452,13 +453,13 @@ public class RptMonthlyHouseAllowanceSheet extends Window {
 					String Header="For the Month Of: "+cmbMonth.getItemCaption(cmbMonth.getValue());
 					String exelSql="";
 					
-					exelSql = "select distinct vSectionName,vEmployeeType,vSectionID,vUnitId,vDepartmentName,vDepartmentId from tbMonthlySalary " +
+					exelSql = "select distinct vSectionName,vEmployeeType,vSectionID,vUnitId,vDepartmentName,vDepartmentId from tbMonthlyHouseAllowance " +
 							"where vEmployeeType like '"+(cmbEmpType.getValue()!=null?cmbEmpType.getValue().toString():"%")+"' " +
 							"and vUnitId like '"+cmbUnit.getValue().toString()+"' " +
 							"and vDepartmentId like '"+(cmbDepartmentName.getValue()!=null?cmbDepartmentName.getValue().toString():"%")+"' " +
 							"and vSectionID like '"+(cmbSectionName.getValue()!=null?cmbSectionName.getValue().toString():"%")+"' " +
-							"and MONTH(dSalaryDate)=MONTH('"+cmbMonth.getValue()+"') " +
-							"and YEAR(dSalaryDate)=YEAR('"+cmbMonth.getValue()+"') " +
+							"and MONTH(dDate)=MONTH('"+cmbMonth.getValue()+"') " +
+							"and YEAR(dDate)=YEAR('"+cmbMonth.getValue()+"') " +
 							"order by vSectionID,vEmployeeType,vUnitId";
 					
 					System.out.println("exelSql: "+exelSql);
