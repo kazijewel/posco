@@ -341,7 +341,7 @@ public class OverTimeRequestApproval extends Window
 	{
 		if(checkTableData())
 		{
-			MessageBox mb = new MessageBox(getParent(), "Are you sure?", MessageBox.Icon.QUESTION, "Do you want to approve Replacement leave?", new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"), new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+			MessageBox mb = new MessageBox(getParent(), "Are you sure?", MessageBox.Icon.QUESTION, "Do you want to approve Over Time?", new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"), new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
 			mb.setStyleName("cwindowMB");
 			mb.show(new EventListener()
 			{
@@ -353,7 +353,7 @@ public class OverTimeRequestApproval extends Window
 						txtInit(true);
 						btnIni(true);
 						txtClear();
-						Notification n=new Notification("Replacement Leave Approved Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+						Notification n=new Notification("Over Time Approved Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 						n.setPosition(Notification.POSITION_TOP_RIGHT);
 						showNotification(n);
 						

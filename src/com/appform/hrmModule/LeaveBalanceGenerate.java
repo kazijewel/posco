@@ -2,9 +2,12 @@ package com.appform.hrmModule;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
 import com.common.share.CommonButton;
 import com.common.share.MessageBox;
 import com.common.share.MessageBox.ButtonType;
@@ -15,12 +18,14 @@ import com.common.share.SessionBean;
 import com.common.share.SessionFactoryUtil;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.ProgressIndicator;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings("serial")
 
@@ -39,6 +44,7 @@ public class LeaveBalanceGenerate extends Window
 
 	private Label lblGenerateDate;
 	private PopupDateField dGenerateDate;
+	private ComboBox cmbEmployeeId;
 
 	private ProgressIndicator PI;
 	private Worker1 worker1;
@@ -61,12 +67,40 @@ public class LeaveBalanceGenerate extends Window
 		setContent(mainLayout);
 		
 		setEventAction();
+		cmbEmployeeDataLoad();
 
 		authenticationCheck();
 		focusEnter();
 		dGenerateDate.focus();
 	}
-
+	
+	private void cmbEmployeeDataLoad()
+	{
+		cmbEmployeeId.removeAllItems();
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String query=" select distinct vEmployeeId,vEmployeeCode,vEmployeeName from tbEmpOfficialPersonalInfo where bStatus=1 order by vEmployeeCode";			
+			System.out.println("query: "+query);
+			
+			List <?> lst=session.createSQLQuery(query).list();
+			if(!lst.isEmpty())
+			{
+				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
+				{
+					Object [] element=(Object[])itr.next();
+					cmbEmployeeId.addItem(element[0]);
+					cmbEmployeeId.setItemCaption(element[0], element[1]+"-"+element[2]);
+				}
+			}
+		}
+		catch (Exception exp)
+		{
+			showNotification("cmbEmployeeDataLoad", exp.toString(), Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
+	}
 
 	private void authenticationCheck()
 	{
@@ -95,7 +129,14 @@ public class LeaveBalanceGenerate extends Window
 			{
 				if(dGenerateDate.getValue()!=null)
 				{
-					generateAction();
+					if(cmbEmployeeId.getValue()!=null)
+					{
+						generateAction();
+					}
+					else
+					{
+						showNotification("Warning!","Please Select Employee ID",Notification.TYPE_WARNING_MESSAGE);
+					}
 				}
 				else
 				{
@@ -108,7 +149,7 @@ public class LeaveBalanceGenerate extends Window
 
 	private void generateAction()
 	{
-		MessageBox mb = new MessageBox(getParent(), "Are you sure?", MessageBox.Icon.QUESTION, "Do you want to Get Employee Attendance?", new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"), new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+		MessageBox mb = new MessageBox(getParent(), "Are you sure?", MessageBox.Icon.QUESTION, "Do you want to Generate Employee Leave Balance?", new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"), new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
 		mb.show(new EventListener()
 		{
 			public void buttonClicked(ButtonType buttonType)
@@ -136,12 +177,13 @@ public class LeaveBalanceGenerate extends Window
 		
 		try
 		{
-			insertQuery = "exec prcLeaveEntitlementGenerate " +
-					"'"+dFormat.format(dGenerateDate.getValue())+"',"
-					+ "'%','%','%','%'," +
-					"'"+sessionBean.getUserId()+"'," +
-					"'"+sessionBean.getUserName()+"'," +
-					"'"+sessionBean.getUserIp()+"'";
+			insertQuery = "exec prcLeaveEntitlementGenerate "
+					+ "'"+dFormat.format(dGenerateDate.getValue())+"',"
+					+ "'%','%','%',"
+					+ "'"+cmbEmployeeId.getValue()+"',"
+					+ "'"+sessionBean.getUserId()+"',"
+					+ "'"+sessionBean.getUserName()+"',"
+					+ "'"+sessionBean.getUserIp()+"'";
 			System.out.println(insertQuery);
 			
 			session.createSQLQuery(insertQuery).executeUpdate();
@@ -201,6 +243,14 @@ public class LeaveBalanceGenerate extends Window
 		dGenerateDate.setValue(new java.util.Date());
 		mainLayout.addComponent(dGenerateDate, "top:18.0px;left:150.0px;");
 		//dGenerateDate.setEnabled(false);
+		
+		cmbEmployeeId = new ComboBox();
+		cmbEmployeeId.setImmediate(true);
+		cmbEmployeeId.setWidth("280px");
+		cmbEmployeeId.setHeight("-1px");
+		cmbEmployeeId.setFilteringMode(cmbEmployeeId.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Employee ID : "),"top:50.0px;left:30.0px");
+		mainLayout.addComponent(cmbEmployeeId,"top:48.0px;left:150.0px");
 
 		// CommonButton
 		cButton.btnSave.setCaption("Generate");
@@ -239,7 +289,7 @@ public class LeaveBalanceGenerate extends Window
 				}
 			}
 			txtClear();
-			showNotification("Attendance Data Inserted Successfully");
+			showNotification("Leave Balance Generated Successfully");
 		}
 		public int getCurrent() 
 		{

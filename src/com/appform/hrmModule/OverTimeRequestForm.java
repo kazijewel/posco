@@ -115,6 +115,8 @@ public class OverTimeRequestForm extends Window
 	private TimeField tMinTo=new TimeField();
 	private TextField txtTo=new TextField();
 	boolean switchUser=false;
+	int saveValidation=0;
+	
 	public OverTimeRequestForm(SessionBean sessionBean,String menuId,boolean switchUser)
 	{
 		this.sessionBean=sessionBean;
@@ -318,6 +320,7 @@ public class OverTimeRequestForm extends Window
 				btnIni(false);
 				dRequestDate.focus();
 				count=0;
+				saveValidation=0;
 				txtTransactionID.setValue(transactionIDGenerate());
 			}
 		});
@@ -326,6 +329,7 @@ public class OverTimeRequestForm extends Window
 		{
 			public void buttonClick(ClickEvent event)
 			{
+				saveValidation=0;
 				checkForm();
 			}
 		});
@@ -335,6 +339,7 @@ public class OverTimeRequestForm extends Window
 			public void buttonClick(ClickEvent event)
 			{
 				count=1;
+				saveValidation=0;
 				if(cmbEmployee.getValue()!=null)
 				{
 					Update = true;
@@ -396,6 +401,7 @@ public class OverTimeRequestForm extends Window
 				componentIni(true);
 				btnIni(true);
 				count=0;
+				saveValidation=0;
 			}
 		});
 
@@ -940,15 +946,23 @@ public class OverTimeRequestForm extends Window
 					{
 						Session session=SessionFactoryUtil.getInstance().openSession();
 						Transaction tx=session.beginTransaction();
+						if(saveValidation==0)
+						{
+							insertData(session,tx);
+							componentIni(true);
+							btnIni(true);
+							Find=false;
+							count=0;
+							Notification n=new Notification("All Information "+(count==1?"Updated":"Saved")+" Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+							n.setPosition(Notification.POSITION_TOP_RIGHT);
+							showNotification(n);
+							saveValidation=1;
+						}
+						else
+						{
+							showNotification("Warning", "Data Already Exist for this Day!!!", Notification.TYPE_WARNING_MESSAGE);
+						}
 						
-						insertData(session,tx);
-						componentIni(true);
-						btnIni(true);
-						Find=false;
-						count=0;
-						Notification n=new Notification("All Information "+(count==1?"Updated":"Saved")+" Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
-						n.setPosition(Notification.POSITION_TOP_RIGHT);
-						showNotification(n);
 					}
 				}
 			});

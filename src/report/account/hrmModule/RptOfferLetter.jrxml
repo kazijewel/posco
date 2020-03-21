@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptOfferLetter" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="25" rightMargin="25" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.9487171000000025"/>
-	<property name="ireport.x" value="3"/>
-	<property name="ireport.y" value="328"/>
+	<property name="ireport.zoom" value="1.1000000000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="326"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -43,6 +43,9 @@
 	<parameter name="SysDate" class="java.util.Date"/>
 	<parameter name="developer" class="java.lang.String"/>
 	<parameter name="dDate" class="java.lang.String"/>
+	<parameter name="PoscoFooter" class="java.lang.String">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[$P!{sql}]]>
 	</queryString>
@@ -414,7 +417,7 @@
 				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["15.	The contract will remain valid 12(Twelve) months from "+$F{dJoiningDate}+" to "+$F{dValidDate}+"."]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["The contract will remain valid 12(Twelve) months from "+$F{dJoiningDate}+" to "+$F{dValidDate}+"."]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="2" y="564" width="543" height="81"/>
@@ -557,41 +560,45 @@
 	</columnFooter>
 	<pageFooter>
 		<band height="21">
+			<image>
+				<reportElement x="-25" y="-15" width="597" height="36"/>
+				<imageExpression class="java.lang.String"><![CDATA["D:\\Tomcat 7.0\\webapps\\report\\posco\\pad.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="178" y="6" width="275" height="11" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7"/>
+				</textElement>
+				<text><![CDATA[Developed by: E-Vision Software Ltd.|| Mob:01755-506044 || www.eslctg.com]]></text>
+			</staticText>
 			<textField pattern="dd-MM-yyyy hh.mm.ss aaa">
-				<reportElement x="0" y="10" width="81" height="11" forecolor="#000000"/>
+				<reportElement x="0" y="6" width="81" height="11" forecolor="#000000"/>
 				<textElement>
 					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$P{SysDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="81" y="10" width="92" height="11"/>
+				<reportElement x="81" y="6" width="92" height="11"/>
 				<textElement>
 					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{UserName}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="528" y="10" width="26" height="10"/>
+				<reportElement x="516" y="6" width="26" height="10"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="486" y="10" width="42" height="10"/>
+				<reportElement x="474" y="6" width="42" height="10"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="189" y="10" width="275" height="11" forecolor="#000000"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="7"/>
-				</textElement>
-				<text><![CDATA[Developed by: E-Vision Software Ltd.|| Mob:01755-506044 || www.eslctg.com]]></text>
-			</staticText>
 		</band>
 	</pageFooter>
 	<summary>

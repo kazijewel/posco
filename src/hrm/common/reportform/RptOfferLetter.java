@@ -544,7 +544,7 @@ public class RptOfferLetter extends Window
 		}
 		try
 		{
-			query = "select a.vEmployeeName,vPermanentAddress,vContactNo,vEmailAddress,dJoiningDate,dValidDate,vDesignationName,mBasic,"
+			query = "select a.vEmployeeName,REPLACE(vPresentAddress,'#','''')vPermanentAddress,vContactNo,vEmailAddress,dJoiningDate,dValidDate,vDesignationName,mBasic,"
 					+ "round(((mBasic/3)*2),0)mEightHrTotal,"
 					+ "(mBasic-round(((mBasic/3)*2),0))mExtraTwoHr "
 					+ "from tbEmpOfficialPersonalInfo a "
