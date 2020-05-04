@@ -966,10 +966,10 @@ public class HrmMenu
 				{
 					showWindow(new LeaveBalanceGenerate(sessionBean,"LeaveBalanceGenerate"),event.getItem(),"LeaveBalanceGenerate","HRM MODULE","TRANSACTION");
 				}
-				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVE"))
+				/*if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVE"))
 				{
 					showWindow(new LeaveApprove(sessionBean,"leaveApprove"),event.getItem(),"leaveApprove","HRM MODULE","TRANSACTION");
-				}
+				}*/
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL STEP 1"))
 				{
 					showWindow(new LeaveApprovePrimary(sessionBean,"LeaveApprovalStep1"),event.getItem(),"LeaveApprovalStep1","HRM MODULE","TRANSACTION");

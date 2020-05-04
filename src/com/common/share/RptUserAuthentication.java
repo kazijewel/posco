@@ -177,7 +177,7 @@ public class RptUserAuthentication extends Window
 					"from (select vUserId,vCompanyUserName,vMenuId,vMenuCaption,0 iSave,0 iEdit,0 iDelete,0 iPreview,'Block' Block," +
 					"vModuleName,vManuType from dbo.tbUserAuthentication union select vUserId,vUserName,vMenuId,vMenuName,iSave,iEdit," +
 					"iDelete,iPreview,'Lock',vModuleName,vManuType from dbo.tbUserAccess )abc inner join tbUserInfo a on a.vUserId=abc.vUserId " +
-					"inner join tbUserDetails b on b.vModuleName=abc.vModuleName where abc.vUserId like '"+Division+"' and vUserType!='Admin') xyz " +
+					"inner join tbUserDetails b on b.vUserId=abc.vUserId where abc.vUserId like '"+Division+"' and vUserType!='Admin') xyz " +
 					"order by vCompanyUserName,xyz.vModuleId,xyz.vManuTypeId,Block";
 			
 			System.out.println("Report Query: "+queryAll);

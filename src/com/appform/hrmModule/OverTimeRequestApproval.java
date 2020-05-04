@@ -62,6 +62,7 @@ public class OverTimeRequestApproval extends Window
 	private CommonMethod cm;
 	private String menuId = "";
 	private boolean click = true;
+	private boolean deleteApproval=true;
 	private CheckBox chkAll=new CheckBox("Select All");
 	public OverTimeRequestApproval( SessionBean sessionBean,String menuId)
 	{
@@ -72,12 +73,12 @@ public class OverTimeRequestApproval extends Window
 		this.menuId = menuId;
 		Buildmainlayout();
 		setContent(mainLayout);
+		authenticationCheck();
 		tableinitialise();
 		txtInit(true);
 		btnIni(true);
 		setEventAction();
 		cmbUnitDataAdd();
-		authenticationCheck();
 		cButton.btnNew.focus();
 	}
 
@@ -93,7 +94,10 @@ public class OverTimeRequestApproval extends Window
 			if(!cm.isEdit)
 			{cButton.btnEdit.setVisible(false);}
 			if(!cm.isDelete)
-			{cButton.btnDelete.setVisible(false);}
+			{
+				cButton.btnDelete.setVisible(false);
+				deleteApproval=false;
+			}
 			if(!cm.isPreview)
 			{cButton.btnPreview.setVisible(false);}
 		}
@@ -523,6 +527,7 @@ public class OverTimeRequestApproval extends Window
 		Delete.get(ar).setImmediate(true);
 		Delete.get(ar).setIcon(new ThemeResource("../icons/trash.png"));
 		Delete.get(ar).setStyleName("Transparent");
+		Delete.get(ar).setEnabled(deleteApproval);
 		Delete.get(ar).addListener(new Button.ClickListener()
 		{
 			public void buttonClick(ClickEvent event) 

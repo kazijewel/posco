@@ -781,8 +781,8 @@ public class SendNotice extends Window {
 					"inner join tbDesignationInfo c on b.vDesignationId=c.vDesignationId  " +
 					"where  vEmailAddress like '%@%' " +
 					"and vDepartmentId like '"+deptId+"' " +
-					"and vUnitId like'"+unit+"' and vSectionId like '"+section+"' " +
-					"order by vUnitName,vDepartmentName,c.iRank,a.dJoiningDate";
+					"and vUnitId like'"+unit+"' and vSectionId like '"+section+"' and bStatus=1 " +
+					"order by vUnitName,vDepartmentName,c.iRank,a.dJoiningDate ";
 			
 			System.out.println("tableDataLoad: "+sql);
 			

@@ -334,7 +334,7 @@ public class UserAuthentication extends Window
 			{
 				if(!tbLblMenuCaption.get(ar).getValue().toString().isEmpty())
 				{
-					//for block and unblock
+					//for block Start
 					if(tbChkBlock.get(ar).booleanValue())
 					{
 						String sqlCheck = "select vMenuId from dbo.tbUserAuthentication where vMenuId = "+
@@ -359,8 +359,31 @@ public class UserAuthentication extends Window
 									" '"+tbLblMenuCaption.get(ar).getValue().toString()+"',"+
 									" '"+sessionBean.getUserName()+"', '"+sessionBean.getUserIp()+"', CURRENT_TIMESTAMP, 'New','"+tbLblModule.get(ar).getValue().toString()+"','"+tbLblType.get(ar).getValue().toString()+"') ";
 							session.createSQLQuery(udSql).executeUpdate();
+							
+							String sqlDelete = " DELETE FROM dbo.tbUserAccess WHERE vUserId = '"+cmbUserName.getValue().toString()+"' " +
+									" AND vMenuId = '"+tbLblMenuId.get(ar).getValue().toString()+"' ";
+							session.createSQLQuery(sqlDelete).executeUpdate();
+							
+							String sqlInsertUserAccess = " INSERT INTO dbo.tbUserAccess(vCompanyId,vUserId,vUserName,"+
+									" vMenuId,vMenuName,iSave,iEdit,iDelete,iPreview,vAuthorBy,vUserIp,dEntryTime,vModuleName,vManuType) VALUES ("+
+									" '1',"+
+									" '"+cmbUserName.getValue().toString()+"',"+
+									" '"+cmbUserName.getItemCaption(cmbUserName.getValue()).toString()+"',"+
+									" '"+tbLblMenuId.get(ar).getValue().toString()+"'," +
+									" '"+tbLblMenuCaption.get(ar).getValue().toString()+"',"+
+									" '"+(tbChkSave.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+(tbChkEdit.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+(tbChkDelete.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+(tbChkPreview.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+sessionBean.getUserName()+"', '"+sessionBean.getUserIp()+"', CURRENT_TIMESTAMP,'"+tbLblModule.get(ar).getValue().toString()+"','"+tbLblType.get(ar).getValue().toString()+"') ";
+							session.createSQLQuery(sqlInsertUserAccess).executeUpdate();
+							System.out.println("sqlUserAccess: "+sqlInsertUserAccess);
+							
 						}
 					}
+					//for block Start
+					
+					//for unblock Start
 					if(tbChkUnBlock.get(ar).booleanValue())
 					{
 						String udSql = " INSERT INTO dbo.tbUdUserAuthentication(vType,vUserId,vCompanyUserName,vMenuId,vMenuCaption,vUserName,vUserIp,dEntryTime,vFlag,vModuleName,vManuType) VALUES ("+
@@ -376,17 +399,26 @@ public class UserAuthentication extends Window
 								" AND vMenuId = '"+tbLblMenuId.get(ar).getValue().toString()+"' ";
 						session.createSQLQuery(sql).executeUpdate();
 					}
-
-					//for restriction in save/edit/delete/preview
-					if(tbChkSave.get(ar).booleanValue() || tbChkEdit.get(ar).booleanValue() ||
-							tbChkDelete.get(ar).booleanValue() || tbChkPreview.get(ar).booleanValue())
+					//for unblock Start
+					
+					
+					
+					//for restriction in save/edit/delete/preview Start
+					if(
+							tbChkSave.get(ar).booleanValue() || tbChkEdit.get(ar).booleanValue() ||
+							tbChkDelete.get(ar).booleanValue() || tbChkPreview.get(ar).booleanValue()
+					)
 					{
+						System.out.println("for restriction in save/edit/delete/preview Start: ");
+						
 						String sqlCheck = "select vMenuId from dbo.tbUserAccess where vMenuId = "+
 								"'"+tbLblMenuId.get(ar).getValue().toString()+"' and vUserId = '"+cmbUserName.getValue().toString()+"' ";
+						System.out.println("sqlCheck: "+sqlCheck);
+						
 						Iterator<?> iter = session.createSQLQuery(sqlCheck).list().iterator();
 						if(!iter.hasNext())
 						{
-							String sqlUserAccess = " INSERT INTO dbo.tbUserAccess(vCompanyId,vUserId,vUserName,"+
+							String sqlInsertUserAccess = " INSERT INTO dbo.tbUserAccess(vCompanyId,vUserId,vUserName,"+
 									" vMenuId,vMenuName,iSave,iEdit,iDelete,iPreview,vAuthorBy,vUserIp,dEntryTime,vModuleName,vManuType) VALUES ("+
 									" '1',"+
 									" '"+cmbUserName.getValue().toString()+"',"+
@@ -398,8 +430,9 @@ public class UserAuthentication extends Window
 									" '"+(tbChkDelete.get(ar).booleanValue()?"1":"0")+"',"+
 									" '"+(tbChkPreview.get(ar).booleanValue()?"1":"0")+"',"+
 									" '"+sessionBean.getUserName()+"', '"+sessionBean.getUserIp()+"', CURRENT_TIMESTAMP,'"+tbLblModule.get(ar).getValue().toString()+"','"+tbLblType.get(ar).getValue().toString()+"') ";
-							session.createSQLQuery(sqlUserAccess).executeUpdate();
-
+							session.createSQLQuery(sqlInsertUserAccess).executeUpdate();
+							System.out.println("sqlUserAccess: "+sqlInsertUserAccess);
+							
 							String udSqlUserAuthor = " INSERT INTO dbo.tbUdUserAccess(vCompanyId,vUserId,vUserName,"+
 									" vMenuId,vMenuName,iSave,iEdit,iDelete,iPreview,vAuthorBy,vUserIp,dEntryTime,vFlag,vModuleName,vManuType) VALUES ("+
 									" '1',"+
@@ -414,7 +447,40 @@ public class UserAuthentication extends Window
 									" '"+sessionBean.getUserName()+"', '"+sessionBean.getUserIp()+"', CURRENT_TIMESTAMP, 'New','"+tbLblModule.get(ar).getValue().toString()+"','"+tbLblType.get(ar).getValue().toString()+"') ";
 							session.createSQLQuery(udSqlUserAuthor).executeUpdate();
 						}
+						else
+						{
+							String sqlUpdateUserAccess = " update dbo.tbUserAccess "
+									+ "set iSave='"+(tbChkSave.get(ar).booleanValue()?"1":"0")+"',"
+									+ "iEdit='"+(tbChkEdit.get(ar).booleanValue()?"1":"0")+"',"
+									+ "iDelete='"+(tbChkDelete.get(ar).booleanValue()?"1":"0")+"',"
+									+ "iPreview='"+(tbChkPreview.get(ar).booleanValue()?"1":"0")+"',"
+									+ "vAuthorBy='"+sessionBean.getUserName()+"',"
+									+ "vUserIp='"+sessionBean.getUserIp()+"',"
+									+ "dEntryTime=CURRENT_TIMESTAMP "
+									+ "where vUserId='"+cmbUserName.getValue().toString()+"' and vMenuId='"+tbLblMenuId.get(ar).getValue().toString()+"' ";
+
+							System.out.println("sqlUserAccess: "+sqlUpdateUserAccess);
+							session.createSQLQuery(sqlUpdateUserAccess).executeUpdate();
+							
+							String udSqlUserAuthor = " INSERT INTO dbo.tbUdUserAccess(vCompanyId,vUserId,vUserName,"+
+									" vMenuId,vMenuName,iSave,iEdit,iDelete,iPreview,vAuthorBy,vUserIp,dEntryTime,vFlag,vModuleName,vManuType) VALUES ("+
+									" '1',"+
+									" '"+cmbUserName.getValue().toString()+"',"+
+									" '"+cmbUserName.getItemCaption(cmbUserName.getValue()).toString()+"',"+
+									" '"+tbLblMenuId.get(ar).getValue().toString()+"'," +
+									" '"+tbLblMenuCaption.get(ar).getValue().toString()+"',"+
+									" '"+(tbChkSave.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+(tbChkEdit.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+(tbChkDelete.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+(tbChkPreview.get(ar).booleanValue()?"1":"0")+"',"+
+									" '"+sessionBean.getUserName()+"', '"+sessionBean.getUserIp()+"', CURRENT_TIMESTAMP, 'Old','"+tbLblModule.get(ar).getValue().toString()+"','"+tbLblType.get(ar).getValue().toString()+"') ";
+							session.createSQLQuery(udSqlUserAuthor).executeUpdate();
+						}
 					}
+					//for restriction in save/edit/delete/preview Start
+					
+					
+					
 					if(!tbChkSave.get(ar).booleanValue() && !tbChkEdit.get(ar).booleanValue() &&
 							!tbChkDelete.get(ar).booleanValue() && !tbChkPreview.get(ar).booleanValue() &&
 							!tbChkBlock.get(ar).booleanValue() && !tbChkUnBlock.get(ar).booleanValue())
@@ -543,6 +609,8 @@ public class UserAuthentication extends Window
 					" dbo.tbUserAuthentication where vUserId = '"+(cmbUserName.getValue()!=null?cmbUserName.getValue().toString():"")+"'"+
 					" union select vMenuId,vMenuName,iSave,iEdit,iDelete,iPreview,'Lock',vModuleName,vManuType from dbo.tbUserAccess"+
 					" where vUserId = '"+(cmbUserName.getValue()!=null?cmbUserName.getValue().toString():"")+"' order by Block";
+			System.out.println("setFindData: "+sql);
+			
 			List<?> lst = session.createSQLQuery(sql).list();
 			tableClear();
 			int i = 0 ;

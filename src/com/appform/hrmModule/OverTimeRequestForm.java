@@ -456,6 +456,19 @@ public class OverTimeRequestForm extends Window
 						try
 						{
 							String transactionID=txtTransactionID.getValue().toString();
+							
+							String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+									+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+									+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+									+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
+									+ "dReplaceHoliday,dReplaceWorking,iFinal,'DELETE' "
+									+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
+							
+							System.out.println("deleteData: "+deleteData);
+							session.createSQLQuery(deleteData).executeUpdate();
+							
 							String del="delete from tbOTRequest where vTransactionId='"+transactionID+"' ";
 							System.out.println(del);
 							
@@ -1022,6 +1035,19 @@ public class OverTimeRequestForm extends Window
 			if(count==1)
 			{
 				transactionID=txtTransactionID.getValue().toString();
+				
+				String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+						+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+						+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+						+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+						+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+						+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
+						+ "dReplaceHoliday,dReplaceWorking,iFinal,'UPDATE' "
+						+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
+				
+				System.out.println("deleteData: "+deleteData);
+				session.createSQLQuery(deleteData).executeUpdate();
+				
 				String del="delete from tbOTRequest where vTransactionId='"+transactionID+"' ";
 				System.out.println(del);
 				session.createSQLQuery(del).executeUpdate();

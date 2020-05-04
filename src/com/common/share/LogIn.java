@@ -1,10 +1,16 @@
      package com.common.share;
 
 import java.io.File;
-
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -65,7 +71,91 @@ public class LogIn extends Window
 		cmbCompanyName.focus();
 		cmbCompanyName.setValue(sessionBean.getCompanyId());
 		cmbCompanyName.setEnabled(false);
+		copyReportFolder();
 	}
+
+	//----------------------------------------------copyReportFolder Start----------------------------------------------
+	public void copyReportFolder()
+	{
+		SimpleDateFormat dFormatDDMMYY = new SimpleDateFormat("dd-MM-yyyy");
+		String saveDate=dFormatDDMMYY.format(new Date()).toString().trim();
+		
+		File srcFolder = new File("D:\\Tomcat 7.0\\webapps\\report\\posco");
+		File destFolder = new File("D:\\ScheduleBackup\\posco\\"+saveDate);
+		
+		//make sure source exists
+		if(!srcFolder.exists())
+		{
+		   System.out.println("Directory does not exist.");
+		   //just exit
+		   System.exit(0);
+		}
+		else
+		{
+			if(!destFolder.exists())
+			{
+				destFolder.mkdir();
+				try
+				{
+					copyFolder(srcFolder,destFolder);
+				}
+				catch(IOException e)
+				{
+					e.printStackTrace();
+					System.exit(0);
+				}
+			}
+			else
+			{
+				System.out.println("No More Today");
+			}
+		}    	
+		System.out.println("Done");
+	}
+	public static void copyFolder(File src, File dest) 	throws IOException
+	{	    	
+		if(src.isDirectory())
+		{    		
+			//if directory not exists, create it
+			if(!dest.exists())
+			{
+			   dest.mkdir();
+			   System.out.println("Directory copied from "+ src + "  to " + dest);
+			}
+			
+			//list all the directory contents
+			String files[] = src.list();
+			
+			for (String file : files) 
+			{
+			   //construct the src and dest file structure
+			   File srcFile = new File(src, file);
+			   File destFile = new File(dest, file);
+			   //recursive copy
+			   copyFolder(srcFile,destFile);
+			}
+		   
+		}
+		else
+		{
+			//if file, then copy it
+			//Use bytes stream to support all file types
+			InputStream in = new FileInputStream(src);
+			OutputStream out = new FileOutputStream(dest); 
+						 
+			byte[] buffer = new byte[1024];	    
+			int length;
+			//copy the file content in bytes 
+			while ((length = in.read(buffer)) > 0)
+			{
+			   out.write(buffer, 0, length);
+			} 
+			in.close();
+			out.close();
+			System.out.println("File copied from " + src + " to " + dest);
+		}
+	}	
+	//----------------------------------------------copyReportFolder End----------------------------------------------
 
 	private void buttonActionAdd()
 	{
@@ -269,21 +359,45 @@ public class LogIn extends Window
 		this.getParent().addComponent(rm);	    		
 		this.close();
 	}
+	private boolean isExpired()
+	{
+		System.out.println("DateValid: "+new Date().getTime());
+		try
+		{
+			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+			Transaction tx = session.beginTransaction();
+			String sql="SELECT COUNT(*) FROM tbCompanyInformation "
+					+ "WHERE cast(validTime as bigint)> "+(new Date().getTime()+" and vCompanyId = '"+cmbCompanyName.getValue().toString())+"' ";
+			
+			String s = session.createSQLQuery(sql).list().listIterator().next().toString();
+			
+			//System.out.println("isExpired: "+sql);
+			
+			if(s.trim().equals("1"))
+			{
+				return true;
+			}
+			else
+			{
+				session.createSQLQuery("UPDATE tbCompanyInformation SET validTime = 'a' where vCompanyId = '"+warId+"' ").executeUpdate();
+				tx.commit();
+				this.getParent().showNotification("Error","Error converting data type varchar to bigint.",Notification.TYPE_ERROR_MESSAGE);
+			}
+		}
+		catch(Exception exp)
+		{
+			this.getParent().showNotification("Error2","Error converting data type varchar to bigint.",Notification.TYPE_ERROR_MESSAGE);
+		}
+		return false;
+	}
 	private void loginBtnAction()
 	{
-		if(true)//isExpired()) // For validation
+		if(true/*isExpired()*/) // For validation
 		{
 			Session session = SessionFactoryUtil.getInstance().openSession();
 			Transaction tx = session.beginTransaction();
 			try
 			{
-			/*	String sql = "select co.vCompanyId,co.vCompanyName,co.vCompanyAddess,co.vCompanyPhone,co.vCompanyFax,co.vCompanyEmail,"+
-						" co.vCompanyLogo,co.vRegistrationNo,co.iActive,br.vBranchId,br.vBranchCode,br.vBranchName,br.vBranchAddress,"+
-						" br.vBranchPhone,br.vBranchFax,br.vBranchEmail,br.vBranchTypeId,br.iActive br,ui.vUserId,ui.vUserName,ui.vPassword,"+
-						" ui.iUserType,ui.iEditDeleteDays,ui.iActive ui from dbo.tbCompanyInformation co inner join dbo.tbBranchInformation br on"+
-						" br.vCompanyId = co.vCompanyId inner join dbo.tbUserInfo ui on br.vBranchId = ui.vBranchId where br.vBranchId = "+
-						" '' and ui.vUserName = '"+txtUserName.getValue().toString()+"'"+
-						" and ui.vPassword = '"+txtPassword.getValue().toString()+"'";*/
 				String sql = "select co.vCompanyId,co.vCompanyName,co.vCompanyAddess,co.vCompanyPhone,co.vCompanyFax,co.vCompanyEmail, co.vCompanyLogo," +
 						"co.vRegistrationNo,co.iActive,ui.vUserId,ui.vUserName,ui.vPassword,ui.iUserType,ui.iEditDeleteDays,ui.iActive ui,co.vCompanyMobile,co.vWebSite,ui.vEmployeeId from " +
 						"dbo.tbCompanyInformation co inner join dbo.tbUserInfo ui on ui.vCompanyId = co.vCompanyId " +
