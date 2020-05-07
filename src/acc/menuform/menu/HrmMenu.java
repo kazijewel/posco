@@ -203,37 +203,6 @@ public class HrmMenu
 			hrmOthers=addCaptionedItem("OTHERS", hrmModule);
 			addHrmOthers(hrmOthers);
 		}
-		/*if(isValidMenu("employeeSalaryLoan"))
-		{
-			hrmSalaryLoan = addCaptionedItem("SALARY LOAN", hrmModule);
-			addSalaryLoanChild(hrmSalaryLoan);
-		}
-		if(isValidMenu("employeePFLoan"))
-		{
-			hrmProvidentFund = addCaptionedItem("PROVIDEND FUND", hrmModule);
-			addPFChild(hrmProvidentFund);
-		}*/
-		/*if(isValidMenu("employeeSalary"))
-		{
-			hrmSalary = addCaptionedItem("MONTHLY SALARY.", hrmModule);
-			addSalaryChild(hrmSalary);
-		}
-		if(isValidMenu("employeeOT"))
-		{
-			hrmOT = addCaptionedItem("OVER TIME", hrmModule);
-			addOTChild(hrmOT);
-		}
-		
-		if(isValidMenu("employeeIncomeTax"))
-		{
-			hrmIncomeTax=addCaptionedItem("INCOME TAX", hrmModule);
-			addIncomeTax(hrmIncomeTax);
-		}
-		if(isValidMenu("employeeOthers"))
-		{
-			hrmOthers=addCaptionedItem("OTHERS", hrmModule);
-			addHrmOthers(hrmOthers);
-		}*/
 	}
 
 	private void addSetupChild(Object hrmSetup)
@@ -268,19 +237,10 @@ public class HrmMenu
 		{
 			addCaptionedItem("DESIGNATION INFORMATION", setupTransaction);
 		}
-		/*if(isValidMenu("GradeInformation"))
-		{
-			addCaptionedItem("GRADE INFORMATION", setupTransaction);
-		}
-		*/
 		if(isValidMenu("employeeInformation"))
 		{
 			addCaptionedItem("EMPLOYEE INFORMATION", setupTransaction);
 		}
-		/*if(isValidMenu("mealChargeInformation"))
-		{
-			addCaptionedItem("MEAL CHARGE ENTRY", setupTransaction);
-		}*/
 		if(isValidMenu("PresentBonusEntry"))
 		{
 			addCaptionedItem("PRESENT BONUS ENTRY", setupTransaction);
@@ -369,10 +329,6 @@ public class HrmMenu
 		{
 			addCaptionedItem("EMAIL NOTICE",setupReport);
 		}
-		/*if(isValidMenu("RptPFMemberList"))
-		{
-			addCaptionedItem("PF MEMBER LIST",setupReport);
-		}*/
 		if(isValidMenu("RptItemDistribution"))
 		{
 			addCaptionedItem("ITEM DISTRIBUTION REPORT",setupReport);
@@ -430,14 +386,6 @@ public class HrmMenu
 		{
 			addCaptionedItem("MONTHLY ATTENDANCE", attendanceTransaction);
 		}
-		/*if(isValidMenu("attendanceSingleDeviceUpload"))
-		{
-			addCaptionedItem("MONTH WISE ATTENDANCE UPLOAD", hrmTrsAttendance);
-		}*/
-		/*if(isValidMenu("attendanceTimeEntry"))
-		{
-			addCaptionedItem("EMPLOYEE ATTENDANCE UPLOAD", attendanceTransaction);
-		}*/
 		if(isValidMenu("GetEmployeeAttendance"))
 		{
 			addCaptionedItem("GENERATE EMPLOYEE ATTENDANCE(MACHINE)", attendanceTransaction);
@@ -461,15 +409,6 @@ public class HrmMenu
 		{
 			addCaptionedItem("SHIFT INFORMATION REPORT", attendanceReport);
 		}
-		/*if(isValidMenu("sectionWiseShift"))
-		{
-			addCaptionedItem("Section WISE SHIFT REPORT", reportAttendance);
-		}*/
-
-		/*if(isValidMenu("rptMonthlyAttendanceManually"))
-		{
-			addCaptionedItem("MONTHLY ATTENDANCE MANUALLY", attendanceReport);
-		}*/
 		
 		if(isValidMenu("RptDailyAttendance"))
 		{
@@ -495,34 +434,6 @@ public class HrmMenu
 		{
 			addCaptionedItem("SHORT VIEW OF ATTENDANCE", attendanceReport);
 		}
-		/*if(isValidMenu("RptMonthlyAttendanceSummaryDevice"))
-		{
-			addCaptionedItem("MONTHLY ATTENDANCE SUMMARY.", attendanceReport);
-		}*/
-		
-		
-		
-		/*if(isValidMenu("auditmonthWiseOt"))
-		{
-			addCaptionedItem("MONTH_WISE_OT", attendanceReport);
-		}*/
-
-		/*if(isValidMenu("individualOt"))
-		{
-			addCaptionedItem("INDIVIDUAL OT", reportAttendance);
-		}
-		if(isValidMenu("rptMonthlyOTComparison"))
-		{
-			addCaptionedItem("MONTHLY OT COMPARISON",reportAttendance);
-		}
-		if(isValidMenu("rptSectionWiseMonthlyOTComparison"))
-		{
-			addCaptionedItem("SECTION WISE MONTHLY OT COMPARISON",reportAttendance);
-		}
-		if(isValidMenu("monthlyFridayAllowance"))
-		{
-			addCaptionedItem("MONTHLY FRIDAY ALLOWANCE",reportAttendance);
-		}*/
 	}
 	private void addLeaveChild(Object leave)
 	{
@@ -555,23 +466,11 @@ public class HrmMenu
 		if(isValidMenu("leaveApplication"))
 		{
 			addCaptionedItem("LEAVE APPLICATION", leaveTransaction);
-		}			
+		}
 		if(isValidMenu("LeaveBalanceGenerate"))
 		{
 			addCaptionedItem("LEAVE BALANCE GENERATE", leaveTransaction);
 		}
-		
-		
-		
-		
-		/*if(isValidMenu("leaveCancel"))
-		{
-			addCaptionedItem("LEAVE CANCEL", leaveTransaction);
-		}*/
-		/*if(isValidMenu("TourApplication"))
-		{
-			addCaptionedItem("TOUR APPLICATION", leaveTransaction);
-		}*/
 		if(isValidMenu("LeaveApprovalStep1"))
 		{
 			addCaptionedItem("LEAVE APPROVAL STEP 1", leaveTransaction);
@@ -610,175 +509,12 @@ public class HrmMenu
 		{
 			addCaptionedItem("DATE AND MONTH WISE LEAVE", leaveReport);
 		}
-		/*if(isValidMenu("RptTourApplication"))
-		{
-			addCaptionedItem("TOUR APPLICATION.", leaveReport);
-		}
-		if(isValidMenu("RptMonthWiseEmployeeTour"))
-		{
-			addCaptionedItem("TOUR SUMMARY", leaveReport);
-		}*/
 		if(isValidMenu("RptReplacementLeaveApplication"))
 		{
 			addCaptionedItem("REPLACEMENT LEAVE APPLICATION.", leaveReport);
 		}
 		
 	}
-	/*private void addSalaryLoanChild(Object salaryLoan)
-	{
-		if(isValidMenu("salaryLoanTransaction"))
-		{
-			salaryLoanTransaction = addCaptionedItem("TRANSACTION", salaryLoan);
-			addsalaryLoanTransaction(salaryLoanTransaction);
-		}
-		if(isValidMenu("salaryLoanReport"))
-		{
-			salaryLoanReport = addCaptionedItem("REPORT", salaryLoan);
-			addsalaryLoanReport(salaryLoanReport);
-		}
-	}*/
-	/*private void addsalaryLoanTransaction(Object salaryLoanTransaction) 
-	{
-		if(isValidMenu("loanApplication"))
-		{
-			addCaptionedItem("LOAN APPLICATION FORM", salaryLoanTransaction);
-		}
-		if(isValidMenu("loanRecovery"))
-		{
-			addCaptionedItem("LOAN RECOVERY FORM", salaryLoanTransaction);
-		}
-	}*/
-	/*private void addsalaryLoanReport(Object salaryLoanReport) {
-		if(isValidMenu("laonApplication"))
-		{
-			addCaptionedItem("LOAN APPLICATION", salaryLoanReport);
-		}
-
-		if(isValidMenu("individualLoanStatement"))
-		{
-			addCaptionedItem("INDIVIDUAL LOAN STATEMENT", salaryLoanReport);
-		}
-
-		if(isValidMenu("loanRegister"))
-		{
-			addCaptionedItem("LOAN SUMMARY", salaryLoanReport);
-		}
-	}*/
-	/*private void addPFChild(Object ProvidentFund)
-	{
-		if(isValidMenu("PFTransaction"))
-		{
-			PFTransaction = addCaptionedItem("TRANSACTION", ProvidentFund);
-			addPFTransaction(PFTransaction);
-		}
-		if(isValidMenu("leaveReport"))
-		{
-			PFReport = addCaptionedItem("REPORT", ProvidentFund);
-			addPFReport(PFReport);
-		}
-	}*/
-	/*private void addPFTransaction(Object ProvidentFund) {
-		if(isValidMenu("PFloanApplication"))
-		{
-			addCaptionedItem("PF LOAN APPLICATION FORM", ProvidentFund);
-		}
-		if(isValidMenu("PFloanRecovery"))
-		{
-			addCaptionedItem("PF LOAN RECOVERY FORM", ProvidentFund);
-		}
-	}*/
-	/*private void addPFReport(Object PFReport) {
-		if(isValidMenu("PFlaonApplication"))
-		{
-			addCaptionedItem("PF LOAN APPLICATION", PFReport);
-		}
-
-		if(isValidMenu("PFindividualLoanStatement"))
-		{
-			addCaptionedItem("PF INDIVIDUAL LOAN STATEMENT", PFReport);
-		}
-
-		if(isValidMenu("PFloanRegister"))
-		{
-			addCaptionedItem("PF LOAN SUMMARY", PFReport);
-		}
-	}*/
-	/*private void addSalaryChild(Object salary)
-	{
-		
-		if(isValidMenu("salaryTransaction"))
-		{
-			salaryTransaction = addCaptionedItem("TRANSACTION", salary);
-			addSalaryTransaction(salaryTransaction);
-		}
-		if(isValidMenu("salaryReport"))
-		{
-			salaryReport = addCaptionedItem("REPORT", salary);
-			addsalaryReport(salaryReport);
-		}
-	}*/
-	/*private void addSalaryTransaction(Object salaryTransaction) {
-		if(isValidMenu("monthlySalaryGenerate"))
-		{
-			addCaptionedItem("GENERATE MONTHLY SALARY", salaryTransaction);
-		}
-		if(isValidMenu("monthlySalaryGenerateMachine"))
-		{
-			addCaptionedItem("GENERATE MONTHLY SALARY MACHINE", salaryTransaction);
-		}
-		if(isValidMenu("editMonthlySalary"))
-		{
-			addCaptionedItem("EDIT MONTHLY SALARY", salaryTransaction);
-		}
-
-		if(isValidMenu("editMonthlySalary(device)"))
-		{
-			addCaptionedItem("EDIT MONTHLY SALARY (MACHINE)",hrmTrsSalary);
-		}
-		if(isValidMenu("DeleteMonthlySalary"))
-		{
-			addCaptionedItem("DELETE MONTHLY SALARY",salaryTransaction);
-		}
-	}*/
-	/*private void addsalaryReport(Object salaryReport) {
-		if(isValidMenu("monthlySalary"))
-		{
-			addCaptionedItem("MONTHLY SALARY", salaryReport);
-		}
-		if(isValidMenu("monthlySalary(device)"))
-		{
-			addCaptionedItem("MONTHLY SALRY(MACHINE)", reportSalary);
-		}
-		if(isValidMenu("editMonthlySalaryReport"))
-		{
-			addCaptionedItem("EDIT MONTHLY SALARY.", salaryReport);
-		}
-		if(isValidMenu("editMonthlySalaryReport(device)"))
-		{
-			addCaptionedItem("EDIT MONTHLY SALARY(MACHINE)", reportSalary);
-		}
-		if(isValidMenu("RptMonthlyPaySlip"))
-		{
-			addCaptionedItem("PAY SLIP", salaryReport);
-		}
-		if(isValidMenu("emailSendPaySlip"))
-		{
-			addCaptionedItem("EMAIL_SEND_PAY_SLIP", salaryReport);
-		}
-		if(isValidMenu("RptEmployeeSeparationList"))
-		{
-			addCaptionedItem("EMPLOYEE SEPARATION LIST", salaryReport);
-		}
-		if(isValidMenu("bankStatement"))
-		{
-			addCaptionedItem("BANK ADVICE WITH FORWARDING LETTER", salaryReport);
-		}
-		if(isValidMenu("RptNotesRequisition"))
-		{
-			addCaptionedItem("NOTES REQUISITION", salaryReport);
-		}
-
-	}*/
 	private void addHrmOthers(Object hrmOthers) {
 		if(isValidMenu("OthersTransaction"))
 		{
@@ -966,10 +702,6 @@ public class HrmMenu
 				{
 					showWindow(new LeaveBalanceGenerate(sessionBean,"LeaveBalanceGenerate"),event.getItem(),"LeaveBalanceGenerate","HRM MODULE","TRANSACTION");
 				}
-				/*if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVE"))
-				{
-					showWindow(new LeaveApprove(sessionBean,"leaveApprove"),event.getItem(),"leaveApprove","HRM MODULE","TRANSACTION");
-				}*/
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL STEP 1"))
 				{
 					showWindow(new LeaveApprovePrimary(sessionBean,"LeaveApprovalStep1"),event.getItem(),"LeaveApprovalStep1","HRM MODULE","TRANSACTION");
@@ -982,14 +714,6 @@ public class HrmMenu
 				{
 					showWindow(new LeaveApproveFinal(sessionBean,"LeaveApprovalStep3"),event.getItem(),"LeaveApprovalStep3","HRM MODULE","TRANSACTION");
 				}
-				/*if(event.getItem().toString().equalsIgnoreCase("LEAVE CANCEL"))
-				{
-					showWindow(new LeaveCancleFrom(sessionBean,"leaveCancel"),event.getItem(),"leaveCancel","HRM MODULE","TRANSACTION");
-				}*/
-				/*if(event.getItem().toString().equalsIgnoreCase("TOUR APPLICATION"))
-				{
-					showWindow(new TourApplication(sessionBean,"TourApplication"),event.getItem(),"TourApplication","HRM MODULE","TRANSACTION");
-				}*/
 				if(event.getItem().toString().equalsIgnoreCase("REPLACEMENT LEAVE APPLICATION"))
 				{
 					showWindow(new ReplacementLeaveApplication(sessionBean,"ReplacementLeaveApplication",false),event.getItem(),"ReplacementLeaveApplication","HRM MODULE","TRANSACTION");
@@ -999,48 +723,10 @@ public class HrmMenu
 				{
 					showWindow(new ReplacementLeaveApproval(sessionBean,"ReplacementLeaveApproval"),event.getItem(),"ReplacementLeaveApproval","HRM MODULE","TRANSACTION");
 				}
-
-				/*if(event.getItem().toString().equalsIgnoreCase("GENERATE MONTHLY SALARY"))
-				{
-					showWindow(new MonthlySalaryGenerate(sessionBean,"monthlySalaryGenerate"),event.getItem(),"monthlySalaryGenerate","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("GENERATE MONTHLY SALARY MACHINE"))
-				{
-					showWindow(new MonthlySalaryGenerateMachine(sessionBean,"MonthlySalaryGenerateMachine"),event.getItem(),"MonthlySalaryGenerateMachine","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("EDIT MONTHLY SALARY"))
-				{
-					showWindow(new EditMonthlySalary(sessionBean,"editMonthlySalary"),event.getItem(),"editMonthlySalary","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("DELETE MONTHLY SALARY"))
-				{
-					showWindow(new DeleteMonthlySalary(sessionBean,"DeleteMonthlySalary"),event.getItem(),"DeleteMonthlySalary","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT PROCESS"))
-				{
-					showWindow(new IncrementProcessMultiple(sessionBean,"salaryIncrementProcess"),event.getItem(),"salaryIncrementProcess","HRM MODULE","TRANSACTION");
-				}*/
-
-
-
-				/*if(event.getItem().toString().equalsIgnoreCase("FESTIVAL BONUS"))
-				{
-					showWindow(new FestivalBonus(sessionBean,"FestivalBonus"),event.getItem(),"FestivalBonus","HRM MODULE","TRANSACTION");
-				}*/
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE REQUSITION FORM"))
 				{
 					showWindow(new EmployeeRequsitionForm(sessionBean, "EmployeeRequsitionForm"), event.getItem(), "EmployeeRequsitionForm","HRM MODULE","TRANSACTION");
 				}
-
-				//Loan
-				/*if(event.getItem().toString().equalsIgnoreCase("LOAN APPLICATION FORM"))
-				{
-					showWindow(new LoanApplicationForm(sessionBean, isPreview,"loanApplication"),event.getItem(),"loanApplication","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("LOAN RECOVERY FORM"))
-				{
-					showWindow(new LoanRecoveryForm(sessionBean,"loanRecovery"),event.getItem(),"loanRecovery","HRM MODULE","TRANSACTION");
-				}*/
 
 				//GENERAL HRM REPORTS
 				if(event.getItem().toString().equalsIgnoreCase("INDIVIDUAL EMPLOYEE DETAILS "))
@@ -1078,9 +764,7 @@ public class HrmMenu
 				{
 					showWindow(new EmailLogInNotice(sessionBean, "EmailLogInNotice"), event.getItem(), "EmailLogInNotice","HRM MODULE","REPORT");
 				}
-
 				
-
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE WISE MONTHLY REPORT"))
 				{
 					showWindow(new RptMonthlyAttendanceSummary(sessionBean,"rptMonthlyAttendanceSummary"),event.getItem(),"rptMonthlyAttendanceSummary","HRM MODULE","REPORT");
@@ -1090,19 +774,12 @@ public class HrmMenu
 				{
 					showWindow(new RptShortViewOfAttendance(sessionBean,"RptShortViewOfAttendance"),event.getItem(),"RptShortViewOfAttendance","HRM MODULE","REPORT");
 				}
-				/*if(event.getItem().toString().equalsIgnoreCase("MONTHLY ATTENDANCE SUMMARY."))
-				{
-					showWindow(new RptMonthlyAttendanceSummaryDevice(sessionBean,"RptMonthlyAttendanceSummaryDevice"),event.getItem(),"RptMonthlyAttendanceSummaryDevice","HRM MODULE","REPORT");
-				}*/
 				
 				//OT Report
 				if(event.getItem().toString().equalsIgnoreCase("MONTH_WISE_OT"))
 				{
 					showWindow(new RptAuditMonthWiseOT(sessionBean,"auditmonthWiseOt"),event.getItem(),"auditmonthWiseOt","HRM MODULE","REPORT");
 				}
-				
-				
-				
 				
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPLICATION "))
 				{
@@ -1124,28 +801,6 @@ public class HrmMenu
 				{
 					showWindow(new RptDateAndMonthWiseLeave(sessionBean, "DateAndMonthWiseLeave"), event.getItem(), "DateAndMonthWiseLeave","HRM MODULE","REPORT");
 				}
-				/*if(event.getItem().toString().equalsIgnoreCase("TOUR APPLICATION."))
-				{
-					showWindow(new RptTourApplication(sessionBean,"RptTourApplication"),event.getItem(),"RptTourApplication","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("TOUR SUMMARY"))
-				{
-					showWindow(new RptMonthWiseEmployeeTour(sessionBean,"RptMonthWiseEmployeeTour"),event.getItem(),"RptMonthWiseEmployeeTour","HRM MODULE","REPORT");
-				}*/
-
-				/*if(event.getItem().toString().equalsIgnoreCase("LOAN APPLICATION"))
-				{
-					showWindow(new RptLoanApplication(sessionBean,"laonApplication"),event.getItem(),"laonApplication","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("LOAN SUMMARY"))
-				{
-					showWindow(new RptLoanRegister(sessionBean,"loanRegister"),event.getItem(),"loanRegister","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("INDIVIDUAL LOAN STATEMENT"))
-				{
-					showWindow(new RptIndividualLoanStatement(sessionBean,"individualLoanStatement"),event.getItem(),"individualLoanStatement","HRM MODULE","REPORT");
-				}*/
-
 				if(event.getItem().toString().equalsIgnoreCase("HOLIDAY REPORT"))
 				{
 					showWindow(new RptHolidays(sessionBean,"holidayreport"),event.getItem(),"holidayreport","HRM MODULE","REPORT");
@@ -1155,8 +810,6 @@ public class HrmMenu
 					showWindow(new RptShiftInformation(sessionBean,"shiftInformationReport"),event.getItem(),"shiftInformationReport","HRM MODULE","REPORT");
 				}
 				
-				
-
 				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT PROCESS"))
 				{
 					showWindow(new IncrementProcessMultiple(sessionBean,"salaryIncrementProcess"),event.getItem(),"salaryIncrementProcess","HRM MODULE","TRANSACTION");
@@ -1165,8 +818,6 @@ public class HrmMenu
 				{
 					showWindow(new RptIncrementProposal(sessionBean, "RptIncrementProposal"), event.getItem(), "RptIncrementProposal","HRM MODULE","REPORT");
 				}
-				
-				
 				
 				//OT Transaction 
 				if(event.getItem().toString().equalsIgnoreCase("OVER TIME REQUEST FORM"))
@@ -1188,25 +839,6 @@ public class HrmMenu
 				{
 					showWindow(new RptShortViewOfOvertime(sessionBean,"RptShortViewOfOvertime"),event.getItem(),"RptShortViewOfOvertime","HRM MODULE","REPORT");
 				}
-				
-				/*if(event.getItem().toString().equalsIgnoreCase("MONTH WISE OT STATEMENT"))
-				{
-					showWindow(new RptMonthWiseOtStatement(sessionBean,"RptMonthWiseOtStatement"),event.getItem(),"RptMonthWiseOtStatement","HRM MODULE","REPORT");
-				}*/
-				/*if(event.getItem().toString().equalsIgnoreCase("MONTHLY HOLIDAY ALLOWANCE"))
-				{
-					showWindow(new rptMonthlyFridayAllowance(sessionBean,"rptMonthlyFridayAllowance"),event.getItem(),"rptMonthlyFridayAllowance","HRM MODULE","REPORT");
-				}*/
-				
-				
-				
-				
-				
-				
-				/*if(event.getItem().toString().equalsIgnoreCase("OVER TIME BANK STATEMENT"))
-				{
-					showWindow(new RptOverTimeStatement(sessionBean,"RptOverTimeBankStatement"),event.getItem(),"RptOverTimeBankStatement","HRM MODULE","REPORT");
-				}*/
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE ATTENDANCE UPLOAD"))
 				{
 					showWindow(new EmployeeAttendanceUploadSingleDevice(sessionBean,"attendanceTimeEntry"),event.getItem(),"attendanceTimeEntry","HRM MODULE","TRANSACTION");
@@ -1237,18 +869,6 @@ public class HrmMenu
 				{
 					showWindow(new NoticeInfo(sessionBean, "NoticeInfo"), event.getItem(), "NoticeInfo","HRM MODULE","TRANSACTION");
 				}
-				
-				//IncomeTax
-				/*if(event.getItem().toString().equalsIgnoreCase("CHEQUE DETAILS ENTRY"))
-				{
-					showWindow(new CheckNoEntry(sessionBean,"CheckDetailsEntry"),event.getItem(),"CheckDetailsEntry","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("TAX ASSESSMENT"))
-				{
-					showWindow(new IncomeTax(sessionBean,"IncomeTax"),event.getItem(),"IncomeTax","HRM MODULE","TRANSACTION");
-				}*/
-				
-				
 				//Attendance Report
 				
 				if(event.getItem().toString().equalsIgnoreCase("MONTHLY ATTENDANCE MANUALLY"))
@@ -1273,26 +893,6 @@ public class HrmMenu
 				{
 					showWindow(new RptDailyEarlyOut(sessionBean, "RptDailyEarlyOutEmployeeList"), event.getItem(), "RptDailyEarlyOutEmployeeList","HRM MODULE","REPORT");
 				}
-
-				//Others
-				/*if(event.getItem().toString().equalsIgnoreCase("FESTIVAL BONUS REPORT"))
-				{
-					showWindow(new RptEmployeeBonus(sessionBean, "RptEmployeeBonus"), event.getItem(), "RptEmployeeBonus","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT REPORT"))
-				{
-					showWindow(new RptIncrementProposal(sessionBean, "RptIncrementProposal"), event.getItem(), "RptIncrementProposal","HRM MODULE","REPORT");
-				}*/
-
-				//IncomeTax Report
-				/*if(event.getItem().toString().equalsIgnoreCase("INCOME TAX INDIVITUAL"))
-				{
-					showWindow(new RptIndivitualIncomeTax(sessionBean,"RptIndivitualIncomeTax"), event.getItem(),"RptIndivitualIncomeTax","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("INCOME TAX STATEMENT"))
-				{
-					showWindow(new RptIncomeTaxStatement(sessionBean,"RptIncomeTaxStatement"), event.getItem(),"RptIncomeTaxStatement","HRM MODULE","REPORT");
-				}*/
 
 				if(event.getItem().toString().equalsIgnoreCase("INDIVIDUAL EMPLOYEE DETAILS "))
 				{
@@ -1364,33 +964,6 @@ public class HrmMenu
 				{
 					showWindow(new hrm.common.reportform.RptOTNFridayEnable(sessionBean,"rptOtNFridayEnable"),event.getItem(),"rptOtNFridayEnable","HRM MODULE","REPORT");
 				}
-				                                                                                                                                                 
-				
-				/*if(event.getItem().toString().equalsIgnoreCase("PF LOAN APPLICATION FORM"))
-				{
-					showWindow(new PFLoanApplicationForm(sessionBean, isPreview,"PFloanApplication"),event.getItem(),"PFloanApplication","HRM MODULE","TRANSACTION");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("PF LOAN RECOVERY FORM"))
-				{
-					showWindow(new PFLoanRecoveryForm(sessionBean,"PFloanRecovery"),event.getItem(),"PFloanRecovery","HRM MODULE","TRANSACTION");
-				}*/
-				
-				/*if(event.getItem().toString().equalsIgnoreCase("BANK ADVICE WITH FORWARDING LETTER"))
-				{
-					showWindow(new RptBankStatement(sessionBean,"bankStatement"),event.getItem(),"bankStatement","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("NOTES REQUISITION"))
-				{
-					showWindow(new RptNotesRequisition(sessionBean,"RptNotesRequisition"),event.getItem(),"RptNotesRequisition","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("BONUS STATEMENT"))
-				{
-					showWindow(new RptBonusStatement(sessionBean,"RptBonusStatement"),event.getItem(),"RptBonusStatement","HRM MODULE","REPORT");
-				}
-				if(event.getItem().toString().equalsIgnoreCase("BONUS NOTES REQUISITION"))
-				{
-					showWindow(new RptBonusNotesRequisition(sessionBean,"RptBonusNotesRequisition"),event.getItem(),"RptBonusNotesRequisition","HRM MODULE","REPORT");
-				}*/
 
 				if(event.getItem().toString().equalsIgnoreCase("PF LOAN APPLICATION"))
 				{

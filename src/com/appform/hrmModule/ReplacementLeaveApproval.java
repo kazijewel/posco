@@ -378,18 +378,27 @@ public class ReplacementLeaveApproval extends Window
 			{
 				if(tbChkSelect.get(i).booleanValue())
 				{
-					int adjust = (Integer.parseInt("0"+tbTxtTotalDays.get(i).getValue().toString())-Integer.parseInt("0"+tbTxtApproveDays.get(i).getValue().toString()));
-
+					/*String queryUpdateData="insert into tbUDReplacementLeaveApplication ("
+							+ "vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+							+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+							+ "dReplacementLeaveTo,iTotalDays,vApprovedFlag,vPurposeOfLeave,vVisitingAddress,UDFlag,"
+							+ "vUserName,vUserIP,dEntryTime"
+							+ ") "
+							+ "select vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+							+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+							+ "dReplacementLeaveTo,iTotalDays,iFinal,vPurposeOfLeave,vVisitingAddress,'UPDATE',"
+							+ "vUserName,vUserIP,dEntryTime from tbReplacementLeaveApplication "
+							+ "where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
+					session.createSQLQuery(queryUpdateData).executeUpdate();*/
+					
 					String updateInfo = " update tbReplacementLeaveApplication set " +
 							" dReplacementLeaveFrom = '"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"'," +
 							" dReplacementLeaveTo = '"+sessionBean.dfDb.format(tbdLeaveTo.get(i).getValue())+"'," +
 							" iTotalDays = '"+"0"+tbTxtApproveDays.get(i).getValue().toString()+"'," +
-							" iFinal=1" +
+							" iFinal=1,"
+							+ "vApprovedBy='"+sessionBean.getUserName()+"' " +
 							" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
-
 					session.createSQLQuery(updateInfo).executeUpdate();
-
-	
 				}
 			}
 			tx.commit();

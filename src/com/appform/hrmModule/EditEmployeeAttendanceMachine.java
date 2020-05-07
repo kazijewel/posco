@@ -1047,9 +1047,22 @@ public class EditEmployeeAttendanceMachine extends Window
 							Transaction tx=session.beginTransaction();		
 							try
 							{
-								String del="delete from tbEmployeeAttendanceFinal where vEmployeeID='"+lblAutoEmpID.get(ar)+"' and dDate='"+lbAttendDate.get(ar)+"' ";
-								System.out.println("DEL: "+del);
-								session.createSQLQuery(del).executeUpdate(); 
+								/*Delete Data Insert*/
+								String queryUpdateDelete = "insert into tbUDEmployeeAttendance (dDate,vEmployeeID,vEmployeeCode,vFingerID,vEmployeeName,vDesignationID,"
+										+ " vDesignation,vUnitID,vUnitName,vDepartmentID,vDepartmentName,dAttDate,dAttInTime,dAttOutTime,permittedBy,"
+										+ " vReason,vShiftID,udFlag,vPAFlag,vUserID,vUserIP,dEntryTime) select dDate,vEmployeeID,vEmployeeCode,vFingerID,"
+										+ " vEmployeeName,vDesignationID,vDesignationName,vUnitID,vUnitName,vDepartmentId,vDepartmentName,"
+										+ " dDate,dInTimeFirst,dOutTimeFirst,'"+txtPermitBy.get(ar).getValue()+"','"+txtReason.get(ar).getValue()+"',"
+										+ " vShiftID,'DELETE',vAttendFlag,vUserID,vUserIp,dEntryTime from tbEmployeeAttendanceFinal where "
+										+ " vEmployeeID='"+lblAutoEmpID.get(ar).getValue().toString()+"' and dDate='"+lbAttendDate.get(ar).getValue()+"'";
+								System.out.println("queryDelete: "+queryUpdateDelete);								
+								session.createSQLQuery(queryUpdateDelete).executeUpdate();
+								/*Delete Data Insert*/
+								
+								String queryDelete="delete from tbEmployeeAttendanceFinal where vEmployeeID='"+lblAutoEmpID.get(ar)+"' and dDate='"+lbAttendDate.get(ar)+"' ";
+								System.out.println("queryDelete: "+queryDelete);
+								session.createSQLQuery(queryDelete).executeUpdate(); 
+								
 								Notification n=new Notification("Row Delete Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 								n.setPosition(Notification.POSITION_TOP_RIGHT);
 								showNotification(n);

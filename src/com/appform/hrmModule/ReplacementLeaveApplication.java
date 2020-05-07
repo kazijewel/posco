@@ -188,6 +188,20 @@ public class ReplacementLeaveApplication extends Window
 						try
 						{
 							String transactionID=txtTransactionID.getValue().toString();
+							
+							String queryUpdateData="insert into tbUDReplacementLeaveApplication ("
+									+ "vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+									+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+									+ "dReplacementLeaveTo,iTotalDays,vApprovedFlag,vPurposeOfLeave,vVisitingAddress,UDFlag,"
+									+ "vUserName,vUserIP,dEntryTime"
+									+ ") "
+									+ "select vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+									+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+									+ "dReplacementLeaveTo,iTotalDays,iFinal,vPurposeOfLeave,vVisitingAddress,'DELETE',"
+									+ "vUserName,vUserIP,dEntryTime from tbReplacementLeaveApplication "
+									+ "where vTransactionID = '"+transactionID+"' ";
+							session.createSQLQuery(queryUpdateData).executeUpdate();
+							
 							String del="delete from tbReplacementLeaveApplication where vTransactionId='"+transactionID+"' ";
 							System.out.println(del);
 							
@@ -849,6 +863,20 @@ public class ReplacementLeaveApplication extends Window
 			if(count==1)
 			{
 				transactionID=txtTransactionID.getValue().toString();
+				
+				String queryUpdateData="insert into tbUDReplacementLeaveApplication ("
+						+ "vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+						+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+						+ "dReplacementLeaveTo,iTotalDays,vApprovedFlag,vPurposeOfLeave,vVisitingAddress,UDFlag,"
+						+ "vUserName,vUserIP,dEntryTime"
+						+ ") "
+						+ "select vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+						+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+						+ "dReplacementLeaveTo,iTotalDays,iFinal,vPurposeOfLeave,vVisitingAddress,'UPDATE',"
+						+ "vUserName,vUserIP,dEntryTime from tbReplacementLeaveApplication "
+						+ "where vTransactionID = '"+transactionID+"' ";
+				session.createSQLQuery(queryUpdateData).executeUpdate();
+				
 				String del="delete from tbReplacementLeaveApplication where vTransactionId='"+transactionID+"' ";
 				System.out.println(del);
 				session.createSQLQuery(del).executeUpdate();
@@ -885,8 +913,6 @@ public class ReplacementLeaveApplication extends Window
 					"'"+txtReplacementLeaveAddress.getValue().toString().replaceAll("'","#")+"'," +
 					"'"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',GETDATE())";
 			session.createSQLQuery(query).executeUpdate();
-			
-			
 			
 			tx.commit();
 		}

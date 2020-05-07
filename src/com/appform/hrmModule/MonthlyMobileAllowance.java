@@ -60,7 +60,8 @@ public class MonthlyMobileAllowance extends Window
 	private Label lblEmployee;
 	private ComboBox cmbEmployee;
 	private CheckBox chkEmployeeAll,chkDepartmentAll,chkSectionAll;
-
+	private TextField txtAutoId=new TextField();
+	
 	private ArrayList<NativeButton> btnDel=new ArrayList<NativeButton>();
 	private ArrayList<Label> lblsa = new ArrayList<Label>();
 	private ArrayList<Label> lblEmployeeId=new ArrayList<Label>();
@@ -90,9 +91,8 @@ public class MonthlyMobileAllowance extends Window
 	boolean t;
 	int i = 0;
 	
-
 	private TextRead findId = new TextRead();
-	private TextRead EmpId = new TextRead();
+	private TextRead empID = new TextRead();
 	
 	private CommonMethod cm;
 	private String menuId = "";
@@ -168,6 +168,7 @@ public class MonthlyMobileAllowance extends Window
 				if(cmbUnit.getValue()!=null)
 				{
 					isUpdate = true;
+					isFind = false;
 					componentIni(false);
 					btnIni(false);
 					
@@ -229,6 +230,7 @@ public class MonthlyMobileAllowance extends Window
 			public void buttonClick(ClickEvent event) 
 			{
 				isFind = true;
+				i=0;
 				findButtonEvent();
 			}
 		});
@@ -238,6 +240,55 @@ public class MonthlyMobileAllowance extends Window
 			public void buttonClick(ClickEvent event)
 			{
 				close();
+			}
+		});
+		
+		button.btnDelete.addListener( new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
+				if(cmbUnit.getValue()!=null )
+				{
+					if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+					{
+						if(cmbSection.getValue()!=null || chkSectionAll.booleanValue())
+						{
+							if(!lblEmployeeName.get(0).toString().equals(""))
+							{
+								MessageBox mb = new MessageBox(getParent(), "Are you sure?", MessageBox.Icon.QUESTION, "Do you want to Delete information?", new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"), new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+								mb.setStyleName("cwindowMB");
+								mb.show(new EventListener()
+								{
+									public void buttonClicked(ButtonType buttonType)
+									{
+										if(buttonType == ButtonType.YES)
+										{
+											deleteData();
+											isUpdate=false;
+											isFind = false;
+										}
+									}
+								});
+							}
+							else
+							{
+								showNotification("Warning","There are nothing to Delete!!!",Notification.TYPE_WARNING_MESSAGE);
+							}
+						}
+						else
+						{
+							showNotification("Warning","Please Select Section!!!",Notification.TYPE_WARNING_MESSAGE);
+						}			
+					}
+					else
+					{
+						showNotification("Warning","Please Select Department!!!",Notification.TYPE_WARNING_MESSAGE);
+					}			
+				}
+				else
+				{
+					showNotification("Warning","Please select  Project!!!",Notification.TYPE_WARNING_MESSAGE);
+				}
 			}
 		});
 
@@ -371,7 +422,7 @@ public class MonthlyMobileAllowance extends Window
 			
 			public void valueChange(ValueChangeEvent event) {
 				//tableClear();
-				if(cmbEmployee.getValue()!=null)
+				if(cmbEmployee.getValue()!=null & isFind==false)
 				{
 					addTableData();
 				}
@@ -380,7 +431,7 @@ public class MonthlyMobileAllowance extends Window
 	}
 	private void findButtonEvent()
 	{
-		Window win = new MonthlyMobileAllowanceFind(sessionBean, findId, EmpId);
+		Window win = new MonthlyMobileAllowanceFind(sessionBean, findId, empID);
 		win.setStyleName("cwindow");
 		win.setModal(true);
 		win.addListener(new Window.CloseListener() 
@@ -389,59 +440,63 @@ public class MonthlyMobileAllowance extends Window
 			{
 				if(findId.getValue().toString().length()>0)
 				{
-					findInitialize(findId.getValue().toString(),EmpId.getValue().toString());
+					findInitialize(findId.getValue().toString(),empID.getValue().toString());
+					
 				}
 			}
 		});
 		this.getParent().addWindow(win);
 	}
+	
 	private void findInitialize(String findId, String strEmpID)
 	{
+		
+		
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		try
 		{
-			String findQuery = "select vEmployeeId,vEmployeeCode,vEmployeeName,vDesignation,vUnitId," +
-					"dJoiningDate,vSectionId," +
-					"(select vDepartmentId from tbEmpOfficialPersonalInfo where vEmployeeId=eli.vEmployeeId)deptId,dEntryDate  " +
-					"from tbLeaveEntitlement eli where vLeaveId = '"+findId+"' and vEmployeeId = '"+strEmpID+"'";
+			String sql = "select vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,vDepartmentId,vDepartmentName,"
+					+ "(select vServiceType from tbEmpOfficialPersonalInfo where vEmployeeID=tbMonthlyMobileAllowance.vEmployeeID)vServiceType, "
+					+ "dJoiningDate,mMobileAllowance,dDate,vUnitId,vDepartmentId,vSectionID,vEmployeeID,iAutoID "
+					+ "from tbMonthlyMobileAllowance "
+					+ "where iAutoID = '"+findId+"' and vEmployeeId = '"+strEmpID+"' "
+					+ "order by SUBSTRING(vEmployeeCode,3,50) ";
 			
-			System.out.println("FindQuery " + findQuery);
-			List <?> list = session.createSQLQuery(findQuery).list();
+			System.out.println("findInitialize: "+sql);
 			
-			if(!list.isEmpty())
+			List <?> lst = session.createSQLQuery(sql).list();
+			if(lst.iterator().hasNext())
 			{
-				if(list.iterator().hasNext())
+				Object[] element = (Object[]) lst.iterator().next();
+				if(i<1)
 				{
-					Object[] element = (Object[]) list.iterator().next();
-					cmbUnit.setValue(element[0].toString());
-					cmbSection.setValue(element[1]);
-					for(int i=0; i<list.size(); i++)
-					{
-						lblEmployeeId.get(i).setValue(element[2].toString());
-						lblEmployeeCode.get(i).setValue(element[3]);
-						lblEmployeeName.get(i).setValue(element[4]);
-						lblDesignation.get(i).setValue(element[5]);
-						lblDepartmentId.get(i).setValue(element[5]);
-						lblDepartmentName.get(i).setValue(element[5]);
-						lblJoiningDate.get(i).setValue(element[6]);
-						lblEmployeeType.get(i).setValue(element[6]);
-						
-						txtMobileAll.get(i).setValue(element[7]);
-					}
-					cmbDepartment.setValue(element[12]);
-					dDate.setValue(element[13]);
+					dDate.setValue(element[9]);
+					cmbUnit.setValue(element[10]);
+					cmbDepartment.setValue(element[11]);
+					cmbSection.setValue(element[12]);
+					cmbEmployee.setValue(element[13]);
+					txtAutoId.setValue(element[14]);					
+				}
+				lblEmployeeId.get(i).setValue(element[0]);
+				lblEmployeeCode.get(i).setValue(element[1]);
+				lblEmployeeName.get(i).setValue(element[2]);
+				lblDesignation.get(i).setValue(element[3]);
+				lblDepartmentId.get(i).setValue(element[4]);
+				lblDepartmentName.get(i).setValue(element[5]);
+				lblEmployeeType.get(i).setValue(element[6]);
+				lblJoiningDate.get(i).setValue(element[7]);				
+				txtMobileAll.get(i).setValue(element[8]);
+				i++;
+				
+				if(i==lblEmployeeName.size()-1)	{
+					tableRowAdd(i+1);
 				}
 			}
-			else
-			{
-				tableClear();
-				this.getParent().showNotification("Warning!","Balance already exist.", Notification.TYPE_WARNING_MESSAGE); 
-			}
 		}
-		catch (Exception ex)
+		catch(Exception exp)
 		{
-			this.getParent().showNotification("Khan", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
+			this.getParent().showNotification("Error",exp+"",Notification.TYPE_ERROR_MESSAGE);
 		}
 		finally{session.close();}
 	}
@@ -688,6 +743,51 @@ public class MonthlyMobileAllowance extends Window
 			});
 		}
 	}
+	
+	private void deleteData()
+	{
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		Transaction tx = session.beginTransaction();
+		try
+		{
+			for(int i = 0;i<lblEmployeeId.size();i++)
+			{
+				if(!lblEmployeeId.get(i).getValue().toString().isEmpty())
+				{
+					/*Old Data Data*/
+					String queryOld="insert into tbUdMonthlyMobileAllowance(" +
+							"dDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,dJoiningDate,vUnitId,vUnitName,vDepartmentId,"
+							+ "vDepartmentName,vSectionID,vSectionName,mMobileAllowance,vEmployeeType,vUdFlag,vUserId,vUserName,vUserIP,dEntryTime" +
+							") "
+							+ "select dDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,dJoiningDate,vUnitId,vUnitName,vDepartmentId,"
+							+ "vDepartmentName,vSectionID,vSectionName,mMobileAllowance,vEmployeeType,'DELETE',vUserId,vUserName,vUserIP,dEntryTime "
+							+ "from tbMonthlyMobileAllowance where iAutoID='"+txtAutoId.getValue()+"' ";
+
+					System.out.println("queryOld :" +queryOld);					
+					session.createSQLQuery(queryOld).executeUpdate();
+
+					/*Delete Data*/
+					String queryDelete="delete from tbMonthlyMobileAllowance where iAutoID='"+txtAutoId.getValue()+"' ";					
+					session.createSQLQuery(queryDelete).executeUpdate();
+				}
+			}
+			tx.commit();
+			Notification n=new Notification("All Information Delete Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+			n.setPosition(Notification.POSITION_TOP_RIGHT);
+			showNotification(n);
+			txtClear();
+			componentIni(true);
+			btnIni(true);
+		}
+		catch(Exception ex)
+		{
+			showNotification("insertData", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
+			tx.rollback();
+		}
+		finally{session.close();}
+	}
+	
+	
 
 	private void insertData()
 	{
@@ -721,7 +821,6 @@ public class MonthlyMobileAllowance extends Window
 							+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',getdate())";
 
 					System.out.println("insertData :" +query);
-					
 					session.createSQLQuery(query).executeUpdate();
 				}
 			}
@@ -740,6 +839,7 @@ public class MonthlyMobileAllowance extends Window
 		}
 		finally{session.close();}
 	}
+	
 	private void updateData()
 	{
 		Session session = SessionFactoryUtil.getInstance().openSession();
@@ -750,37 +850,60 @@ public class MonthlyMobileAllowance extends Window
 			{
 				if(!lblEmployeeId.get(i).getValue().toString().isEmpty())
 				{
-					String udquery="insert into tbMonthlyMobileAllowance(" +
+					
+					/*Old Data Data*/
+					String queryOld="insert into tbUdMonthlyMobileAllowance(" +
 							"dDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,dJoiningDate,vUnitId,vUnitName,vDepartmentId,"
-							+ "vDepartmentName,vSectionID,vSectionName,mMobileAllowance,vUserId,vUserName,vUserIP,dEntryTime" +
+							+ "vDepartmentName,vSectionID,vSectionName,mMobileAllowance,vEmployeeType,vUdFlag,vUserId,vUserName,vUserIP,dEntryTime" +
 							") "
-							+ "values ()";
+							+ "select dDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,dJoiningDate,vUnitId,vUnitName,vDepartmentId,"
+							+ "vDepartmentName,vSectionID,vSectionName,mMobileAllowance,vEmployeeType,'UPDATE',vUserId,vUserName,vUserIP,dEntryTime "
+							+ "from tbMonthlyMobileAllowance where iAutoID='"+txtAutoId.getValue()+"' ";
 
-					System.out.println("Update Monthly Salary UD :" +udquery);
-					
-					session.createSQLQuery(udquery).executeUpdate();
-					session.clear();
-					
-					String query = "update tbEmpOfficialPersonalInfo " +
-							"set mMobileAllowance='"+(txtMobileAll.get(i).getValue().toString().trim().isEmpty()?0:txtMobileAll.get(i).getValue().toString().trim())+"'," + 
-							"vUserName='"+sessionBean.getUserName()+"',vUserIP='"+sessionBean.getUserIp()+"',dEntryTime=GETDATE() " +
-							"where vEmployeeID = '"+lblEmployeeId.get(i).getValue().toString()+"' " +
-							"and vSalaryMonth='"+FMonthName.format(dDate.getValue())+"' and vSalaryYear='"+FYear.format(dDate.getValue())+"'";
+					System.out.println("queryOld :" +queryOld);					
+					session.createSQLQuery(queryOld).executeUpdate();
 
-					System.out.println("Update Monthly Salary :" +query);
+					/*Delete Data*/
+					String queryDelete="delete from tbMonthlyMobileAllowance where iAutoID='"+txtAutoId.getValue()+"' ";					
+					session.createSQLQuery(queryDelete).executeUpdate();
+
+					/*Insert Data*/
+					String queryUpdate="insert into tbMonthlyMobileAllowance(" +
+							"dDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationName,dJoiningDate,vUnitId,vUnitName,vDepartmentId,"
+							+ "vDepartmentName,vSectionID,vSectionName,mMobileAllowance,vEmployeeType,vUserId,vUserName,vUserIP,dEntryTime" +
+							") "
+							+ "values ("
+							+ "'"+dFormat.format(dDate.getValue())+"',"
+							+ "'"+lblEmployeeId.get(i).getValue()+"',"
+							+ "'"+lblEmployeeCode.get(i).getValue()+"',"
+							+ "'"+lblEmployeeName.get(i).getValue()+"',"
+							+ "'"+lblDesignation.get(i).getValue()+"',"
+							+ "'"+lblJoiningDate.get(i).getValue()+"',"
+							+ "'"+cmbUnit.getValue()+"',"
+							+ "'"+cmbUnit.getItemCaption(cmbUnit.getValue())+"',"
+							+ "'"+lblDepartmentId.get(i).getValue()+"',"
+							+ "'"+lblDepartmentName.get(i).getValue()+"',"
+							+ "'',"
+							+ "'',"
+							+ "'"+txtMobileAll.get(i).getValue()+"',"
+							+ "'"+lblEmployeeType.get(i).getValue()+"',"
+							+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',getdate())";
 					
-					session.createSQLQuery(query).executeUpdate();
-					session.clear();
+					System.out.println("queryUpdate: "+queryUpdate);					
+					session.createSQLQuery(queryUpdate).executeUpdate();
 				}
 			}
 			tx.commit();
-			Notification n=new Notification("All Information Updated Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+			Notification n=new Notification("All Information Update Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 			n.setPosition(Notification.POSITION_TOP_RIGHT);
 			showNotification(n);
+			txtClear();
+			componentIni(true);
+			btnIni(true);
 		}
 		catch(Exception ex)
 		{
-			showNotification("updateData", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
+			showNotification("insertData", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
 			tx.rollback();
 		}
 		finally{session.close();}
@@ -987,6 +1110,12 @@ public class MonthlyMobileAllowance extends Window
 		dDate.setDateFormat("dd-MM-yyyy");
 		dDate.setValue(new java.util.Date());
 		mainLayout.addComponent(dDate, "top:18.0px; left:150.0px;");
+
+		txtAutoId.setImmediate(true);
+		txtAutoId.setWidth("150px");
+		txtAutoId.setHeight("-1px");
+		mainLayout.addComponent(txtAutoId, "top:18.0px; left:450.0px;");
+		txtAutoId.setVisible(false);
 		
 		lblUnit = new Label("Project :");
 		lblUnit.setImmediate(false); 
@@ -1096,8 +1225,8 @@ public class MonthlyMobileAllowance extends Window
 		table.addContainerProperty("EmployeeType", Label.class, new Label());
 		table.setColumnWidth("EmployeeType", 60);
 
-		table.addContainerProperty("Mobile", TextField.class, new TextField());
-		table.setColumnWidth("Mobile", 70);
+		table.addContainerProperty("HR", TextField.class, new TextField());
+		table.setColumnWidth("HR", 70);
 
 		table.setColumnCollapsed("System ID", true);
 		table.setColumnCollapsed("Department ID", true);

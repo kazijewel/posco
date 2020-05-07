@@ -155,11 +155,6 @@ public class OverTimeRequestApproval extends Window
 				{
 					 cmbDepartmentDataAdd();
 				}
-				else
-				{
-					showNotification("Warning!","Select Project",Notification.TYPE_WARNING_MESSAGE);
-					cmbDepartment.focus();
-				}
 			}
 		});
 
@@ -383,12 +378,12 @@ public class OverTimeRequestApproval extends Window
 			{
 				if(tbChkSelect.get(i).booleanValue())
 				{
-					String updateInfo = " update tbOTRequest set " +
-							" iFinal=1" +
+					String updateInfo = " update tbOTRequest "
+							+ "set iFinal=1, "
+							+ "vApprovedBy='"+sessionBean.getUserName()+"' " +
 							" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
 
 					session.createSQLQuery(updateInfo).executeUpdate();
-	
 				}
 			}
 			tx.commit();
