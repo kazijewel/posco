@@ -62,8 +62,6 @@ import com.appform.hrmModule.IncrementType;
 import com.appform.hrmModule.ItemDistribution;
 import com.appform.hrmModule.ItemTypeInformation;
 import com.appform.hrmModule.LeaveApplicationForm;
-import com.appform.hrmModule.LeaveApprovalMapping;
-import com.appform.hrmModule.LeaveApprove;
 import com.appform.hrmModule.LeaveApproveFinal;
 import com.appform.hrmModule.LeaveApproveHR;
 import com.appform.hrmModule.LeaveApprovePrimary;
@@ -450,10 +448,6 @@ public class HrmMenu
 		
 	}
 	private void addLeaveTransaction(Object leaveTransaction) {
-		if(isValidMenu("LeaveApprovalMapping"))
-		{
-			addCaptionedItem("LEAVE APPROVAL MAPPING", leaveTransaction);
-		}
 		if(isValidMenu("leaveTypeEntry"))
 		{
 			addCaptionedItem("LEAVE TYPE ENTRY", leaveTransaction);
@@ -977,13 +971,6 @@ public class HrmMenu
 				{
 					showWindow(new RptPFIndividualLoanStatement(sessionBean,"PFindividualLoanStatement"),event.getItem(),"PFindividualLoanStatement","HRM MODULE","REPORT");
 				}
-				
-				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL MAPPING"))
-				{
-					showWindow(new LeaveApprovalMapping(sessionBean,"LeaveApprovalMapping"),event.getItem(),"LeaveApprovalMapping","HRM MODULE","TRANSACTION");
-				}
-				
-				
 			}
 		});
 	}

@@ -7,11 +7,7 @@ import java.util.Iterator;
 
 import org.hibernate.Session;
 
-
-
-
-
-import com.common.access.accessGeneralSetup;
+import com.appform.hrmModule.LeaveApprovalMapping;
 import com.common.access.accessMasterSetup;
 import com.common.access.accessSetupReports;
 import com.common.share.ChangePass;
@@ -67,15 +63,7 @@ public class AdminMenu
 		if(isValidMenu("companyInformation"))
 		{
 			addCaptionedItem("COMPANY INFORMATION", masterSetup);
-		}	
-		/*if(isValidMenu("SectionInfo"))
-		{
-			addCaptionedItem("SECTION INFORMATION", masterSetup);
 		}
-		if(isValidMenu("PosTypeInfo"))
-		{
-			addCaptionedItem("POS TYPE INFO", masterSetup);
-		}*/
 		if(isValidMenu("userCreate"))
 		{
 			addCaptionedItem("USER CREATE", masterSetup);
@@ -88,19 +76,11 @@ public class AdminMenu
 		{
 			addCaptionedItem("USER AUTHENTICATION", masterSetup);
 		}
-
-	}
-
-	private void masterSetup(Object generalSetup)
-	{
-		if(isValidMenu("userCreate"))
+		if(isValidMenu("LeaveApprovalMapping"))
 		{
-			addCaptionedItem("USER CREATE", generalSetup);
+			addCaptionedItem("LEAVE APPROVAL MAPPING", masterSetup);
 		}
-		if(isValidMenu("userAuthentication"))
-		{
-			addCaptionedItem("USER AUTHENTICATION", generalSetup);
-		}
+
 	}
 
 	private void reportMenu(Object setupReport)
@@ -163,14 +143,17 @@ public class AdminMenu
 				{
 					showWindow(new ChangePass(sessionBean),event.getItem(),"ChangePassword","SETUP MODULE","SETUP");
 				}
-				
+
+				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL MAPPING"))
+				{
+					showWindow(new LeaveApprovalMapping(sessionBean,"LeaveApprovalMapping"),event.getItem(),"LeaveApprovalMapping","HRM MODULE","TRANSACTION");
+				}
 				
 				//REPORT
 				
 				if(event.getItem().toString().equalsIgnoreCase("USER AUTHENTICATION REPORT"))
 				{
-					showWindow(new RptUserAuthentication(sessionBean,"rptUserAuthentication"),
-							event.getItem(),"rptUserAuthentication","SETUP MODULE","REPORT");
+					showWindow(new RptUserAuthentication(sessionBean,"rptUserAuthentication"),event.getItem(),"rptUserAuthentication","SETUP MODULE","REPORT");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("DATA ENTRY STATUS"))
 				{

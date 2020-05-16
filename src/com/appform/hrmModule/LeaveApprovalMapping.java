@@ -457,8 +457,19 @@ public class LeaveApprovalMapping extends Window
 			if(isUpdate)
 			{
 				autoId=labelTransaction.getValue().toString();
-				String sql="delete from tbLeaveApprovalMapping where vDepartmentId='"+(cmbDepartment.getValue()==null?"":cmbDepartment.getValue())+"'";
-				session.createSQLQuery(sql).executeUpdate();
+				
+				String sqlOldDataInsert="insert into tbUdLeaveApprovalMapping(vTransactionId,vDepartmentId,vDepartmentName,vUnitId,vUnitName,"
+						+ "vDesignationIdPrimary,vDesignationNamePrimary,vDesignationIdFinal,vDesignationNameFinal,vUserId,vUserName,vUserIp,"
+						+ "dEntryTime,vDesignationIdHR,vDesignationNameHR,vUdFlag) "
+						+ "select vTransactionId,vDepartmentId,vDepartmentName,vUnitId,vUnitName,vDesignationIdPrimary,vDesignationNamePrimary,"
+						+ "vDesignationIdFinal,vDesignationNameFinal,vUserId,vUserName,vUserIp,dEntryTime,vDesignationIdHR,vDesignationNameHR, "
+						+ "'OLD' from tbLeaveApprovalMapping where vTransactionId='"+autoId+"'";
+				System.out.println("sqlOldDataInsert: "+sqlOldDataInsert);
+				
+				session.createSQLQuery(sqlOldDataInsert).executeUpdate();
+				
+				String sqlDelete="delete from tbLeaveApprovalMapping where vDepartmentId='"+(cmbDepartment.getValue()==null?"":cmbDepartment.getValue())+"'";
+				session.createSQLQuery(sqlDelete).executeUpdate();
 			}
 			
 			String sql="insert into tbLeaveApprovalMapping(vTransactionId,vDepartmentId,vDepartmentName,vUnitId,vUnitName,vDesignationIdPrimary,"+
@@ -579,6 +590,7 @@ public class LeaveApprovalMapping extends Window
 		cmbDesignationPrimary.setNullSelectionAllowed(false);
 		mainLayout.addComponent(new Label("Primary Approve :"),"top:80px; left:30px");
 		mainLayout.addComponent(cmbDesignationPrimary,"top:78px; left:150px");
+		mainLayout.addComponent(new Label("(STEP 1)"),"top:80px; left:410px");
 		
 		cmbDesignationHR=new ComboBox();
 		cmbDesignationHR.setWidth("250px");
@@ -587,8 +599,7 @@ public class LeaveApprovalMapping extends Window
 		cmbDesignationHR.setNullSelectionAllowed(false);
 		mainLayout.addComponent(new Label("HR Approve :"),"top:110px; left:30px");
 		mainLayout.addComponent(cmbDesignationHR,"top:108px; left:150px");
-		
-		
+		mainLayout.addComponent(new Label("(STEP 2)"),"top:110px; left:410px");
 		
 		cmbDesignationFinal=new ComboBox();
 		cmbDesignationFinal.setWidth("250px");
@@ -597,9 +608,8 @@ public class LeaveApprovalMapping extends Window
 		cmbDesignationFinal.setNullSelectionAllowed(false);
 		mainLayout.addComponent(new Label("Final Approve :"),"top:140px; left:30px");
 		mainLayout.addComponent(cmbDesignationFinal,"top:138px; left:150px");
+		mainLayout.addComponent(new Label("(STEP 3)"),"top:140px; left:410px");
 		
-		
-
 		mainLayout.addComponent(cButton, "bottom:15px;left:40px;");
 
 		return mainLayout;
