@@ -106,7 +106,6 @@ public class OverTimeRequestForm extends Window
 	private SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private SimpleDateFormat dbMonthFormat = new SimpleDateFormat("MM");
 	private SimpleDateFormat dbYearFormat = new SimpleDateFormat("yyyy");
-    public int count=0;
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss aa");
     private TimeField tHrFrom=new TimeField();
 	private TimeField tMinFrom=new TimeField();
@@ -315,11 +314,12 @@ public class OverTimeRequestForm extends Window
 			public void buttonClick(ClickEvent event)
 			{
 				Find = false;
+				Update = false;
+				
 				txtClear();
 				componentIni(false);
 				btnIni(false);
 				dRequestDate.focus();
-				count=0;
 				saveValidation=0;
 				txtTransactionID.setValue(transactionIDGenerate());
 			}
@@ -331,6 +331,8 @@ public class OverTimeRequestForm extends Window
 			{
 				saveValidation=0;
 				checkForm();
+				cButton.btnEdit.setEnabled(false);
+				cButton.btnDelete.setEnabled(false);
 			}
 		});
 
@@ -338,7 +340,6 @@ public class OverTimeRequestForm extends Window
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				count=1;
 				saveValidation=0;
 				if(cmbEmployee.getValue()!=null)
 				{
@@ -400,7 +401,6 @@ public class OverTimeRequestForm extends Window
 				txtClear();
 				componentIni(true);
 				btnIni(true);
-				count=0;
 				saveValidation=0;
 			}
 		});
@@ -477,7 +477,7 @@ public class OverTimeRequestForm extends Window
 							txtClear();
 							btnIni(true);
 							Find=false;
-							count=0;
+							Update=false;
 							Notification n=new Notification("All Information Delete Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 							n.setPosition(Notification.POSITION_TOP_RIGHT);
 							showNotification(n);
@@ -597,7 +597,10 @@ public class OverTimeRequestForm extends Window
 				outTime=outhour+":"+OutMin+":00";
 			
 			
-			String sql="select dbo.funTimeDuration('"+inTime+"','"+outTime+"','"+sessionBean.dfDb.format(dRequestDate.getValue())+"')";
+			String sql="select dbo.funTimeDuration('"+inTime+"',"
+					+ "(case when '"+outTime+"'='24:0:0' OR '"+outTime+"'='24:00:0' OR '"+outTime+"'='24:0:00' OR '"+outTime+"'='24:00:00' "
+					+ "then '00:00:00' else '"+outTime+"' end),"
+					+ "'"+sessionBean.dfDb.format(dRequestDate.getValue())+"')";
 			System.out.println(sql);
 			Iterator<?> iter=session.createSQLQuery(sql).list().iterator();
 			if(iter.hasNext())
@@ -871,20 +874,13 @@ public class OverTimeRequestForm extends Window
 							{
 								if(!inTime.equalsIgnoreCase(outTime))
 								{
-									if(count==0)
+									if(checkData())
 									{
-										if(checkData())
-										{
-											saveButtonEvent();
-										}
-										else
-										{
-											showNotification("Warning", "Data already exist! Try new one!", Notification.TYPE_WARNING_MESSAGE);
-										}
+										saveButtonEvent();
 									}
 									else
 									{
-										saveButtonEvent();
+										showNotification("Warning", "Data already exist! Try new one!", Notification.TYPE_WARNING_MESSAGE);
 									}
 								
 								}
@@ -949,7 +945,7 @@ public class OverTimeRequestForm extends Window
 		
 		if(!chkSalary(query))
 		{
-			MessageBox mb = new MessageBox(getParent(),"Are You Sure?",MessageBox.Icon.QUESTION,count==1?"Do You Want to Update All Information?":"Do You Want to save All Information?",new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"),new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+			MessageBox mb = new MessageBox(getParent(),"Are You Sure?",MessageBox.Icon.QUESTION,Update==true?"Do You Want to Update All Information?":"Do You Want to save All Information?",new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"),new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
 			mb.setStyleName("cwindowMB");
 			mb.show(new EventListener()
 			{
@@ -965,8 +961,7 @@ public class OverTimeRequestForm extends Window
 							componentIni(true);
 							btnIni(true);
 							Find=false;
-							count=0;
-							Notification n=new Notification("All Information "+(count==1?"Updated":"Saved")+" Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+							Notification n=new Notification("All Information "+(Update==true?"Updated":"Saved")+" Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 							n.setPosition(Notification.POSITION_TOP_RIGHT);
 							showNotification(n);
 							saveValidation=1;
@@ -1032,7 +1027,7 @@ public class OverTimeRequestForm extends Window
 			else
 				outTime=outhour+":"+OutMin+":00";
 			
-			if(count==1)
+			if(Update)
 			{
 				transactionID=txtTransactionID.getValue().toString();
 				
@@ -1081,6 +1076,7 @@ public class OverTimeRequestForm extends Window
                     + " '"+sessionBean.getUserIp()+"',GETDATE(),"
                     + " '"+sessionBean.dfDb.format(dReplaceHoliday.getValue())+"','"+sessionBean.dfDb.format(dReplaceWorking.getValue())+"','"+approved+"')";
 			
+			System.out.println("insertData: "+query);
 			
 			session.createSQLQuery(query).executeUpdate();
 			

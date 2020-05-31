@@ -1,7 +1,6 @@
 package com.appform.hrmModule;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,28 +11,28 @@ import org.hibernate.classic.Session;
 import com.common.share.CommonButton;
 import com.common.share.CommonMethod;
 import com.common.share.MessageBox;
+import com.common.share.MessageBox.ButtonType;
+import com.common.share.MessageBox.EventListener;
 import com.common.share.ReportDate;
 import com.common.share.ReportViewer;
 import com.common.share.SessionBean;
 import com.common.share.SessionFactoryUtil;
 import com.common.share.TextRead;
-import com.common.share.MessageBox.ButtonType;
-import com.common.share.MessageBox.EventListener;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.AbsoluteLayout;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Table.HeaderClickEvent;
-import com.vaadin.ui.Window.Notification;
+import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
 public class LeaveApprove extends Window 
@@ -47,6 +46,7 @@ public class LeaveApprove extends Window
 	CommonButton btnFind = new CommonButton("", "", "", "", "", "Find", "", "", "", "");
 
 	private Table table = new Table();
+	private ArrayList<NativeButton> Delete = new ArrayList<NativeButton>();
 	private ArrayList<Label> tbLblReference = new ArrayList<Label>();
 	private ArrayList<Label> tbLblEmployeeId = new ArrayList<Label>();
 	private ArrayList<Label> tbLblEmployeeCode = new ArrayList<Label>();
@@ -133,11 +133,6 @@ public class LeaveApprove extends Window
 				{
 					 cmbDepartmentDataAdd();
 				}
-				else
-				{
-					showNotification("Warning!","Select Project",Notification.TYPE_WARNING_MESSAGE);
-					cmbDepartment.focus();
-				}
 			}
 		});
 
@@ -184,8 +179,7 @@ public class LeaveApprove extends Window
 				txtClear();
 				txtInit(false);
 				btnIni(false);			
-				cmbUnit.focus();				
-				cmbDepartment.focus();
+				cmbUnit.focus();
 				cmbUnitDataAdd();
 				
 			}
@@ -229,20 +223,10 @@ public class LeaveApprove extends Window
 		session.beginTransaction();
 		try
 		{
-			/*String query=" select distinct vDepartmentId,(select vDepartmentName from tbDepartmentInfo si where" +
-					" si.vDepartmentId=li.vDepartmentId) vDepartmentName from tbEmpLeaveApplicationInfo li" +
-					" where iApprovedFlag = 0 order by vDepartmentName ";*/
+			String query=" select epo.vUnitId,epo.vUnitName from tbEmpOfficialPersonalInfo epo inner join "
+					+ " tbEmpLeaveApplicationInfo eli on epo.vEmployeeId=eli.vEmployeeId where eli.iFinal=0 "
+					+ " order by epo.vUnitName";
 			
-			/*String query="select distinct vUnitId,(select vUnitName from tbUnitInfo si where "
-					+ "si.vUnitId=li.vUnitId) vUnitName from tbEmpLeaveApplicationInfo li where"
-					+ " iApprovedFlag = 0 order by vUnitName ";*/
-			
-			String query=" select sec.vUnitId,sec.vUnitName from tbEmpOfficialPersonalInfo sec inner join "
-					+ "tbEmpLeaveApplicationInfo emp on sec.vEmployeeId=emp.vEmployeeId  where emp.iApprovedFlag = 0 "
-					+ "order by sec.vUnitName";
-			
-			
-					
 					System.out.println("UNIT"+query);
 			
 			List <?> lst=session.createSQLQuery(query).list();
@@ -272,15 +256,10 @@ public class LeaveApprove extends Window
 		session.beginTransaction();
 		try
 		{
-			/*String query=" select distinct vDepartmentId,(select vDepartmentName from tbDepartmentInfo si where" +
-					" si.vDepartmentId=li.vDepartmentId) vDepartmentName  and vUnitId = '"+cmbUnit.getValue().toString()+"'"
-							+ " from tbEmpLeaveApplicationInfo li" +
-					" where iApprovedFlag = 0 order by vDepartmentName "*/;
-		
-			
-	String query=" select sec.vDepartmentId,sec.vDepartmentName from tbEmpOfficialPersonalInfo sec inner join tbEmpLeaveApplicationInfo "
-			+ "emp on sec.vEmployeeId=emp.vEmployeeId  where sec.vUnitId='"+cmbUnit.getValue().toString()+"' and emp.iApprovedFlag =0 order "
-			+ "by sec.vDepartmentName";
+			String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo "
+			+ "inner join tbEmpLeaveApplicationInfo eli on epo.vEmployeeId=eli.vEmployeeId "
+			+ "where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and eli.iFinal=0 "
+			+ " order by epo.vDepartmentName";
 			
 	
 	System.out.println("Department"+query);
@@ -330,6 +309,7 @@ public class LeaveApprove extends Window
 		if(checkTableData())
 		{
 			MessageBox mb = new MessageBox(getParent(), "Are you sure?", MessageBox.Icon.QUESTION, "Do you want to approve leave?", new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"), new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+			mb.setStyleName("cwindowMB");
 			mb.show(new EventListener()
 			{
 				public void buttonClicked(ButtonType buttonType)
@@ -339,7 +319,7 @@ public class LeaveApprove extends Window
 						updateData();
 						txtInit(true);
 						btnIni(true);
-						Notification n=new Notification("Leave Approved Successfully!","",Notification.TYPE_HUMANIZED_MESSAGE);
+						Notification n=new Notification("Leave Approved Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 						n.setPosition(Notification.POSITION_TOP_RIGHT);
 						showNotification(n);
 					}
@@ -365,20 +345,36 @@ public class LeaveApprove extends Window
 				{
 					int adjust = (Integer.parseInt("0"+tbTxtTotalDays.get(i).getValue().toString())-Integer.parseInt("0"+tbTxtApproveDays.get(i).getValue().toString()));
 
-					String updateInfo = " update tbEmpLeaveApplicationInfo set " +
-							" dSanctionFrom = '"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"'," +
-							" dSanctionTo = '"+sessionBean.dfDb.format(tbdLeaveTo.get(i).getValue())+"'," +
-							" mTotalDays = '"+"0"+tbTxtApproveDays.get(i).getValue().toString()+"'," +
-							" mAdjustDays = '"+adjust+"'," +
-							" mFridays = '"+(fridayCount(sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue()), sessionBean.dfDb.format(tbdLeaveTo.get(i).getValue())))+"'," +
-							" iApprovedFlag = 1," +
+					String leaveId=tbLblReference.get(i).getValue().toString();
+					
+					String deleteData = "insert into tbUdEmpLeaveApplicationInfo (vLeaveId,vLeaveTypeId,vLeaveTypeName,vEmployeeId,vEmployeeName,"
+							+ "vUnitId,vUnitName,dLeaveDate,vPaymentFlag,iApprovedFlag,vAdjustedType,vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,"
+							+ "iFinal,iHR,dEntitleFromDate,dEntitleToDate,vELType,vUdFlag,vUserId,vUserName,vUserIp,dEntryTime) "
+							+ "select vLeaveId,vLeaveTypeId,vLeaveTypeName,vEmployeeId,vEmployeeName,vUnitId,vUnitName,dLeaveDate,vPaymentFlag,"
+							+ "iApprovedFlag,vAdjustedType,vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,iFinal,iHR,dEntitleFromDate,dEntitleToDate,"
+							+ "vELType,'UPDATE','"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP "
+							+ "from tbEmpLeaveApplicationDetails where vLeaveId ='"+leaveId+"' ";
+					
+					System.out.println("deleteData: "+deleteData);
+					session.createSQLQuery(deleteData).executeUpdate();
+					
+					String updateInfo = " update tbEmpLeaveApplicationInfo "
+							+ "set dSanctionFrom = '"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"', "
+							+ "dSanctionTo = '"+sessionBean.dfDb.format(tbdLeaveTo.get(i).getValue())+"', "
+							+ "mTotalDays = '"+"0"+tbTxtApproveDays.get(i).getValue().toString()+"',"
+							+ "mAdjustDays = '"+adjust+"',"
+							+ "mFridays = '"+(fridayCount(sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue()), sessionBean.dfDb.format(tbdLeaveTo.get(i).getValue())))+"', "
+							+ "iFinal = 1, "
+							+ "iPrimary = 1, "
+							+ "iHR = 1, "
+							+ "iApprovedFlag=1," +
 							" vApprovedBy = '"+sessionBean.getUserName()+"'" +
 							" where vLeaveId = '"+tbLblReference.get(i).getValue().toString()+"' ";
 
 					session.createSQLQuery(updateInfo).executeUpdate();
 
 					String updateDetails = " update tbEmpLeaveApplicationDetails set " +
-							" iApprovedFlag = 1 where vLeaveId = '"+tbLblReference.get(i).getValue().toString()+"' ";
+							" iFinal=1, iApprovedFlag=1, iPrimary=1, iHR=1 where vLeaveId = '"+tbLblReference.get(i).getValue().toString()+"' ";
 
 					session.createSQLQuery(updateDetails).executeUpdate();
 
@@ -397,11 +393,11 @@ public class LeaveApprove extends Window
 							+ " from tbEmpLeaveApplicationDetails where vEmployeeID = '"+tbLblEmployeeId.get(i).getValue()+"' "
 							+ " and MONTH(dLeaveDate) = MONTH('"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"') and "
 							+ " YEAR(dLeaveDate) = YEAR('"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"') and "
-							+ " iApprovedFlag = 1 and vPaymentFlag !='Without Pay'), iLeaveWithoutPay = (select COUNT(dLeaveDate)"
+							+ " iPrimary = 1 and vPaymentFlag !='Without Pay'), iLeaveWithoutPay = (select COUNT(dLeaveDate)"
 							+ " from tbEmpLeaveApplicationDetails where vEmployeeID = '"+tbLblEmployeeId.get(i).getValue()+"' "
 							+ " and MONTH(dLeaveDate) = MONTH('"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"') and "
 							+ " YEAR(dLeaveDate) = YEAR('"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"') and "
-							+ " iApprovedFlag = 1 and vPaymentFlag ='Without Pay') where vEmployeeID = '"+tbLblEmployeeId.get(i).getValue()+"' and "
+							+ " iPrimary = 1 and vPaymentFlag ='Without Pay') where vEmployeeID = '"+tbLblEmployeeId.get(i).getValue()+"' and "
 							+ " MONTH(dDate) = MONTH('"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"') and "
 							+ " YEAR(dDate) = YEAR('"+sessionBean.dfDb.format(tbdLeaveFrom.get(i).getValue())+"')";
 					session.createSQLQuery(leaveAttendanceSummary).executeUpdate();
@@ -444,9 +440,10 @@ public class LeaveApprove extends Window
 
 		try
 		{
-			String sql = "select vLeaveId,eli.dApplicationDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,dSanctionFrom,dSanctionTo,mTotalDays," +
-					" epo.vEmployeeId,epo.vEmployeeCode from tbEmpLeaveApplicationInfo eli inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=eli.vEmployeeId where epo.vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue().toString())+"'" +
-					" and iApprovedFlag = 0 order by eli.dApplicationDate";
+			String sql = "select vLeaveId,eli.dApplicationDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,dSanctionFrom,dSanctionTo,mTotalDays," 
+					+" epo.vEmployeeId,epo.vEmployeeCode from tbEmpLeaveApplicationInfo eli inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=eli.vEmployeeId "
+					+" where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"'" 
+					+" and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"' and iFinal = 0 order by eli.dApplicationDate";
 			List <?> list = session.createSQLQuery(sql).list();
 			System.out.println("Find Query :" + sql);
 			tableClear();
@@ -474,11 +471,9 @@ public class LeaveApprove extends Window
 					tbdApplicationDate.get(i).setReadOnly(false);
 					tbdApplicationDate.get(i).setValue(element[1]);
 					tbdApplicationDate.get(i).setReadOnly(true);
-
-					if(tbLblEmployeeName.size()-1==i)
-					{
+					
+					if(i==tbLblEmployeeName.size()-1)
 						tableRowAdd(i+1);
-					}
 
 					i++;
 				}
@@ -497,14 +492,338 @@ public class LeaveApprove extends Window
 
 	private void tableinitialise()
 	{
+		table.setWidth("98%");
+		table.setHeight("330px");
+		table.setColumnCollapsingAllowed(true);
+
+		table.addContainerProperty("Delete", NativeButton.class , new NativeButton());
+		table.setColumnWidth("Delete",45);
+		
+		table.addContainerProperty("Ref.", Label.class, new Label());
+		table.setColumnWidth("Ref.", 30);
+
+		table.addContainerProperty("Emp ID", Label.class, new Label());
+		table.setColumnWidth("Emp ID", 75);
+
+		table.addContainerProperty("Employee Id", Label.class, new Label());
+		table.setColumnWidth("Employee Id", 75);
+
+		table.addContainerProperty("Employee Name", Label.class, new Label());
+		table.setColumnWidth("Employee Name", 170);
+
+		table.addContainerProperty("Designation", Label.class, new Label());
+		table.setColumnWidth("Designation", 130);
+
+		table.addContainerProperty("Unit Name", Label.class, new Label());
+		table.setColumnWidth("Unit Name", 105);
+
+		table.addContainerProperty("Department Name", Label.class, new Label());
+		table.setColumnWidth("Department Name", 135);
+
+		table.addContainerProperty("Leave From", PopupDateField.class, new PopupDateField());
+		table.setColumnWidth("Leave From", 90);
+
+		table.addContainerProperty("Leave To", PopupDateField.class, new PopupDateField());
+		table.setColumnWidth("Leave To", 90);
+
+		table.addContainerProperty("From", PopupDateField.class, new PopupDateField());
+		table.setColumnWidth("From", 90);
+
+		table.addContainerProperty("To", PopupDateField.class, new PopupDateField());
+		table.setColumnWidth("To", 90);
+
+		table.addContainerProperty("Total", TextRead.class, new TextRead());
+		table.setColumnWidth("Total", 40);
+
+		table.addContainerProperty("Apr. Days", TextRead.class, new TextRead());
+		table.setColumnWidth("Apr. Days", 55);
+
+		table.addContainerProperty("App. Date", PopupDateField.class, new PopupDateField());
+		table.setColumnWidth("App. Date", 65);
+
+		table.addContainerProperty("Application", NativeButton.class, new NativeButton());
+		table.setColumnWidth("Application", 65);
+
+		table.addContainerProperty("Approved", CheckBox.class, new CheckBox());
+		table.setColumnWidth("Approved", 60);
+
+		table.setColumnAlignments(new String[] {Table.ALIGN_CENTER, Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT,
+				Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT,
+				Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_CENTER, Table.ALIGN_CENTER,Table.ALIGN_LEFT,
+				Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_CENTER});
+
+		table.setColumnCollapsed("Emp ID", true);
+		table.setColumnCollapsed("From", true);
+		table.setColumnCollapsed("To", true);
+		table.setColumnCollapsed("App. Date", true);
+		table.setColumnCollapsed("Unit Name", true);
+		
+
+		rowAddinTable();
+	}
+	public void rowAddinTable()
+	{
 		for(int i=0;i<10;i++)
 		{
 			tableRowAdd(i);
 		}
 	}
+	public void deleteData(int deleteId)
+	{
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		Transaction tx=session.beginTransaction();		
+		try
+		{
+			String leaveId=tbLblReference.get(deleteId).getValue().toString();
+			
+			String deleteData = "insert into tbUdEmpLeaveApplicationInfo (vLeaveId,vLeaveTypeId,vLeaveTypeName,vEmployeeId,vEmployeeName,"
+					+ "vUnitId,vUnitName,dLeaveDate,vPaymentFlag,iApprovedFlag,vAdjustedType,vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,"
+					+ "iFinal,iHR,dEntitleFromDate,dEntitleToDate,vELType,vUdFlag,vUserId,vUserName,vUserIp,dEntryTime) "
+					+ "select vLeaveId,vLeaveTypeId,vLeaveTypeName,vEmployeeId,vEmployeeName,vUnitId,vUnitName,dLeaveDate,vPaymentFlag,"
+					+ "iApprovedFlag,vAdjustedType,vAuthorisedBy,vRemarks,vCancelBy,vPcIp,iPrimary,iFinal,iHR,dEntitleFromDate,dEntitleToDate,"
+					+ "vELType,'DELETE','"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP "
+					+ "from tbEmpLeaveApplicationDetails where vLeaveId ='"+leaveId+"' ";
+			
+			System.out.println("deleteData: "+deleteData);
+			session.createSQLQuery(deleteData).executeUpdate();
+			
 
+			// delete data from main table to insert update data
+			String deleteInfo = "delete from tbEmpLeaveApplicationInfo where vLeaveId = '"+leaveId+"'";
+			session.createSQLQuery(deleteInfo).executeUpdate();
+			String deleteDetails = "delete from tbEmpLeaveApplicationDetails where vLeaveId = '"+leaveId+"'";
+			session.createSQLQuery(deleteDetails).executeUpdate();
+			tx.commit();
+			
+		}
+		catch (Exception exp)
+		{
+			tx.rollback();
+			showNotification("deleteData", exp.toString(), Notification.TYPE_WARNING_MESSAGE);
+		}
+		finally
+		{
+			session.close();
+		}
+		
+	}
 	private void tableRowAdd( final int ar)
 	{
+		Delete.add(ar, new NativeButton(""));
+		Delete.get(ar).setWidth("100%");
+		Delete.get(ar).setImmediate(true);
+		Delete.get(ar).setIcon(new ThemeResource("../icons/trash.png"));
+		Delete.get(ar).setStyleName("Transparent");
+		Delete.get(ar).addListener(new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event) 
+			{
+				MessageBox mb = new MessageBox(getParent(),"Are You Sure?",MessageBox.Icon.QUESTION,"Do you want to Delete this Row?",new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"),new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+				mb.setStyleName("cwindowMB");
+				mb.show(new EventListener()
+				{
+					public void buttonClicked(ButtonType buttonType)
+					{
+						if(buttonType==ButtonType.YES)
+						{
+							deleteData(ar);
+							
+							tbLblReference.get(ar).setValue("");
+							tbLblEmployeeId.get(ar).setValue("");
+							tbLblEmployeeCode.get(ar).setValue("");
+							tbLblEmployeeName.get(ar).setValue("");
+							tbLblDesignation.get(ar).setValue("");
+							tbLblUnitName.get(ar).setValue("");
+							tbLblDivisionName.get(ar).setValue("");							
+							tbdLeaveFrom.get(ar).setValue(null);
+							tbdLeaveTo.get(ar).setValue(null);
+							tbdLeaveF.get(ar).setValue(null);
+							tbdLeaveT.get(ar).setValue(null);
+							
+							tbTxtTotalDays.get(ar).setValue("");
+							tbTxtApproveDays.get(ar).setValue("");
+							
+							tbdApplicationDate.get(ar).setReadOnly(false);
+							tbdApplicationDate.get(ar).setValue(null);
+							tbChkSelect.get(ar).setValue(false);
+							
+							for(int rowcount=ar;rowcount<=tbLblEmployeeId.size()-1;rowcount++)
+							{
+								if(rowcount+1<=tbLblEmployeeId.size()-1)
+								{
+									if(!tbLblEmployeeId.get(rowcount+1).getValue().toString().equals(""))
+									{
+										tbLblReference.get(rowcount).setValue(tbLblReference.get(rowcount+1).getValue());
+										tbLblEmployeeId.get(rowcount).setValue(tbLblEmployeeId.get(rowcount+1).getValue());
+										tbLblEmployeeCode.get(rowcount).setValue(tbLblEmployeeCode.get(rowcount+1).getValue());
+										tbLblEmployeeName.get(rowcount).setValue(tbLblEmployeeName.get(rowcount+1).getValue());
+										tbLblDesignation.get(rowcount).setValue(tbLblDesignation.get(rowcount+1).getValue());
+										tbLblUnitName.get(rowcount).setValue(tbLblUnitName.get(rowcount+1).getValue());
+										tbLblDivisionName.get(rowcount).setValue(tbLblDivisionName.get(rowcount+1));
+										tbdLeaveFrom.get(rowcount).setValue(tbdLeaveFrom.get(rowcount+1).getValue());
+										tbdLeaveTo.get(rowcount).setValue(tbdLeaveTo.get(rowcount+1).getValue());
+										tbdLeaveF.get(rowcount).setValue(tbdLeaveF.get(rowcount+1).getValue());
+										tbdLeaveT.get(rowcount).setValue(tbdLeaveT.get(rowcount+1).getValue());
+										tbTxtTotalDays.get(rowcount).setValue(tbTxtTotalDays.get(rowcount+1).getValue());
+										tbTxtApproveDays.get(rowcount).setValue(tbTxtApproveDays.get(rowcount+1).getValue());
+										tbdApplicationDate.get(ar).setReadOnly(false);
+										tbdApplicationDate.get(rowcount).setValue(tbdApplicationDate.get(rowcount+1).getValue());
+										tbChkSelect.get(rowcount).setValue(tbChkSelect.get(rowcount+1).getValue());
+
+										tbLblReference.get(rowcount+1).setValue("");
+										tbLblEmployeeId.get(rowcount+1).setValue("");
+										tbLblEmployeeCode.get(rowcount+1).setValue("");
+										tbLblEmployeeName.get(rowcount+1).setValue("");
+										tbLblDesignation.get(rowcount+1).setValue("");
+										tbLblUnitName.get(rowcount+1).setValue("");
+										tbLblDivisionName.get(rowcount+1).setValue("");
+										tbdLeaveFrom.get(rowcount+1).setValue(null);
+										tbdLeaveTo.get(rowcount+1).setValue(null);
+										tbdLeaveF.get(rowcount+1).setValue(null);
+										tbdLeaveT.get(rowcount+1).setValue(null);
+										tbTxtTotalDays.get(rowcount+1).setValue("");
+										tbTxtApproveDays.get(rowcount+1).setValue("");
+										tbdApplicationDate.get(rowcount+1).setReadOnly(false);
+										tbdApplicationDate.get(rowcount+1).setValue(null);
+										tbChkSelect.get(rowcount+1).setValue(false);
+									}
+								}
+							}
+							
+							Notification n=new Notification("Row Data Delete Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+							n.setPosition(Notification.POSITION_TOP_RIGHT);
+							showNotification(n);							
+						}
+					}
+				});
+			}
+		});
+
+		tbLblReference.add(ar, new Label());
+		tbLblReference.get(ar).setImmediate(true);
+		tbLblReference.get(ar).setWidth("100%");
+		
+		tbLblEmployeeId.add(ar,new Label());
+		tbLblEmployeeId.get(ar).setImmediate(true);
+		tbLblEmployeeId.get(ar).setWidth("100%");
+
+		tbLblEmployeeCode.add(ar,new Label());
+		tbLblEmployeeCode.get(ar).setImmediate(true);
+		tbLblEmployeeCode.get(ar).setWidth("100%");
+
+		tbLblEmployeeName.add(ar,new Label());
+		tbLblEmployeeName.get(ar).setImmediate(true);
+		tbLblEmployeeName.get(ar).setWidth("100%");
+
+		tbLblDesignation.add(ar, new Label());
+		tbLblDesignation.get(ar).setImmediate(true);
+		tbLblDesignation.get(ar).setWidth("100%");
+
+		tbLblUnitName.add(ar, new Label());
+		tbLblUnitName.get(ar).setImmediate(true);
+		tbLblUnitName.get(ar).setWidth("100%");
+
+		tbLblDivisionName.add(ar, new Label());
+		tbLblDivisionName.get(ar).setImmediate(true);
+		tbLblDivisionName.get(ar).setWidth("100%");
+
+		tbdLeaveFrom.add(ar, new PopupDateField());
+		tbdLeaveFrom.get(ar).setWidth("100%");
+		tbdLeaveFrom.get(ar).setDateFormat("dd-MM-yy");
+		tbdLeaveFrom.get(ar).setEnabled(false);
+		tbdLeaveFrom.get(ar).setImmediate(true);
+		tbdLeaveFrom.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
+		tbdLeaveFrom.get(ar).addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(tbdLeaveFrom.get(ar).getValue()!=null && tbdLeaveTo.get(ar).getValue()!=null)
+				{
+					if
+					(
+						!tbLblEmployeeName.get(ar).getValue().toString().isEmpty() && 
+						!tbTxtTotalDays.get(ar).getValue().toString().isEmpty() && 
+						!tbTxtApproveDays.get(ar).getValue().toString().isEmpty() 
+					)
+					{
+						findDayDiffernce(ar);
+					}
+				}
+			}
+		});
+
+		tbdLeaveTo.add(ar, new PopupDateField());
+		tbdLeaveTo.get(ar).setWidth("100%");
+		tbdLeaveTo.get(ar).setDateFormat("dd-MM-yy");
+		tbdLeaveTo.get(ar).setEnabled(false);
+		tbdLeaveTo.get(ar).setImmediate(true);
+		tbdLeaveTo.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
+		tbdLeaveTo.get(ar).addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(tbdLeaveFrom.get(ar).getValue()!=null && tbdLeaveTo.get(ar).getValue()!=null)
+				{
+					if
+					(
+						!tbLblEmployeeName.get(ar).getValue().toString().isEmpty() && 
+						!tbTxtTotalDays.get(ar).getValue().toString().isEmpty() && 
+						!tbTxtApproveDays.get(ar).getValue().toString().isEmpty() 
+					)
+					{
+						findDayDiffernce(ar);
+					}
+				}
+			}
+		});
+
+		tbdLeaveF.add(ar, new PopupDateField());
+		tbdLeaveF.get(ar).setWidth("100%");
+		tbdLeaveF.get(ar).setDateFormat("dd-MM-yy");
+		tbdLeaveF.get(ar).setEnabled(false);
+		tbdLeaveF.get(ar).setImmediate(true);
+		tbdLeaveF.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
+
+		tbdLeaveT.add(ar, new PopupDateField());
+		tbdLeaveT.get(ar).setWidth("100%");
+		tbdLeaveT.get(ar).setDateFormat("dd-MM-yy");
+		tbdLeaveT.get(ar).setEnabled(false);
+		tbdLeaveT.get(ar).setImmediate(true);
+		tbdLeaveT.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
+
+		tbTxtTotalDays.add(ar, new TextRead(1));
+		tbTxtTotalDays.get(ar).setImmediate(true);
+		tbTxtTotalDays.get(ar).setWidth("100%");
+
+		tbTxtApproveDays.add(ar, new TextRead(1));
+		tbTxtApproveDays.get(ar).setImmediate(true);
+		tbTxtApproveDays.get(ar).setWidth("100%");
+
+		tbdApplicationDate.add(ar, new PopupDateField());
+		tbdApplicationDate.get(ar).setWidth("100%");
+		tbdApplicationDate.get(ar).setDateFormat("dd-MM-yy");
+		tbdApplicationDate.get(ar).setImmediate(true);
+		tbdApplicationDate.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
+		tbdApplicationDate.get(ar).setReadOnly(true);
+
+		tbBtnDetails.add(ar, new NativeButton());
+		tbBtnDetails.get(ar).setWidth("100%");
+		tbBtnDetails.get(ar).setHeight("24px");
+		tbBtnDetails.get(ar).setIcon(new ThemeResource("../icons/preview.png"));
+		tbBtnDetails.get(ar).addListener(new ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
+				if(!tbLblEmployeeName.get(ar).getValue().toString().isEmpty())
+				{
+					reportPreview(ar);
+				}
+				else
+				{
+					showNotification("Warning!","No employee found.",Notification.TYPE_WARNING_MESSAGE);
+				}
+			}
+		});
 		tbChkSelect.add(ar,new CheckBox());
 		tbChkSelect.get(ar).setWidth("100%");
 		tbChkSelect.get(ar).setImmediate(true);
@@ -533,114 +852,7 @@ public class LeaveApprove extends Window
 			}
 		});
 
-		tbLblEmployeeId.add(ar,new Label());
-		tbLblEmployeeId.get(ar).setWidth("100%");
-
-		tbLblEmployeeCode.add(ar,new Label());
-		tbLblEmployeeCode.get(ar).setWidth("100%");
-
-		tbLblEmployeeName.add(ar,new Label());
-		tbLblEmployeeName.get(ar).setWidth("100%");
-
-		tbLblDesignation.add(ar, new Label());
-		tbLblDesignation.get(ar).setWidth("100%");
-
-		tbLblUnitName.add(ar, new Label());
-		tbLblUnitName.get(ar).setWidth("100%");
-
-		tbLblDivisionName.add(ar, new Label());
-		tbLblDivisionName.get(ar).setWidth("100%");
-
-		tbdLeaveFrom.add(ar, new PopupDateField());
-		tbdLeaveFrom.get(ar).setWidth("100%");
-		tbdLeaveFrom.get(ar).setDateFormat("dd-MM-yy");
-		tbdLeaveFrom.get(ar).setEnabled(false);
-		tbdLeaveFrom.get(ar).setImmediate(true);
-		tbdLeaveFrom.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
-		tbdLeaveFrom.get(ar).addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(tbdLeaveFrom.get(ar).getValue()!=null)
-				{
-					if(!tbLblEmployeeName.get(ar).getValue().toString().isEmpty())
-					{
-						findDayDiffernce(ar);
-					}
-				}
-			}
-		});
-
-		tbdLeaveTo.add(ar, new PopupDateField());
-		tbdLeaveTo.get(ar).setWidth("100%");
-		tbdLeaveTo.get(ar).setDateFormat("dd-MM-yy");
-		tbdLeaveTo.get(ar).setEnabled(false);
-		tbdLeaveTo.get(ar).setImmediate(true);
-		tbdLeaveTo.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
-		tbdLeaveTo.get(ar).addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(tbdLeaveFrom.get(ar).getValue()!=null)
-				{
-					if(!tbLblEmployeeName.get(ar).getValue().toString().isEmpty())
-					{
-						findDayDiffernce(ar);
-					}
-				}
-			}
-		});
-
-		tbdLeaveF.add(ar, new PopupDateField());
-		tbdLeaveF.get(ar).setWidth("100%");
-		tbdLeaveF.get(ar).setDateFormat("dd-MM-yy");
-		tbdLeaveF.get(ar).setEnabled(false);
-		tbdLeaveF.get(ar).setImmediate(true);
-		tbdLeaveF.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
-
-		tbdLeaveT.add(ar, new PopupDateField());
-		tbdLeaveT.get(ar).setWidth("100%");
-		tbdLeaveT.get(ar).setDateFormat("dd-MM-yy");
-		tbdLeaveT.get(ar).setEnabled(false);
-		tbdLeaveT.get(ar).setImmediate(true);
-		tbdLeaveT.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
-
-		tbTxtTotalDays.add(ar, new TextRead(1));
-		tbTxtTotalDays.get(ar).setWidth("100%");
-
-		tbTxtApproveDays.add(ar, new TextRead(1));
-		tbTxtApproveDays.get(ar).setWidth("100%");
-
-		tbdApplicationDate.add(ar, new PopupDateField());
-		tbdApplicationDate.get(ar).setWidth("100%");
-		tbdApplicationDate.get(ar).setDateFormat("dd-MM-yy");
-		tbdApplicationDate.get(ar).setImmediate(true);
-		tbdApplicationDate.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
-		tbdApplicationDate.get(ar).setReadOnly(true);
-
-		tbBtnDetails.add(ar, new NativeButton());
-		tbBtnDetails.get(ar).setWidth("100%");
-		tbBtnDetails.get(ar).setHeight("24px");
-		tbBtnDetails.get(ar).setIcon(new ThemeResource("../icons/preview.png"));
-		tbBtnDetails.get(ar).addListener(new ClickListener()
-		{
-			public void buttonClick(ClickEvent event)
-			{
-				if(!tbLblEmployeeName.get(ar).getValue().toString().isEmpty())
-				{
-					reportPreview(ar);
-				}
-				else
-				{
-					showNotification("Warning!","No employee found.",Notification.TYPE_WARNING_MESSAGE);
-				}
-			}
-		});
-
-		tbLblReference.add(ar, new Label());
-		tbLblReference.get(ar).setWidth("100%");
-
-		table.addItem(new Object[]{tbLblReference.get(ar), tbLblEmployeeId.get(ar), tbLblEmployeeCode.get(ar), 
+		table.addItem(new Object[]{Delete.get(ar),tbLblReference.get(ar), tbLblEmployeeId.get(ar), tbLblEmployeeCode.get(ar), 
 				tbLblEmployeeName.get(ar), tbLblDesignation.get(ar), tbLblUnitName.get(ar),  
 				tbLblDivisionName.get(ar), tbdLeaveFrom.get(ar), tbdLeaveTo.get(ar), tbdLeaveF.get(ar), 
 				tbdLeaveT.get(ar), tbTxtTotalDays.get(ar), tbTxtApproveDays.get(ar), tbdApplicationDate.get(ar), 
@@ -677,82 +889,13 @@ public class LeaveApprove extends Window
 
 		mainLayout.addComponent(btnFind,"top:11.0px;left:860.0px");
 
-		tableAdd();
-
 		mainLayout.addComponent(table,"top:55.0px; left:10.0px;");
-		mainLayout.addComponent(new Label("<b><Font Color='#FFD6D6' size='2px'> APR. Days => Approved Days </Font></b>",Label.CONTENT_XHTML), "top:395.0px; left:10.0px;");
+		mainLayout.addComponent(new Label("<b><Font Color='brown' size='2px'> APR. Days => Approved Days </Font></b>",Label.CONTENT_XHTML), "top:395.0px; left:10.0px;");
 
 		cButton.btnSave.setCaption("Approve");
 		mainLayout.addComponent(cButton,"top:400.0px; left:430.0px");
 
 		return mainLayout;
-	}
-
-	private void tableAdd()
-	{
-		table.setWidth("98%");
-		table.setHeight("330px");
-		table.setColumnCollapsingAllowed(true);
-
-		table.addContainerProperty("Ref.", Label.class, new Label());
-		table.setColumnWidth("Ref.", 30);
-
-		table.addContainerProperty("Emp ID", Label.class, new Label());
-		table.setColumnWidth("Emp ID", 75);
-
-		table.addContainerProperty("Employee Id", Label.class, new Label());
-		table.setColumnWidth("Employee Id", 75);
-
-		table.addContainerProperty("Employee Name", Label.class, new Label());
-		table.setColumnWidth("Employee Name", 170);
-
-		table.addContainerProperty("Designation", Label.class, new Label());
-		table.setColumnWidth("Designation", 100);
-
-		table.addContainerProperty("Unit Name", Label.class, new Label());
-		table.setColumnWidth("Unit Name", 105);
-
-		table.addContainerProperty("Department Name", Label.class, new Label());
-		table.setColumnWidth("Department Name", 105);
-
-		table.addContainerProperty("Leave From", PopupDateField.class, new PopupDateField());
-		table.setColumnWidth("Leave From", 90);
-
-		table.addContainerProperty("Leave To", PopupDateField.class, new PopupDateField());
-		table.setColumnWidth("Leave To", 90);
-
-		table.addContainerProperty("From", PopupDateField.class, new PopupDateField());
-		table.setColumnWidth("From", 90);
-
-		table.addContainerProperty("To", PopupDateField.class, new PopupDateField());
-		table.setColumnWidth("To", 90);
-
-		table.addContainerProperty("Total", TextRead.class, new TextRead());
-		table.setColumnWidth("Total", 40);
-
-		table.addContainerProperty("Apr. Days", TextRead.class, new TextRead());
-		table.setColumnWidth("Apr. Days", 55);
-
-		table.addContainerProperty("App. Date", PopupDateField.class, new PopupDateField());
-		table.setColumnWidth("App. Date", 65);
-
-		table.addContainerProperty("Application", NativeButton.class, new NativeButton());
-		table.setColumnWidth("Application", 65);
-
-		table.addContainerProperty("Approved", CheckBox.class, new CheckBox());
-		table.setColumnWidth("Approved", 60);
-
-		table.setColumnAlignments(new String[] {Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT,
-				Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_LEFT,
-				Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_CENTER, Table.ALIGN_CENTER,Table.ALIGN_LEFT,
-				Table.ALIGN_LEFT, Table.ALIGN_LEFT, Table.ALIGN_CENTER});
-
-		table.setColumnCollapsed("Emp ID", true);
-		table.setColumnCollapsed("From", true);
-		table.setColumnCollapsed("To", true);
-		table.setColumnCollapsed("App. Date", true);
-		table.setColumnCollapsed("Unit Name", true);
-
 	}
 
 	private void txtClear()
@@ -765,7 +908,7 @@ public class LeaveApprove extends Window
 
 	private void tableClear()
 	{
-		for(int i = 0; i<tbChkSelect.size(); i++)
+		for(int i = 0; i<tbLblReference.size(); i++)
 		{
 			tbLblReference.get(i).setValue("");
 			tbLblEmployeeId.get(i).setValue("");
@@ -784,7 +927,6 @@ public class LeaveApprove extends Window
 			tbdApplicationDate.get(i).setReadOnly(false);
 			tbdApplicationDate.get(i).setValue(null);
 			tbdApplicationDate.get(i).setReadOnly(true);
-
 			tbChkSelect.get(i).setValue(false);
 		}
 	}
@@ -808,29 +950,24 @@ public class LeaveApprove extends Window
 	private void reportPreview(int ar)
 	{
 		ReportDate reportTime = new ReportDate();
+		String sql = " select * from funLeaveApplicationReport('"+tbLblReference.get(ar).getValue()+"','"+tbLblEmployeeId.get(ar).getValue()+"') "
+				+ "order by vEmployeeId ";
+		System.out.println(sql);
 		try
 		{
 			HashMap <String,Object> hm = new HashMap <String,Object> ();
 			hm.put("company", sessionBean.getCompany());
 			hm.put("address", sessionBean.getCompanyAddress());
 			hm.put("phone", sessionBean.getCompanyContact());
-			hm.put("appDate", tbdApplicationDate.get(ar).getValue());
+			//hm.put("appDate", dApplicationDate.getValue());
 			hm.put("userName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
 			hm.put("path", "./report/account/hrmModule/");
 			hm.put("SysDate",reportTime.getTime);
 			hm.put("logo", sessionBean.getCompanyLogo());
+			hm.put("developer", sessionBean.getDeveloperAddress());
+			hm.put("sql", sql);
 
-			//hm.put("developer", sessionBean.getDeveloperAddress());
-
-			String subReportQuery="select * from funLeaveBalanceDetails('%','"+tbLblEmployeeId.get(ar).getValue().toString()+"','"+sessionBean.dfDb.format(new Date())+"')";
-
-			hm.put("subsql", subReportQuery);
-
-			String str1 = " select * from funLeaveApplication('"+tbLblReference.get(ar).getValue().toString()+"','%','%') order by vEmployeeId ";
-
-			hm.put("sql", str1);
-
-			Window win = new ReportViewer(hm,"report/account/hrmModule/rptLeaveApplicationForm.jasper",
+			Window win = new ReportViewer(hm,"report/account/hrmModule/rptLeaveApplicationFormPOSCO.jasper",
 					this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
 					this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
 					this.getWindow().getApplication().getURL()+"VAADIN/applet",true);
@@ -856,6 +993,8 @@ public class LeaveApprove extends Window
 			{
 				String query = "select 0 as c, DATEDIFF(DAY,'"+sessionBean.dfDb.format(tbdLeaveFrom.get(ar).getValue())+"'," +
 						"'"+sessionBean.dfDb.format(tbdLeaveTo.get(ar).getValue())+"')+1 as day";
+				System.out.println("findDayDiffernce: "+query);
+				
 				List <?> list = session.createSQLQuery(query).list();
 
 				if(list.iterator().hasNext())
@@ -872,8 +1011,13 @@ public class LeaveApprove extends Window
 					else if(totalDays>0)
 					{
 						tbTxtApproveDays.get(ar).setValue(totalDays);
-						if(Integer.parseInt("0"+tbTxtApproveDays.get(ar).toString().replaceAll(" ", "")) > 
-						Integer.parseInt("0"+tbTxtTotalDays.get(ar).toString().replaceAll(" ", "")))
+						int ApproveDays=0,TotalDays=0;
+						ApproveDays=Integer.parseInt(tbTxtApproveDays.get(ar).getValue().toString().isEmpty()?"0":tbTxtApproveDays.get(ar).getValue().toString());
+						TotalDays=Integer.parseInt(tbTxtTotalDays.get(ar).getValue().toString().isEmpty()?"0":tbTxtTotalDays.get(ar).getValue().toString());
+						
+						System.out.println("ApproveDays: "+ApproveDays+" TotalDays: "+TotalDays);
+						
+						if(ApproveDays>TotalDays)
 						{
 							showNotification("Warning!","Approve days is greater than application days.", Notification.TYPE_WARNING_MESSAGE);
 							tbdLeaveFrom.get(ar).setValue(tbdLeaveF.get(ar).getValue());

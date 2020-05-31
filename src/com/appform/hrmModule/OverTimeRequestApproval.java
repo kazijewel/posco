@@ -283,20 +283,14 @@ public class OverTimeRequestApproval extends Window
 		session.beginTransaction();
 		try
 		{
-			/*String query=" select distinct vDepartmentId,(select vDepartmentName from tbDepartmentInfo si where" +
-					" si.vDepartmentId=li.vDepartmentId) vDepartmentName  and vUnitId = '"+cmbUnit.getValue().toString()+"'"
-							+ " from tbEmpLeaveApplicationInfo li" +
-					" where iFinal = 0 order by vDepartmentName "*/;
-		
-			
-	String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbOTRequest "
+			String query=" select epo.vDepartmentId,epo.vDepartmentName from tbEmpOfficialPersonalInfo epo inner join tbOTRequest "
 			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and  b.iFinal='0' "
 			+ " order by epo.vDepartmentName";
 			
 	
-	System.out.println("Department"+query);
-	
-	List <?> lst=session.createSQLQuery(query).list();
+		System.out.println("Department"+query);
+		
+		List <?> lst=session.createSQLQuery(query).list();
 			if(!lst.isEmpty())
 			{
 				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
@@ -378,6 +372,18 @@ public class OverTimeRequestApproval extends Window
 			{
 				if(tbChkSelect.get(i).booleanValue())
 				{
+					String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+							+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+							+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+							+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
+							+ "dReplaceHoliday,dReplaceWorking,iFinal,'UPDATE' "
+							+ "from tbOTRequest where vTransactionId ='"+tbLblReference.get(i).getValue().toString()+"' ";
+					
+					System.out.println("deleteData: "+deleteData);
+					session.createSQLQuery(deleteData).executeUpdate();
+					
 					String updateInfo = " update tbOTRequest "
 							+ "set iFinal=1, "
 							+ "vApprovedBy='"+sessionBean.getUserName()+"' " +

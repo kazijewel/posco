@@ -155,8 +155,8 @@ public class UserCreate extends Window
 					txtEnable(true);
 
 					txtUserName.setEnabled(false);
-					txtPassword.setEnabled(false);
-					txtConfirmPassword.setEnabled(false);
+					/*txtPassword.setEnabled(false);
+					txtConfirmPassword.setEnabled(false);*/
 				}
 				else
 				{
@@ -310,7 +310,7 @@ public class UserCreate extends Window
 								{
 									if(chkTable())
 									{
-										if(txtPassword.getValue().toString().length()>=6)
+										if(txtPassword.getValue().toString().length()>=2)
 										{
 											if(txtPassword.getValue().toString().equals(txtConfirmPassword.getValue().toString()))
 											{
@@ -324,7 +324,7 @@ public class UserCreate extends Window
 										}
 										else
 										{
-											showNotification("Warning!","Password length should be more than 6 digit.",Notification.TYPE_WARNING_MESSAGE);
+											showNotification("Warning!","Password length should be more than 2 digit.",Notification.TYPE_WARNING_MESSAGE);
 											txtPassword.focus();
 										}
 									}

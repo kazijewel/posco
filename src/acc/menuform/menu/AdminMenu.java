@@ -76,10 +76,10 @@ public class AdminMenu
 		{
 			addCaptionedItem("USER AUTHENTICATION", masterSetup);
 		}
-		if(isValidMenu("LeaveApprovalMapping"))
+		/*if(isValidMenu("LeaveApprovalMapping"))
 		{
 			addCaptionedItem("LEAVE APPROVAL MAPPING", masterSetup);
-		}
+		}*/
 
 	}
 

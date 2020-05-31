@@ -62,6 +62,7 @@ import com.appform.hrmModule.IncrementType;
 import com.appform.hrmModule.ItemDistribution;
 import com.appform.hrmModule.ItemTypeInformation;
 import com.appform.hrmModule.LeaveApplicationForm;
+import com.appform.hrmModule.LeaveApprove;
 import com.appform.hrmModule.LeaveApproveFinal;
 import com.appform.hrmModule.LeaveApproveHR;
 import com.appform.hrmModule.LeaveApprovePrimary;
@@ -465,7 +466,7 @@ public class HrmMenu
 		{
 			addCaptionedItem("LEAVE BALANCE GENERATE", leaveTransaction);
 		}
-		if(isValidMenu("LeaveApprovalStep1"))
+		/*if(isValidMenu("LeaveApprovalStep1"))
 		{
 			addCaptionedItem("LEAVE APPROVAL STEP 1", leaveTransaction);
 		}
@@ -476,6 +477,10 @@ public class HrmMenu
 		if(isValidMenu("LeaveApprovalStep3"))
 		{
 			addCaptionedItem("LEAVE APPROVAL STEP 3", leaveTransaction);
+		}*/
+		if(isValidMenu("LeaveApprove"))
+		{
+			addCaptionedItem("LEAVE APPROVAL", leaveTransaction);
 		}
 		if(isValidMenu("ReplacementLeaveApplication"))
 		{
@@ -696,7 +701,9 @@ public class HrmMenu
 				{
 					showWindow(new LeaveBalanceGenerate(sessionBean,"LeaveBalanceGenerate"),event.getItem(),"LeaveBalanceGenerate","HRM MODULE","TRANSACTION");
 				}
-				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL STEP 1"))
+				
+				
+				/*if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL STEP 1"))
 				{
 					showWindow(new LeaveApprovePrimary(sessionBean,"LeaveApprovalStep1"),event.getItem(),"LeaveApprovalStep1","HRM MODULE","TRANSACTION");
 				}
@@ -707,7 +714,15 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL STEP 3"))
 				{
 					showWindow(new LeaveApproveFinal(sessionBean,"LeaveApprovalStep3"),event.getItem(),"LeaveApprovalStep3","HRM MODULE","TRANSACTION");
+				}*/
+				
+				
+				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPROVAL"))
+				{	/*30-05-2020 order by Nazim sir & sumon*/
+					showWindow(new LeaveApprove(sessionBean,"LeaveApprove"),event.getItem(),"LeaveApprove","HRM MODULE","TRANSACTION");
 				}
+				
+				
 				if(event.getItem().toString().equalsIgnoreCase("REPLACEMENT LEAVE APPLICATION"))
 				{
 					showWindow(new ReplacementLeaveApplication(sessionBean,"ReplacementLeaveApplication",false),event.getItem(),"ReplacementLeaveApplication","HRM MODULE","TRANSACTION");
