@@ -99,8 +99,8 @@ public class OverTimeRequestForm extends Window
 	private static final List<String> nationality = Arrays.asList(new String[]{"Bangladeshi","Korean"});
 	
 	private TextField txtOverTimeRequest;
-	private boolean Find=false;
-	private boolean Update=false;
+	private boolean isFind=false;
+	private boolean isUpdate=false;
 	private CommonMethod cm;
 	private String menuId = "";
 	private SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -114,7 +114,6 @@ public class OverTimeRequestForm extends Window
 	private TimeField tMinTo=new TimeField();
 	private TextField txtTo=new TextField();
 	boolean switchUser=false;
-	int saveValidation=0;
 	
 	public OverTimeRequestForm(SessionBean sessionBean,String menuId,boolean switchUser)
 	{
@@ -313,15 +312,13 @@ public class OverTimeRequestForm extends Window
 		{	
 			public void buttonClick(ClickEvent event)
 			{
-				Find = false;
-				Update = false;
+				isFind = false;
+				isUpdate = false;
 				
 				txtClear();
 				componentIni(false);
 				btnIni(false);
 				dRequestDate.focus();
-				saveValidation=0;
-				txtTransactionID.setValue(transactionIDGenerate());
 			}
 		});
 
@@ -329,7 +326,6 @@ public class OverTimeRequestForm extends Window
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				saveValidation=0;
 				checkForm();
 				cButton.btnEdit.setEnabled(false);
 				cButton.btnDelete.setEnabled(false);
@@ -340,10 +336,9 @@ public class OverTimeRequestForm extends Window
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				saveValidation=0;
 				if(cmbEmployee.getValue()!=null)
 				{
-					Update = true;
+					isUpdate = true;
 					
 					componentIni(false);
 					btnIni(false);
@@ -396,12 +391,11 @@ public class OverTimeRequestForm extends Window
 		{	
 			public void buttonClick(ClickEvent event)
 			{
-				Find = false;
-				Update = false;
+				isFind = false;
+				isUpdate = false;
 				txtClear();
 				componentIni(true);
 				btnIni(true);
-				saveValidation=0;
 			}
 		});
 
@@ -409,7 +403,7 @@ public class OverTimeRequestForm extends Window
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				Find = true;
+				isFind = true;
 				findbuttonEvent();
 			}
 		});
@@ -476,8 +470,8 @@ public class OverTimeRequestForm extends Window
 							componentIni(true);
 							txtClear();
 							btnIni(true);
-							Find=false;
-							Update=false;
+							isFind=false;
+							isUpdate=false;
 							Notification n=new Notification("All Information Delete Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 							n.setPosition(Notification.POSITION_TOP_RIGHT);
 							showNotification(n);
@@ -501,8 +495,6 @@ public class OverTimeRequestForm extends Window
 		{
 			showNotification("Warning", "Salary Already Generated for this Month!!!", Notification.TYPE_WARNING_MESSAGE);
 		}
-		Find = false;
-		Update = false;
 		
 	}
 	private void reportPreview()
@@ -613,26 +605,6 @@ public class OverTimeRequestForm extends Window
 			System.out.println(""+exp);
 		}
 		finally{session.close();}
-	}
-	
-	private boolean checkData()
-	{
-		boolean ret=false;
-		Session session=SessionFactoryUtil.getInstance().openSession();
-		try{
-			String sql="select * from tbOTRequest where dRequestDate='"+sessionBean.dfDb.format(dRequestDate.getValue())+"' and vEmployeeId='"+cmbEmployee.getValue()+"'";
-			
-			List<?> list=session.createSQLQuery(sql).list();
-			if(list.isEmpty())
-			{
-				ret=true;
-			}
-		}catch(Exception exp)
-		{
-			System.out.println(""+exp);
-		}
-		finally{session.close();}
-		return ret;
 	}
 	public void cmbEmployeeValueAdd()
 	{
@@ -874,15 +846,7 @@ public class OverTimeRequestForm extends Window
 							{
 								if(!inTime.equalsIgnoreCase(outTime))
 								{
-									if(checkData())
-									{
-										saveButtonEvent();
-									}
-									else
-									{
-										showNotification("Warning", "Data already exist! Try new one!", Notification.TYPE_WARNING_MESSAGE);
-									}
-								
+									saveButtonEvent();								
 								}
 								else
 								{
@@ -909,10 +873,6 @@ public class OverTimeRequestForm extends Window
 			cmbEmployee.focus();
 			showNotification("Warning", "Please select Employee!", Notification.TYPE_WARNING_MESSAGE);
 		}
-		System.out.println(dTimeFrom);
-		System.out.println(dTimeTo);
-		System.out.println(inTime);
-		System.out.println(outTime);
 	}
 
 	private boolean chkSalary(String query)
@@ -945,42 +905,67 @@ public class OverTimeRequestForm extends Window
 		
 		if(!chkSalary(query))
 		{
-			MessageBox mb = new MessageBox(getParent(),"Are You Sure?",MessageBox.Icon.QUESTION,Update==true?"Do You Want to Update All Information?":"Do You Want to save All Information?",new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"),new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
-			mb.setStyleName("cwindowMB");
-			mb.show(new EventListener()
+			if(isUpdate)
 			{
-				public void buttonClicked(ButtonType buttonType)
+				MessageBox mb = new MessageBox(getParent(),"Are You Sure?",MessageBox.Icon.QUESTION,"Do You Want to Update All Information?",new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"),new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+				mb.setStyleName("cwindowMB");
+				mb.show(new EventListener()
 				{
-					if(buttonType==ButtonType.YES)
+					public void buttonClicked(ButtonType buttonType)
 					{
-						Session session=SessionFactoryUtil.getInstance().openSession();
-						Transaction tx=session.beginTransaction();
-						if(saveValidation==0)
+						if(buttonType==ButtonType.YES)
 						{
-							insertData(session,tx);
+							updateData();
 							componentIni(true);
 							btnIni(true);
-							Find=false;
-							Notification n=new Notification("All Information "+(Update==true?"Updated":"Saved")+" Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+							isFind=false;
+							isUpdate=false;
+							cButton.btnEdit.setEnabled(false);
+							cButton.btnDelete.setEnabled(false);
+							Notification n=new Notification("All Information Updated Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 							n.setPosition(Notification.POSITION_TOP_RIGHT);
 							showNotification(n);
-							saveValidation=1;
 						}
-						else
-						{
-							showNotification("Warning", "Data Already Exist for this Day!!!", Notification.TYPE_WARNING_MESSAGE);
-						}
-						
 					}
-				}
-			});
+				});
+			}
+			else
+			{
+				MessageBox mb = new MessageBox(getParent(),"Are You Sure?",MessageBox.Icon.QUESTION,"Do You Want to save All Information?",new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"),new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
+				mb.setStyleName("cwindowMB");
+				mb.show(new EventListener()
+				{
+					public void buttonClicked(ButtonType buttonType)
+					{
+						if(buttonType==ButtonType.YES)
+						{
+							String sql="select * from tbOTRequest where dRequestDate='"+sessionBean.dfDb.format(dRequestDate.getValue())+"' and vEmployeeId='"+cmbEmployee.getValue()+"'";
+							
+							if(!chkSalary(sql))
+							{
+								insertData();
+								componentIni(true);
+								btnIni(true);
+								isFind=false;
+								isUpdate=false;
+								Notification n=new Notification("All Information Saved Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
+								n.setPosition(Notification.POSITION_TOP_RIGHT);
+								showNotification(n);
+							}
+							else
+							{
+								showNotification("Warning", "Data already exist! Try new one!!!", Notification.TYPE_WARNING_MESSAGE);
+							}
+						}
+					}
+				});
+			}
+			
 		}
 		else
 		{
 			showNotification("Warning", "Salary Already Generated for this Month!!!", Notification.TYPE_WARNING_MESSAGE);
 		}
-		Find = false;
-		Update = false;
 	}
 
 	private String transactionIDGenerate()
@@ -991,10 +976,12 @@ public class OverTimeRequestForm extends Window
 		try
 		{
 			String query = "select ISNULL(MAX(CAST(SUBSTRING(vTransactionID,5,LEN(vTransactionID)) as int)),0)+1 from tbOTRequest";
+			
 			List <?> lst = session.createSQLQuery(query).list();
 			if(!lst.isEmpty())
 			{
 				transactionID += lst.iterator().next().toString();
+				System.out.println("transactionIDGenerate: "+transactionID);
 			}
 		}
 		catch (Exception exp)
@@ -1005,52 +992,51 @@ public class OverTimeRequestForm extends Window
 		return transactionID;
 	}
 
-	private void insertData(Session session,Transaction tx)
+	private void insertData()
 	{
+		System.out.println("Hello Boss!! I'm from insertData()");
+		
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		Transaction tx=session.beginTransaction();
 		try
 		{
-			String transactionID = transactionIDGenerate();
-			
 			String inhour=tHrFrom.getValue().toString().isEmpty()?"00":tHrFrom.getValue().toString().trim();
 			String inMin=tMinFrom.getValue().toString().isEmpty()?"00":tMinFrom.getValue().toString().trim();
 			String inTime="";
-			if(txtFrom.getValue().toString().trim().equals("PM"))
+			if(txtFrom.getValue().toString().trim().equals("PM")){
 				inTime=Integer.toString(Integer.parseInt(inhour)+12)+":"+inMin+":00";
-			else
+				if(inTime.equals("24:00:00") | inTime.equals("24:0:0") | inTime.equals("24:00:0") | inTime.equals("24:0:00"))
+				{
+					inTime="00:00:00";
+				}
+			}
+			else{
 				inTime=inhour+":"+inMin+":00";
+			}
 
 			String outhour=tHrTo.getValue().toString().isEmpty()?"00":tHrTo.getValue().toString().trim();
 			String OutMin=tMinTo.getValue().toString().isEmpty()?"00":tMinTo.getValue().toString().trim();
 			String outTime="";
-			if(txtTo.getValue().toString().trim().equals("PM"))
+			if(txtTo.getValue().toString().trim().equals("PM")){
 				outTime=Integer.toString(Integer.parseInt(outhour)+12)+":"+OutMin+":00";
-			else
-				outTime=outhour+":"+OutMin+":00";
-			
-			if(Update)
-			{
-				transactionID=txtTransactionID.getValue().toString();
-				
-				String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-						+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-						+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
-						+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-						+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-						+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-						+ "dReplaceHoliday,dReplaceWorking,iFinal,'UPDATE' "
-						+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
-				
-				System.out.println("deleteData: "+deleteData);
-				session.createSQLQuery(deleteData).executeUpdate();
-				
-				String del="delete from tbOTRequest where vTransactionId='"+transactionID+"' ";
-				System.out.println(del);
-				session.createSQLQuery(del).executeUpdate();
+				if(outTime.equals("24:00:00") | outTime.equals("24:0:0") | outTime.equals("24:00:0") | outTime.equals("24:0:00"))
+				{
+					outTime="00:00:00";
+				}
 			}
+			else{
+				outTime=outhour+":"+OutMin+":00";
+			}
+			
+
+			System.out.println("inTime: "+inTime);
+			System.out.println("outTime: "+outTime);
 			
 			StringTokenizer strToken=new StringTokenizer(cmbEmployee.getItemCaption(cmbEmployee.getValue()), "->");
 			String employeeCode=strToken.nextToken();
 			String employeeName=strToken.nextToken(); 
+			
+			String transactionID = transactionIDGenerate();
 			
 			String approved = "0";
 			
@@ -1093,6 +1079,107 @@ public class OverTimeRequestForm extends Window
 		}
 	}
 
+	private void updateData()
+	{
+		System.out.println("Hello Boss!! I'm from updateData()");
+		
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		Transaction tx=session.beginTransaction();
+		try
+		{
+			String inhour=tHrFrom.getValue().toString().isEmpty()?"00":tHrFrom.getValue().toString().trim();
+			String inMin=tMinFrom.getValue().toString().isEmpty()?"00":tMinFrom.getValue().toString().trim();
+			String inTime="";
+			if(txtFrom.getValue().toString().trim().equals("PM")){
+				inTime=Integer.toString(Integer.parseInt(inhour)+12)+":"+inMin+":00";
+				if(inTime.equals("24:00:00") | inTime.equals("24:0:0") | inTime.equals("24:00:0") | inTime.equals("24:0:00"))
+				{
+					inTime="00:00:00";
+				}
+			}
+			else{
+				inTime=inhour+":"+inMin+":00";
+			}
+
+			String outhour=tHrTo.getValue().toString().isEmpty()?"00":tHrTo.getValue().toString().trim();
+			String OutMin=tMinTo.getValue().toString().isEmpty()?"00":tMinTo.getValue().toString().trim();
+			String outTime="";
+			if(txtTo.getValue().toString().trim().equals("PM")){
+				outTime=Integer.toString(Integer.parseInt(outhour)+12)+":"+OutMin+":00";
+				if(outTime.equals("24:00:00") | outTime.equals("24:0:0") | outTime.equals("24:00:0") | outTime.equals("24:0:00"))
+				{
+					outTime="00:00:00";
+				}
+			}
+			else{
+				outTime=outhour+":"+OutMin+":00";
+			}
+
+			System.out.println("inTime: "+inTime);
+			System.out.println("outTime: "+outTime);
+			
+			StringTokenizer strToken=new StringTokenizer(cmbEmployee.getItemCaption(cmbEmployee.getValue()), "->");
+			String employeeCode=strToken.nextToken();
+			String employeeName=strToken.nextToken(); 
+			
+			String transactionID=txtTransactionID.getValue().toString();
+			
+			String updateData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+					+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
+					+ "dReplaceHoliday,dReplaceWorking,iFinal,'UPDATE' "
+					+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
+			
+			System.out.println("updateData: "+updateData);
+			session.createSQLQuery(updateData).executeUpdate();
+			
+			String approved = "0";
+			
+			String query = "update tbOTRequest "
+					+ "set vEmployeeId='"+cmbEmployee.getValue()+"',"
+					+ "vEmployeeName='"+employeeName+"',"
+					+ "vDesignationId='"+cmbDesignationID.getValue()+"',"
+					+ "vDesignationName='"+cmbDesignationID.getItemCaption(cmbDesignationID.getValue())+"',"
+					+ "vDepartmentId='"+cmbDepartment.getValue()+"',"
+					+ "vDepartmentName='"+cmbDepartment.getItemCaption(cmbDepartment.getValue())+"',"
+					+ "vJobSite='"+(cmbJobSite.getValue()==null?"":cmbJobSite.getItemCaption(cmbJobSite.getValue()))+"',"
+					+ "dRequestDate='"+sessionBean.dfDb.format(dRequestDate.getValue())+"',"
+					+ "dTimeFrom='"+(sessionBean.dfDb.format(dRequestDate.getValue())+" "+inTime)+"',"
+					+ "dTimeTo='"+(sessionBean.dfDb.format(dRequestDate.getValue())+" "+outTime)+"',"
+					+ "dTimeTotal='"+sessionBean.dDateTimeFormat.format(dTimeTotal.getValue())+"',"
+					+ "vManger='"+(cmbManager.getValue()==null?"":cmbManager.getItemCaption(cmbManager.getValue()))+"',"
+					+ "vWorkRequest='"+(txtOverTimeRequest.getValue().toString().isEmpty()?"":txtOverTimeRequest.getValue().toString().trim().replaceAll("'","#"))+"',"
+					+ "vManPower='"+opgNationality.getValue().toString()+"',"
+					+ "iHoliday='"+(opgOverTime.getValue().toString().equals("Holiday")?"1":"0")+"',"
+					+ "iNightTim='"+(opgOverTime.getValue().toString().equals("Night Time")?"1":"0")+"',"
+					+ "vUserId='"+sessionBean.getUserId()+"',"
+					+ "vUserName='"+sessionBean.getUserName()+"',"
+					+ "vUserIp='"+sessionBean.getUserIp()+"',"
+					+ "dEntryTime=GETDATE(),"
+					+ "dReplaceHoliday='"+sessionBean.dfDb.format(dReplaceHoliday.getValue())+"',"
+					+ "dReplaceWorking='"+sessionBean.dfDb.format(dReplaceWorking.getValue())+"',"
+					+ "iFinal='"+approved+"' where vTransactionId='"+transactionID+"' ";
+			
+			System.out.println("updateData: "+query);
+			
+			session.createSQLQuery(query).executeUpdate();
+			
+			tx.commit();
+		}
+		catch (Exception exp)
+		{
+			tx.rollback();
+			showNotification("insertData", exp.toString(), Notification.TYPE_WARNING_MESSAGE);
+		}
+		finally
+		{
+			session.close();
+		}
+	}
+
 	private void findbuttonEvent()
 	{
 		Window win = new OverTimeRequestFormFind(sessionBean, txtTransactionID);
@@ -1102,7 +1189,6 @@ public class OverTimeRequestForm extends Window
 			{
 				if(!txtTransactionID.getValue().toString().trim().isEmpty())
 				{
-					
 					findInitialize(txtTransactionID.getValue().toString());
 				}
 			}
@@ -1167,6 +1253,9 @@ public class OverTimeRequestForm extends Window
 			showNotification("findInitialize", exp.toString(), Notification.TYPE_WARNING_MESSAGE);
 		}
 		finally{session.close();}
+
+		cButton.btnEdit.setEnabled(true);
+		cButton.btnDelete.setEnabled(true);
 	}
 
 

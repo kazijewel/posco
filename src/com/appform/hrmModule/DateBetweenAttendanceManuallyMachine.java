@@ -58,6 +58,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 	private TimeField outMin=new TimeField();
 	private TextField outTF=new TextField();
 	private CheckBox chkPermitAll=new CheckBox();
+	private TextField txtReasonForAll=new TextField();
 
 	private Table table=new Table();
 	private ArrayList<NativeButton> btnDel=new ArrayList<NativeButton>();
@@ -76,6 +77,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 	private ArrayList<Label> lblSectionName=new ArrayList<Label>();
 	private ArrayList<TextField> txtReason=new ArrayList<TextField>();
 	private ArrayList<CheckBox> chkPermit=new ArrayList<CheckBox>();
+	
 
 	private CommonButton cButton=new CommonButton("New", "Save", "", "", "Refresh", "", "", "", "", "Exit");
 
@@ -138,6 +140,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		allComp.add(outHrs);
 		allComp.add(outMin);
 		allComp.add(outTF);
+		allComp.add(txtReasonForAll);
 		for(int ind=0;ind<lblProximityID.size();ind++)
 			allComp.add(txtReason.get(ind));
 		new FocusMoveByEnter(this, allComp);
@@ -303,6 +306,18 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 					cmbEmployee.setEnabled(true);
 					chkEmployeeAll.setValue(false);
 					tableclear();
+				}
+			}
+		});
+		
+		txtReasonForAll.addListener(new ValueChangeListener() {
+			public void valueChange(ValueChangeEvent event) {
+				for(int i=0;i<txtReason.size();i++)
+				{
+					if(!lblAutoEmployeeID.get(i).getValue().toString().isEmpty())
+					{
+						txtReason.get(i).setValue(txtReasonForAll.getValue());
+					}
 				}
 			}
 		});
@@ -995,6 +1010,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		outMin.setValue("");
 		outTF.setValue("");
 		outTF.setInputPrompt("PM");
+		txtReasonForAll.setValue("");
 		chkPermitAll.setValue(false);
 		tableclear();
 	}
@@ -1038,6 +1054,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		outHrs.setEnabled(!b);
 		outMin.setEnabled(!b);
 		outTF.setEnabled(!b);
+		txtReasonForAll.setEnabled(!b);
 		chkPermitAll.setEnabled(!b);
 		table.setEnabled(!b);
 	}
@@ -1188,7 +1205,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		cmbUnit.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbUnit.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainlayout.addComponent(new Label("Project : "), "top:10.0px;left:30.0px;");
-		mainlayout.addComponent(cmbUnit, "top:08.0px;left:120.0px");
+		mainlayout.addComponent(cmbUnit, "top:08.0px;left:110.0px");
 
 		cmbDepartment=new ComboBox();
 		cmbDepartment.setWidth("290.0px");
@@ -1197,11 +1214,11 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		cmbDepartment.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbDepartment.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainlayout.addComponent(new Label("Department : "), "top:35.0px;left:30.0px;");
-		mainlayout.addComponent(cmbDepartment, "top:33.0px;left:120.0px");
+		mainlayout.addComponent(cmbDepartment, "top:33.0px;left:110.0px");
 
 		chkDepartmentAll=new CheckBox("All");
 		chkDepartmentAll.setImmediate(true);
-		mainlayout.addComponent(chkDepartmentAll, "top:35.0px; left:415.0px;");
+		mainlayout.addComponent(chkDepartmentAll, "top:35.0px; left:405.0px;");
 
 		cmbSection=new ComboBox();
 		cmbSection.setWidth("290.0px");
@@ -1210,11 +1227,11 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		cmbSection.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbSection.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainlayout.addComponent(new Label("Section : "), "top:60.0px;left:30.0px;");
-		mainlayout.addComponent(cmbSection, "top:58.0px;left:120.0px;");
+		mainlayout.addComponent(cmbSection, "top:58.0px;left:110.0px;");
 
 		chkSectionAll=new CheckBox("All");
 		chkSectionAll.setImmediate(true);
-		mainlayout.addComponent(chkSectionAll, "top:60.0px;left:415.0px");
+		mainlayout.addComponent(chkSectionAll, "top:60.0px;left:405.0px");
 
 		cmbEmployee=new ComboBox();
 		cmbEmployee.setWidth("290.0px");
@@ -1222,12 +1239,12 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		cmbEmployee.setImmediate(true);
 		cmbEmployee.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		cmbEmployee.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
-		mainlayout.addComponent(new Label("Employee: "), "top:10.0px;left:480.0px;");
-		mainlayout.addComponent(cmbEmployee, "top:08.0px;left:555.0px;");
+		mainlayout.addComponent(new Label("Employee: "), "top:10.0px;left:460.0px;");
+		mainlayout.addComponent(cmbEmployee, "top:08.0px;left:535.0px;");
 
 		chkEmployeeAll=new CheckBox("All");
 		chkEmployeeAll.setImmediate(true);
-		mainlayout.addComponent(chkEmployeeAll, "top:08.0px; left:850.0px;");				
+		mainlayout.addComponent(chkEmployeeAll, "top:08.0px; left:830.0px;");				
 
 		fromdate=new PopupDateField();
 		fromdate.setImmediate(true);
@@ -1235,24 +1252,24 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		fromdate.setDateFormat("dd-MM-yyyy");
 		fromdate.setValue(new Date());
 		fromdate.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainlayout.addComponent(new Label("From Date : "), "top:35.0px;left:480.0px;");
-		mainlayout.addComponent(fromdate, "top:33.0px;left:555.0px;");
+		mainlayout.addComponent(new Label("From Date : "), "top:35.0px;left:460.0px;");
+		mainlayout.addComponent(fromdate, "top:33.0px;left:535.0px;");
 
 		InHrs=new TimeField();
 		InHrs.setWidth("25.0px");
-		mainlayout.addComponent(new Label("In Time : "), "top:35.0px;left:675.0px;");
-		mainlayout.addComponent(InHrs, "top:33.0px;left:740.0px;");
-		mainlayout.addComponent(new Label(" : "),"top:33.0px;left:767.0px;");
+		mainlayout.addComponent(new Label("In Time : "), "top:35.0px;left:655.0px;");
+		mainlayout.addComponent(InHrs, "top:33.0px;left:720.0px;");
+		mainlayout.addComponent(new Label(" : "),"top:33.0px;left:747.0px;");
 
 		InMin=new TimeField();
 		InMin.setWidth("25.0px");
-		mainlayout.addComponent(InMin, "top:33.0px;left:771.0px;");
+		mainlayout.addComponent(InMin, "top:33.0px;left:751.0px;");
 
 		InTF=new TextField();
 		InTF.setWidth("28.0px");
 		InTF.setInputPrompt("AM");
 		InTF.setTextChangeEventMode(TextChangeEventMode.EAGER);
-		mainlayout.addComponent(InTF, "top:33.0px;left:800.0px;");
+		mainlayout.addComponent(InTF, "top:33.0px;left:780.0px;");
 
 		todate=new PopupDateField();
 		todate.setImmediate(true);
@@ -1260,29 +1277,33 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		todate.setDateFormat("dd-MM-yyyy");
 		todate.setValue(new Date());
 		todate.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainlayout.addComponent(new Label("To Date : "), "top:60.0px;left:480.0px;");
-		mainlayout.addComponent(todate, "top:58.0px;left:555.0px;");
+		mainlayout.addComponent(new Label("To Date : "), "top:60.0px;left:460.0px;");
+		mainlayout.addComponent(todate, "top:58.0px;left:535.0px;");
 		
 		outHrs=new TimeField();
 		outHrs.setWidth("25.0px");
-		mainlayout.addComponent(new Label("Out Time : "), "top:60.0px;left:675.0px;");
-		mainlayout.addComponent(outHrs, "top:58.0px;left:740.0px;");
-		mainlayout.addComponent(new Label(" : "),"top:58.0px;left:767.0px;");
+		mainlayout.addComponent(new Label("Out Time : "), "top:60.0px;left:655.0px;");
+		mainlayout.addComponent(outHrs, "top:58.0px;left:720.0px;");
+		mainlayout.addComponent(new Label(" : "),"top:58.0px;left:747.0px;");
 
 		outMin=new TimeField();
 		outMin.setWidth("25.0px");
-		mainlayout.addComponent(outMin, "top:58.0px;left:771.0px;");
+		mainlayout.addComponent(outMin, "top:58.0px;left:751.0px;");
 
 		outTF=new TextField();
 		outTF.setWidth("28.0px");
 		outTF.setInputPrompt("PM");
 		outTF.setTextChangeEventMode(TextChangeEventMode.EAGER);
-		mainlayout.addComponent(outTF, "top:58.0px;left:800.0px;");
+		mainlayout.addComponent(outTF, "top:58.0px;left:780.0px;");
 
+		txtReasonForAll.setWidth("140px");
+		txtReasonForAll.setHeight("-1px");
+		//mainlayout.addComponent(txtReasonForAll, "top:58.0px;left:810.0px");
+		
 		chkPermitAll=new CheckBox("Apply All");
 		chkPermitAll.setImmediate(true);
-		mainlayout.addComponent(chkPermitAll, "top:60.0px;left:955.0px");
-
+		mainlayout.addComponent(chkPermitAll, "top:60.0px;left:972.0px");
+		
 		table.setWidth("990.0px");
 		table.setHeight("360.0px");
 
@@ -1337,6 +1358,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 		table.setColumnWidth("Apply", 40);
 
 		table.setColumnCollapsed("Designation", true);
+		table.setColumnCollapsed("Project ID", true);
 		table.setColumnCollapsed("Designation ID", true);
 		table.setColumnCollapsed("Unit ID", true);
 		table.setColumnCollapsed("Department ID", true);
