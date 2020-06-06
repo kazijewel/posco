@@ -32,6 +32,7 @@ import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -193,7 +194,7 @@ public class OverTimeRequestForm extends Window
 				dTimeTotal.setValue(new java.util.Date());
 				if(dTimeFrom.getValue()!=null)
 				{
-					setTime();
+					timeValidation();
 				}
 			}
 		});
@@ -203,7 +204,7 @@ public class OverTimeRequestForm extends Window
 				dTimeTotal.setValue(new java.util.Date());
 				if(dTimeTo.getValue()!=null)
 				{
-					setTime();
+					timeValidation();
 				}
 			}
 		});
@@ -213,7 +214,7 @@ public class OverTimeRequestForm extends Window
 			{
 				if(!tHrFrom.getValue().toString().isEmpty())	
 				{
-					setTime();
+					timeValidation();
 					if(Integer.parseInt(tHrFrom.getValue().toString())>12)
 					{
 						tHrFrom.setValue("");
@@ -229,7 +230,7 @@ public class OverTimeRequestForm extends Window
 			{
 				if(!tMinFrom.getValue().toString().isEmpty())
 				{
-					setTime();
+					timeValidation();
 					if(Integer.parseInt(tMinFrom.getValue().toString())>59)
 					{
 						tMinFrom.setValue("");
@@ -247,13 +248,13 @@ public class OverTimeRequestForm extends Window
 				if(event.getText().equalsIgnoreCase("a"))
 				{
 					txtFrom.setValue("AM");
-					setTime();
+					timeValidation();
 				}
 
 				if(event.getText().equalsIgnoreCase("p"))
 				{
 					txtFrom.setValue("PM");
-					setTime();
+					timeValidation();
 				}
 			}
 		});
@@ -264,8 +265,8 @@ public class OverTimeRequestForm extends Window
 			{
 				if(!tHrTo.getValue().toString().isEmpty())	
 				{
-					setTime();
-					if(Integer.parseInt(tHrTo.getValue().toString())>12)
+					timeValidation();
+					if(Integer.parseInt(tHrTo.getValue().toString())>24)
 					{
 						tHrTo.setValue("");
 						showNotification("Warning", "Provide To Hour!!!",Notification.TYPE_WARNING_MESSAGE);
@@ -280,7 +281,7 @@ public class OverTimeRequestForm extends Window
 			{
 				if(!tMinTo.getValue().toString().isEmpty())
 				{
-					setTime();
+					timeValidation();
 					if(Integer.parseInt(tMinTo.getValue().toString())>59)
 					{
 						tMinTo.setValue("");
@@ -297,13 +298,13 @@ public class OverTimeRequestForm extends Window
 				if(event.getText().equalsIgnoreCase("a"))
 				{
 					txtTo.setValue("AM");
-					setTime();
+					timeValidation();
 				}
 
 				if(event.getText().equalsIgnoreCase("p"))
 				{
 					txtTo.setValue("PM");
-					setTime();
+					timeValidation();
 				}
 			}
 		});
@@ -511,7 +512,7 @@ public class OverTimeRequestForm extends Window
 			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("empList", "Employee's List ( "+cmbJobSite.getItemCaption(cmbJobSite.getValue())+" )");
 
-			String query="select *,case when iHoliday=1 and DATEPART(HOUR,CONVERT(time,dTimeTotal))>10 " +
+			String query="select *,case when iHoliday=1 and DATEPART(HOUR,CONVERT(time,dTimeTotal))>=10 " +
 			" then DATEPART(HOUR,CONVERT(time,dTimeTotal))-1 else DATEPART(HOUR,CONVERT(time,dTimeTotal)) end hours, "+
 			" (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "+
 			" from tbOTRequest ot "
@@ -567,6 +568,83 @@ public class OverTimeRequestForm extends Window
 
 		return false;
 	}
+	/*public void timeValidation()
+	{
+		if(tHrFrom.getValue().toString().trim().length()>0)
+		{
+			if(tMinFrom.getValue().toString().trim().length()>0)
+			{
+				if(txtFrom.getValue().toString().trim().equals("AM") || txtFrom.getValue().toString().trim().equals("PM"))
+				{
+					if(tHrTo.getValue().toString().trim().length()>0)
+					{
+						if(tMinTo.getValue().toString().trim().length()>0)
+						{	
+							if(txtTo.getValue().toString().trim().equals("AM") || txtTo.getValue().toString().trim().equals("PM"))
+							{
+								setTime();
+							}
+							else
+							{
+								txtTo.setValue("");
+								txtTo.focus();
+								showNotification("Warning", "Please Enter Out Time Format [AM/PM]!!!", Notification.TYPE_WARNING_MESSAGE);
+							}
+						}
+						else
+						{
+							tMinTo.focus();
+							showNotification("Warning", "Please Enter Out Min.!!!", Notification.TYPE_WARNING_MESSAGE);
+						}
+					}
+					else
+					{
+						tHrTo.focus();
+						showNotification("Warning", "Please Enter Out Hour!!!", Notification.TYPE_WARNING_MESSAGE);
+					}
+				}
+				else
+				{
+					txtFrom.setValue("");
+					txtFrom.focus();
+					showNotification("Warning", "Please Enter In Time Format [AM/PM]!!!", Notification.TYPE_WARNING_MESSAGE);
+				}
+			}
+			else
+			{
+				tMinFrom.focus();
+				showNotification("Warning", "Please Enter In Min.!!!", Notification.TYPE_WARNING_MESSAGE);
+			}
+		}
+		else
+		{
+			tHrFrom.focus();
+			showNotification("Warning", "Please Enter In Hour!!!", Notification.TYPE_WARNING_MESSAGE);
+		}
+	}*/
+
+	public void timeValidation()
+	{
+		if(tHrFrom.getValue().toString().trim().length()>0)
+		{
+			if(tMinFrom.getValue().toString().trim().length()>0)
+			{
+				if(txtFrom.getValue().toString().trim().equals("AM") || txtFrom.getValue().toString().trim().equals("PM"))
+				{
+					if(tHrTo.getValue().toString().trim().length()>0)
+					{
+						if(tMinTo.getValue().toString().trim().length()>0)
+						{	
+							if(txtTo.getValue().toString().trim().equals("AM") || txtTo.getValue().toString().trim().equals("PM"))
+							{
+								setTime();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	private void setTime()
 	{
 		Session session=SessionFactoryUtil.getInstance().openSession();
@@ -575,25 +653,18 @@ public class OverTimeRequestForm extends Window
 			String inhour=tHrFrom.getValue().toString().isEmpty()?"00":tHrFrom.getValue().toString().trim();
 			String inMin=tMinFrom.getValue().toString().isEmpty()?"00":tMinFrom.getValue().toString().trim();
 			String inTime="";
-			if(txtFrom.getValue().toString().trim().equals("PM"))
-				inTime=Integer.toString(Integer.parseInt(inhour)+12)+":"+inMin+":00";
-			else
-				inTime=inhour+":"+inMin+":00";
-
+			String inTF=txtFrom.getValue().toString();
+			inTime=inhour+":"+inMin+":00 "+inTF;
+			
 			String outhour=tHrTo.getValue().toString().isEmpty()?"00":tHrTo.getValue().toString().trim();
 			String OutMin=tMinTo.getValue().toString().isEmpty()?"00":tMinTo.getValue().toString().trim();
 			String outTime="";
-			if(txtTo.getValue().toString().trim().equals("PM"))
-				outTime=Integer.toString(Integer.parseInt(outhour)+12)+":"+OutMin+":00";
-			else
-				outTime=outhour+":"+OutMin+":00";
+			String outTF=txtTo.getValue().toString();
+			outTime=outhour+":"+OutMin+":00 "+outTF;
 			
-			
-			String sql="select dbo.funTimeDuration('"+inTime+"',"
-					+ "(case when '"+outTime+"'='24:0:0' OR '"+outTime+"'='24:00:0' OR '"+outTime+"'='24:0:00' OR '"+outTime+"'='24:00:00' "
-					+ "then '00:00:00' else '"+outTime+"' end),"
-					+ "'"+sessionBean.dfDb.format(dRequestDate.getValue())+"')";
+			String sql="select dbo.funTimeDurationUpdate('"+inTime+"','"+outTime+"','"+sessionBean.dfDb.format(dRequestDate.getValue())+"')";
 			System.out.println(sql);
+			
 			Iterator<?> iter=session.createSQLQuery(sql).list().iterator();
 			if(iter.hasNext())
 			{
@@ -1003,30 +1074,14 @@ public class OverTimeRequestForm extends Window
 			String inhour=tHrFrom.getValue().toString().isEmpty()?"00":tHrFrom.getValue().toString().trim();
 			String inMin=tMinFrom.getValue().toString().isEmpty()?"00":tMinFrom.getValue().toString().trim();
 			String inTime="";
-			if(txtFrom.getValue().toString().trim().equals("PM")){
-				inTime=Integer.toString(Integer.parseInt(inhour)+12)+":"+inMin+":00";
-				if(inTime.equals("24:00:00") | inTime.equals("24:0:0") | inTime.equals("24:00:0") | inTime.equals("24:0:00"))
-				{
-					inTime="00:00:00";
-				}
-			}
-			else{
-				inTime=inhour+":"+inMin+":00";
-			}
-
+			String inTF=txtFrom.getValue().toString();
+			inTime=inhour+":"+inMin+":00 "+inTF;
+			
 			String outhour=tHrTo.getValue().toString().isEmpty()?"00":tHrTo.getValue().toString().trim();
 			String OutMin=tMinTo.getValue().toString().isEmpty()?"00":tMinTo.getValue().toString().trim();
 			String outTime="";
-			if(txtTo.getValue().toString().trim().equals("PM")){
-				outTime=Integer.toString(Integer.parseInt(outhour)+12)+":"+OutMin+":00";
-				if(outTime.equals("24:00:00") | outTime.equals("24:0:0") | outTime.equals("24:00:0") | outTime.equals("24:0:00"))
-				{
-					outTime="00:00:00";
-				}
-			}
-			else{
-				outTime=outhour+":"+OutMin+":00";
-			}
+			String outTF=txtTo.getValue().toString();
+			outTime=outhour+":"+OutMin+":00 "+outTF;
 			
 
 			System.out.println("inTime: "+inTime);
@@ -1037,6 +1092,7 @@ public class OverTimeRequestForm extends Window
 			String employeeName=strToken.nextToken(); 
 			
 			String transactionID = transactionIDGenerate();
+			txtTransactionID.setValue(transactionID);
 			
 			String approved = "0";
 			
@@ -1090,30 +1146,16 @@ public class OverTimeRequestForm extends Window
 			String inhour=tHrFrom.getValue().toString().isEmpty()?"00":tHrFrom.getValue().toString().trim();
 			String inMin=tMinFrom.getValue().toString().isEmpty()?"00":tMinFrom.getValue().toString().trim();
 			String inTime="";
-			if(txtFrom.getValue().toString().trim().equals("PM")){
-				inTime=Integer.toString(Integer.parseInt(inhour)+12)+":"+inMin+":00";
-				if(inTime.equals("24:00:00") | inTime.equals("24:0:0") | inTime.equals("24:00:0") | inTime.equals("24:0:00"))
-				{
-					inTime="00:00:00";
-				}
-			}
-			else{
-				inTime=inhour+":"+inMin+":00";
-			}
-
+			String inTF=txtFrom.getValue().toString();
+			inTime=inhour+":"+inMin+":00 "+inTF;
+			
 			String outhour=tHrTo.getValue().toString().isEmpty()?"00":tHrTo.getValue().toString().trim();
 			String OutMin=tMinTo.getValue().toString().isEmpty()?"00":tMinTo.getValue().toString().trim();
 			String outTime="";
-			if(txtTo.getValue().toString().trim().equals("PM")){
-				outTime=Integer.toString(Integer.parseInt(outhour)+12)+":"+OutMin+":00";
-				if(outTime.equals("24:00:00") | outTime.equals("24:0:0") | outTime.equals("24:00:0") | outTime.equals("24:0:00"))
-				{
-					outTime="00:00:00";
-				}
-			}
-			else{
-				outTime=outhour+":"+OutMin+":00";
-			}
+			String outTF=txtTo.getValue().toString();
+			outTime=outhour+":"+OutMin+":00 "+outTF;
+			
+			
 
 			System.out.println("inTime: "+inTime);
 			System.out.println("outTime: "+outTime);
@@ -1202,10 +1244,12 @@ public class OverTimeRequestForm extends Window
 		session.beginTransaction();
 		try
 		{
-			String query = "select vEmployeeId,vJobSite,dRequestDate,DATEPART(HOUR,CONVERT(time,dTimeFrom))%12 hours1,"
-					+ " DATEPART(HOUR,CONVERT(time,dTimeTo))%12 hours2,dTimeTotal,"
+			String query = "select vEmployeeId,vJobSite,dRequestDate,DATEPART(HOUR,dTimeFrom) hours1,"
+					+ " DATEPART(HOUR,dTimeTo) hours2,dTimeTotal,"
 					+ " vManger,vWorkRequest,iHoliday,iNightTim,vManPower,DATEPART(MINUTE,CONVERT(time,dTimeFrom))min1,"
-					+ " DATEPART(MINUTE,CONVERT(time,dTimeTo))min2,vTransactionId,dReplaceHoliday,dReplaceWorking,iHoliday "
+					+ " DATEPART(MINUTE,CONVERT(time,dTimeTo))min2,vTransactionId,dReplaceHoliday,dReplaceWorking,iHoliday,"
+					+ "(case when DATEPART(HOUR,dTimeFrom)>11 then 'PM' else 'AM' end)tf1,"
+					+ "(case when DATEPART(HOUR,dTimeTo)>11 then 'PM' else 'AM' end)tr2  "
 					+ " from tbOTRequest where  vTransactionID = '"+TransID+"'";
 			System.out.println("Find :"+query);
 			List <?> lst = session.createSQLQuery(query).list();
@@ -1244,6 +1288,8 @@ public class OverTimeRequestForm extends Window
 					txtTransactionID.setValue(element[13]);
 					dReplaceHoliday.setValue(element[14]);
 					dReplaceWorking.setValue(element[15]);
+					txtFrom.setValue(element[17]);
+					txtTo.setValue(element[18]);
 					
 				}
 			}

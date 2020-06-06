@@ -1298,7 +1298,7 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 
 		txtReasonForAll.setWidth("140px");
 		txtReasonForAll.setHeight("-1px");
-		//mainlayout.addComponent(txtReasonForAll, "top:58.0px;left:810.0px");
+		mainlayout.addComponent(txtReasonForAll, "top:58.0px;left:810.0px");
 		
 		chkPermitAll=new CheckBox("Apply All");
 		chkPermitAll.setImmediate(true);
