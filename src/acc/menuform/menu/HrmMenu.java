@@ -48,6 +48,8 @@ import java.util.Iterator;
 
 import org.hibernate.Session;
 
+import com.appform.hrmModule.BankBranchInfo;
+import com.appform.hrmModule.BankInfo;
 import com.appform.hrmModule.DateBetweenAttendanceManuallyMachine;
 import com.appform.hrmModule.DepartmentInformation;
 import com.appform.hrmModule.DesignationInformation;
@@ -273,6 +275,14 @@ public class HrmMenu
 		if(isValidMenu("EmployeeRequsitionForm"))
 		{
 			addCaptionedItem("EMPLOYEE REQUSITION FORM",setupTransaction);
+		}
+		if(isValidMenu("BankInfo"))
+		{
+			addCaptionedItem("BANK INFORMATION",setupTransaction);
+		}
+		if(isValidMenu("BankBranchInfo"))
+		{
+			addCaptionedItem("BRANCH INFORMATION",setupTransaction);
 		}
 	}
 	private void addSetupReportChild(Object setupReport) {
@@ -735,6 +745,19 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE REQUSITION FORM"))
 				{
 					showWindow(new EmployeeRequsitionForm(sessionBean, "EmployeeRequsitionForm"), event.getItem(), "EmployeeRequsitionForm","HRM MODULE","TRANSACTION");
+				}
+				
+				
+				
+				
+
+				if(event.getItem().toString().equalsIgnoreCase("BANK INFORMATION"))
+				{
+					showWindow(new BankInfo(sessionBean, "BankInfo"), event.getItem(), "BankInfo","HRM MODULE","TRANSACTION");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("BRANCH INFORMATION"))
+				{
+					showWindow(new BankBranchInfo(sessionBean, "BankBranchInfo"), event.getItem(), "BankBranchInfo","HRM MODULE","TRANSACTION");
 				}
 
 				//GENERAL HRM REPORTS

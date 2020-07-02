@@ -83,7 +83,7 @@ public class TabOfficialInfo extends VerticalLayout
 	public TextField txtFamilyName;
 	public TextField txtGivenName;
 	public TextField txtUnitName;
-	public TextField txtCareerPeriod;
+	public AmountField txtCareerPeriodYear,txtCareerPeriodMonth;
 
 	public NativeButton btnPlusSection;
 	public NativeButton btnPlusUnit;
@@ -1046,11 +1046,15 @@ public class TabOfficialInfo extends VerticalLayout
 		cmbLevel.setNewItemsAllowed(true);
 		cmbLevel.setNullSelectionAllowed(false);
 		
-		txtCareerPeriod = new TextField();
-		txtCareerPeriod.setImmediate(true);
-		txtCareerPeriod.setWidth("140px");
-		txtCareerPeriod.setHeight("-1px");
-		txtCareerPeriod.setMaxLength(17);
+		txtCareerPeriodYear = new AmountField();
+		txtCareerPeriodYear.setImmediate(true);
+		txtCareerPeriodYear.setWidth("30px");
+		txtCareerPeriodYear.setHeight("-1px");
+		
+		txtCareerPeriodMonth = new AmountField();
+		txtCareerPeriodMonth.setImmediate(true);
+		txtCareerPeriodMonth.setWidth("30px");
+		txtCareerPeriodMonth.setHeight("-1px");
 
 		// cmbServiceType
 		cmbServiceType = new ComboBox("",ServiceType);
@@ -1365,7 +1369,12 @@ public class TabOfficialInfo extends VerticalLayout
 		mainLayout.addComponent(cmbLevel, "top:398px;left:128.0px;");
 		
 		mainLayout.addComponent(new Label("<b><Font Color='#CD0606' size='3px'>*</Font></b>Career Period:",Label.CONTENT_XHTML), "top:425px;left:12.0px;");
-		mainLayout.addComponent(txtCareerPeriod, "top:423px;left:128.0px;");
+		mainLayout.addComponent(txtCareerPeriodYear, "top:423px;left:128.0px;");
+		mainLayout.addComponent(new Label("Year"), "top:425px;left:162.0px;");
+		mainLayout.addComponent(txtCareerPeriodMonth, "top:423px;left:198.0px;");
+		mainLayout.addComponent(new Label("Month"), "top:425px;left:232.0px;");
+		txtCareerPeriodYear.setValue("0");
+		txtCareerPeriodMonth.setValue("0");
 		
 		mainLayout.addComponent( new Label("<b><Font Color='#CD0606' size='3px'>*</Font></b>Service Type:",Label.CONTENT_XHTML), "top:450px;left:12.0px;");
 		mainLayout.addComponent(cmbServiceType, "top:448px;left:128.0px;");

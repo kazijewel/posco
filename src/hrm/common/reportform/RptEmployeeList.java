@@ -47,7 +47,6 @@ public class RptEmployeeList extends Window
 	private ComboBox cmbReligion;
 
 	private OptionGroup opgStatus = new OptionGroup();
-	private OptionGroup opgGross = new OptionGroup();
 	private OptionGroup opgReportView;
 
 	private CheckBox chkUnitAll = new CheckBox("All");
@@ -59,7 +58,6 @@ public class RptEmployeeList extends Window
 	private CheckBox chkDepartmentAll = new CheckBox("All");
 
 	private static final List<String> aictiveType = Arrays.asList(new String[]{"Active","Inactive","All"});
-	private static final List<String> gross = Arrays.asList(new String[]{"With Gross","Without Gross"});
 	private static final List<String> reportView = Arrays.asList(new String[]{"PDF","Excel"});
 	private static final List<String> EmployeeType = Arrays.asList(new String[]{"Regular", "Temporary"});
 	private static final List<String> religion = Arrays.asList(new String[] {"Islam","Hindu","Buddism","Cristian","Other"});
@@ -759,22 +757,11 @@ public class RptEmployeeList extends Window
 		mainLayout.addComponent(new Label("Service Status Type : "), "top:190px; left:30px;");
 		mainLayout.addComponent(opgStatus, "top:188px; left:147px;");
 
-		opgGross = new OptionGroup("",gross);
-		opgGross.setImmediate(true);
-		opgGross.setWidth("250px");
-		opgGross.setHeight("-1px");
-		opgGross.setStyleName("horizontal");
-		opgGross.setValue("With Gross");
-		//mainLayout.addComponent(new Label("Gross Type  :"), "top:220px; left:30.0px;");
-		mainLayout.addComponent(opgGross, "top:218px; left:110px;");
-		opgGross.setVisible(false);
-
 		opgReportView = new OptionGroup("",reportView);
 		opgReportView.setImmediate(true);
 		opgReportView.setStyleName("horizontal");
 		opgReportView.setValue("PDF");
 		mainLayout.addComponent(opgReportView, "top:250px;left:110.0px;");
-		opgReportView.setVisible(false);
 		mainLayout.addComponent(cButton, "bottom:15px;left:120.0px;");
 
 		return mainLayout;
@@ -837,144 +824,106 @@ public class RptEmployeeList extends Window
 	}
 
 
-	private void reportShow(Object unitValue,Object empTypeValue,Object deptValue,Object sectionValue,Object designationValue,Object religionvalue,Object statusValue)
+	private void reportShow(
+			Object unitValue,Object empTypeValue,Object deptValue,Object sectionValue,
+			Object designationValue,Object religionvalue,Object statusValue)
 	{
 		reportTime = new ReportDate();
 		ReportOption RadioBtn = new ReportOption(opgReportView.getValue().toString());
 		Session session=SessionFactoryUtil.getInstance().openSession();
-		String report = "";
+		
 		try
 		{
-			HashMap <String,Object>  hm = new HashMap <String,Object> ();
-			hm.put("company", sessionBean.getCompany());
-			hm.put("address", sessionBean.getCompanyAddress());
-			hm.put("phone",sessionBean.getCompanyContact());
-			hm.put("username", sessionBean.getUserName()+" "+sessionBean.getUserIp());
-			hm.put("SysDate",reportTime.getTime);
-			hm.put("logo", sessionBean.getCompanyLogo());
-			hm.put("Unit", cmbUnit.getItemCaption(cmbUnit.getValue()));
-			hm.put("status", opgStatus.getValue().toString());
-
-			String query="select * from funEmployeeDetails('"+unitValue+"','"+deptValue+"','"+sectionValue+"','"+designationValue+"','"+empTypeValue+"','"+religionvalue+"','%','%','"+statusValue+"') order by vUnitName,vDepartmentName,vSectionName,iRank,dJoiningDate";
-
-			System.out.println("rePORT SHOW"+query);
-
-
-
-			if(opgGross.getValue().toString().equals("Without Gross"))
-			{
-				report="report/account/hrmModule/rptEmployeeList.jasper";
-			}
-			else if(opgGross.getValue().toString().equals("With Gross"))
-			{
-				report="report/account/hrmModule/rptEmployeeListWithGross.jasper";
-			}
+			String query="select vEmployeeId,vEmployeeCode,dJoiningDate,dValidDate,dStatusDate,vEmployeeName,vFamilyName,vGivenName,vGender,dDateOfBirth,"
+					+ "vEducationDetails,vDesignationName,vLevelOfEnglish,vCareerPeriod,vCompanyPeriod,vContactNo,vEmailAddress,"
+					+ "vUnitName,vDepartmentId,vDepartmentName,vSectionName,vEmployeeStatus "
+					+ "from funEmployeeDetails"
+					+ "("
+						+ "'"+unitValue+"','"+deptValue+"','"+sectionValue+"','"+designationValue+"','"+empTypeValue+"','"+religionvalue+"',"
+						+ "'%','%','"+statusValue+"'"
+					+ ") order by vUnitName,vDepartmentName,vSectionName,dJoiningDate";
+			System.out.println("reportShow: "+query);
 
 			if(queryValueCheck(query))
 			{
-
-				if(opgReportView.getValue()=="Excel" && opgGross.getValue().toString().equals("With Gross"))
+				if(opgReportView.getValue()=="Excel")
 				{
 					String loc = getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/themes/temp/attendanceFolder";
-					String fname = "EmployeeList.xls";
+					String fname = "MonthlySalary.xls";
 					String url = getWindow().getApplication().getURL()+"VAADIN/themes/temp/attendanceFolder/"+fname;
-					String strColName[]={"SL#","Employee ID","Employee Name","Designation","Employee Type","Joining Date","Confirmation Date","Religion","Sex","Gross"};
-
-
-					//String Header="";
-					String Header="Unit : "+cmbUnit.getItemCaption(cmbUnit.getValue())+"        Service Status : "+opgStatus.getValue().toString();
+					
+					String strColName[]={"SL#","vEmployeeCode","vEmployeeName","vFamilyName","vGivenName","vDesignationName","dJoiningDate",
+							"dValidDate","dStatusDate","vGender","dDateOfBirth","vEducationDetails","vLevelOfEnglish","vCareerPeriod",
+							"vCompanyPeriod","vContactNo","vEmailAddress","vEmployeeStatus",
+							"vServiceType","vFatherName","vMotherName","vPresentAddress","vPermanentAddress","vBloodGroup",
+							"vBankName","vBranchName","vAccountNo","mBasic","mHouseRent","mMobileAllowance","vLevelOfEnglish",
+							"Signature"};
+					
+					String Header="Employee List";
 					String exelSql="";
-					//String exelSql2="";
-					exelSql = "";
-
+					
+					exelSql = "select distinct vUnitId,vDepartmentId,vUnitName,vDepartmentName from tbEmpOfficialPersonalInfo "
+							+ "where vUnitId like '"+unitValue+"' "
+							+ "and vDepartmentId like '"+deptValue+"' "
+							+ "and vSectionId like '"+sectionValue+"' "
+							+ "and vDesignationId like '"+designationValue+"' "
+							+ "and vReligion like '"+religionvalue+"' "
+							+ "and vEmployeeType like '"+empTypeValue+"' "
+							+ "and bStatus like '"+statusValue+"' ";
+					
+					System.out.println("exelSql: "+exelSql);
+					
 					List <?> lst1=session.createSQLQuery(exelSql).list();
-
+							
 					String detailQuery[]=new String[lst1.size()];
-					String [] signatureOption = new String [0];
+					String [] signatureOption = {"HEAD OF HR","HEAD OF ACCOUNTS","GROUP C.E.O / CHAIRMAN"};
+					//String [] signatureOption = new String [0];
 					String [] groupItem=new String[lst1.size()];
 					Object [][] GroupElement=new Object[lst1.size()][];
 					String [] GroupColName=new String[0];
 					int countInd=0;
+					
 					for(Iterator<?> iter=lst1.iterator(); iter.hasNext();)
 					{
 						Object [] element = (Object[])iter.next();
-						groupItem[countInd]="Department Name : "+element[16].toString()+"    Section Name : "+element[18].toString()+"   Employee Type : "+element[4].toString();
-						GroupElement[countInd]=new Object [] {(Object)"",(Object)"Department Name : ",element[16],(Object)"Section Name : ",element[18],(Object)"Employee Type : ",element[4]};
-
-						String status="";
-						if(element[4].toString().equals(true)){
-							status = "1";
-						}
-
-						else {
-							status = "0";
-						}	
-						detailQuery[countInd] = "";
-
+						groupItem[countInd]="Project Name  : "+element[2].toString()+"                                                Department Name : "+element[3].toString();
+						GroupElement[countInd]=new Object [] {(Object)"",(Object)"Project Name : ",element[2],(Object)"Department Name : ",element[3]};
+					
+						detailQuery[countInd]="select vEmployeeCode,vEmployeeName,vFamilyName,vGivenName,vDesignationName,dJoiningDate,"
+							+ "dValidDate,dStatusDate,vGender,dDateOfBirth,vEducationDetails,vLevelOfEnglish,vCareerPeriod,"
+							+ "vCompanyPeriod,vContactNo,vEmailAddress,vEmployeeStatus,"
+							+ "vServiceType,vFatherName,vMotherName,vPresentAddress,vPermanentAddress,vBloodGroup,vBankName,vBranchName,"
+							+ "vAccountNo,CAST(ISNULL(mBasic,0) as FLOAT)mBasic,CAST(ISNULL(mHouseRent,0) as FLOAT)mHouseRent,CAST(ISNULL(mMobileAllowance,0) as FLOAT)mMobileAllowance,vLevelOfEnglish "
+							+ "from funEmployeeDetails"
+							+ "("
+								+ "'"+element[0].toString()+"','"+element[1].toString()+"','"+sectionValue+"','"+designationValue+"','"+empTypeValue+"','"+religionvalue+"',"
+								+ "'%','%','"+statusValue+"'"
+							+ ") order by vUnitName,vDepartmentName,vSectionName,dJoiningDate";
+							
+						System.out.println("Details query :"+detailQuery[countInd]);
 						countInd++;
+						
 					}
-					System.out.println("Details query :"+detailQuery);
-					new GenerateExcelReport(sessionBean, loc, url, fname, "Employee List With Gross Salary", "Employee List With Gross Salary",
-							Header, strColName, 2, groupItem, GroupColName, GroupElement, 1, detailQuery, 0, 0, "A4",
-							"Landscape",signatureOption,"");
+					
+					new GenerateExcelReport(sessionBean, loc, url, fname, "MONTHLY  SALARY", "MONTHLY  SALARY",
+							Header, strColName, 2, groupItem, GroupColName, GroupElement, 1, detailQuery, 14, 25, "A4",
+							"Landscape",signatureOption,cmbUnit.getItemCaption(cmbUnit.getValue()));
+					
 					Window window = new Window();
 					getApplication().addWindow(window);
 					getWindow().open(new ExternalResource(url),"_blank",500,200,Window.BORDER_NONE);
-
-
-				}
-				else if(opgReportView.getValue()=="Excel" && opgGross.getValue().toString().equals("Without Gross"))
-				{
-					String loc = getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/themes/temp/attendanceFolder";
-					String fname = "EmployeeList.xls";
-					String url = getWindow().getApplication().getURL()+"VAADIN/themes/temp/attendanceFolder/"+fname;
-					String strColName[]={"SL#","Employee ID","Employee Name","Designation","Employee Type","Joining Date","Confirmation Date","Religion","Sex"};
-
-
-					//String Header="";
-					String Header="Unit : "+cmbUnit.getItemCaption(cmbUnit.getValue())+"        Service Status : "+opgStatus.getValue().toString();
-					String exelSql="";
-					//String exelSql2="";
-					exelSql = "";
-
-					List <?> lst1=session.createSQLQuery(exelSql).list();
-
-					String detailQuery[]=new String[lst1.size()];
-					String [] signatureOption = new String [0];
-					String [] groupItem=new String[lst1.size()];
-					Object [][] GroupElement=new Object[lst1.size()][];
-					String [] GroupColName=new String[0];
-					int countInd=0;
-					for(Iterator<?> iter=lst1.iterator(); iter.hasNext();)
-					{
-						Object [] element = (Object[])iter.next();
-						groupItem[countInd]="Department Name : "+element[16].toString()+"    Section Name : "+element[18].toString()+"   Employee Type : "+element[4].toString();
-						GroupElement[countInd]=new Object [] {(Object)"",(Object)"Department Name : ",element[16],(Object)"Section Name : ",element[18],(Object)"Employee Type : ",element[4]};
-
-						String status="";
-						if(element[4].toString().equals(true)){
-							status = "1";
-						}
-
-						else {
-							status = "0";
-						}	
-						detailQuery[countInd] = "";
-
-						countInd++;
-					}
-					System.out.println("Details query :"+countInd);
-					new GenerateExcelReport(sessionBean, loc, url, fname, "Employee List With Gross Salary", "Employee List With Gross Salary",
-							Header, strColName, 2, groupItem, GroupColName, GroupElement, 1, detailQuery, 0, 0, "A4",
-							"Landscape",signatureOption,"");
-					Window window = new Window();
-					getApplication().addWindow(window);
-					getWindow().open(new ExternalResource(url),"_blank",500,200,Window.BORDER_NONE);
-
-
 				}
 				else
 				{
+					HashMap <String,Object>  hm = new HashMap <String,Object> ();
+					hm.put("company", sessionBean.getCompany());
+					hm.put("address", sessionBean.getCompanyAddress());
+					hm.put("phone",sessionBean.getCompanyContact());
+					hm.put("username", sessionBean.getUserName()+" "+sessionBean.getUserIp());
+					hm.put("SysDate",reportTime.getTime);
+					hm.put("logo", sessionBean.getCompanyLogo());
+					hm.put("Unit", cmbUnit.getItemCaption(cmbUnit.getValue()));
+					hm.put("status", opgStatus.getValue().toString());
 					hm.put("sql", query);
 
 					Window win = new ReportViewer(hm,"report/account/hrmModule/rptEmployeeList.jasper",

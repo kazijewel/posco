@@ -14,10 +14,12 @@ import com.common.share.SessionFactoryUtil;
 import com.common.share.TextRead;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -63,7 +65,9 @@ public class TabSalaryStructure extends VerticalLayout
 	ArrayList<Component> allComp = new ArrayList<Component>();
 
 	private DecimalFormat dff = new DecimalFormat("#0");
-
+	
+	public NativeButton btnPlusBank,btnPlusBranch;
+	
 	public TabSalaryStructure() 
 	{
 		buildMainLayout();
@@ -86,12 +90,17 @@ public class TabSalaryStructure extends VerticalLayout
 	}
 	public void allTrueFalse(boolean x)
 	{
-		cmbBankName.setVisible(x);
-		cmbBranchName.setVisible(x);
 		lblAccountNo.setVisible(x);
-		lblBankName.setVisible(x);
-		lblBranchName.setVisible(x);
 		txtAccountNo.setVisible(x);
+		
+		lblBankName.setVisible(x);	
+		cmbBankName.setVisible(x);
+		btnPlusBank.setVisible(x);
+		
+		lblBranchName.setVisible(x);
+		cmbBranchName.setVisible(x);
+		btnPlusBranch.setVisible(x);
+		
 		lblRoutingNo.setVisible(x);
 		txtRoutingNo.setVisible(x);
 	}
@@ -410,6 +419,18 @@ public class TabSalaryStructure extends VerticalLayout
 		cmbBranchName.setImmediate(true);
 		cmbBranchName.setWidth("200px");
 		cmbBranchName.setHeight("-1px");
+		
+		btnPlusBank = new NativeButton();
+		btnPlusBank.setIcon(new ThemeResource("../icons/add.png"));
+		btnPlusBank.setImmediate(true);
+		btnPlusBank.setWidth("28px");
+		btnPlusBank.setHeight("24px");
+
+		btnPlusBranch = new NativeButton();
+		btnPlusBranch.setIcon(new ThemeResource("../icons/add.png"));
+		btnPlusBranch.setImmediate(true);
+		btnPlusBranch.setWidth("28px");
+		btnPlusBranch.setHeight("24px");
 
 		lblAccountNo=new Label("Account No. :");
 		lblRoutingNo=new Label("Routing No. :");
@@ -455,10 +476,12 @@ public class TabSalaryStructure extends VerticalLayout
 		mainLayout.addComponent(opgBank,"top:100px; left:570px");
 				
 		mainLayout.addComponent(lblBankName ,"top:125.0px;left:445.0px;");
-		mainLayout.addComponent(cmbBankName,"top:123.0px;left:570.0px;");
+		mainLayout.addComponent(cmbBankName,"top:123.0px;left:570.0px;");		
+		mainLayout.addComponent(btnPlusBank, "top:123.0px;left:775.0px;");
 
 		mainLayout.addComponent(lblBranchName,"top:150.0px;left:445.0px;");
-		mainLayout.addComponent(cmbBranchName,"top:148.0px;left:570.0px;");
+		mainLayout.addComponent(cmbBranchName,"top:148.0px;left:570.0px;");	
+		mainLayout.addComponent(btnPlusBranch, "top:148.0px;left:775.0px;");
 		
 		mainLayout.addComponent(lblAccountNo,"top:175px;left:445.0px;");
 		mainLayout.addComponent(txtAccountNo, "top:173px;left:570.0px;");

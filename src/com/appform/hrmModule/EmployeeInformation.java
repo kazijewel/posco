@@ -675,8 +675,9 @@ public class EmployeeInformation extends Window
 					" dValidDate,iContactPeriod, "+
 					" vUnitId,vUnitName,ISNULL(vSectionId,'')vSectionId,ISNULL(vSectionName,'')vSectionName,"+
 					" vDesignationId,vAccommodation,ISNULL(vGradeId,'')vGradeId,ISNULL(vGradeName,'')vGradeName,"+
-					" ISNULL(vShiftId,'')vShiftId,ISNULL(vShiftName,'')vShiftName,ISNULL(vCareerPeriod,'0')vCareerPeriod,ISNULL(vAttachServiceAgreement,'0')vAttachServiceAgreement," +
-					" ISNULL(vRoutingNo,'')vRoutingNo "+
+					" ISNULL(vShiftId,'')vShiftId,ISNULL(vShiftName,'')vShiftName,ISNULL(vCareerPeriod,'0')vCareerPeriod,"
+					+ "ISNULL(vAttachServiceAgreement,'0')vAttachServiceAgreement,ISNULL(vRoutingNo,'')vRoutingNo,"
+					+ "ISNULL(vCareerPeriodYear,'0')vCareerPeriodYear,ISNULL(vCareerPeriodMonth,'0')vCareerPeriodMonth "+
 					" from tbEmpOfficialPersonalInfo where vEmployeeId = '"+employeeId+"' ";
 			
 			System.out.println("sqlOfficial: "+sqlOfficial);
@@ -685,8 +686,6 @@ public class EmployeeInformation extends Window
 			for(Iterator<?> iterEmployee = listOfficial.iterator(); iterEmployee.hasNext();)
 			{
 				Object[] element = (Object[]) iterEmployee.next();
-
-				firstTab.txtCareerPeriod.setValue(element[67]);
 				
 				System.out.println("Ok Boss: "+element[67]);
 				
@@ -799,6 +798,9 @@ public class EmployeeInformation extends Window
 				fifthTab.txtAccountNo.setValue(element[40]);
 				fifthTab.txtRoutingNo.setValue(element[69]);
 				
+
+				firstTab.txtCareerPeriodYear.setValue(element[70]);
+				firstTab.txtCareerPeriodMonth.setValue(element[71]);
 				
 				
 			}
@@ -1112,7 +1114,8 @@ public class EmployeeInformation extends Window
 					" vBankId,vBankName,vBranchId,vBranchName,vAccountNo,iOtEnable,vUserName,vUserIp,dEntryTime,vGradeId,vGradeName,"+
 					" vUnitId,vUnitName,vDepartmentId,vDepartmentName,FridayStatus,iHolidayStatus,vShiftId,vShiftName,"+
 					" iProbationPeriod,vMoneyTransferType,vFamilyName,vGivenName,vLevelOfEnglish,vSectionId,vSectionName,dValidDate,"+
-					" iContactPeriod,vDesignationId,vDesignationName,vAccommodation,vCareerPeriod,vAttachServiceAgreement,vRoutingNo) values (" +
+					" iContactPeriod,vDesignationId,vDesignationName,vAccommodation,vCareerPeriodYear,vCareerPeriodMonth,"
+					+ "vAttachServiceAgreement,vRoutingNo) values (" +
 					" '"+masterEmployeeId+"', " +
 					" '"+(firstTab.txtEmployeeCode.getValue().toString().isEmpty()?"":firstTab.txtEmployeeCode.getValue().toString())+"', " +
 					" '"+(firstTab.txtFingerId.getValue().toString().isEmpty()?"":firstTab.txtFingerId.getValue().toString())+"', " +
@@ -1181,7 +1184,8 @@ public class EmployeeInformation extends Window
 			        " '"+(firstTab.cmbDesignation.getValue()==null?"":firstTab.cmbDesignation.getValue())+"'," +
 			        " '"+(firstTab.cmbDesignation.getValue()==null?"":(firstTab.cmbDesignation.getItemCaption(firstTab.cmbDesignation.getValue())))+"'," +
 			        " '"+(firstTab.cmbAccommodation.getValue()==null?"":firstTab.cmbAccommodation.getValue())+"'," +
-			        " '"+(firstTab.txtCareerPeriod.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriod.getValue().toString().replaceAll("'", "#"))+"'," +
+			        " '"+(firstTab.txtCareerPeriodYear.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriodYear.getValue().toString().replaceAll("'", "#"))+"'," +
+			        " '"+(firstTab.txtCareerPeriodMonth.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriodMonth.getValue().toString().replaceAll("'", "#"))+"'," +
 					" '"+imagePathServiceAgreement+"','"+(fifthTab.txtRoutingNo.getValue().toString().isEmpty()?"":(fifthTab.txtRoutingNo.getValue()))+"') ";
 			
 			System.out.println("officialQuery :"+officialQuery);
@@ -1403,7 +1407,8 @@ public class EmployeeInformation extends Window
 					" vDesignationId = '"+(firstTab.cmbDesignation.getValue()==null?"":(firstTab.cmbDesignation.getValue()))+"'," +
 					" vDesignationName = '"+(firstTab.cmbDesignation.getValue()==null?"":(firstTab.cmbDesignation.getItemCaption(firstTab.cmbDesignation.getValue())))+"'," +
 					" vAccommodation = '"+(firstTab.cmbAccommodation.getValue()==null?"":(firstTab.cmbAccommodation.getValue()))+"'," +
-					" vCareerPeriod = '"+(firstTab.txtCareerPeriod.getValue().toString().isEmpty()?"":firstTab.txtCareerPeriod.getValue().toString().replaceAll("'","#"))+"'," +
+					" vCareerPeriodYear = '"+(firstTab.txtCareerPeriodYear.getValue().toString().isEmpty()?"0":firstTab.txtCareerPeriodYear.getValue().toString().replaceAll("'","#"))+"'," +
+					" vCareerPeriodMonth = '"+(firstTab.txtCareerPeriodMonth.getValue().toString().isEmpty()?"0":firstTab.txtCareerPeriodMonth.getValue().toString().replaceAll("'","#"))+"'," +
 					" vAttachServiceAgreement = '"+imagePathServiceAgreement+"'" +
 					" where vEmployeeId = '"+masterEmployeeId+"' ";
 
@@ -1679,7 +1684,35 @@ public class EmployeeInformation extends Window
 		});
 		this.getParent().addWindow(win);
 	}
-
+	
+	public void BranchLink()
+	{
+		Window win = new BankBranchInfo(sessionBean,"BankInfo");
+		win.setStyleName("cwindow");
+		win.setModal(true);
+		win.addListener(new Window.CloseListener() 
+		{
+			public void windowClose(CloseEvent e) 
+			{
+				fifthTab.addBranchName();
+			}
+		});
+		this.getParent().addWindow(win);
+	}
+	public void BankLink()
+	{
+		Window win = new BankInfo(sessionBean,"BankBranchInfo");
+		win.setStyleName("cwindow");
+		win.setModal(true);
+		win.addListener(new Window.CloseListener() 
+		{
+			public void windowClose(CloseEvent e) 
+			{
+				fifthTab.addBankName();
+			}
+		});
+		this.getParent().addWindow(win);
+	}
 
 	private AbsoluteLayout buildMainLayout() 
 	{
@@ -1823,7 +1856,8 @@ public class EmployeeInformation extends Window
 		firstTab.cmbLevel.setValue(null);
 		firstTab.dValidDate.setValue(new java.util.Date());
 		firstTab.cmbUnitName.setValue(null);
-		firstTab.txtCareerPeriod.setValue("");
+		firstTab.txtCareerPeriodYear.setValue("0");
+		firstTab.txtCareerPeriodMonth.setValue("0");
 	}
 
 	public void secondTabClear()
@@ -2188,7 +2222,21 @@ public class EmployeeInformation extends Window
 				salaryRegisterLink();
 			}
 		});
-
+		
+		fifthTab.btnPlusBank.addListener(new ClickListener()
+		{			
+			public void buttonClick(ClickEvent event)
+			{
+				BankLink();
+			}
+		});
+		fifthTab.btnPlusBranch.addListener(new ClickListener()
+		{			
+			public void buttonClick(ClickEvent event)
+			{
+				BranchLink();
+			}
+		});
 		firstTab.cmbStatus.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)

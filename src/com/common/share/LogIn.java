@@ -71,17 +71,28 @@ public class LogIn extends Window
 		cmbCompanyName.focus();
 		cmbCompanyName.setValue(sessionBean.getCompanyId());
 		cmbCompanyName.setEnabled(false);
-		copyReportFolder();
+		copyReportFolder("D:\\Tomcat 7.0\\webapps\\report\\posco","D:\\ScheduleBackup\\posco\\");
 	}
 
 	//----------------------------------------------copyReportFolder Start----------------------------------------------
-	public void copyReportFolder()
+	
+	
+	/**
+     * using this Method you can Copy File from One Location to Other Location
+     * <pre class='code'>
+     * @param src
+     *            "D:\\Tomcat 7.0\\webapps\\report\\posco"
+     * @param dst
+     * 			  "D:\\ScheduleBackup\\posco\\"
+     * 
+     */
+	public void copyReportFolder(String src,String dst)
 	{
 		SimpleDateFormat dFormatDDMMYY = new SimpleDateFormat("dd-MM-yyyy");
 		String saveDate=dFormatDDMMYY.format(new Date()).toString().trim();
 		
-		File srcFolder = new File("D:\\Tomcat 7.0\\webapps\\report\\posco");
-		File destFolder = new File("D:\\ScheduleBackup\\posco\\"+saveDate);
+		File srcFolder = new File(src);
+		File destFolder = new File(dst+saveDate);
 		
 		//make sure source exists
 		if(!srcFolder.exists())

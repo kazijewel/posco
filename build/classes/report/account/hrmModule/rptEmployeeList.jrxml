@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptEmployeeList" language="groovy" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1164" leftMargin="16" rightMargin="10" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.366026910730141"/>
+	<property name="ireport.x" value="730"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
@@ -12,7 +12,7 @@
 	<parameter name="phone" class="java.lang.String"/>
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select * from funEmployeeDetails('%','%','%','%','%','%','%','%','%')"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select vEmployeeId,vEmployeeCode,dJoiningDate,dValidDate,dStatusDate,vEmployeeName,vFamilyName,vGivenName,vGender,dDateOfBirth,vEducationDetails, vDesignationName,vLevelOfEnglish,vCompanyPeriod,vContactNo,vEmailAddress,vUnitName,vDepartmentId,vDepartmentName,vSectionName,vEmployeeStatus,vCareerPeriod  from funEmployeeDetails('19001','%','%','%','%','%','%','%','1') order by vEmployeeId,vUnitName,vDepartmentName,vSectionName,dJoiningDate"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="username" class="java.lang.String"/>
 	<parameter name="userIp" class="java.lang.String"/>
@@ -24,112 +24,33 @@
 		<![CDATA[$P!{sql}]]>
 	</queryString>
 	<field name="vEmployeeId" class="java.lang.String"/>
-	<field name="vEmployeeName" class="java.lang.String"/>
 	<field name="vEmployeeCode" class="java.lang.String"/>
-	<field name="vFingerId" class="java.lang.String"/>
-	<field name="vProximityId" class="java.lang.String"/>
-	<field name="vReligion" class="java.lang.String"/>
-	<field name="vContactNo" class="java.lang.String"/>
-	<field name="vEmailAddress" class="java.lang.String"/>
-	<field name="vGender" class="java.lang.String"/>
-	<field name="dDateOfBirth" class="java.sql.Date"/>
-	<field name="vNationality" class="java.lang.String"/>
-	<field name="vNationalIdNo" class="java.lang.String"/>
-	<field name="vEmployeeType" class="java.lang.String"/>
-	<field name="vServiceType" class="java.lang.String"/>
-	<field name="bPhysicallyDisable" class="java.lang.Boolean"/>
-	<field name="dApplicationDate" class="java.sql.Date"/>
-	<field name="dInterviewDate" class="java.sql.Date"/>
 	<field name="dJoiningDate" class="java.sql.Date"/>
-	<field name="dConfirmationDate" class="java.sql.Date"/>
-	<field name="vEmployeeStatus" class="java.lang.String"/>
-	<field name="bStatus" class="java.lang.Boolean"/>
-	<field name="dStatusDate" class="java.sql.Date"/>
-	<field name="vEmployeePhoto" class="java.lang.String"/>
-	<field name="vAttachBirth" class="java.lang.String"/>
-	<field name="vAttachNid" class="java.lang.String"/>
-	<field name="vAttachApplication" class="java.lang.String"/>
-	<field name="vAttachJoining" class="java.lang.String"/>
-	<field name="vAttachConfirmation" class="java.lang.String"/>
-	<field name="vFatherName" class="java.lang.String"/>
-	<field name="vMotherName" class="java.lang.String"/>
-	<field name="vPresentAddress" class="java.lang.String"/>
-	<field name="vPermanentAddress" class="java.lang.String"/>
-	<field name="vBloodGroup" class="java.lang.String"/>
-	<field name="vMaritalStatus" class="java.lang.String"/>
-	<field name="dMarriageDate" class="java.sql.Date"/>
-	<field name="vSpouseName" class="java.lang.String"/>
-	<field name="vSpouseOccupation" class="java.lang.String"/>
-	<field name="iNumberOfChild" class="java.lang.Integer"/>
-	<field name="vBankName" class="java.lang.String"/>
-	<field name="vBranchName" class="java.lang.String"/>
-	<field name="vAccountNo" class="java.lang.String"/>
-	<field name="vSectionId" class="java.lang.String"/>
-	<field name="vSectionName" class="java.lang.String"/>
-	<field name="iSectionSerial" class="java.lang.Integer"/>
-	<field name="vDesignationId" class="java.lang.String"/>
-	<field name="vDesignationName" class="java.lang.String"/>
-	<field name="iDesignationSerial" class="java.lang.Integer"/>
-	<field name="vGradeId" class="java.lang.String"/>
-	<field name="vGradeName" class="java.lang.String"/>
-	<field name="vRegisterId" class="java.lang.String"/>
-	<field name="vRegisterName" class="java.lang.String"/>
-	<field name="mBasic" class="java.math.BigDecimal"/>
-	<field name="mHouseRent" class="java.math.BigDecimal"/>
-	<field name="mMedicalAllowance" class="java.math.BigDecimal"/>
-	<field name="mClinicalAllowance" class="java.math.BigDecimal"/>
-	<field name="mNonPracticeAllowance" class="java.math.BigDecimal"/>
-	<field name="mSpecialAllowance" class="java.math.BigDecimal"/>
-	<field name="mOtherAllowance" class="java.math.BigDecimal"/>
-	<field name="mDearnessAllowance" class="java.math.BigDecimal"/>
-	<field name="mConveyanceAllowance" class="java.math.BigDecimal"/>
-	<field name="mAttendanceBonus" class="java.math.BigDecimal"/>
-	<field name="mKhichuriMeal" class="java.math.BigDecimal"/>
-	<field name="mRoomCharge" class="java.math.BigDecimal"/>
-	<field name="mIncomeTax" class="java.math.BigDecimal"/>
-	<field name="mProvidentFund" class="java.math.BigDecimal"/>
-	<field name="mKallanFund" class="java.math.BigDecimal"/>
-	<field name="vUnitId" class="java.lang.Integer"/>
-	<field name="vUnitName" class="java.lang.String"/>
-	<field name="mMobileAllowance" class="java.lang.Integer"/>
-	<field name="mTiffinAllowance" class="java.lang.Integer"/>
-	<field name="iRank" class="java.lang.Integer"/>
-	<field name="vComputerSkill" class="java.lang.String"/>
-	<field name="vOtherQualification" class="java.lang.String"/>
-	<field name="vPFId" class="java.lang.String"/>
-	<field name="dPfStartDate" class="java.sql.Date"/>
-	<field name="tlEarning" class="java.math.BigDecimal"/>
-	<field name="tlDeduction" class="java.math.BigDecimal"/>
-	<field name="tempEducationEmpId" class="java.lang.String"/>
-	<field name="tempExpEmpId" class="java.lang.String"/>
-	<field name="vLineId" class="java.lang.String"/>
-	<field name="vLineName" class="java.lang.String"/>
-	<field name="vFloorId" class="java.lang.String"/>
-	<field name="vFloorName" class="java.lang.String"/>
-	<field name="vShiftid" class="java.lang.String"/>
-	<field name="vShiftName" class="java.lang.String"/>
-	<field name="mTransport" class="java.math.BigDecimal"/>
-	<field name="mUnionSubsCription" class="java.math.BigDecimal"/>
-	<field name="mFoodAllowance" class="java.math.BigDecimal"/>
 	<field name="dValidDate" class="java.sql.Date"/>
+	<field name="dStatusDate" class="java.sql.Date"/>
+	<field name="vEmployeeName" class="java.lang.String"/>
 	<field name="vFamilyName" class="java.lang.String"/>
 	<field name="vGivenName" class="java.lang.String"/>
+	<field name="vGender" class="java.lang.String"/>
+	<field name="dDateOfBirth" class="java.sql.Date"/>
+	<field name="vEducationDetails" class="java.lang.String"/>
+	<field name="vDesignationName" class="java.lang.String"/>
 	<field name="vLevelOfEnglish" class="java.lang.String"/>
+	<field name="vCompanyPeriod" class="java.lang.String"/>
+	<field name="vContactNo" class="java.lang.String"/>
+	<field name="vEmailAddress" class="java.lang.String"/>
+	<field name="vUnitName" class="java.lang.String"/>
 	<field name="vDepartmentId" class="java.lang.String"/>
 	<field name="vDepartmentName" class="java.lang.String"/>
+	<field name="vSectionName" class="java.lang.String"/>
+	<field name="vEmployeeStatus" class="java.lang.String"/>
 	<field name="vCareerPeriod" class="java.lang.String"/>
-	<field name="vCompanyPeriod" class="java.lang.String"/>
-	<field name="vEducationDetails" class="java.lang.String"/>
-	<field name="TempDateOfBirth" class="java.lang.String"/>
-	<field name="TempDateOfValid" class="java.lang.String"/>
-	<field name="TempDateOfJoin" class="java.lang.String"/>
-	<field name="TempDateOfStatus" class="java.lang.String"/>
 	<variable name="sl" class="java.lang.Number" resetType="Group" resetGroup="Department">
 		<variableExpression><![CDATA[$V{sl}+1]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="ToatalEmployee" class="java.lang.Integer" calculation="Count">
-		<variableExpression><![CDATA[$F{vFingerId}]]></variableExpression>
+		<variableExpression><![CDATA[]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<group name="Department">
@@ -689,30 +610,24 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{vFingerId}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{vEmployeeCode}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd-MM-yy" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="78" y="0" width="45" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{TempDateOfJoin}.equals( "0")?false:true]]></printWhenExpression>
-				</reportElement>
+				<reportElement stretchType="RelativeToBandHeight" x="78" y="0" width="45" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dJoiningDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd-MM-yy" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="123" y="0" width="40" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{TempDateOfValid}.equals( "0")?false:true]]></printWhenExpression>
-				</reportElement>
+				<reportElement stretchType="RelativeToBandHeight" x="123" y="0" width="40" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dValidDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd-MM-yy" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="163" y="0" width="40" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{TempDateOfStatus}.equals( "0")?false:true]]></printWhenExpression>
-				</reportElement>
+				<reportElement stretchType="RelativeToBandHeight" x="163" y="0" width="40" height="15" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" size="9"/>
 				</textElement>
@@ -751,9 +666,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vGender}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd-MM-yy" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="522" y="0" width="41" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{TempDateOfBirth}.equals( "0")?false:true]]></printWhenExpression>
-				</reportElement>
+				<reportElement stretchType="RelativeToBandHeight" x="522" y="0" width="41" height="15" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" size="9"/>
