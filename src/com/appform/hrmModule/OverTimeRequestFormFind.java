@@ -163,7 +163,7 @@ public class OverTimeRequestFormFind extends Window
 			if(cmbEmployeeID.getValue()!=null)
 				employeeCode=cmbEmployeeID.getValue().toString();
 			String query = "select vTransactionID,(select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode,"
-					+ " vEmployeeName,CONVERT(varchar(50),dTimeTotal,108)dTimeTotal,dRequestDate from " +
+					+ " vEmployeeName,mTotalTimeHR,dRequestDate from " +
 					" tbOTRequest ot where dRequestDate>='"+dbDateFormat.format(dFrom.getValue())+"' " +
 					" and dRequestDate<='"+dbDateFormat.format(dTo.getValue())+"' and " +
 					" vEmployeeID like '"+employeeCode+"' order by dRequestDate desc";

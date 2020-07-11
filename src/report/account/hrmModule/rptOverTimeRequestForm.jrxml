@@ -2,13 +2,13 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptLeaveApplicationForm" language="groovy" pageWidth="595" pageHeight="842" columnWidth="541" leftMargin="29" rightMargin="25" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="144"/>
 	<parameter name="company" class="java.lang.String"/>
 	<parameter name="address" class="java.lang.String"/>
 	<parameter name="userName" class="java.lang.String"/>
 	<parameter name="userIp" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select *,DATEPART(HOUR,CONVERT(time,dTimeTotal))hours, (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode  from tbOTRequest ot "]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select *,case when iHoliday=1 and mTotalTimeHR>=10  then mTotalTimeHR-1 else mTotalTimeHR end hours,  (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode  from tbOTRequest ot  where vEmployeeId='EMP-86'  and dRequestDate='2020-07-05'  and vTransactionId like 'TRA-8146' "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="phone" class="java.lang.String"/>
 	<parameter name="email" class="java.lang.String"/>
@@ -45,7 +45,6 @@
 	<field name="dRequestDate" class="java.sql.Date"/>
 	<field name="dTimeFrom" class="java.sql.Timestamp"/>
 	<field name="dTimeTo" class="java.sql.Timestamp"/>
-	<field name="dTimeTotal" class="java.sql.Timestamp"/>
 	<field name="vManger" class="java.lang.String"/>
 	<field name="vWorkRequest" class="java.lang.String"/>
 	<field name="vManPower" class="java.lang.String"/>
@@ -55,7 +54,12 @@
 	<field name="vUserName" class="java.lang.String"/>
 	<field name="vUserIp" class="java.lang.String"/>
 	<field name="dEntryTime" class="java.sql.Timestamp"/>
-	<field name="hours" class="java.lang.Integer"/>
+	<field name="iFinal" class="java.lang.Integer"/>
+	<field name="vApprovedBy" class="java.lang.String"/>
+	<field name="dDateFrom" class="java.sql.Date"/>
+	<field name="dDateTo" class="java.sql.Date"/>
+	<field name="mTotalTimeHR" class="java.math.BigDecimal"/>
+	<field name="hours" class="java.math.BigDecimal"/>
 	<field name="vEmployeeCode" class="java.lang.String"/>
 	<variable name="sl" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$V{sl}+1]]></variableExpression>
@@ -379,7 +383,7 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="177" y="442" width="72" height="17"/>
+				<reportElement x="164" y="442" width="72" height="17"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma"/>
@@ -394,7 +398,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{empList}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="177" y="461" width="72" height="17"/>
+				<reportElement x="190" y="461" width="72" height="17"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma"/>
@@ -532,17 +536,17 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vWorkRequest}]]></textFieldExpression>
 			</textField>
 			<textField pattern="hh:mm:ss aa">
-				<reportElement x="161" y="234" width="77" height="17"/>
+				<reportElement x="161" y="234" width="64" height="17"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{dTimeFrom}]]></textFieldExpression>
 			</textField>
 			<textField pattern="hh:mm:ss aa">
-				<reportElement x="259" y="234" width="104" height="17"/>
+				<reportElement x="246" y="234" width="64" height="17"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{dTimeTo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="238" y="234" width="21" height="17"/>
+				<reportElement x="225" y="234" width="21" height="17"/>
 				<box leftPadding="2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma"/>
@@ -564,24 +568,24 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[1]]></textFieldExpression>
 			</textField>
 			<textField pattern="hh:mm:ss aa">
-				<reportElement x="347" y="442" width="104" height="17"/>
+				<reportElement x="334" y="442" width="104" height="17"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{dTimeTo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="hh:mm:ss aa">
-				<reportElement x="249" y="442" width="77" height="17"/>
+				<reportElement x="236" y="442" width="77" height="17"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{dTimeFrom}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="326" y="442" width="21" height="17"/>
+				<reportElement x="313" y="442" width="21" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="Tahoma"/>
 				</textElement>
 				<text><![CDATA[To]]></text>
 			</staticText>
 			<textField pattern="dd MMMMM yyyy">
-				<reportElement x="249" y="461" width="202" height="17"/>
+				<reportElement x="262" y="461" width="202" height="17"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{dRequestDate}]]></textFieldExpression>
 			</textField>

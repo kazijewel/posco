@@ -373,12 +373,12 @@ public class OverTimeRequestApproval extends Window
 				if(tbChkSelect.get(i).booleanValue())
 				{
 					String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-							+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+							+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
 							+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
 							+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-							+ "dReplaceHoliday,dReplaceWorking,iFinal,'UPDATE' "
+							+ "dDateFrom,dDateTo,iFinal,'UPDATE' "
 							+ "from tbOTRequest where vTransactionId ='"+tbLblReference.get(i).getValue().toString()+"' ";
 					
 					System.out.println("deleteData: "+deleteData);
@@ -430,7 +430,7 @@ public class OverTimeRequestApproval extends Window
 		try
 		{
 			String sql = "select vTransactionID,b.dRequestDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,"
-					+ "dReplaceHoliday,dReplaceWorking,1 days,epo.vEmployeeId,epo.vEmployeeCode from tbOTRequest b inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=b.vEmployeeId "
+					+ "dDateFrom,dDateTo,1 days,epo.vEmployeeId,epo.vEmployeeCode from tbOTRequest b inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=b.vEmployeeId "
 					+" where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"' "
 					+ "and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"'" 
 					+" and b.iFinal='0'  order by b.dRequestDate";
@@ -493,12 +493,12 @@ public class OverTimeRequestApproval extends Window
 			String leaveId=tbLblReference.get(deleteId).getValue().toString();
 			
 			String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-					+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
 					+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
 					+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-					+ "dReplaceHoliday,dReplaceWorking,iFinal,'DELETE' "
+					+ "dDateFrom,dDateTo,iFinal,'DELETE' "
 					+ "from tbOTRequest where vTransactionId ='"+leaveId+"' ";
 			
 			System.out.println("deleteData: "+deleteData);
@@ -518,7 +518,6 @@ public class OverTimeRequestApproval extends Window
 		{
 			session.close();
 		}
-		
 	}
 	
 	private void tableRowAdd( final int ar)
@@ -817,8 +816,8 @@ public class OverTimeRequestApproval extends Window
 			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("empList", "Employee's List ( Site Office )");
 
-			String query="select *,case when iHoliday=1 and DATEPART(HOUR,CONVERT(time,dTimeTotal))>10 " +
-			"then DATEPART(HOUR,CONVERT(time,dTimeTotal))-1 else DATEPART(HOUR,CONVERT(time,dTimeTotal)) end hours, "+
+			String query="select *,case when iHoliday=1 and mTotalTimeHR>10 " +
+			"then mTotalTimeHR-1 else mTotalTimeHR end hours, "+
 			" (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "+
 			" from tbOTRequest ot "
 			+ " where  vTransactionId like '"+tbLblReference.get(ar).getValue()+"' and vEmployeeId like '"+tbLblEmployeeId.get(ar).getValue()+"' ";

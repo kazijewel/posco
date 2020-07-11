@@ -1957,6 +1957,10 @@ public class EmployeeInformation extends Window
 		allComp.add(firstTab.txtNid);
 		allComp.add(firstTab.cmbEmployeeType);
 		allComp.add(firstTab.cmbLevel);
+
+		allComp.add(firstTab.txtCareerPeriodMonth);
+		allComp.add(firstTab.txtCareerPeriodYear);
+		
 		allComp.add(firstTab.cmbServiceType);
 
 		allComp.add(firstTab.dApplicationDate);

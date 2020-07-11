@@ -1,6 +1,5 @@
 package hrm.common.reportform;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +21,8 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -30,9 +31,6 @@ import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings("serial")
 public class RptOverTimeRequest extends Window
@@ -42,7 +40,6 @@ public class RptOverTimeRequest extends Window
 
 	private Label lblUnit;
 	private Label lblSection;
-	private Label lblSalaryMonth;
 
 	private ComboBox cmbUnit;
 	private ComboBox cmbSection,cmbDepartment;
@@ -52,21 +49,15 @@ public class RptOverTimeRequest extends Window
 	private CheckBox chkSectionAll,chkDepartmentAll;
 	private CheckBox chkEmployeeName;
 
-	private SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
-	private SimpleDateFormat fMonth = new SimpleDateFormat("MMMMM");
-	private SimpleDateFormat fYear = new SimpleDateFormat("yyyy");
-
 	ArrayList<Component> allComp = new ArrayList<Component>();
 	private PopupDateField dFrom,dTo;
 	CommonButton cButton=new CommonButton("", "", "", "", "", "", "", "Preview", "", "Exit");
-	private ReportDate reportTime = new ReportDate();
 
 	private OptionGroup RadioBtnGroup;
 	private static final List<String> type1=Arrays.asList(new String[]{"PDF","Other"});
-
-	private OptionGroup RadioBtnGroup1;
+	
 	TextField txtPath=new TextField();
-	//private static final List<String> type2=Arrays.asList(new String[]{"English","Bangla"});
+	
 	private CommonMethod cm;
 	private String menuId = "";
 	public RptOverTimeRequest(SessionBean sessionBean,String menuId)
@@ -203,7 +194,7 @@ public class RptOverTimeRequest extends Window
 				  + " and epo.vDepartmentId like '"+(chkDepartmentAll.booleanValue()?"%":cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' "
 				  + " and epo.vSectionId like '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"' order by epo.vEmployeeName";
 		
-			System.out.println("query :"+query);
+			System.out.println("employeeSetData :"+query);
 			
 			List <?> list=session.createSQLQuery(query).list();
 			for(Iterator <?> iter=list.iterator();iter.hasNext();)
@@ -236,7 +227,7 @@ public class RptOverTimeRequest extends Window
 				  + " and epo.vSectionId like '"+(chkSectionAll.booleanValue()?"%":cmbSection.getValue()==null?"%":cmbSection.getValue())+"' "
 				  + " and epo.vEmployeeId like '"+(chkEmployeeName.booleanValue()?"%":cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue())+"' order by dTimeFrom desc";
 		
-			System.out.println("query :"+query);
+			System.out.println("cmbTimeOfWorkData :"+query);
 			
 			
 			List <?> list=session.createSQLQuery(query).list();
@@ -244,7 +235,7 @@ public class RptOverTimeRequest extends Window
 			{
 				Object[] element = (Object[]) iter.next();
 				cmbTimeOfWork.addItem(element[0]);
-				cmbTimeOfWork.setItemCaption(element[0], element[1]+"");
+				cmbTimeOfWork.setItemCaption(element[0], sessionBean.dfBd.format(element[2])+"# "+element[1]);
 			}
 		}
 		catch(Exception exp){
@@ -291,6 +282,9 @@ public class RptOverTimeRequest extends Window
 				
 				if(cmbDepartment.getValue()!=null)
 				{
+					cmbEmployeeName.setValue(null);
+					chkSectionAll.setValue(false);
+					cmbTimeOfWork.setValue(null);
 					cmbSectionAddData();
 				}
 			}
@@ -307,6 +301,10 @@ public class RptOverTimeRequest extends Window
 					{
 						cmbDepartment.setEnabled(false);
 						cmbDepartment.setValue(null);
+						
+						chkSectionAll.setValue(false);
+						cmbEmployeeName.setValue(null);
+						cmbTimeOfWork.setValue(null);
 						cmbSectionAddData();
 					}
 					else
@@ -327,6 +325,8 @@ public class RptOverTimeRequest extends Window
 				
 				if(cmbSection.getValue()!=null)
 				{
+					cmbEmployeeName.setValue(null);
+					cmbTimeOfWork.setValue(null);
 					employeeSetData();
 				}
 			}
@@ -342,6 +342,8 @@ public class RptOverTimeRequest extends Window
 					{
 						cmbSection.setEnabled(false);
 						cmbSection.setValue(null);
+						cmbEmployeeName.setValue(null);
+						cmbTimeOfWork.setValue(null);
 						employeeSetData();
 					}
 					else
@@ -466,8 +468,8 @@ public class RptOverTimeRequest extends Window
 			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("empList", "Employee's List ( Site Office )");
 
-			String query="select *,case when iHoliday=1 and DATEPART(HOUR,CONVERT(time,dTimeTotal))>10 " +
-			"then DATEPART(HOUR,CONVERT(time,dTimeTotal))-1 else DATEPART(HOUR,CONVERT(time,dTimeTotal)) end hours, "+
+			String query="select *,case when iHoliday=1 and mTotalTimeHR>10 " +
+			"then mTotalTimeHR-1 else mTotalTimeHR end hours, "+
 			" (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "+
 			" from tbOTRequest ot "
 			+ " where  vTransactionId like '"+cmbTimeOfWork.getValue()+"' and vEmployeeId like '"+cmbEmployeeName.getValue()+"' ";

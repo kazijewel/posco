@@ -53,7 +53,7 @@ public class OverTimeRequestForm extends Window
 	private Label lblRequestDate;
 	private PopupDateField dRequestDate;
 	
-	private PopupDateField dReplaceHoliday,dReplaceWorking;
+	private PopupDateField dDateFrom,dDateTo;
 
 	private Label lblUnit;
 	private ComboBox cmbUnit;
@@ -93,9 +93,6 @@ public class OverTimeRequestForm extends Window
 	private OptionGroup opgOverTime;
 	private ComboBox cmbJobSite,cmbManager;
 	private OptionGroup opgNationality;
-	private InlineDateField dTimeFrom;
-	private InlineDateField dTimeTo;
-	private InlineDateField dTimeTotal;
 	private static final List<String> overTime = Arrays.asList(new String[]{"Holiday","Night Time"});
 	private static final List<String> nationality = Arrays.asList(new String[]{"Bangladeshi","Korean"});
 	
@@ -114,6 +111,9 @@ public class OverTimeRequestForm extends Window
 	private TimeField tHrTo=new TimeField();
 	private TimeField tMinTo=new TimeField();
 	private TextField txtTo=new TextField();
+	
+	private TextField txtTimeTotal=new TextField();
+	
 	boolean switchUser=false;
 	
 	public OverTimeRequestForm(SessionBean sessionBean,String menuId,boolean switchUser)
@@ -171,8 +171,8 @@ public class OverTimeRequestForm extends Window
 			{
 				if(dRequestDate.getValue()!=null)
 				{
-					dReplaceHoliday.setValue(dRequestDate.getValue());
-					dReplaceWorking.setValue(dRequestDate.getValue());
+					dDateFrom.setValue(dRequestDate.getValue());
+					dDateTo.setValue(dRequestDate.getValue());
 				}
 			}
 		});
@@ -184,27 +184,6 @@ public class OverTimeRequestForm extends Window
 				if(cmbEmployee.getValue()!=null)
 				{
 					setEmployeeInfo();
-				}
-			}
-		});
-		dTimeFrom.addListener(new ValueChangeListener() {
-			
-			public void valueChange(ValueChangeEvent event) {
-				
-				dTimeTotal.setValue(new java.util.Date());
-				if(dTimeFrom.getValue()!=null)
-				{
-					timeValidation();
-				}
-			}
-		});
-		dTimeTo.addListener(new ValueChangeListener() {
-					
-			public void valueChange(ValueChangeEvent event) {
-				dTimeTotal.setValue(new java.util.Date());
-				if(dTimeTo.getValue()!=null)
-				{
-					timeValidation();
 				}
 			}
 		});
@@ -308,6 +287,30 @@ public class OverTimeRequestForm extends Window
 				}
 			}
 		});
+		
+		
+		
+
+		dDateFrom.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(dDateFrom.getValue()!=null)	
+				{
+					timeValidation();
+				}				
+			}
+		});
+		dDateTo.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(dDateTo.getValue()!=null)	
+				{
+					timeValidation();
+				}				
+			}
+		});
 
 		cButton.btnNew.addListener(new ClickListener()
 		{	
@@ -359,11 +362,11 @@ public class OverTimeRequestForm extends Window
 					{
 						if(cmbManager.getValue()!=null)
 						{
-							if(dTimeFrom.getValue()!=null)
+							if(dDateFrom.getValue()!=null)
 							{
-								if(dTimeTo.getValue()!=null)
+								if(dDateTo.getValue()!=null)
 								{
-									if(dTimeTotal.getValue()!=null)
+									if(!txtTimeTotal.getValue().toString().isEmpty())
 									{
 										deleteData();
 									}
@@ -432,8 +435,8 @@ public class OverTimeRequestForm extends Window
 	{
 		String query = "select top(5) * from tbMonthlySalary " +
 				"where vEmployeeID='"+cmbEmployee.getValue()+"' " +
-				"and ((MONTH(dSalaryDate) = '"+dbMonthFormat.format(dTimeTotal.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dTimeTotal.getValue())+"') " +
-				"or (MONTH(dSalaryDate) = '"+dbMonthFormat.format(dTimeTotal.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dTimeTotal.getValue())+"'))";
+				"and ((MONTH(dSalaryDate) = '"+dbMonthFormat.format(dRequestDate.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dRequestDate.getValue())+"') " +
+				"or (MONTH(dSalaryDate) = '"+dbMonthFormat.format(dRequestDate.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dRequestDate.getValue())+"'))";
 		System.out.println("Check Salary: "+query);
 		
 		if(!chkSalary(query))
@@ -453,12 +456,12 @@ public class OverTimeRequestForm extends Window
 							String transactionID=txtTransactionID.getValue().toString();
 							
 							String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-									+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+									+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
 									+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
 									+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-									+ "dReplaceHoliday,dReplaceWorking,iFinal,'DELETE' "
+									+ "dDateFrom,dDateTo,iFinal,'DELETE' "
 									+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
 							
 							System.out.println("deleteData: "+deleteData);
@@ -512,8 +515,8 @@ public class OverTimeRequestForm extends Window
 			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("empList", "Employee's List ( "+cmbJobSite.getItemCaption(cmbJobSite.getValue())+" )");
 
-			String query="select *,case when iHoliday=1 and DATEPART(HOUR,CONVERT(time,dTimeTotal))>=10 " +
-			" then DATEPART(HOUR,CONVERT(time,dTimeTotal))-1 else DATEPART(HOUR,CONVERT(time,dTimeTotal)) end hours, "+
+			String query="select *,case when iHoliday=1 and mTotalTimeHR>=10 " +
+			" then mTotalTimeHR-1 else mTotalTimeHR end hours, "+
 			" (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "+
 			" from tbOTRequest ot "
 			+ " where vEmployeeId='"+cmbEmployee.getValue()+"' "
@@ -568,76 +571,27 @@ public class OverTimeRequestForm extends Window
 
 		return false;
 	}
-	/*public void timeValidation()
-	{
-		if(tHrFrom.getValue().toString().trim().length()>0)
-		{
-			if(tMinFrom.getValue().toString().trim().length()>0)
-			{
-				if(txtFrom.getValue().toString().trim().equals("AM") || txtFrom.getValue().toString().trim().equals("PM"))
-				{
-					if(tHrTo.getValue().toString().trim().length()>0)
-					{
-						if(tMinTo.getValue().toString().trim().length()>0)
-						{	
-							if(txtTo.getValue().toString().trim().equals("AM") || txtTo.getValue().toString().trim().equals("PM"))
-							{
-								setTime();
-							}
-							else
-							{
-								txtTo.setValue("");
-								txtTo.focus();
-								showNotification("Warning", "Please Enter Out Time Format [AM/PM]!!!", Notification.TYPE_WARNING_MESSAGE);
-							}
-						}
-						else
-						{
-							tMinTo.focus();
-							showNotification("Warning", "Please Enter Out Min.!!!", Notification.TYPE_WARNING_MESSAGE);
-						}
-					}
-					else
-					{
-						tHrTo.focus();
-						showNotification("Warning", "Please Enter Out Hour!!!", Notification.TYPE_WARNING_MESSAGE);
-					}
-				}
-				else
-				{
-					txtFrom.setValue("");
-					txtFrom.focus();
-					showNotification("Warning", "Please Enter In Time Format [AM/PM]!!!", Notification.TYPE_WARNING_MESSAGE);
-				}
-			}
-			else
-			{
-				tMinFrom.focus();
-				showNotification("Warning", "Please Enter In Min.!!!", Notification.TYPE_WARNING_MESSAGE);
-			}
-		}
-		else
-		{
-			tHrFrom.focus();
-			showNotification("Warning", "Please Enter In Hour!!!", Notification.TYPE_WARNING_MESSAGE);
-		}
-	}*/
-
 	public void timeValidation()
 	{
-		if(tHrFrom.getValue().toString().trim().length()>0)
+		if(dDateFrom.getValue()!=null)
 		{
-			if(tMinFrom.getValue().toString().trim().length()>0)
+			if(tHrFrom.getValue().toString().trim().length()>0)
 			{
-				if(txtFrom.getValue().toString().trim().equals("AM") || txtFrom.getValue().toString().trim().equals("PM"))
+				if(tMinFrom.getValue().toString().trim().length()>0)
 				{
-					if(tHrTo.getValue().toString().trim().length()>0)
+					if(txtFrom.getValue().toString().trim().equals("AM") || txtFrom.getValue().toString().trim().equals("PM"))
 					{
-						if(tMinTo.getValue().toString().trim().length()>0)
-						{	
-							if(txtTo.getValue().toString().trim().equals("AM") || txtTo.getValue().toString().trim().equals("PM"))
+						if(dDateTo.getValue()!=null)
+						{
+							if(tHrTo.getValue().toString().trim().length()>0)
 							{
-								setTime();
+								if(tMinTo.getValue().toString().trim().length()>0)
+								{	
+									if(txtTo.getValue().toString().trim().equals("AM") || txtTo.getValue().toString().trim().equals("PM"))
+									{
+										setTime();
+									}
+								}
 							}
 						}
 					}
@@ -662,13 +616,21 @@ public class OverTimeRequestForm extends Window
 			String outTF=txtTo.getValue().toString();
 			outTime=outhour+":"+OutMin+":00 "+outTF;
 			
-			String sql="select dbo.funTimeDurationUpdate('"+inTime+"','"+outTime+"','"+sessionBean.dfDb.format(dRequestDate.getValue())+"')";
+			//System.out.println("inTime: "+inTime+" outTime: "+outTime+" Date: "+sessionBean.dfDb.format(dRequestDate.getValue()));
+			
+			String sql="select datediff"
+					+ "(HH,"
+					+ "'"+sessionBean.dfDb.format(dDateFrom.getValue())+" "+inTime+"',"
+					+ "'"+sessionBean.dfDb.format(dDateTo.getValue())+" "+outTime+"'"
+					+ ")";
+			
+			//String sql="select dbo.funTimeDurationUpdate('"+inTime+"','"+outTime+"','"+sessionBean.dfDb.format(dRequestDate.getValue())+"')";
 			System.out.println(sql);
 			
 			Iterator<?> iter=session.createSQLQuery(sql).list().iterator();
 			if(iter.hasNext())
 			{
-				dTimeTotal.setValue(iter.next());
+				txtTimeTotal.setValue(iter.next());
 				
 			}
 		}catch(Exception exp)
@@ -903,25 +865,40 @@ public class OverTimeRequestForm extends Window
 		else
 			outTime=outhour+":"+OutMin+":00";
 		
+		
 		if(cmbEmployee.getValue()!=null)
 		{
 			if(cmbJobSite.getValue()!=null)
 			{
 				if(cmbManager.getValue()!=null)
 				{
-					if(dTimeFrom.getValue()!=null)
+					if(dDateFrom.getValue()!=null)
 					{
-						if(dTimeTo.getValue()!=null)
+						if(dDateTo.getValue()!=null)
 						{
-							if(dTimeTotal.getValue()!=null)
+							if(!txtTimeTotal.getValue().toString().isEmpty())
 							{
 								if(!inTime.equalsIgnoreCase(outTime))
 								{
-									saveButtonEvent();								
+									if(!txtTimeTotal.getValue().toString().isEmpty())
+									{
+										int totalHour=(int) txtTimeTotal.getValue();
+										if(totalHour>0)
+										{
+											saveButtonEvent();								
+										}
+										else
+										{
+											showNotification("Warning", "Total Hour Cannot be Minus Amount", Notification.TYPE_WARNING_MESSAGE);
+										}							
+									}
+									else
+									{
+										showNotification("Warning", "From Time and To Time Cannot be same!", Notification.TYPE_WARNING_MESSAGE);
+									}						
 								}
 								else
 								{
-									dTimeFrom.focus();
 									showNotification("Warning", "From Time and To Time Cannot be same!", Notification.TYPE_WARNING_MESSAGE);
 								}
 							
@@ -970,8 +947,8 @@ public class OverTimeRequestForm extends Window
 	{
 		String query = "select top(5) * from tbMonthlySalary " +
 				"where vEmployeeID='"+cmbEmployee.getValue()+"' " +
-				"and ((MONTH(dSalaryDate) = '"+dbMonthFormat.format(dTimeTotal.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dTimeTotal.getValue())+"') " +
-				"or (MONTH(dSalaryDate) = '"+dbMonthFormat.format(dTimeTotal.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dTimeTotal.getValue())+"'))";
+				"and ((MONTH(dSalaryDate) = '"+dbMonthFormat.format(dRequestDate.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dRequestDate.getValue())+"') " +
+				"or (MONTH(dSalaryDate) = '"+dbMonthFormat.format(dRequestDate.getValue())+"' and YEAR(dSalaryDate) = '"+dbYearFormat.format(dRequestDate.getValue())+"'))";
 		System.out.println("Check Salary: "+query);
 		
 		if(!chkSalary(query))
@@ -1098,8 +1075,8 @@ public class OverTimeRequestForm extends Window
 			
 			String query = "insert into tbOTRequest(vTransactionId,vEmployeeId,vEmployeeName,"
 					+ " vDesignationId,vDesignationName,vDepartmentId,vDepartmentName, "
-					+ " vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,"
-					+ " iHoliday,iNightTim,vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal)  "
+					+ " vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,"
+					+ " iHoliday,iNightTim,vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal)  "
 			        + " values('"+transactionID+"','"+cmbEmployee.getValue()+"','"+employeeName+"','"+cmbDesignationID.getValue()+"',"
                     + " '"+cmbDesignationID.getItemCaption(cmbDesignationID.getValue())+"','"+cmbDepartment.getValue()+"',"
                     + " '"+cmbDepartment.getItemCaption(cmbDepartment.getValue())+"',"
@@ -1107,7 +1084,7 @@ public class OverTimeRequestForm extends Window
                     + " '"+sessionBean.dfDb.format(dRequestDate.getValue())+"',"
                     + " '"+(sessionBean.dfDb.format(dRequestDate.getValue())+" "+inTime)+"',"
                     + " '"+(sessionBean.dfDb.format(dRequestDate.getValue())+" "+outTime)+"',"
-                    + " '"+sessionBean.dDateTimeFormat.format(dTimeTotal.getValue())+"',"
+                    + " '"+txtTimeTotal.getValue()+"',"
                     + " '"+(cmbManager.getValue()==null?"":cmbManager.getItemCaption(cmbManager.getValue()))+"',"
                     + " '"+(txtOverTimeRequest.getValue().toString().isEmpty()?"":txtOverTimeRequest.getValue().toString().trim().replaceAll("'","#"))+"',"
                     + " '"+opgNationality.getValue().toString()+"',"
@@ -1116,7 +1093,7 @@ public class OverTimeRequestForm extends Window
                     + " '"+sessionBean.getUserId()+"',"
                     + " '"+sessionBean.getUserName()+"',"
                     + " '"+sessionBean.getUserIp()+"',GETDATE(),"
-                    + " '"+sessionBean.dfDb.format(dReplaceHoliday.getValue())+"','"+sessionBean.dfDb.format(dReplaceWorking.getValue())+"','"+approved+"')";
+                    + " '"+sessionBean.dfDb.format(dDateFrom.getValue())+"','"+sessionBean.dfDb.format(dDateTo.getValue())+"','"+approved+"')";
 			
 			System.out.println("insertData: "+query);
 			
@@ -1167,12 +1144,12 @@ public class OverTimeRequestForm extends Window
 			String transactionID=txtTransactionID.getValue().toString();
 			
 			String updateData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-					+ "vUserId,vUserName,vUserIp,dEntryTime,dReplaceHoliday,dReplaceWorking,iFinal,vUdFlag) "
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
 					+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
 					+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-					+ "dReplaceHoliday,dReplaceWorking,iFinal,'UPDATE' "
+					+ "dDateFrom,dDateTo,iFinal,'UPDATE' "
 					+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
 			
 			System.out.println("updateData: "+updateData);
@@ -1191,7 +1168,7 @@ public class OverTimeRequestForm extends Window
 					+ "dRequestDate='"+sessionBean.dfDb.format(dRequestDate.getValue())+"',"
 					+ "dTimeFrom='"+(sessionBean.dfDb.format(dRequestDate.getValue())+" "+inTime)+"',"
 					+ "dTimeTo='"+(sessionBean.dfDb.format(dRequestDate.getValue())+" "+outTime)+"',"
-					+ "dTimeTotal='"+sessionBean.dDateTimeFormat.format(dTimeTotal.getValue())+"',"
+					+ "mTotalTimeHR='"+txtTimeTotal.getValue()+"',"
 					+ "vManger='"+(cmbManager.getValue()==null?"":cmbManager.getItemCaption(cmbManager.getValue()))+"',"
 					+ "vWorkRequest='"+(txtOverTimeRequest.getValue().toString().isEmpty()?"":txtOverTimeRequest.getValue().toString().trim().replaceAll("'","#"))+"',"
 					+ "vManPower='"+opgNationality.getValue().toString()+"',"
@@ -1201,8 +1178,8 @@ public class OverTimeRequestForm extends Window
 					+ "vUserName='"+sessionBean.getUserName()+"',"
 					+ "vUserIp='"+sessionBean.getUserIp()+"',"
 					+ "dEntryTime=GETDATE(),"
-					+ "dReplaceHoliday='"+sessionBean.dfDb.format(dReplaceHoliday.getValue())+"',"
-					+ "dReplaceWorking='"+sessionBean.dfDb.format(dReplaceWorking.getValue())+"',"
+					+ "dDateFrom='"+sessionBean.dfDb.format(dDateFrom.getValue())+"',"
+					+ "dDateTo='"+sessionBean.dfDb.format(dDateTo.getValue())+"',"
 					+ "iFinal='"+approved+"' where vTransactionId='"+transactionID+"' ";
 			
 			System.out.println("updateData: "+query);
@@ -1242,12 +1219,13 @@ public class OverTimeRequestForm extends Window
 	{
 		Session session = SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
+		int hrFrom=0,hrTo=0;
 		try
 		{
 			String query = "select vEmployeeId,vJobSite,dRequestDate,DATEPART(HOUR,dTimeFrom) hours1,"
-					+ " DATEPART(HOUR,dTimeTo) hours2,dTimeTotal,"
+					+ " DATEPART(HOUR,dTimeTo) hours2,mTotalTimeHR,"
 					+ " vManger,vWorkRequest,iHoliday,iNightTim,vManPower,DATEPART(MINUTE,CONVERT(time,dTimeFrom))min1,"
-					+ " DATEPART(MINUTE,CONVERT(time,dTimeTo))min2,vTransactionId,dReplaceHoliday,dReplaceWorking,iHoliday,"
+					+ " DATEPART(MINUTE,CONVERT(time,dTimeTo))min2,vTransactionId,dDateFrom,dDateTo,iHoliday,"
 					+ "(case when DATEPART(HOUR,dTimeFrom)>11 then 'PM' else 'AM' end)tf1,"
 					+ "(case when DATEPART(HOUR,dTimeTo)>11 then 'PM' else 'AM' end)tr2  "
 					+ " from tbOTRequest where  vTransactionID = '"+TransID+"'";
@@ -1261,11 +1239,36 @@ public class OverTimeRequestForm extends Window
 					cmbEmployee.setValue(element[0]);
 					cmbJobSite.setValue(element[1]);
 					dRequestDate.setValue(element[2]);
-					tHrFrom.setValue(element[3]);
-					tHrTo.setValue(element[4]);
+					
+
+					
+					hrFrom=(int) element[3];
+					if(hrFrom>12)
+					{
+						hrFrom=hrFrom-12;
+					}
+					
+					dDateFrom.setValue(element[14]);
+					tHrFrom.setValue(hrFrom);
 					tMinFrom.setValue(element[11]);
+					txtFrom.setValue(element[17]);					
+					
+
+					hrTo=(int) element[4];
+					if(hrTo>12)
+					{
+						hrTo=hrTo-12;
+					}
+					
+					System.out.println("hrFrom: "+hrFrom+" hrTo: "+hrTo);
+					
+					dDateTo.setValue(element[15]);
+					tHrTo.setValue(hrTo);
 					tMinTo.setValue(element[12]);
-					dTimeTotal.setValue(element[5]);
+					txtTo.setValue(element[18]);
+					
+					
+					txtTimeTotal.setValue(element[5]);
 					cmbManager.setValue(element[6]);
 					txtOverTimeRequest.setValue(element[7]);
 					if(element[8].equals(1))
@@ -1286,10 +1289,6 @@ public class OverTimeRequestForm extends Window
 					}
 					opgNationality.setValue(element[10].toString());
 					txtTransactionID.setValue(element[13]);
-					dReplaceHoliday.setValue(element[14]);
-					dReplaceWorking.setValue(element[15]);
-					txtFrom.setValue(element[17]);
-					txtTo.setValue(element[18]);
 					
 				}
 			}
@@ -1328,13 +1327,9 @@ public class OverTimeRequestForm extends Window
 		cmbManager.setEnabled(!t);
 		cmbJobSite.setEnabled(!t);
 		txtOverTimeRequest.setEnabled(!t);
-		dTimeFrom.setEnabled(!t);
-		dTimeTo.setEnabled(!t);
 		dRequestDate.setEnabled(!t);
-		dReplaceHoliday.setEnabled(!t);
-		dReplaceWorking.setEnabled(!t);
-		
-		
+		dDateFrom.setEnabled(false);
+		dDateTo.setEnabled(!t);
 	}
 
 
@@ -1349,14 +1344,12 @@ public class OverTimeRequestForm extends Window
 		cmbManager.setValue(null);
 		cmbJobSite.setValue(null);
 		txtOverTimeRequest.setValue("");
-		dTimeFrom.setValue(new java.util.Date());
-		dTimeTo.setValue(new java.util.Date());
-		dTimeTotal.setValue(new java.util.Date());
+		txtTimeTotal.setValue("");
 		dRequestDate.setValue(new java.util.Date());
 		opgNationality.setValue("Bangladeshi");
 		opgOverTime.setValue("Holiday");
-		dReplaceHoliday.setValue(new java.util.Date());
-		dReplaceWorking.setValue(new java.util.Date());
+		dDateFrom.setValue(new java.util.Date());
+		dDateTo.setValue(new java.util.Date());
 		txtTransactionID.setValue("");
 		tHrFrom.setValue("");
 		tHrTo.setValue("");
@@ -1373,16 +1366,16 @@ public class OverTimeRequestForm extends Window
 		allComp.add(cmbManager);
 		/*allComp.add(dTimeFrom);
 		allComp.add(dTimeTo);*/
-		allComp.add(dReplaceHoliday);
-		allComp.add(dReplaceWorking);
+		allComp.add(dDateFrom);
 		allComp.add(tHrFrom);
 		allComp.add(tMinFrom);
 		allComp.add(txtFrom);
+		allComp.add(dDateTo);
 		allComp.add(tHrTo);
 		allComp.add(tMinTo);
 		allComp.add(txtTo);
 		
-		allComp.add(dTimeTotal);
+		allComp.add(txtTimeTotal);
 		allComp.add(txtOverTimeRequest);
 		
 		allComp.add(cButton.btnSave);
@@ -1500,7 +1493,7 @@ public class OverTimeRequestForm extends Window
 		cmbJobSite.setWidth("210px");
 		cmbJobSite.setHeight("-1px");
 		cmbJobSite.setNewItemsAllowed(true);
-		mainLayout.addComponent(new Label("Job Site :"), "top:10px; left:430px;");
+		mainLayout.addComponent(new Label("Job Site :"), "top:10px; left:425px;");
 		mainLayout.addComponent(cmbJobSite, "top:08px; left:530px;");
 		
 		cmbManager = new ComboBox();
@@ -1508,124 +1501,94 @@ public class OverTimeRequestForm extends Window
 		cmbManager.setWidth("210px");
 		cmbManager.setHeight("-1px");
 		cmbManager.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
-		mainLayout.addComponent(new Label("Manager :"), "top:40px; left:430px;");
+		mainLayout.addComponent(new Label("Manager :"), "top:40px; left:425px;");
 		mainLayout.addComponent(cmbManager, "top:38px; left:530px;");
-		
-		dReplaceHoliday=new PopupDateField();
-		dReplaceHoliday.setImmediate(true);
-		dReplaceHoliday.setDateFormat("dd-MM-yyyy");
-		dReplaceHoliday.setResolution(PopupDateField.RESOLUTION_DAY);
-		dReplaceHoliday.setWidth("110px");
-		dReplaceHoliday.setHeight("-1px");
-		dReplaceHoliday.setValue(new java.util.Date());
-		mainLayout.addComponent(new Label("Replace by Holiday:"),"top:70px; left:400px");
-		mainLayout.addComponent(dReplaceHoliday,"top:68px; left:530px");
-		
-		dReplaceWorking=new PopupDateField();
-		dReplaceWorking.setImmediate(true);
-		dReplaceWorking.setDateFormat("dd-MM-yyyy");
-		dReplaceWorking.setResolution(PopupDateField.RESOLUTION_DAY);
-		dReplaceWorking.setWidth("110px");
-		dReplaceWorking.setHeight("-1px");
-		dReplaceWorking.setValue(new java.util.Date());
-		mainLayout.addComponent(new Label("Replace by Working Day:"),"top:100px; left:390px");
-		mainLayout.addComponent(dReplaceWorking,"top:98px; left:530px");
-		
-		
+
+		mainLayout.addComponent(new Label("<b><Font color='CD0606' size='2px'>Type a or p for AM/PM</Font></b>",Label.CONTENT_XHTML),"top:67px; left:530px");
+		//mainLayout.addComponent(new Label("<b><Font color='CD0606' size='2px'> H : M : AM/PM</Font></b>",Label.CONTENT_XHTML),"top:80px; left:650px");
+
+		dDateFrom=new PopupDateField();
+		dDateFrom.setImmediate(true);
+		dDateFrom.setDateFormat("dd-MM-yyyy");
+		dDateFrom.setResolution(PopupDateField.RESOLUTION_DAY);
+		dDateFrom.setWidth("110px");
+		dDateFrom.setHeight("-1px");
+		dDateFrom.setValue(new java.util.Date());
+		mainLayout.addComponent(new Label("From Date:"),"top:100px; left:425px");
+		mainLayout.addComponent(dDateFrom,"top:98px; left:530px");
 		
 		tHrFrom=new TimeField();
 		tHrFrom.setWidth("25.0px");
 		tHrFrom.setImmediate(true);
-		mainLayout.addComponent(new Label("From Time : "), "top:130px;left:430px;");
-		mainLayout.addComponent(tHrFrom, "top:128px;left:530px;");
-		mainLayout.addComponent(new Label(" : "),"top:130px;left:557px;");
-		
+		tHrFrom.setInputPrompt("HH");
+		mainLayout.addComponent(tHrFrom, "top:98px;left:650px;");
+		mainLayout.addComponent(new Label(" : "),"top:98px;left:680px;");
 
 		tMinFrom=new TimeField();
 		tMinFrom.setWidth("25.0px");
 		tMinFrom.setImmediate(true);
-		mainLayout.addComponent(tMinFrom, "top:128px;left:560px;");
-		mainLayout.addComponent(new Label("<b><Font color='CD0606' size='2px'>H:M:AM/PM</Font></b>",Label.CONTENT_XHTML),"top:130px; left:630px");
-		mainLayout.addComponent(new Label("<b><Font color='CD0606' size='2px'>Type a or p for AM/PM</Font></b>",Label.CONTENT_XHTML),"top:150px; left:630px");
+		tMinFrom.setInputPrompt("MM");
+		mainLayout.addComponent(tMinFrom, "top:98px;left:690px;");
 
 		txtFrom=new TextField();
 		txtFrom.setWidth("28.0px");
 		txtFrom.setImmediate(true);
 		txtFrom.setTextChangeEventMode(TextChangeEventMode.EAGER);
-		mainLayout.addComponent(txtFrom, "top:128px;left:590px;");
+		mainLayout.addComponent(txtFrom, "top:98px;left:720px;");
+		
+		dDateTo=new PopupDateField();
+		dDateTo.setImmediate(true);
+		dDateTo.setDateFormat("dd-MM-yyyy");
+		dDateTo.setResolution(PopupDateField.RESOLUTION_DAY);
+		dDateTo.setWidth("110px");
+		dDateTo.setHeight("-1px");
+		dDateTo.setValue(new java.util.Date());
+		mainLayout.addComponent(new Label("To Date:"),"top:130px; left:425px");
+		mainLayout.addComponent(dDateTo,"top:128px; left:530px");
 		
 		tHrTo=new TimeField();
 		tHrTo.setWidth("25.0px");
 		tHrTo.setImmediate(true);
-		mainLayout.addComponent(new Label("To Time : "), "top:160px;left:430px;");
-		mainLayout.addComponent(tHrTo, "top:158px;left:530px;");
-		mainLayout.addComponent(new Label(" : "),"top:160px;left:557px;");
+		tHrTo.setInputPrompt("HH");
+		mainLayout.addComponent(tHrTo, "top:130px;left:650px;");
+		mainLayout.addComponent(new Label(" : "),"top:130px;left:680px;");
 
 		tMinTo=new TimeField();
 		tMinTo.setWidth("25.0px");
 		tMinTo.setImmediate(true);
-		mainLayout.addComponent(tMinTo, "top:158px;left:560px;");
+		tMinTo.setInputPrompt("MM");
+		mainLayout.addComponent(tMinTo, "top:130px;left:690px;");
 
 		txtTo=new TextField();
 		txtTo.setWidth("28.0px");
 		txtTo.setImmediate(true);
 		txtTo.setTextChangeEventMode(TextChangeEventMode.EAGER);
-		mainLayout.addComponent(txtTo, "top:158px;left:590px;");
+		mainLayout.addComponent(txtTo, "top:130px;left:720px;");
 		
-		dTimeTotal = new InlineDateField();
-		dTimeTotal.setImmediate(true);
-		dTimeTotal.setWidth("110px");
-		dTimeTotal.setHeight("-1px");
-		dTimeTotal.setDateFormat("hh:mm:ss");
-		dTimeTotal.setValue(null);
-		dTimeTotal.setLocale(new Locale("fi", "FI"));
-		dTimeTotal.setResolution(DateField.RESOLUTION_SEC);
-		mainLayout.addComponent(new Label("Total Time :"), "top:190px; left:430px;");
-		mainLayout.addComponent(dTimeTotal, "top:188px; left:531px;");
-		dTimeTotal.setEnabled(false);
-		
-		/** Un use start**/
-		dTimeFrom = new InlineDateField();
-		dTimeFrom.setImmediate(true);
-		dTimeFrom.setWidth("110px");
-		dTimeFrom.setHeight("-1px");
-		dTimeFrom.setDateFormat("hh:mm:ss");
-		dTimeFrom.setValue(new java.util.Date());
-		dTimeFrom.setResolution(InlineDateField.RESOLUTION_SEC);
-		//mainLayout.addComponent(new Label("From Time :"), "top:70px; left:430px;");
-		mainLayout.addComponent(dTimeFrom, "top:68px; left:531px;");
-		dTimeFrom.setVisible(false);
-		
-		dTimeTo = new InlineDateField();
-		dTimeTo.setImmediate(true);
-		dTimeTo.setWidth("110px");
-		dTimeTo.setHeight("-1px");
-		dTimeTo.setDateFormat("hh:mm:ss");
-		dTimeTo.setValue(new java.util.Date());
-		dTimeTo.setResolution(InlineDateField.RESOLUTION_SEC);
-		//mainLayout.addComponent(new Label("To Time :"), "top:100px; left:430px;");
-		mainLayout.addComponent(dTimeTo, "top:98px; left:531px;");
-		dTimeTo.setVisible(false);
-		/** Un use end**/
+		txtTimeTotal=new TimeField();
+		txtTimeTotal.setWidth("40.0px");
+		txtTimeTotal.setImmediate(true);
+		txtTimeTotal.setInputPrompt("HH");
+		mainLayout.addComponent(new Label("Total Hour :"), "top:160px; left:425px;");
+		mainLayout.addComponent(txtTimeTotal, "top:158px; left:531px;");
+		txtTimeTotal.setEnabled(false);
 		
 		txtOverTimeRequest=new TextField();
 		txtOverTimeRequest.setWidth("210px");
 		txtOverTimeRequest.setHeight("-1px");
 		txtOverTimeRequest.setImmediate(true);
-		mainLayout.addComponent(new Label("Over Time Request For :"),"top:220px; left:395px");
-		mainLayout.addComponent(txtOverTimeRequest,"top:218px; left:530px");
+		mainLayout.addComponent(new Label("O.T Request For :"),"top:190px; left:425px");
+		mainLayout.addComponent(txtOverTimeRequest,"top:188px; left:530px");
 		
-
 		opgNationality=new OptionGroup("",nationality);
 		opgNationality.setWidth("-1px");
 		opgNationality.setHeight("-1px");
 		opgNationality.setImmediate(true);
 		opgNationality.setValue("Bangladeshi");
-		mainLayout.addComponent(new Label("Manpower :"),"top:250px; left:430px");
-		mainLayout.addComponent(opgNationality,"top:248px; left:530px");
+		mainLayout.addComponent(new Label("Manpower :"),"top:220px; left:425px");
+		mainLayout.addComponent(opgNationality,"top:218px; left:530px");
 		opgNationality.setStyleName("horizontal");
-
-
+		
 		mainLayout.addComponent(cButton, "bottom:15px; left:50px;");
 		return mainLayout;
 	}
