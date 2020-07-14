@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
@@ -31,11 +32,13 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.InlineDateField;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings("serial")
 public class LeaveEntitlement extends Window 
@@ -52,7 +55,8 @@ public class LeaveEntitlement extends Window
 	private TextRead EmpId = new TextRead();
 
 	private Table table = new Table();
-	
+
+	private ArrayList<NativeButton> Delete = new ArrayList<NativeButton>();
 	private ArrayList<Label> tblblSl = new ArrayList<Label>();
 	private ArrayList<Label> tblblEmployeeID = new ArrayList<Label>();
 	private ArrayList<Label> tblblEmployeeCode = new ArrayList<Label>();
@@ -811,6 +815,64 @@ public class LeaveEntitlement extends Window
 
 	public void tableRowAdd(final int ar)
 	{
+		Delete.add(ar, new NativeButton(""));
+		Delete.get(ar).setWidth("100%");
+		Delete.get(ar).setImmediate(true);
+		Delete.get(ar).setIcon(new ThemeResource("../icons/trash.png"));
+		Delete.get(ar).setStyleName("Transparent");
+		Delete.get(ar).addListener(new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event) 
+			{
+				tblblEmployeeID.get(ar).setValue("");
+				tblblEmployeeCode.get(ar).setValue("");
+				tblblEmployeeName.get(ar).setValue("");
+				tblblDesignation.get(ar).setValue("");
+				tblblUnitId.get(ar).setValue("");
+				tblblDepartmentId.get(ar).setValue("");
+				tblblSectionId.get(ar).setValue("");
+				tblblJoiningDate.get(ar).setValue("");
+				tblblEntitleFromDate.get(ar).setValue("");
+				tblblEntitleToDate.get(ar).setValue("");
+				tbTxtEntitleDays.get(ar).setValue("");
+				tblblUpdateDate.get(ar).setValue("");
+
+				for(int rowcount=ar;rowcount<=tblblEmployeeID.size()-1;rowcount++)
+				{
+					if(rowcount+1<=tblblEmployeeID.size()-1)
+					{
+						if(!tblblEmployeeID.get(rowcount+1).getValue().toString().equals(""))
+						{
+							tblblEmployeeID.get(rowcount).setValue(tblblEmployeeID.get(rowcount+1).getValue().toString());
+							tblblEmployeeCode.get(rowcount).setValue(tblblEmployeeCode.get(rowcount+1).getValue().toString());
+							tblblEmployeeName.get(rowcount).setValue(tblblEmployeeName.get(rowcount+1).getValue().toString());
+							tblblDesignation.get(rowcount).setValue(tblblDesignation.get(rowcount+1).getValue().toString());
+							tblblUnitId.get(rowcount).setValue(tblblUnitId.get(rowcount+1).getValue().toString());
+							tblblDepartmentId.get(rowcount).setValue(tblblDepartmentId.get(rowcount+1).getValue().toString());
+							tblblSectionId.get(rowcount).setValue(tblblSectionId.get(rowcount+1).getValue().toString());
+							tblblJoiningDate.get(rowcount).setValue(tblblJoiningDate.get(rowcount+1).getValue().toString());
+							tblblEntitleFromDate.get(rowcount).setValue(tblblEntitleFromDate.get(rowcount+1).getValue().toString());
+							tblblEntitleToDate.get(rowcount).setValue(tblblEntitleToDate.get(rowcount+1).getValue().toString());
+							tbTxtEntitleDays.get(rowcount).setValue(tbTxtEntitleDays.get(rowcount+1).getValue().toString());
+							tblblUpdateDate.get(rowcount).setValue(tblblUpdateDate.get(rowcount+1).getValue().toString());
+														
+							tblblEmployeeID.get(rowcount+1).setValue("");
+							tblblEmployeeCode.get(rowcount+1).setValue("");
+							tblblEmployeeName.get(rowcount+1).setValue("");
+							tblblDesignation.get(rowcount+1).setValue("");
+							tblblUnitId.get(rowcount+1).setValue("");
+							tblblDepartmentId.get(rowcount+1).setValue("");
+							tblblSectionId.get(rowcount+1).setValue("");
+							tblblJoiningDate.get(rowcount+1).setValue("");
+							tblblEntitleFromDate.get(rowcount+1).setValue("");
+							tblblEntitleToDate.get(rowcount+1).setValue("");
+							tbTxtEntitleDays.get(rowcount+1).setValue("");
+							tblblUpdateDate.get(rowcount+1).setValue("");
+						}
+					}
+				}
+			}
+		});
 		tblblSl.add(ar, new Label());
 		tblblSl.get(ar).setImmediate(true);
 		tblblSl.get(ar).setWidth("100%");
@@ -866,7 +928,7 @@ public class LeaveEntitlement extends Window
 		tblblUpdateDate.get(ar).setImmediate(true);
 		tblblUpdateDate.get(ar).setWidth("100%");
 
-		table.addItem(new Object[]{tblblSl.get(ar),tblblEmployeeID.get(ar),tblblEmployeeCode.get(ar),tblblEmployeeName.get(ar),
+		table.addItem(new Object[]{Delete.get(ar),tblblSl.get(ar),tblblEmployeeID.get(ar),tblblEmployeeCode.get(ar),tblblEmployeeName.get(ar),
 				tblblDesignation.get(ar),tblblUnitId.get(ar),tblblDepartmentId.get(ar),tblblSectionId.get(ar),tblblJoiningDate.get(ar),
 				tblblEntitleFromDate.get(ar),tblblEntitleToDate.get(ar),tbTxtEntitleDays.get(ar),tblblUpdateDate.get(ar)},ar);
 	}
@@ -948,7 +1010,7 @@ public class LeaveEntitlement extends Window
 		mainLayout.setImmediate(true);
 		mainLayout.setMargin(false);
 
-		setWidth("698px");
+		setWidth("827px");
 		setHeight("585px");
 		
 		lblCommon = new Label("Year :");
@@ -1007,7 +1069,7 @@ public class LeaveEntitlement extends Window
 		cmbLeaveType.setHeight("-1px");
 		mainLayout.addComponent(lblCommon, "top:120px;left:20.0px;");
 		mainLayout.addComponent(cmbLeaveType, "top:118px;left:130.0px;");
-
+		
 		table.setWidth("98%");
 		table.setHeight("310px");
 		table.setPageLength(0);
@@ -1015,6 +1077,9 @@ public class LeaveEntitlement extends Window
 		
 		table.setCaption("Use table for individual leave entry");
 
+		table.addContainerProperty("Remove", NativeButton.class , new NativeButton());
+		table.setColumnWidth("Remove",45);
+		
 		table.addContainerProperty("SL#", Label.class , new Label());
 		table.setColumnWidth("SL#",20);
 
@@ -1062,7 +1127,7 @@ public class LeaveEntitlement extends Window
 		table.setColumnCollapsed("Project Id", true);
 		table.setColumnCollapsed("Department Id", true);
 		table.setColumnCollapsed("Section Id", true);
-		table.setColumnCollapsed("Entitle From", true);
+		//table.setColumnCollapsed("Entitle From", true);
 		table.setColumnCollapsed("Update Date", true);
 
 		/*table.setColumnAlignments(new String[]{Table.ALIGN_RIGHT,Table.ALIGN_LEFT,Table.ALIGN_LEFT,Table.ALIGN_LEFT,Table.ALIGN_LEFT,
@@ -1073,7 +1138,7 @@ public class LeaveEntitlement extends Window
 
 		tableInitialise();
 
-		mainLayout.addComponent(button, "top:500.0px;left:90.0px;");
+		mainLayout.addComponent(button, "top:500.0px;left:130.0px;");
 
 		return mainLayout;
 	}

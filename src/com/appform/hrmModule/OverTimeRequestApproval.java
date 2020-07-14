@@ -374,11 +374,11 @@ public class OverTimeRequestApproval extends Window
 				{
 					String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-							+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
+							+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag,vApprovedBy) "
 							+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-							+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-							+ "dDateFrom,dDateTo,iFinal,'UPDATE' "
+							+ "vUserId,vUserName,vUserIp,dEntryTime,"
+							+ "dDateFrom,dDateTo,iFinal,'UPDATE',vApprovedBy "
 							+ "from tbOTRequest where vTransactionId ='"+tbLblReference.get(i).getValue().toString()+"' ";
 					
 					System.out.println("deleteData: "+deleteData);
@@ -386,7 +386,11 @@ public class OverTimeRequestApproval extends Window
 					
 					String updateInfo = " update tbOTRequest "
 							+ "set iFinal=1, "
-							+ "vApprovedBy='"+sessionBean.getUserName()+"' " +
+							+ "vApprovedBy='"+sessionBean.getUserName()+"', "
+							+ "vUserId='"+sessionBean.getUserId()+"',"
+							+ "vUserName='"+sessionBean.getUserName()+"',"
+							+ "vUserIp='"+sessionBean.getUserIp()+"',"
+							+ "dEntryTime=GETDATE() " +
 							" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
 
 					session.createSQLQuery(updateInfo).executeUpdate();
@@ -494,11 +498,11 @@ public class OverTimeRequestApproval extends Window
 			
 			String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-					+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
+					+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag,vApprovedBy) "
 					+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
 					+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-					+ "dDateFrom,dDateTo,iFinal,'DELETE' "
+					+ "dDateFrom,dDateTo,iFinal,'DELETE',vApprovedBy "
 					+ "from tbOTRequest where vTransactionId ='"+leaveId+"' ";
 			
 			System.out.println("deleteData: "+deleteData);

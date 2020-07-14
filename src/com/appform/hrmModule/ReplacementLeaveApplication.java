@@ -189,6 +189,19 @@ public class ReplacementLeaveApplication extends Window
 						{
 							String transactionID=txtTransactionID.getValue().toString();
 							
+							String queryOldData="insert into tbUDReplacementLeaveApplication ("
+									+ "vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+									+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+									+ "dReplacementLeaveTo,iTotalDays,vApprovedFlag,vPurposeOfLeave,vVisitingAddress,UDFlag,"
+									+ "vUserName,vUserIP,dEntryTime"
+									+ ") "
+									+ "select vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
+									+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
+									+ "dReplacementLeaveTo,iTotalDays,iFinal,vPurposeOfLeave,vVisitingAddress,'UPDATE',"
+									+ "vUserName,vUserIP,dEntryTime from tbReplacementLeaveApplication "
+									+ "where vTransactionID = '"+transactionID+"' ";
+							session.createSQLQuery(queryOldData).executeUpdate();
+							
 							String queryUpdateData="insert into tbUDReplacementLeaveApplication ("
 									+ "vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
 									+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
@@ -198,7 +211,7 @@ public class ReplacementLeaveApplication extends Window
 									+ "select vTransactionID,dApplicationDate,vEmployeeID,vEmployeeCode,vEmployeeName,vDesignationID,vDesignationName,"
 									+ "vDepartmentID,vDepartmentName,vSectionId,vSectionName,dJoiningDate,vMobileNo,dReplacementLeaveFrom,"
 									+ "dReplacementLeaveTo,iTotalDays,iFinal,vPurposeOfLeave,vVisitingAddress,'DELETE',"
-									+ "vUserName,vUserIP,dEntryTime from tbReplacementLeaveApplication "
+									+ "'"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',GETDATE() from tbReplacementLeaveApplication "
 									+ "where vTransactionID = '"+transactionID+"' ";
 							session.createSQLQuery(queryUpdateData).executeUpdate();
 							
@@ -899,8 +912,8 @@ public class ReplacementLeaveApplication extends Window
 					"'"+employeeName+"'," +
 					"'"+cmbDesignationID.getValue()+"'," +
 					"'"+cmbDesignationID.getItemCaption(cmbDesignationID.getValue())+"'," +
-					"'"+cmbUnit.getValue()+"'," +
-					"'"+cmbUnit.getItemCaption(cmbUnit.getValue())+"'," +
+					"'"+cmbDepartment.getValue()+"'," +
+					"'"+cmbDepartment.getItemCaption(cmbDepartment.getValue())+"'," +
 					"'"+cmbSection.getValue()+"'," +
 					"'"+cmbSection.getItemCaption(cmbSection.getValue())+"'," +
 					"'"+dbDateFormat.format(dJoiningDate.getValue())+"'," +

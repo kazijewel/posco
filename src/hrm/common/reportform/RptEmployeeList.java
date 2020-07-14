@@ -849,7 +849,7 @@ public class RptEmployeeList extends Window
 				if(opgReportView.getValue()=="Excel")
 				{
 					String loc = getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/themes/temp/attendanceFolder";
-					String fname = "MonthlySalary.xls";
+					String fname = "EmployeeLis.xls";
 					String url = getWindow().getApplication().getURL()+"VAADIN/themes/temp/attendanceFolder/"+fname;
 					
 					String strColName[]={"SL#","vEmployeeCode","vEmployeeName","vFamilyName","vGivenName","vDesignationName","dJoiningDate",
@@ -905,8 +905,8 @@ public class RptEmployeeList extends Window
 						
 					}
 					
-					new GenerateExcelReport(sessionBean, loc, url, fname, "MONTHLY  SALARY", "MONTHLY  SALARY",
-							Header, strColName, 2, groupItem, GroupColName, GroupElement, 1, detailQuery, 14, 25, "A4",
+					new GenerateExcelReport(sessionBean, loc, url, fname, "Employee Lis ", "Employee Lis",
+							Header, strColName, 2, groupItem, GroupColName, GroupElement, 1, detailQuery, 0, 0, "A4",
 							"Landscape",signatureOption,cmbUnit.getItemCaption(cmbUnit.getValue()));
 					
 					Window window = new Window();

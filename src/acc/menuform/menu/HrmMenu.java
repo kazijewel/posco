@@ -10,6 +10,8 @@ import hrm.common.reportform.RptDailyEarlyOut;
 import hrm.common.reportform.RptDailyLateIn;
 import hrm.common.reportform.RptDateAndMonthWiseLeave;
 import hrm.common.reportform.RptDesignationList;
+import hrm.common.reportform.RptEditDeleteOverTimeRequest;
+import hrm.common.reportform.RptEditDeleteReplacementLeave;
 import hrm.common.reportform.RptEditEmployeeInformation;
 import hrm.common.reportform.RptEmployeeAgreement;
 import hrm.common.reportform.RptEmployeeAnnualEvaluationSheet;
@@ -522,6 +524,10 @@ public class HrmMenu
 		{
 			addCaptionedItem("REPLACEMENT LEAVE APPLICATION.", leaveReport);
 		}
+		if(isValidMenu("RptEditDeleteReplacementLeave"))
+		{
+			addCaptionedItem("EDIT DELETE REPLACEMENT LEAVE", leaveReport);
+		}
 		
 	}
 	private void addHrmOthers(Object hrmOthers) {
@@ -584,6 +590,10 @@ public class HrmMenu
 		if(isValidMenu("RptShortViewOfOvertime"))
 		{
 			addCaptionedItem("SHORT VIEW OF OVERTIME", otReport);
+		}
+		if(isValidMenu("RptEditDeleteOverTimeRequest"))
+		{
+			addCaptionedItem("EDIT DELETE OVER TIME REQUEST", otReport);
 		}
 	}
 
@@ -821,6 +831,11 @@ public class HrmMenu
 				{
 					showWindow(new RptReplacementLeaveApplication(sessionBean,"RptReplacementLeaveApplication"),event.getItem(),"RptReplacementLeaveApplication","HRM MODULE","REPORT");
 				}	
+				if(event.getItem().toString().equalsIgnoreCase("EDIT DELETE REPLACEMENT LEAVE"))
+				{
+					showWindow(new RptEditDeleteReplacementLeave(sessionBean,"RptEditDeleteReplacementLeave"),event.getItem(),"RptEditDeleteReplacementLeave","HRM MODULE","REPORT");
+				}
+				
 				if(event.getItem().toString().equalsIgnoreCase("INDIVIDUAL LEAVE REGISTER"))
 				{
 					showWindow(new RptLeaveRegisterIndividual(sessionBean,"individualleaveregister"),event.getItem(),"individualleaveregister","HRM MODULE","REPORT");
@@ -865,12 +880,18 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("OVER TIME REQUEST"))
 				{
 					showWindow(new RptOverTimeRequest(sessionBean,"RptOverTimeRequest"),event.getItem(),"RptOverTimeRequest","HRM MODULE","REPORT");
-				}
-				
+				}				
 				if(event.getItem().toString().equalsIgnoreCase("SHORT VIEW OF OVERTIME"))
 				{
 					showWindow(new RptShortViewOfOvertime(sessionBean,"RptShortViewOfOvertime"),event.getItem(),"RptShortViewOfOvertime","HRM MODULE","REPORT");
 				}
+				if(event.getItem().toString().equalsIgnoreCase("EDIT DELETE OVER TIME REQUEST"))
+				{
+					showWindow(new RptEditDeleteOverTimeRequest(sessionBean,"RptEditDeleteOverTimeRequest"),event.getItem(),"RptEditDeleteOverTimeRequest","HRM MODULE","REPORT");
+				}
+				
+				
+				
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE ATTENDANCE UPLOAD"))
 				{
 					showWindow(new EmployeeAttendanceUploadSingleDevice(sessionBean,"attendanceTimeEntry"),event.getItem(),"attendanceTimeEntry","HRM MODULE","TRANSACTION");

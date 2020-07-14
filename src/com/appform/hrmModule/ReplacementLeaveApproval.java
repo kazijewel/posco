@@ -398,7 +398,9 @@ public class ReplacementLeaveApproval extends Window
 							" dReplacementLeaveTo = '"+sessionBean.dfDb.format(tbdLeaveTo.get(i).getValue())+"'," +
 							" iTotalDays = '"+"0"+tbTxtApproveDays.get(i).getValue().toString()+"'," +
 							" iFinal=1,"
-							+ "vApprovedBy='"+sessionBean.getUserName()+"' " +
+							+ "vApprovedBy='"+sessionBean.getUserName()+"',"
+							+ "vUserName='"+sessionBean.getUserName()+"',"
+							+ "vUserIP='"+sessionBean.getUserIp()+"',dEntryTime=GETDATE() " +
 							" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
 					session.createSQLQuery(updateInfo).executeUpdate();
 				}

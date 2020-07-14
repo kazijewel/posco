@@ -455,13 +455,24 @@ public class OverTimeRequestForm extends Window
 						{
 							String transactionID=txtTransactionID.getValue().toString();
 							
+							String oldData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+									+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag,vApprovedBy) "
+									+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+									+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,'UPDATE',vApprovedBy "
+									+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
+							
+							System.out.println("deleteData: "+oldData);
+							session.createSQLQuery(oldData).executeUpdate();
+							
 							String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-									+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
+									+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag,vApprovedBy) "
 									+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 									+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
 									+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-									+ "dDateFrom,dDateTo,iFinal,'DELETE' "
+									+ "dDateFrom,dDateTo,iFinal,'DELETE',vApprovedBy "
 									+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
 							
 							System.out.println("deleteData: "+deleteData);
@@ -885,7 +896,7 @@ public class OverTimeRequestForm extends Window
 										int totalHour=(int) txtTimeTotal.getValue();
 										if(totalHour>0)
 										{
-											saveButtonEvent();								
+											saveButtonEvent();
 										}
 										else
 										{
@@ -909,11 +920,13 @@ public class OverTimeRequestForm extends Window
 				else
 				{
 					showNotification("Warning", "Please select Manager!", Notification.TYPE_WARNING_MESSAGE);
+					cmbManager.focus();
 				}
 			}
 			else
 			{
 				showNotification("Warning", "Please select Job Site!", Notification.TYPE_WARNING_MESSAGE);
+				cmbJobSite.focus();
 			}
 		}
 		else
@@ -1145,11 +1158,10 @@ public class OverTimeRequestForm extends Window
 			
 			String updateData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-					+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag) "
+					+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag,vApprovedBy) "
 					+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
 					+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-					+ "'"+sessionBean.getUserId()+"','"+sessionBean.getUserName()+"','"+sessionBean.getUserIp()+"',CURRENT_TIMESTAMP,"
-					+ "dDateFrom,dDateTo,iFinal,'UPDATE' "
+					+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,'UPDATE',vApprovedBy "
 					+ "from tbOTRequest where vTransactionId ='"+transactionID+"' ";
 			
 			System.out.println("updateData: "+updateData);
@@ -1180,7 +1192,7 @@ public class OverTimeRequestForm extends Window
 					+ "dEntryTime=GETDATE(),"
 					+ "dDateFrom='"+sessionBean.dfDb.format(dDateFrom.getValue())+"',"
 					+ "dDateTo='"+sessionBean.dfDb.format(dDateTo.getValue())+"',"
-					+ "iFinal='"+approved+"' where vTransactionId='"+transactionID+"' ";
+					+ "iFinal='"+approved+"' where vTransactionId='"+transactionID+"' "; 
 			
 			System.out.println("updateData: "+query);
 			
