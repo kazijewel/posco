@@ -623,7 +623,7 @@ public class LeaveEntitlement extends Window
 		}
 		catch (Exception ex)
 		{
-			this.getParent().showNotification("Khan", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
+			this.getParent().showNotification("findInitialize", ex.toString(), Notification.TYPE_ERROR_MESSAGE);
 		}
 		finally{session.close();}
 	}
