@@ -142,7 +142,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		session.beginTransaction();
 		try
 		{
-			String sql = "select distinct vDesignationId,vDesignationName from tbEmpOfficialPersonalInfo where vEmployeeId='"+cmbEmployee.getValue()+"'";
+			String sql = "select distinct vDesignationId,vDesignationName from tbEmpOfficialPersonalInfo where vEmployeeId='"+cmbReviewer.getValue()+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			txtReviewerTital.setValue("");
 			for(Iterator<?> iter = list.iterator();iter.hasNext();)
@@ -689,6 +689,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		cmbDepartment.setImmediate(true);
 		cmbDepartment.setWidth("250.0px");
 		cmbDepartment.setHeight("-1px");
+		cmbDepartment.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Department :"), "top:40px; left:30.0px;");
 		mainLayout.addComponent(cmbDepartment, "top:38px; left:120.0px;");
 		
@@ -704,6 +705,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		cmbSection.setImmediate(true);
 		cmbSection.setWidth("250.0px");
 		cmbSection.setHeight("-1px");
+		cmbSection.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Section :"), "top:70px; left:30.0px;");
 		mainLayout.addComponent(cmbSection, "top:68px; left:120.0px;");
 
@@ -717,6 +719,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		cmbDesignation.setImmediate(true);
 		cmbDesignation.setWidth("250.0px");
 		cmbDesignation.setHeight("-1px");
+		cmbDesignation.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Designation :"), "top:100px; left:30.0px;");
 		mainLayout.addComponent(cmbDesignation, "top:98px; left:120.0px;");
 
@@ -730,6 +733,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		cmbEmployee.setImmediate(true);
 		cmbEmployee.setWidth("250.0px");
 		cmbEmployee.setHeight("-1px");
+		cmbEmployee.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Employee"),"top:130px; left:30px");
 		mainLayout.addComponent(cmbEmployee, "top:128px; left:120.0px;");
 		cmbEmployee.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
@@ -745,6 +749,7 @@ public class RptEmployeeAnnualEvaluationSheet extends Window
 		cmbReviewer.setImmediate(true);
 		cmbReviewer.setWidth("250.0px");
 		cmbReviewer.setHeight("-1px");
+		cmbReviewer.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Reviewer"),"top:160px; left:30px");
 		mainLayout.addComponent(cmbReviewer, "top:158px; left:120.0px;");
 		cmbReviewer.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);

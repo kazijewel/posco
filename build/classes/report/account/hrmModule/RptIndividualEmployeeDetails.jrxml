@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptIndividualEmployeeDetails" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.zoom" value="1.366026910730141"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -54,6 +54,10 @@
 	<parameter name="eduSql" class="java.lang.String"/>
 	<parameter name="exSql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select ex.vCompanyName,ex.vPostName,ex.vResponsibility,ex.dDurationFrom,ex.dDurationTo from funEmployeeDetails('%') ed left join tbEmpExperienceInfo ex  on ex.vEmployeeId=ed.vEmployeeId where ed.vUnitId='2' and ed.vDepartmentId like '%'  and ed.vSectionId like '%' and ed.vDesignationId like '%' order by ex.dDurationFrom desc,ex.dDurationTo desc"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="barcode" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{barcode}]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[$P!{sql}]]>
@@ -1033,6 +1037,12 @@ $F{mConveyanceAllowance}]]></variableExpression>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{vSectionName}]]></textFieldExpression>
 				</textField>
+				<componentElement>
+					<reportElement x="332" y="220" width="200" height="18"/>
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+						<jr:codeExpression><![CDATA[$F{vEmployeeCode}]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
 			</band>
 		</groupHeader>
 	</group>

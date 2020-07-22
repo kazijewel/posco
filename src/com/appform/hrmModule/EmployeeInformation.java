@@ -2595,6 +2595,7 @@ public class EmployeeInformation extends Window
 		Date date1=(Date) firstTab.dJoiningDate.getValue();
 		Calendar calendar=Calendar.getInstance();
 		calendar.setTime(date1);
+		calendar.add(calendar.DATE, Integer.parseInt(firstTab.txtValidYear.getValue().toString().isEmpty()?"0":"-1"));
 		calendar.add(calendar.YEAR, Integer.parseInt(firstTab.txtValidYear.getValue().toString().isEmpty()?"0":firstTab.txtValidYear.getValue().toString()));
 		
 		Date date=new Date();
