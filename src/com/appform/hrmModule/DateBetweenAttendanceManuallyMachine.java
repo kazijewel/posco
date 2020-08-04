@@ -370,7 +370,6 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 						cmbEmployee.removeAllItems();
 						chkEmployeeAll.setValue(false);
 						tableclear();
-						
 					}
 				}
 			}
@@ -423,7 +422,6 @@ public class DateBetweenAttendanceManuallyMachine extends Window
 							cmbEmployee.removeAllItems();
 							chkEmployeeAll.setValue(false);
 							tableclear();
-							
 						}
 					}
 				}

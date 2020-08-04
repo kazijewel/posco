@@ -108,17 +108,17 @@ public class RptShortViewOfAttendance extends Window{
 		cm.checkFormAction(menuId);
 		if(!sessionBean.isSuperAdmin())
 		{
-		if(!sessionBean.isAdmin())
-		{
-			if(!cm.isSave)
-			{cButton.btnSave.setVisible(false);}
-			if(!cm.isEdit)
-			{cButton.btnEdit.setVisible(false);}
-			if(!cm.isDelete)
-			{cButton.btnDelete.setVisible(false);}
-			if(!cm.isPreview)
-			{cButton.btnPreview.setVisible(false);}
-		}
+			if(!sessionBean.isAdmin())
+			{
+				if(!cm.isSave)
+				{cButton.btnSave.setVisible(false);}
+				if(!cm.isEdit)
+				{cButton.btnEdit.setVisible(false);}
+				if(!cm.isDelete)
+				{cButton.btnDelete.setVisible(false);}
+				if(!cm.isPreview)
+				{cButton.btnPreview.setVisible(false);}
+			}
 		}
 	}
 	public void setEventAction()
@@ -181,7 +181,9 @@ public class RptShortViewOfAttendance extends Window{
 					}
 				}
 				else
+				{
 					cmbDepartmentName.setEnabled(true);
+				}
 			}
 		});		
 
@@ -234,7 +236,9 @@ public class RptShortViewOfAttendance extends Window{
 					cmbEmployee.setEnabled(false);
 				}
 				else
+				{
 					cmbEmployee.setEnabled(true);
+				}
 			}
 		});
 		cButton.btnPreview.addListener( new Button.ClickListener() 
@@ -295,7 +299,7 @@ public class RptShortViewOfAttendance extends Window{
 			{
 				Object [] element=(Object[])itr.next();
 				cmbUnit.addItem(element[0]);
-				cmbUnit.setItemCaption(element[0], element[1].toString());
+				cmbUnit.setItemCaption(element[0], element[1]+"");
 			}
 		}
 
@@ -321,7 +325,7 @@ public class RptShortViewOfAttendance extends Window{
 			{
 				Object [] element=(Object[])itr.next();
 				cmbDepartmentName.addItem(element[0]);
-				cmbDepartmentName.setItemCaption(element[0], element[1].toString());
+				cmbDepartmentName.setItemCaption(element[0], element[1]+"");
 			}
 		}
 
@@ -352,7 +356,7 @@ public class RptShortViewOfAttendance extends Window{
 			{
 				Object [] element=(Object[])itr.next();
 				cmbSectionName.addItem(element[0]);
-				cmbSectionName.setItemCaption(element[0], element[1].toString());
+				cmbSectionName.setItemCaption(element[0], element[1]+"");
 			}
 		}
 
@@ -411,8 +415,6 @@ public class RptShortViewOfAttendance extends Window{
 		Session session=SessionFactoryUtil.getInstance().openSession();
 		session.beginTransaction();
 		
-		
-		
 		if(!chkDepartmentAll.booleanValue())
 		{
 			dept=cmbDepartmentName.getValue().toString();
@@ -425,7 +427,6 @@ public class RptShortViewOfAttendance extends Window{
 		{
 			empId=cmbEmployee.getValue().toString();
 		}
-		
 		if(dfMonth.format(cmbDate.getValue()).equalsIgnoreCase("01"))
 		{
 			report="report/account/hrmModule/RptShortViewOfAttendance31.jasper";
@@ -469,7 +470,6 @@ public class RptShortViewOfAttendance extends Window{
 		{
 			report="report/account/hrmModule/RptShortViewOfAttendance30.jasper";
 		}
-
 		
 		ReportOption RadioBtn= new ReportOption(RadioBtnGroup.getValue().toString());
 		try
@@ -530,7 +530,7 @@ public class RptShortViewOfAttendance extends Window{
 		finally{session.close();}
 		return false;
 	}
-
+	
 	private void focusMove()
 	{
 		allComp.add(cmbUnit);
@@ -540,22 +540,22 @@ public class RptShortViewOfAttendance extends Window{
 		allComp.add(cButton.btnPreview);
 		new FocusMoveByEnter(this,allComp);
 	}
-
+	
 	private AbsoluteLayout buildMainLayout()
 	{
 		mainLayout = new AbsoluteLayout();
 		mainLayout.setImmediate(false);
 		mainLayout.setMargin(false);
-
+		
 		setWidth("460px");
 		setHeight("300px");
-
+		
 		lblMonth = new Label("Month :");
 		lblMonth.setImmediate(false);
 		lblMonth.setWidth("-1px");
 		lblMonth.setHeight("-1px");
 		mainLayout.addComponent(lblMonth, "top:30.0px; left:30.0px;");
-
+		
 		cmbDate = new ComboBox();
 		cmbDate.setImmediate(false);
 		cmbDate.setWidth("140px");
@@ -563,7 +563,7 @@ public class RptShortViewOfAttendance extends Window{
 		cmbDate.setNullSelectionAllowed(true);
 		cmbDate.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(cmbDate, "top:28.0px; left:130.0px;");
-
+		
 		cmbUnit=new ComboBox();
 		cmbUnit.setImmediate(true);
 		cmbUnit.setWidth("260.0px");
@@ -571,7 +571,7 @@ public class RptShortViewOfAttendance extends Window{
 		cmbUnit.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Project :"), "top:60.0px; left:30.0px;");
 		mainLayout.addComponent(cmbUnit, "top:58.0px;left:130.0px;");
-
+		
 		cmbDepartmentName=new ComboBox();
 		cmbDepartmentName.setImmediate(true);
 		cmbDepartmentName.setWidth("260.0px");
@@ -579,11 +579,11 @@ public class RptShortViewOfAttendance extends Window{
 		cmbDepartmentName.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Department :"), "top:90.0px; left:30.0px;");
 		mainLayout.addComponent(cmbDepartmentName, "top:88.0px;left:130.0px;");
-
+		
 		chkDepartmentAll=new CheckBox("All");
 		chkDepartmentAll.setImmediate(true);
 		mainLayout.addComponent(chkDepartmentAll,"top:90.0px; left:395px");
-
+		
 		cmbSectionName=new ComboBox();
 		cmbSectionName.setImmediate(true);
 		cmbSectionName.setWidth("260.0px");
@@ -591,18 +591,18 @@ public class RptShortViewOfAttendance extends Window{
 		cmbSectionName.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(new Label("Section :"), "top:120.0px; left:30.0px;");
 		mainLayout.addComponent(cmbSectionName, "top:118.0px;left:130.0px;");
-
+		
 		chkSectionAll=new CheckBox("All");
 		chkSectionAll.setImmediate(true);
 		mainLayout.addComponent(chkSectionAll,"top:120.0px; left:395px");
-
+		
 		lblEmployee = new Label();
 		lblEmployee.setImmediate(false);
 		lblEmployee.setWidth("100.0%");
 		lblEmployee.setHeight("-1px");
 		lblEmployee.setValue("Employee ID :");
 		mainLayout.addComponent(lblEmployee,"top:150.0px; left:30.0px;");
-
+		
 		cmbEmployee = new ComboBox();
 		cmbEmployee.setImmediate(false);
 		cmbEmployee.setWidth("260px");
@@ -611,19 +611,19 @@ public class RptShortViewOfAttendance extends Window{
 		cmbEmployee.setImmediate(true);
 		cmbEmployee.setFilteringMode(Filtering.FILTERINGMODE_CONTAINS);
 		mainLayout.addComponent(cmbEmployee, "top:148.0px; left:130.0px;");
-
+		
 		chkEmployeeAll = new CheckBox("All");
 		chkEmployeeAll.setHeight("-1px");
 		chkEmployeeAll.setWidth("-1px");
 		chkEmployeeAll.setImmediate(true);
 		mainLayout.addComponent(chkEmployeeAll, "top:150.0px; left:396.0px;");
-
+		
 		RadioBtnGroup = new OptionGroup("",type1);
 		RadioBtnGroup.setImmediate(true);
 		RadioBtnGroup.setStyleName("horizontal");
 		RadioBtnGroup.setValue("PDF");
 		mainLayout.addComponent(RadioBtnGroup, "top:180.0px;left:130.0px;");
-
+		
 		mainLayout.addComponent(new Label("______________________________________________________________________________"), "top:200.0px; left:20.0px; right:20.0px;");
 		mainLayout.addComponent(cButton,"top:230.opx; left:150.0px");
 		return mainLayout;

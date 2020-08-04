@@ -1,5 +1,6 @@
 package com.appform.hrmModule;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,6 +59,10 @@ public class OverTimeRequestApproval extends Window
 	private ArrayList<NativeButton> tbBtnDetails = new ArrayList<NativeButton>();
 	private ArrayList<CheckBox> tbChkSelect = new ArrayList<CheckBox>();
 
+	private SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat dbMonthFormat = new SimpleDateFormat("MM");
+	private SimpleDateFormat dbYearFormat = new SimpleDateFormat("yyyy");
+	
 	CommonButton cButton = new CommonButton("New", "Save", "", "", "Refresh", "", "", "", "", "Exit");
 	private CommonMethod cm;
 	private String menuId = "";
@@ -359,8 +364,27 @@ public class OverTimeRequestApproval extends Window
 			showNotification("Warning!","Select data to approve in table.",Notification.TYPE_WARNING_MESSAGE);
 		}
 	}
-	
 
+	private boolean chkSalary(String query)
+	{
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			List <?> lst = session.createSQLQuery(query).list();
+			if(!lst.isEmpty())
+			{
+				return true;
+			}
+		}
+		catch (Exception exp)
+		{
+			showNotification("chkSalary", exp.toString(), Notification.TYPE_WARNING_MESSAGE);
+		}
+		finally{session.close();}
+		return false;
+	}
+	
 	private void updateData()
 	{
 		Session session = SessionFactoryUtil.getInstance().openSession();
@@ -372,28 +396,46 @@ public class OverTimeRequestApproval extends Window
 			{
 				if(tbChkSelect.get(i).booleanValue())
 				{
-					String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-							+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag,vApprovedBy) "
-							+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
-							+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
-							+ "vUserId,vUserName,vUserIp,dEntryTime,"
-							+ "dDateFrom,dDateTo,iFinal,'UPDATE',vApprovedBy "
-							+ "from tbOTRequest where vTransactionId ='"+tbLblReference.get(i).getValue().toString()+"' ";
+					String query = "select top(5) * from tbMonthlySalary " +
+							"where vEmployeeID='"+tbLblEmployeeId.get(i).getValue()+"' "
+							+ "and ("
+								+ "("
+									+ "MONTH(dSalaryDate) = '"+dbMonthFormat.format(tbdApplicationDate.get(i).getValue())+"' "
+									+ "and YEAR(dSalaryDate) = '"+dbYearFormat.format(tbdApplicationDate.get(i).getValue())+"'"
+								+ ") "
+							+ ")";
+					//System.out.println("Check Salary: "+query);
 					
-					System.out.println("deleteData: "+deleteData);
-					session.createSQLQuery(deleteData).executeUpdate();
-					
-					String updateInfo = " update tbOTRequest "
-							+ "set iFinal=1, "
-							+ "vApprovedBy='"+sessionBean.getUserName()+"', "
-							+ "vUserId='"+sessionBean.getUserId()+"',"
-							+ "vUserName='"+sessionBean.getUserName()+"',"
-							+ "vUserIp='"+sessionBean.getUserIp()+"',"
-							+ "dEntryTime=GETDATE() " +
-							" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
+					if(!chkSalary(query))
+					{
+						String deleteData = "insert into tbUDOTRequest(vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+								+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+								+ "vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vUdFlag,vApprovedBy) "
+								+ "select vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,"
+								+ "vDepartmentName,vJobSite,dRequestDate,dTimeFrom,dTimeTo,mTotalTimeHR,vManger,vWorkRequest,vManPower,iHoliday,iNightTim,"
+								+ "vUserId,vUserName,vUserIp,dEntryTime,"
+								+ "dDateFrom,dDateTo,iFinal,'UPDATE',vApprovedBy "
+								+ "from tbOTRequest where vTransactionId ='"+tbLblReference.get(i).getValue().toString()+"' ";
+						
+						System.out.println("deleteData: "+deleteData);
+						session.createSQLQuery(deleteData).executeUpdate();
+						
+						String updateInfo = " update tbOTRequest "
+								+ "set iFinal=1, "
+								+ "vApprovedBy='"+sessionBean.getUserName()+"', "
+								+ "vUserId='"+sessionBean.getUserId()+"',"
+								+ "vUserName='"+sessionBean.getUserName()+"',"
+								+ "vUserIp='"+sessionBean.getUserIp()+"',"
+								+ "dEntryTime=GETDATE() " +
+								" where vTransactionID = '"+tbLblReference.get(i).getValue().toString()+"' ";
 
-					session.createSQLQuery(updateInfo).executeUpdate();
+						session.createSQLQuery(updateInfo).executeUpdate();
+					}
+					else
+					{
+						showNotification("Warning", "Salary Already Generated for this Month. EmployeeId: "+tbLblEmployeeCode.get(i).getValue()+ " Please Delete or Uncheck", Notification.TYPE_WARNING_MESSAGE);
+						break;
+					}
 				}
 			}
 			tx.commit();
