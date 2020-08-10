@@ -43,6 +43,8 @@ public class OverTimeRequestApproval extends Window
 	private ComboBox cmbUnit;
 	private ComboBox cmbDepartment;
 	private CheckBox chkDepartmentAll;
+	private ComboBox cmbEmployee;
+	private CheckBox chkEmployeeAll;
 
 	CommonButton btnFind = new CommonButton("", "", "", "", "", "Find", "", "", "", "");
 
@@ -111,12 +113,35 @@ public class OverTimeRequestApproval extends Window
 
 	private void setEventAction()
 	{
+		cmbUnit.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(cmbUnit.getValue()!=null)
+				{
+					 cmbDepartmentDataAdd();
+				}
+			}
+		});
+		
+		cmbDepartment.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(cmbDepartment.getValue()!=null)
+				{
+					cmbEmployeeDataLoad();
+				}
+			}
+		});
+		
 		chkDepartmentAll.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
 				if(chkDepartmentAll.booleanValue())
 				{
+					cmbEmployeeDataLoad();
 					cmbDepartment.setValue(null);
 					cmbDepartment.setEnabled(false);
 				}
@@ -126,9 +151,28 @@ public class OverTimeRequestApproval extends Window
 				}
 			}
 		});
+		chkEmployeeAll.addListener(new ClickListener() 
+		{
+			public void buttonClick(ClickEvent event) 
+			{
+				if(chkEmployeeAll.booleanValue())
+				{
+					if(cmbUnit.getValue()!=null)
+					{
+						if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+						{
+							cmbEmployee.setValue(null);
+							cmbEmployee.setEnabled(false);
+						}
+					}
+				}
+				else{
+					cmbEmployee.setEnabled(true);
+				}
+			}
+		});
 		
-		chkAll.addListener(new ClickListener() {
-					
+		chkAll.addListener(new ClickListener() {					
 			public void buttonClick(ClickEvent event) {
 				if(chkAll.booleanValue())
 				{
@@ -152,29 +196,35 @@ public class OverTimeRequestApproval extends Window
 				}
 			}
 		});
-		cmbUnit.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(cmbUnit.getValue()!=null)
-				{
-					 cmbDepartmentDataAdd();
-				}
-			}
-		});
 
 		btnFind.btnFind.addListener(new ClickListener()
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+				if(cmbUnit.getValue()!=null)
 				{
-					addTableData();
+					if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+					{
+						if(cmbEmployee.getValue()!=null || chkEmployeeAll.booleanValue())
+						{
+							addTableData();
+						}
+						else
+						{
+							showNotification("Warning!","Select Employee",Notification.TYPE_WARNING_MESSAGE);
+							cmbEmployee.focus();
+						}
+					}
+					else
+					{
+						showNotification("Warning!","Select Department",Notification.TYPE_WARNING_MESSAGE);
+						cmbDepartment.focus();
+					}
 				}
 				else
 				{
-					showNotification("Warning!","Select Department",Notification.TYPE_WARNING_MESSAGE);
-					cmbDepartment.focus();
+					showNotification("Warning!","Select Project",Notification.TYPE_WARNING_MESSAGE);
+					cmbUnit.focus();
 				}
 			}
 		});
@@ -206,8 +256,7 @@ public class OverTimeRequestApproval extends Window
 				txtClear();
 				txtInit(false);
 				btnIni(false);			
-				cmbUnit.focus();				
-				cmbDepartment.focus();
+				cmbUnit.focus();
 				cmbUnitDataAdd();
 				
 			}
@@ -279,7 +328,38 @@ public class OverTimeRequestApproval extends Window
 		finally{session.close();}
 	}
 
+	private void cmbEmployeeDataLoad()
+	{
+	    cmbEmployee.removeAllItems();
 
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String query=" select epo.vEmployeeId,epo.vEmployeeCode,epo.vEmployeeName from tbEmpOfficialPersonalInfo epo inner join tbOTRequest "
+			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and  b.iFinal='0' "
+			+ " order by epo.vEmployeeName";
+	
+		System.out.println("cmbEmployeeDataLoad: "+query);
+		
+		List <?> lst=session.createSQLQuery(query).list();
+			if(!lst.isEmpty())
+			{
+				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
+				{
+					Object [] element=(Object[])itr.next();
+					cmbEmployee.addItem(element[0]);
+					cmbEmployee.setItemCaption(element[0], element[1]+"-"+element[2]);
+				}
+			}
+		}
+		catch (Exception exp)
+		{
+			showNotification("cmbEmployeeDataLoad", exp.toString(), Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
+	}
+	
 	private void cmbDepartmentDataAdd()
 	{
 	     cmbDepartment.removeAllItems();
@@ -293,7 +373,7 @@ public class OverTimeRequestApproval extends Window
 			+ " order by epo.vDepartmentName";
 			
 	
-		System.out.println("Department"+query);
+		System.out.println("cmbDepartmentDataAdd: "+query);
 		
 		List <?> lst=session.createSQLQuery(query).list();
 			if(!lst.isEmpty())
@@ -348,9 +428,9 @@ public class OverTimeRequestApproval extends Window
 					if(buttonType == ButtonType.YES)
 					{
 						updateData();
+						txtClear();
 						txtInit(true);
 						btnIni(true);
-						txtClear();
 						Notification n=new Notification("Over Time Approved Successfully!","",Notification.TYPE_TRAY_NOTIFICATION);
 						n.setPosition(Notification.POSITION_TOP_RIGHT);
 						showNotification(n);
@@ -476,10 +556,12 @@ public class OverTimeRequestApproval extends Window
 		try
 		{
 			String sql = "select vTransactionID,b.dRequestDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,"
-					+ "dDateFrom,dDateTo,1 days,epo.vEmployeeId,epo.vEmployeeCode from tbOTRequest b inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=b.vEmployeeId "
-					+" where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"' "
-					+ "and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"'" 
-					+" and b.iFinal='0'  order by b.dRequestDate";
+					+ "dDateFrom,dDateTo,1 days,epo.vEmployeeId,epo.vEmployeeCode "
+					+ "from tbOTRequest b inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=b.vEmployeeId "
+					+ "where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"' "
+					+ "and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"' "
+					+ "and epo.vEmployeeId like '"+(cmbEmployee.getValue()==null?"%":cmbEmployee.getValue().toString())+"' " 
+					+"and b.iFinal='0'  order by b.dRequestDate";
 			List <?> list = session.createSQLQuery(sql).list();
 			System.out.println("Find Query :" + sql);
 			tableClear();
@@ -707,52 +789,6 @@ public class OverTimeRequestApproval extends Window
 				tbBtnDetails.get(ar), tbChkSelect.get(ar)},ar);
 	}
 
-	private AbsoluteLayout Buildmainlayout() 
-	{
-		mainLayout = new AbsoluteLayout();
-		mainLayout.setImmediate(false);
-		setWidth("1200.0px");
-		setHeight("480.0px");
-
-		mainLayout.addComponent(new Label("Department : "),"top:15.0px;left:450.0px");
-
-		cmbUnit = new ComboBox();
-		cmbUnit.setImmediate(true);
-		cmbUnit.setWidth("280px");
-		cmbUnit.setHeight("-1px");
-		mainLayout.addComponent(new Label("Project : "),"top:15.0px;left:30.0px");
-		mainLayout.addComponent(cmbUnit,"top:12.0px;left:120.0px");
-		
-		cmbDepartment = new ComboBox();
-		cmbDepartment.setImmediate(true);
-		cmbDepartment.setWidth("280px");
-		cmbDepartment.setHeight("-1px");
-		mainLayout.addComponent(cmbDepartment,"top:12.0px;left:540.0px");
-
-		chkDepartmentAll = new CheckBox("All");
-		chkDepartmentAll.setImmediate(true);
-		chkDepartmentAll.setWidth("-1px");
-		chkDepartmentAll.setHeight("-1px");
-		mainLayout.addComponent(chkDepartmentAll,"top:15.0px;left:825.0px");
-
-		mainLayout.addComponent(btnFind,"top:11.0px;left:860.0px");
-		
-		chkAll.setImmediate(true);
-		chkAll.setWidth("-1px");
-		chkAll.setHeight("-1px");
-		mainLayout.addComponent(chkAll,"top:15px; right:60px");
-
-		tableAdd();
-
-		mainLayout.addComponent(table,"top:55.0px; left:10.0px;");
-		mainLayout.addComponent(new Label("<b><Font Color='#FFD6D6' size='2px'> APR. Days => Approved Days </Font></b>",Label.CONTENT_XHTML), "top:395.0px; left:10.0px;");
-
-		cButton.btnSave.setCaption("Approve");
-		mainLayout.addComponent(cButton,"top:400.0px; left:430.0px");
-
-		return mainLayout;
-	}
-
 	private void tableAdd()
 	{
 		table.setWidth("98%");
@@ -804,8 +840,12 @@ public class OverTimeRequestApproval extends Window
 	private void txtClear()
 	{
 		cmbUnit.setValue(null);
-		cmbDepartment.setValue(null);
 		chkDepartmentAll.setValue(false);
+		cmbDepartment.setValue(null);
+
+		chkEmployeeAll.setValue(false);
+		cmbEmployee.setValue(null);
+		
 		chkAll.setValue(false);
 		tableClear();
 	}
@@ -842,6 +882,10 @@ public class OverTimeRequestApproval extends Window
 		cmbUnit.setEnabled(!t);
 		cmbDepartment.setEnabled(!t);
 		chkDepartmentAll.setEnabled(!t);
+
+		cmbEmployee.setEnabled(!t);
+		chkEmployeeAll.setEnabled(!t);
+		
 		chkAll.setEnabled(!t);
 		btnFind.setEnabled(!t);
 		table.setEnabled(!t);
@@ -914,4 +958,66 @@ public class OverTimeRequestApproval extends Window
 		finally{session.close();}
 		return false;
 	}
+
+	private AbsoluteLayout Buildmainlayout() 
+	{
+		mainLayout = new AbsoluteLayout();
+		mainLayout.setImmediate(false);
+		setWidth("1200.0px");
+		setHeight("480.0px");
+		
+		cmbUnit = new ComboBox();
+		cmbUnit.setImmediate(true);
+		cmbUnit.setWidth("200px");
+		cmbUnit.setHeight("-1px");
+		cmbUnit.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Project : "),"top:15.0px;left:15.0px");
+		mainLayout.addComponent(cmbUnit,"top:12.0px;left:80.0px");
+		
+		cmbDepartment = new ComboBox();
+		cmbDepartment.setImmediate(true);
+		cmbDepartment.setWidth("200px");
+		cmbDepartment.setHeight("-1px");
+		cmbDepartment.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Department : "),"top:15.0px;left:300.0px");
+		mainLayout.addComponent(cmbDepartment,"top:12.0px;left:380.0px");
+
+		chkDepartmentAll = new CheckBox("All");
+		chkDepartmentAll.setImmediate(true);
+		chkDepartmentAll.setWidth("-1px");
+		chkDepartmentAll.setHeight("-1px");
+		mainLayout.addComponent(chkDepartmentAll,"top:15.0px;left:580.0px");
+		
+		cmbEmployee = new ComboBox();
+		cmbEmployee.setImmediate(true);
+		cmbEmployee.setWidth("230px");
+		cmbEmployee.setHeight("-1px");
+		cmbEmployee.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Employee : "),"top:15.0px;left:640.0px");
+		mainLayout.addComponent(cmbEmployee,"top:12.0px;left:720.0px");
+
+		chkEmployeeAll = new CheckBox("All");
+		chkEmployeeAll.setImmediate(true);
+		chkEmployeeAll.setWidth("-1px");
+		chkEmployeeAll.setHeight("-1px");
+		mainLayout.addComponent(chkEmployeeAll,"top:15.0px;left:950.0px");
+
+		mainLayout.addComponent(btnFind,"top:11.0px;left:998.0px");
+		
+		chkAll.setImmediate(true);
+		chkAll.setWidth("-1px");
+		chkAll.setHeight("-1px");
+		mainLayout.addComponent(chkAll,"top:15px; right:30px");
+
+		tableAdd();
+
+		mainLayout.addComponent(table,"top:55.0px; left:10.0px;");
+		mainLayout.addComponent(new Label("<b><Font Color='#FFD6D6' size='2px'> APR. Days => Approved Days </Font></b>",Label.CONTENT_XHTML), "top:395.0px; left:10.0px;");
+
+		cButton.btnSave.setCaption("Approve");
+		mainLayout.addComponent(cButton,"top:400.0px; left:430.0px");
+
+		return mainLayout;
+	}
+	
 }

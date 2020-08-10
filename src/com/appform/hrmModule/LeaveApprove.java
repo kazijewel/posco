@@ -32,6 +32,7 @@ import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.HeaderClickEvent;
+import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
@@ -42,6 +43,8 @@ public class LeaveApprove extends Window
 	private ComboBox cmbUnit;
 	private ComboBox cmbDepartment;
 	private CheckBox chkDepartmentAll;
+	private ComboBox cmbEmployee;
+	private CheckBox chkEmployeeAll;
 
 	CommonButton btnFind = new CommonButton("", "", "", "", "", "Find", "", "", "", "");
 
@@ -108,23 +111,6 @@ public class LeaveApprove extends Window
 
 	private void setEventAction()
 	{
-		chkDepartmentAll.addListener(new ValueChangeListener()
-		{
-			public void valueChange(ValueChangeEvent event)
-			{
-				if(chkDepartmentAll.booleanValue())
-				{
-					cmbDepartment.setValue(null);
-					cmbDepartment.setEnabled(false);
-				}
-				else
-				{
-					cmbDepartment.setEnabled(true);
-				}
-			}
-		});
-		
-		
 		cmbUnit.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -135,7 +121,54 @@ public class LeaveApprove extends Window
 				}
 			}
 		});
-
+		
+		cmbDepartment.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(cmbDepartment.getValue()!=null)
+				{
+					cmbEmployeeDataLoad();
+				}
+			}
+		});
+		chkDepartmentAll.addListener(new ValueChangeListener()
+		{
+			public void valueChange(ValueChangeEvent event)
+			{
+				if(chkDepartmentAll.booleanValue())
+				{
+					cmbEmployeeDataLoad();
+					cmbDepartment.setValue(null);
+					cmbDepartment.setEnabled(false);
+				}
+				else
+				{
+					cmbDepartment.setEnabled(true);
+				}
+			}
+		});
+		chkEmployeeAll.addListener(new ClickListener() 
+		{
+			public void buttonClick(ClickEvent event) 
+			{
+				if(chkEmployeeAll.booleanValue())
+				{
+					if(cmbUnit.getValue()!=null)
+					{
+						if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+						{
+							cmbEmployee.setValue(null);
+							cmbEmployee.setEnabled(false);
+						}
+					}
+				}
+				else{
+					cmbEmployee.setEnabled(true);
+				}
+			}
+		});
+		
 		btnFind.btnFind.addListener(new ClickListener()
 		{
 			public void buttonClick(ClickEvent event)
@@ -247,7 +280,39 @@ public class LeaveApprove extends Window
 		finally{session.close();}
 	}
 
+	private void cmbEmployeeDataLoad()
+	{
+	    cmbEmployee.removeAllItems();
 
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String query="select epo.vEmployeeId,epo.vEmployeeCode,epo.vEmployeeName from tbEmpOfficialPersonalInfo epo "
+			+ "inner join tbEmpLeaveApplicationInfo eli on epo.vEmployeeId=eli.vEmployeeId "
+			+ "where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and eli.iFinal=0 "
+			+ " order by epo.vEmployeeName";
+	
+		System.out.println("cmbEmployeeDataLoad: "+query);
+		
+		List <?> lst=session.createSQLQuery(query).list();
+			if(!lst.isEmpty())
+			{
+				for(Iterator <?> itr=lst.iterator();itr.hasNext();)
+				{
+					Object [] element=(Object[])itr.next();
+					cmbEmployee.addItem(element[0]);
+					cmbEmployee.setItemCaption(element[0], element[1]+"-"+element[2]);
+				}
+			}
+		}
+		catch (Exception exp)
+		{
+			showNotification("cmbEmployeeDataLoad", exp.toString(), Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
+	}
+	
 	private void cmbDepartmentDataAdd()
 	{
 	     cmbDepartment.removeAllItems();
@@ -440,10 +505,14 @@ public class LeaveApprove extends Window
 
 		try
 		{
-			String sql = "select vLeaveId,eli.dApplicationDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,dSanctionFrom,dSanctionTo,mTotalDays," 
-					+" epo.vEmployeeId,epo.vEmployeeCode from tbEmpLeaveApplicationInfo eli inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=eli.vEmployeeId "
-					+" where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"'" 
-					+" and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"' and iFinal = 0 order by eli.dApplicationDate";
+			String sql = "select vLeaveId,eli.dApplicationDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,dSanctionFrom,"
+					+ "dSanctionTo,mTotalDays,epo.vEmployeeId,epo.vEmployeeCode "
+					+ "from tbEmpLeaveApplicationInfo eli "
+					+ "inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=eli.vEmployeeId "
+					+ "where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"' "
+					+ "and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"' "
+					+ "and epo.vEmployeeId like '"+(cmbEmployee.getValue()==null?"%":cmbEmployee.getValue().toString())+"' "
+					+ "and iFinal = 0 order by eli.dApplicationDate";
 			List <?> list = session.createSQLQuery(sql).list();
 			System.out.println("Find Query :" + sql);
 			tableClear();
@@ -859,50 +928,14 @@ public class LeaveApprove extends Window
 				tbBtnDetails.get(ar), tbChkSelect.get(ar)},ar);
 	}
 
-	private AbsoluteLayout Buildmainlayout() 
-	{
-		mainLayout = new AbsoluteLayout();
-		mainLayout.setImmediate(false);
-		setWidth("1200.0px");
-		setHeight("480.0px");
-
-		mainLayout.addComponent(new Label("Department : "),"top:15.0px;left:450.0px");
-
-		cmbUnit = new ComboBox();
-		cmbUnit.setImmediate(true);
-		cmbUnit.setWidth("280px");
-		cmbUnit.setHeight("-1px");
-		mainLayout.addComponent(new Label("Project : "),"top:15.0px;left:30.0px");
-		mainLayout.addComponent(cmbUnit,"top:12.0px;left:120.0px");
-		
-		cmbDepartment = new ComboBox();
-		cmbDepartment.setImmediate(true);
-		cmbDepartment.setWidth("280px");
-		cmbDepartment.setHeight("-1px");
-		mainLayout.addComponent(cmbDepartment,"top:12.0px;left:540.0px");
-
-		chkDepartmentAll = new CheckBox("All");
-		chkDepartmentAll.setImmediate(true);
-		chkDepartmentAll.setWidth("-1px");
-		chkDepartmentAll.setHeight("-1px");
-		mainLayout.addComponent(chkDepartmentAll,"top:15.0px;left:825.0px");
-
-		mainLayout.addComponent(btnFind,"top:11.0px;left:860.0px");
-
-		mainLayout.addComponent(table,"top:55.0px; left:10.0px;");
-		mainLayout.addComponent(new Label("<b><Font Color='brown' size='2px'> APR. Days => Approved Days </Font></b>",Label.CONTENT_XHTML), "top:395.0px; left:10.0px;");
-
-		cButton.btnSave.setCaption("Approve");
-		mainLayout.addComponent(cButton,"top:400.0px; left:430.0px");
-
-		return mainLayout;
-	}
-
 	private void txtClear()
 	{
 		cmbUnit.setValue(null);
 		cmbDepartment.setValue(null);
 		chkDepartmentAll.setValue(false);
+
+		chkEmployeeAll.setValue(false);
+		cmbEmployee.setValue(null);
 		tableClear();
 	}
 
@@ -943,6 +976,9 @@ public class LeaveApprove extends Window
 		cmbUnit.setEnabled(!t);
 		cmbDepartment.setEnabled(!t);
 		chkDepartmentAll.setEnabled(!t);
+
+		cmbEmployee.setEnabled(!t);
+		chkEmployeeAll.setEnabled(!t);
 		btnFind.setEnabled(!t);
 		table.setEnabled(!t);
 	}
@@ -1056,5 +1092,59 @@ public class LeaveApprove extends Window
 		}
 		finally{session.close();}
 		return numFriday;  
+	}
+
+	private AbsoluteLayout Buildmainlayout() 
+	{
+		mainLayout = new AbsoluteLayout();
+		mainLayout.setImmediate(false);
+		setWidth("1200.0px");
+		setHeight("480.0px");
+
+		cmbUnit = new ComboBox();
+		cmbUnit.setImmediate(true);
+		cmbUnit.setWidth("200px");
+		cmbUnit.setHeight("-1px");
+		cmbUnit.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Project : "),"top:15.0px;left:15.0px");
+		mainLayout.addComponent(cmbUnit,"top:12.0px;left:80.0px");
+		
+		cmbDepartment = new ComboBox();
+		cmbDepartment.setImmediate(true);
+		cmbDepartment.setWidth("200px");
+		cmbDepartment.setHeight("-1px");
+		cmbDepartment.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Department : "),"top:15.0px;left:300.0px");
+		mainLayout.addComponent(cmbDepartment,"top:12.0px;left:380.0px");
+
+		chkDepartmentAll = new CheckBox("All");
+		chkDepartmentAll.setImmediate(true);
+		chkDepartmentAll.setWidth("-1px");
+		chkDepartmentAll.setHeight("-1px");
+		mainLayout.addComponent(chkDepartmentAll,"top:15.0px;left:580.0px");
+		
+		cmbEmployee = new ComboBox();
+		cmbEmployee.setImmediate(true);
+		cmbEmployee.setWidth("230px");
+		cmbEmployee.setHeight("-1px");
+		cmbEmployee.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
+		mainLayout.addComponent(new Label("Employee : "),"top:15.0px;left:640.0px");
+		mainLayout.addComponent(cmbEmployee,"top:12.0px;left:720.0px");
+
+		chkEmployeeAll = new CheckBox("All");
+		chkEmployeeAll.setImmediate(true);
+		chkEmployeeAll.setWidth("-1px");
+		chkEmployeeAll.setHeight("-1px");
+		mainLayout.addComponent(chkEmployeeAll,"top:15.0px;left:950.0px");
+
+		mainLayout.addComponent(btnFind,"top:11.0px;left:998.0px");
+
+		mainLayout.addComponent(table,"top:55.0px; left:10.0px;");
+		mainLayout.addComponent(new Label("<b><Font Color='brown' size='2px'> APR. Days => Approved Days </Font></b>",Label.CONTENT_XHTML), "top:395.0px; left:10.0px;");
+
+		cButton.btnSave.setCaption("Approve");
+		mainLayout.addComponent(cButton,"top:400.0px; left:430.0px");
+
+		return mainLayout;
 	}
 }
