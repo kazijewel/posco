@@ -51,6 +51,7 @@ public class OverTimeRequestApproval extends Window
 	private Table table = new Table();
 	private ArrayList<NativeButton> Delete = new ArrayList<NativeButton>();
 	private ArrayList<Label> tbLblReference = new ArrayList<Label>();
+	private ArrayList<Label> tbLblTotalOtHr = new ArrayList<Label>();
 	private ArrayList<Label> tbLblEmployeeId = new ArrayList<Label>();
 	private ArrayList<Label> tbLblEmployeeCode = new ArrayList<Label>();
 	private ArrayList<Label> tbLblEmployeeName = new ArrayList<Label>();
@@ -330,6 +331,12 @@ public class OverTimeRequestApproval extends Window
 
 	private void cmbEmployeeDataLoad()
 	{
+		String deptId="%";
+		
+		if(cmbDepartment.getValue()!=null)
+		{
+			deptId=cmbDepartment.getValue().toString();
+		}
 	    cmbEmployee.removeAllItems();
 
 		Session session=SessionFactoryUtil.getInstance().openSession();
@@ -337,7 +344,8 @@ public class OverTimeRequestApproval extends Window
 		try
 		{
 			String query=" select epo.vEmployeeId,epo.vEmployeeCode,epo.vEmployeeName from tbEmpOfficialPersonalInfo epo inner join tbOTRequest "
-			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' and  b.iFinal='0' "
+			+ " b on epo.vEmployeeId=b.vEmployeeId  where epo.vUnitId='"+cmbUnit.getValue().toString()+"' "
+			+ "and epo.vDepartmentId like'"+deptId+"' and  b.iFinal='0' "
 			+ " order by epo.vEmployeeName";
 	
 		System.out.println("cmbEmployeeDataLoad: "+query);
@@ -556,7 +564,8 @@ public class OverTimeRequestApproval extends Window
 		try
 		{
 			String sql = "select vTransactionID,b.dRequestDate,epo.vEmployeeName,epo.vDepartmentName,epo.vDesignationName,"
-					+ "dDateFrom,dDateTo,1 days,epo.vEmployeeId,epo.vEmployeeCode "
+					+ "dDateFrom,dDateTo,1 days,epo.vEmployeeId,epo.vEmployeeCode,"
+					+ "case when iHoliday=1 and mTotalTimeHR>10 then mTotalTimeHR-1 else mTotalTimeHR end hours "
 					+ "from tbOTRequest b inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=b.vEmployeeId "
 					+ "where epo.vUnitId like '"+(cmbUnit.getValue()==null?"%":cmbUnit.getValue().toString())+"' "
 					+ "and epo.vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue().toString())+"' "
@@ -565,16 +574,16 @@ public class OverTimeRequestApproval extends Window
 			List <?> list = session.createSQLQuery(sql).list();
 			System.out.println("Find Query :" + sql);
 			tableClear();
-
+			
 			if(!list.isEmpty())
 			{
 				int i = 0;
 				for (Iterator <?> iter = list.iterator(); iter.hasNext();)
 				{
 					Object[] element = (Object[]) iter.next();
-
+					
 					tbLblReference.get(i).setValue(element[0].toString());
-
+					
 					tbLblEmployeeId.get(i).setValue(element[8].toString());
 					tbLblEmployeeCode.get(i).setValue(element[9].toString());
 					tbLblEmployeeName.get(i).setValue(element[2].toString());
@@ -583,7 +592,8 @@ public class OverTimeRequestApproval extends Window
 					tbdApplicationDate.get(i).setReadOnly(false);
 					tbdApplicationDate.get(i).setValue(element[1]);
 					tbdApplicationDate.get(i).setReadOnly(true);
-
+					tbLblTotalOtHr.get(i).setValue(element[10].toString());
+					
 					if(tbLblEmployeeName.size()-1==i)
 					{
 						tableRowAdd(i+1);
@@ -680,6 +690,7 @@ public class OverTimeRequestApproval extends Window
 							tbdApplicationDate.get(ar).setReadOnly(false);
 							tbdApplicationDate.get(ar).setValue(null);
 							tbdApplicationDate.get(ar).setReadOnly(true);
+							tbLblTotalOtHr.get(ar).setValue("");
 							tbChkSelect.get(ar).setValue(false);
 							
 							for(int rowcount=ar;rowcount<=tbLblEmployeeId.size()-1;rowcount++)
@@ -698,6 +709,7 @@ public class OverTimeRequestApproval extends Window
 										tbdApplicationDate.get(rowcount).setReadOnly(false);
 										tbdApplicationDate.get(rowcount).setValue(tbdApplicationDate.get(rowcount+1).getValue());
 										tbdApplicationDate.get(rowcount).setReadOnly(true);
+										tbLblTotalOtHr.get(rowcount).setValue(tbLblTotalOtHr.get(rowcount+1).getValue());
 										tbChkSelect.get(rowcount).setValue(tbChkSelect.get(rowcount+1).getValue());
 										
 										tbLblReference.get(rowcount+1).setValue("");
@@ -711,6 +723,7 @@ public class OverTimeRequestApproval extends Window
 										tbdApplicationDate.get(rowcount+1).setReadOnly(false);
 										tbdApplicationDate.get(rowcount+1).setValue(null);
 										tbdApplicationDate.get(rowcount+1).setReadOnly(true);
+										tbLblTotalOtHr.get(rowcount+1).setValue("");
 										tbChkSelect.get(rowcount+1).setValue(false);
 									}
 								}
@@ -724,7 +737,7 @@ public class OverTimeRequestApproval extends Window
 				});
 			}
 		});
-
+		
 		tbLblReference.add(ar, new Label());
 		tbLblReference.get(ar).setImmediate(true);
 		tbLblReference.get(ar).setWidth("100%");
@@ -732,34 +745,38 @@ public class OverTimeRequestApproval extends Window
 		tbLblEmployeeId.add(ar,new Label());
 		tbLblEmployeeId.get(ar).setImmediate(true);
 		tbLblEmployeeId.get(ar).setWidth("100%");
-
+		
 		tbLblEmployeeCode.add(ar,new Label());
 		tbLblEmployeeCode.get(ar).setImmediate(true);
 		tbLblEmployeeCode.get(ar).setWidth("100%");
-
+		
 		tbLblEmployeeName.add(ar,new Label());
 		tbLblEmployeeName.get(ar).setImmediate(true);
 		tbLblEmployeeName.get(ar).setWidth("100%");
-
+		
 		tbLblDesignation.add(ar, new Label());
 		tbLblDesignation.get(ar).setImmediate(true);
 		tbLblDesignation.get(ar).setWidth("100%");
-
+		
 		tbLblUnitName.add(ar, new Label());
 		tbLblUnitName.get(ar).setImmediate(true);
 		tbLblUnitName.get(ar).setWidth("100%");
-
+		
 		tbLblDivisionName.add(ar, new Label());
 		tbLblDivisionName.get(ar).setImmediate(true);
 		tbLblDivisionName.get(ar).setWidth("100%");
-
+		
 		tbdApplicationDate.add(ar, new PopupDateField());
 		tbdApplicationDate.get(ar).setWidth("100%");
 		tbdApplicationDate.get(ar).setDateFormat("dd-MM-yy");
 		tbdApplicationDate.get(ar).setImmediate(true);
 		tbdApplicationDate.get(ar).setResolution(PopupDateField.RESOLUTION_DAY);
 		tbdApplicationDate.get(ar).setReadOnly(true);
-
+		
+		tbLblTotalOtHr.add(ar, new Label());
+		tbLblTotalOtHr.get(ar).setImmediate(true);
+		tbLblTotalOtHr.get(ar).setWidth("100%");
+		
 		tbBtnDetails.add(ar, new NativeButton());
 		tbBtnDetails.get(ar).setWidth("100%");
 		tbBtnDetails.get(ar).setHeight("24px");
@@ -778,15 +795,14 @@ public class OverTimeRequestApproval extends Window
 				}
 			}
 		});
-
+		
 		tbChkSelect.add(ar,new CheckBox());
 		tbChkSelect.get(ar).setWidth("100%");
 		tbChkSelect.get(ar).setImmediate(true);
 		
 		table.addItem(new Object[]{Delete.get(ar), tbLblReference.get(ar), tbLblEmployeeId.get(ar), tbLblEmployeeCode.get(ar), 
-				tbLblEmployeeName.get(ar), tbLblDesignation.get(ar), tbLblUnitName.get(ar),  
-				tbLblDivisionName.get(ar),tbdApplicationDate.get(ar), 
-				tbBtnDetails.get(ar), tbChkSelect.get(ar)},ar);
+				tbLblEmployeeName.get(ar), tbLblDesignation.get(ar), tbLblUnitName.get(ar),tbLblDivisionName.get(ar),
+				tbdApplicationDate.get(ar),tbLblTotalOtHr.get(ar),tbBtnDetails.get(ar), tbChkSelect.get(ar)},ar);
 	}
 
 	private void tableAdd()
@@ -794,49 +810,50 @@ public class OverTimeRequestApproval extends Window
 		table.setWidth("98%");
 		table.setHeight("330px");
 		table.setColumnCollapsingAllowed(true);
-
+		
 		table.addContainerProperty("Delete", NativeButton.class , new NativeButton());
 		table.setColumnWidth("Delete",45);
 		
 		table.addContainerProperty("Ref.", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Ref.", 30);
-
+		
 		table.addContainerProperty("Emp ID", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Emp ID", 60);
-
+		
 		table.addContainerProperty("Employee Id", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Employee Id", 60);
-
+		
 		table.addContainerProperty("Employee Name", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Employee Name", 280);
-
+		
 		table.addContainerProperty("Designation", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Designation", 200);
-
+		
 		table.addContainerProperty("Unit Name", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Unit Name", 105);
-
+		
 		table.addContainerProperty("Department Name", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
 		table.setColumnWidth("Department Name", 200);
-
+		
 		table.addContainerProperty("OT Request Date", PopupDateField.class, new PopupDateField());
 		table.setColumnWidth("OT Request Date", 75);
-
+		
+		table.addContainerProperty("OT HR", Label.class, new Label(),null,null,Table.ALIGN_LEFT);
+		table.setColumnWidth("OT HR", 30);
+		
 		table.addContainerProperty("Application", NativeButton.class, new NativeButton());
 		table.setColumnWidth("Application", 65);
-
+		
 		table.addContainerProperty("Approved", CheckBox.class, new CheckBox(),null,null,Table.ALIGN_CENTER);
 		table.setColumnWidth("Approved", 70);
-
-	
-
+		
 		table.setColumnCollapsed("Emp ID", true);
 		table.setColumnCollapsed("Unit Name", true);
+		table.setColumnCollapsed("Ref.", true);
 		
 		table.setStyleName("wordwrap-headers");
-
 	}
-
+	
 	private void txtClear()
 	{
 		cmbUnit.setValue(null);
@@ -865,6 +882,7 @@ public class OverTimeRequestApproval extends Window
 			tbdApplicationDate.get(i).setReadOnly(false);
 			tbdApplicationDate.get(i).setValue(null);
 			tbdApplicationDate.get(i).setReadOnly(true);
+			tbLblTotalOtHr.get(i).setValue("");
 
 			tbChkSelect.get(i).setValue(false);
 		}
