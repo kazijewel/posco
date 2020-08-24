@@ -131,7 +131,18 @@ public class LeaveBalanceGenerate extends Window
 				{
 					if(cmbEmployeeId.getValue()!=null)
 					{
-						generateAction();
+						if(checkPendingLeave())
+						{
+							generateAction();
+						}
+						else
+						{
+							if(cmbEmployeeId.getValue()!=null)
+							{
+								showNotification("Warning!",""+(cmbEmployeeId.getItemCaption(cmbEmployeeId.getValue()))+"" +
+										" has a pending leave.",Notification.TYPE_WARNING_MESSAGE);
+							}
+						}
 					}
 					else
 					{
@@ -147,6 +158,31 @@ public class LeaveBalanceGenerate extends Window
 
 	}
 
+	private boolean checkPendingLeave()
+	{
+		boolean ret = false;
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try 
+		{
+			String query = "select * from tbEmpLeaveApplicationInfo "
+					+ "where vEmployeeId ='"+(cmbEmployeeId.getValue()==null?"":cmbEmployeeId.getValue().toString())+"' "
+					+ "and iApprovedFlag=0";
+
+			Iterator <?> iter = session.createSQLQuery(query).list().iterator();
+			if(!iter.hasNext())
+			{
+				ret = true;
+			}
+		}
+		catch (Exception ex) 
+		{
+			System.out.print(ex);
+		}
+		finally{session.close();}
+		return ret;
+	}
+	
 	private void generateAction()
 	{
 		MessageBox mb = new MessageBox(getParent(), "Are you sure?", MessageBox.Icon.QUESTION, "Do you want to Generate Employee Leave Balance?", new MessageBox.ButtonConfig(MessageBox.ButtonType.YES, "Yes"), new MessageBox.ButtonConfig(MessageBox.ButtonType.NO, "No"));
