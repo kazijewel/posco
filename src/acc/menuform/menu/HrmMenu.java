@@ -52,6 +52,7 @@ import org.hibernate.Session;
 
 import com.appform.hrmModule.BankBranchInfo;
 import com.appform.hrmModule.BankInfo;
+import com.appform.hrmModule.DateBetweenAttendanceDelete;
 import com.appform.hrmModule.DateBetweenAttendanceManuallyMachine;
 import com.appform.hrmModule.DepartmentInformation;
 import com.appform.hrmModule.DesignationInformation;
@@ -296,13 +297,17 @@ public class HrmMenu
 		{
 			addCaptionedItem("INDIVIDUAL EMPLOYEE DETAILS ", setupReport);
 		}
-		if(isValidMenu("EmployeeList"))
+		if(isValidMenu("RptManPower"))
 		{
-			addCaptionedItem("EMPLOYEE LIST", setupReport);
+			addCaptionedItem("MAN POWER", setupReport);
 		}
 		if(isValidMenu("NewEmployeeList"))
 		{
 			addCaptionedItem("NEW EMPLOYEE LIST", setupReport);
+		}
+		if(isValidMenu("EmployeeList"))
+		{
+			addCaptionedItem("EMPLOYEE LIST", setupReport);
 		}
 		if(isValidMenu("LengthOfService"))
 		{
@@ -348,10 +353,6 @@ public class HrmMenu
 		{
 			addCaptionedItem("SALARY STRUCTURE",setupReport);
 		}
-		if(isValidMenu("RptManPower"))
-		{
-			addCaptionedItem("MAN POWER", setupReport);
-		}
 		if(isValidMenu("RptEmployeeJoiningLetter"))
 		{
 			addCaptionedItem("EMPLOYEE JOINING LETTER", setupReport);
@@ -392,7 +393,6 @@ public class HrmMenu
 		{
 			addCaptionedItem("HOLIDAY DECLARE", attendanceTransaction);
 		}
-
 		if(isValidMenu("attendanceManually"))
 		{
 			addCaptionedItem("MONTHLY ATTENDANCE", attendanceTransaction);
@@ -408,6 +408,10 @@ public class HrmMenu
 		if(isValidMenu("EditEmployeeAttendanceMachine"))
 		{
 			addCaptionedItem("EDIT DELETE EMPLOYEE ATTENDANCE",attendanceTransaction);
+		}
+		if(isValidMenu("DateBetweenAttendanceDelete"))
+		{
+			addCaptionedItem("DATE BETWEEN ATTENDANCE DELETE",attendanceTransaction);
 		}
 
 	}
@@ -908,7 +912,10 @@ public class HrmMenu
 				{
 					showWindow(new EditEmployeeAttendanceMachine(sessionBean,"EditEmployeeAttendanceMachine"), event.getItem(),"EditEmployeeAttendanceMachine","HRM MODULE","TRANSACTION");
 				}
-				
+				if(event.getItem().toString().equalsIgnoreCase("DATE BETWEEN ATTENDANCE DELETE"))
+				{
+					showWindow(new DateBetweenAttendanceDelete(sessionBean,"DateBetweenAttendanceDelete"), event.getItem(),"DateBetweenAttendanceDelete","HRM MODULE","TRANSACTION");
+				}
 				
 				if(event.getItem().toString().equalsIgnoreCase("SHIFT INFORMATION"))
 				{

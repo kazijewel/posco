@@ -58,12 +58,12 @@ public class EmailLogInNotice extends Window
 		cm.checkFormAction(menuId);
 		if(!sessionBean.isSuperAdmin())
 		{
-		if(!sessionBean.isAdmin())
-		{
-			if(!cm.isSave)
-			{btnLogin.setVisible(false);}
-			
-		}
+			if(!sessionBean.isAdmin())
+			{
+				if(!cm.isSave)
+				{btnLogin.setVisible(false);}
+				
+			}
 		}
 	}
 	private void buttonActionAdd()
@@ -74,7 +74,7 @@ public class EmailLogInNotice extends Window
 			{
 					if(!txtEmailId.getValue().toString().isEmpty() && isValid(txtEmailId.getValue().toString().trim()))
 					{
-						if(!txtPassword.getValue().toString().isEmpty() && txtPassword.getValue().toString().length()>8)
+						if(!txtPassword.getValue().toString().isEmpty() && txtPassword.getValue().toString().length()>6)
 						{
 							if(isGmail(txtEmailId.getValue().toString()))
 							{
@@ -99,7 +99,7 @@ public class EmailLogInNotice extends Window
 					}
 			}
 		});
-	txtEmailId.addListener(new ValueChangeListener()
+		txtEmailId.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
 			{
@@ -156,14 +156,6 @@ public class EmailLogInNotice extends Window
 		}
 		
 	}
-	private String userIpSet()
-	{
-		String userIp = "";
-		WebApplicationContext context = ((WebApplicationContext) getApplication().getContext());
-		WebBrowser webBrowser = context.getBrowser();
-		userIp = (webBrowser.getAddress());
-		return userIp;
-	}
 
 	private AbsoluteLayout buildMainLayout() 
 	{
@@ -176,12 +168,6 @@ public class EmailLogInNotice extends Window
 
 		setWidth("400px");
 		setHeight("250px");
-
-		/*Embedded eStu_I = new Embedded("",new ThemeResource("../icons/0.png"));
-		eStu_I.requestRepaint();
-		eStu_I.setWidth("100px");
-		eStu_I.setHeight("100px");
-		mainLayout.addComponent(eStu_I, "top:50.0px;left:50.0px;");*/
 
 		lblCommon = new Label("<b>Email ID :</b>",Label.CONTENT_XHTML);
 		lblCommon.setImmediate(true);

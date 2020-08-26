@@ -20,6 +20,8 @@ import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 
 
+
+
 import com.common.share.CommaSeparator;
 import com.common.share.CommonButton;
 import com.common.share.CommonMethod;
@@ -453,7 +455,19 @@ public class EmployeeInformation extends Window
 					isUpdate = true;
 					btnInit(false);
 					tabInit(true);
-					firstTab.dJoiningDate.setEnabled(false);
+					
+					String query = "select distinct vEmployeeId from tbLeaveEntitlement "
+							+ "where vEmployeeId='"+firstTab.txtEmployeeID.getValue()+"'";
+					
+					System.out.println("chkSalary: "+query);					
+					if(!isExistData(query))
+					{
+						firstTab.dJoiningDate.setEnabled(true);
+					}
+					else
+					{
+						firstTab.dJoiningDate.setEnabled(false);
+					}
 				}
 				else
 				{
@@ -559,6 +573,23 @@ public class EmployeeInformation extends Window
 		{
 			return true;
 		}
+		return false;
+	}
+	private boolean isExistData(String query)
+	{
+		Session session=SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			List <?> empList = session.createSQLQuery(query).list();
+			if(!empList.isEmpty())
+				return true;
+		}
+		catch (Exception exp)
+		{
+
+		}
+		finally{session.close();}
 		return false;
 	}
 	public void addEmployeeByStaus(String stAIctive)
