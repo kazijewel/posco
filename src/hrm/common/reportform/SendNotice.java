@@ -113,8 +113,6 @@ public class SendNotice extends Window {
 	private ComboBox cmbSection;
 	private CheckBox chkDepartmentAll,chkUnitAll,chkSectionAll;
 
-	TextField txtPath=new TextField();
-
 	CommonButton button = new CommonButton("", "", "", "", "", "", "","Preview", "", "Exit");
 	
 	public SendNotice(SessionBean sessionBean, String EmailID, String EmailPass) {
@@ -419,7 +417,6 @@ public class SendNotice extends Window {
 		{
 			public void valueChange(ValueChangeEvent event) 
 			{
-				txtPath.setValue("");
 				if(cmbUnit.getValue()!= null)
 				{
 					tableClear();
@@ -880,7 +877,7 @@ public class SendNotice extends Window {
 		}
 	}
 
-	private void emailSend() 
+	private void emailSend()
 	{
 		System.out.printf("1");
 		//HashMap hm = new HashMap();
@@ -947,7 +944,7 @@ public class SendNotice extends Window {
 					messageBodyPart = new MimeBodyPart();
 					DataSource source = new FileDataSource(sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+cmbSubject.getItemCaption(cmbSubject.getValue())+".pdf");
 					messageBodyPart.setDataHandler( new DataHandler(source));
-					messageBodyPart.setFileName(sessionBean.emailPath+"Email/"+MasterId+"_"+"_"+cmbSubject.getItemCaption(cmbSubject.getValue())+".pdf");
+					messageBodyPart.setFileName(cmbSubject.getItemCaption(cmbSubject.getValue())+".pdf");
 					multipart.addBodyPart(messageBodyPart);
 					System.out.printf("9");
 					// Put parts in message
@@ -986,12 +983,12 @@ public class SendNotice extends Window {
 		if(queryValueCheck(query))
 		{
 			HashMap <String,Object> hm = new HashMap <String,Object> ();
-			hm.put("company", "NK Group");
+			hm.put("company", sessionBean.getCompany());
 			hm.put("address", sessionBean.getCompanyAddress());
 			hm.put("phone", sessionBean.getCompanyContact());
 			hm.put("userName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
 			hm.put("SysDate",reportTime.getTime);
-			hm.put("logo", txtPath.getValue().toString().isEmpty()?"0":txtPath.getValue().toString());
+			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("sql", query);
 			
 			FileOutputStream of = new FileOutputStream(fpath);

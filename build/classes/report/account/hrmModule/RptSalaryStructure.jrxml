@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptSalaryStructure" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="812" leftMargin="15" rightMargin="15" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.zoom" value="1.24184264611831"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="company" class="java.lang.String"/>
@@ -172,8 +172,8 @@
 		<variableExpression><![CDATA[$F{mMedicalAllowance}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
-	<variable name="tlFoodAllowance" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{mFoodAllowance}]]></variableExpression>
+	<variable name="tlMobileAllowance" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{mMobileAllowance}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="tlMealCharge" class="java.math.BigDecimal" calculation="Sum">
@@ -316,6 +316,11 @@
 				</textElement>
 				<text><![CDATA[SALARY STRUCTURE]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="478" y="16" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{dJoiningDate}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -345,7 +350,7 @@
 				<text><![CDATA[Emp. ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="73" y="0" width="183" height="28"/>
+				<reportElement x="73" y="0" width="206" height="28"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -357,7 +362,7 @@
 				<text><![CDATA[Employee Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="256" y="0" width="166" height="28"/>
+				<reportElement x="279" y="0" width="188" height="28"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -369,7 +374,7 @@
 				<text><![CDATA[Designation]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="422" y="0" width="45" height="28"/>
+				<reportElement x="532" y="0" width="45" height="28"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -381,7 +386,7 @@
 				<text><![CDATA[Basic]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="467" y="0" width="40" height="28"/>
+				<reportElement x="577" y="0" width="40" height="28"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -391,30 +396,6 @@
 					<font fontName="Arial Narrow" isBold="true"/>
 				</textElement>
 				<text><![CDATA[House Rent]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="507" y="0" width="40" height="28"/>
-				<box>
-					<topPen lineWidth="0.5" lineStyle="Solid"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Medical Allow.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="547" y="0" width="35" height="28"/>
-				<box>
-					<topPen lineWidth="0.5" lineStyle="Solid"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Conv.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="653" y="0" width="44" height="28"/>
@@ -467,7 +448,7 @@
 				<text><![CDATA[Total Deduction]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="581" y="0" width="36" height="28"/>
+				<reportElement x="617" y="0" width="36" height="28"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -479,7 +460,7 @@
 				<text><![CDATA[Mobile Allow.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="617" y="0" width="36" height="28"/>
+				<reportElement x="467" y="0" width="65" height="28"/>
 				<box>
 					<topPen lineWidth="0.5" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -488,50 +469,32 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Special Allow.]]></text>
+				<text><![CDATA[Joining Date]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="15">
-			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="581" y="0" width="36" height="15" isPrintWhenDetailOverflows="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="9" isBold="true"/>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)">
+				<reportElement stretchType="RelativeToBandHeight" x="532" y="0" width="45" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{mBasic}>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="9"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="29" y="0" width="44" height="15" isPrintWhenDetailOverflows="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-				</box>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{mBasic}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy">
+				<reportElement stretchType="RelativeToBandHeight" x="467" y="0" width="65" height="15" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" isBold="true"/>
+					<font fontName="Arial Narrow"/>
 				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{dJoiningDate}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="73" y="0" width="183" height="15" isPrintWhenDetailOverflows="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="256" y="0" width="166" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement stretchType="RelativeToBandHeight" x="279" y="0" width="188" height="15" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -543,7 +506,7 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="422" y="0" width="46" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement stretchType="RelativeToBandHeight" x="532" y="0" width="45" height="15" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -555,31 +518,7 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="467" y="0" width="40" height="15" isPrintWhenDetailOverflows="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="507" y="0" width="40" height="15" isPrintWhenDetailOverflows="true"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement stretchType="RelativeToBandHeight" x="547" y="0" width="35" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement stretchType="RelativeToBandHeight" x="577" y="0" width="40" height="15" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid"/>
@@ -643,7 +582,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vEmployeeCode}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="73" y="0" width="183" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement stretchType="RelativeToBandHeight" x="73" y="0" width="206" height="15" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial Narrow"/>
@@ -651,25 +590,27 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vEmployeeName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="256" y="0" width="166" height="15" isPrintWhenDetailOverflows="true"/>
+				<reportElement stretchType="RelativeToBandHeight" x="279" y="0" width="188" height="15" isPrintWhenDetailOverflows="true"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial Narrow"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vDesignationName}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)">
-				<reportElement stretchType="RelativeToBandHeight" x="422" y="0" width="45" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{mBasic}>0?true:false]]></printWhenExpression>
-				</reportElement>
-				<box rightPadding="2"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="9"/>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="29" y="0" width="44" height="15" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{mBasic}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[]]></text>
+			</staticText>
 			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)">
-				<reportElement stretchType="RelativeToBandHeight" x="467" y="0" width="40" height="15" isPrintWhenDetailOverflows="true">
+				<reportElement stretchType="RelativeToBandHeight" x="577" y="0" width="40" height="15" isPrintWhenDetailOverflows="true">
 					<printWhenExpression><![CDATA[$F{mHouseRent}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="2"/>
@@ -677,26 +618,6 @@
 					<font fontName="Arial Narrow" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{mHouseRent}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)">
-				<reportElement stretchType="RelativeToBandHeight" x="507" y="0" width="40" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{mMedicalAllowance}>0?true:false]]></printWhenExpression>
-				</reportElement>
-				<box rightPadding="2"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="9"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{mMedicalAllowance}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)">
-				<reportElement stretchType="RelativeToBandHeight" x="547" y="0" width="34" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{mConveyanceAllowance}>0?true:false]]></printWhenExpression>
-				</reportElement>
-				<box rightPadding="2"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="9"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{mConveyanceAllowance}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0;(#,##0)">
 				<reportElement stretchType="RelativeToBandHeight" x="653" y="0" width="44" height="15" isPrintWhenDetailOverflows="true">
@@ -775,16 +696,40 @@
 				</textElement>
 				<text><![CDATA[]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" pattern="#,##0;(#,##0)">
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="73" y="0" width="206" height="15" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="###0.00;(###0.00)">
 				<reportElement stretchType="RelativeToBandHeight" x="617" y="0" width="36" height="15" isPrintWhenDetailOverflows="true">
-					<printWhenExpression><![CDATA[$F{mSpecialAllowance}>0?true:false]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{mMobileAllowance}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" size="9"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{mSpecialAllowance}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{mMobileAllowance}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="467" y="0" width="65" height="15" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<pageFooter>
@@ -835,7 +780,7 @@
 	<summary>
 		<band height="15" splitType="Stretch">
 			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="469" y="0" width="38" height="15">
+				<reportElement x="577" y="0" width="40" height="15">
 					<printWhenExpression><![CDATA[$V{totalHR}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -847,31 +792,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{totalHR}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="508" y="0" width="39" height="15">
-					<printWhenExpression><![CDATA[$V{tlMedicalAllow}>0?true:false]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<bottomPen lineWidth="2.25" lineStyle="Double"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="7" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tlMedicalAllow}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="548" y="0" width="34" height="15">
-					<printWhenExpression><![CDATA[$V{totalConvence}>0?true:false]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<bottomPen lineWidth="2.25" lineStyle="Double"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="7" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{totalConvence}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="734" y="0" width="38" height="15">
+				<reportElement x="732" y="0" width="40" height="15">
 					<printWhenExpression><![CDATA[$V{totalPFund}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -883,7 +804,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{totalPFund}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="654" y="0" width="43" height="15">
+				<reportElement x="653" y="0" width="44" height="15">
 					<printWhenExpression><![CDATA[$V{tlEarning}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -895,7 +816,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tlEarning}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="698" y="0" width="34" height="15">
+				<reportElement x="697" y="0" width="35" height="15">
 					<printWhenExpression><![CDATA[$V{totalIncome}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -907,7 +828,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{totalIncome}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="418" y="0" width="49" height="15">
+				<reportElement x="532" y="0" width="45" height="15">
 					<printWhenExpression><![CDATA[$V{totalBasic}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -919,7 +840,7 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{totalBasic}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="773" y="0" width="39" height="15">
+				<reportElement x="772" y="0" width="40" height="15">
 					<printWhenExpression><![CDATA[$V{totalDeduction}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -931,8 +852,8 @@
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{totalDeduction}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="583" y="0" width="34" height="15">
-					<printWhenExpression><![CDATA[$V{tlFoodAllowance}>0?true:false]]></printWhenExpression>
+				<reportElement x="617" y="0" width="36" height="15">
+					<printWhenExpression><![CDATA[$V{tlMobileAllowance}>0?true:false]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<bottomPen lineWidth="2.25" lineStyle="Double"/>
@@ -940,19 +861,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" size="7" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tlFoodAllowance}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0;(#,##0)">
-				<reportElement x="619" y="0" width="34" height="15">
-					<printWhenExpression><![CDATA[$V{tlSpecial}>0?true:false]]></printWhenExpression>
-				</reportElement>
-				<box>
-					<bottomPen lineWidth="2.25" lineStyle="Double"/>
-				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="7" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tlSpecial}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tlMobileAllowance}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

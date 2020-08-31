@@ -124,6 +124,10 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{vSubject}]]></textFieldExpression>
 			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="2" y="1" width="96" height="48"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 		</band>
 	</pageHeader>
 	<detail>

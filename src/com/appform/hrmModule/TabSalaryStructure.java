@@ -469,7 +469,7 @@ public class TabSalaryStructure extends VerticalLayout
 		mainLayout.addComponent(txtIncomeTaxLess,"top:48.0px;left:570.0px;");
 		txtIncomeTaxLess.setVisible(true);
 
-		mainLayout.addComponent(new Label("Provident Fund(%) :"),"top:75.0px;left:445.0px;");
+		mainLayout.addComponent(new Label("Provident Fund :"),"top:75.0px;left:445.0px;");
 		mainLayout.addComponent(txtProvidentFundLess,"top:73.0px;left:570.0px;");
 		
 		mainLayout.addComponent(new Label("Payment Type : "),"top:100px; left:445px");
