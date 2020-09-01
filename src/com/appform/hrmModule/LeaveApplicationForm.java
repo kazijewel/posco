@@ -888,8 +888,8 @@ public class LeaveApplicationForm extends Window
 					cmbLeaveType.setValue(element[10]);
 					dLeaveFrom.setValue(element[12]);
 					dLeaveTo.setValue(element[13]);
-					txtPurposeOfLeave.setValue(element[14]);
-					txtLeaveAddress.setValue(element[15]);
+					txtPurposeOfLeave.setValue(element[14].toString().replaceAll("#", "'"));
+					txtLeaveAddress.setValue(element[15].toString().replaceAll("#", "'"));
 					txtMobileNo.setValue(element[16]);
 					txtDuration.setValue(element[17]);
 					txtFriday.setValue(element[18]);
@@ -1602,8 +1602,8 @@ public class LeaveApplicationForm extends Window
 			" '"+(cmbLeaveType.getValue()!=null?cmbLeaveType.getItemCaption(cmbLeaveType.getValue()).toString():txtLeaveType.getValue().toString())+"'," +
 			" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
 			" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
-			" '"+(txtPurposeOfLeave.getValue().toString().isEmpty()?"":txtPurposeOfLeave.getValue().toString())+"'," +
-			" '"+(txtLeaveAddress.getValue().toString().isEmpty()?"":txtLeaveAddress.getValue().toString())+"'," +
+			" '"+(txtPurposeOfLeave.getValue().toString().isEmpty()?"":txtPurposeOfLeave.getValue().toString().replaceAll("'", "#"))+"'," +
+			" '"+(txtLeaveAddress.getValue().toString().isEmpty()?"":txtLeaveAddress.getValue().toString().replaceAll("'", "#"))+"'," +
 			" '"+sessionBean.dfDb.format(dLeaveFrom.getValue())+"'," +
 			" '"+sessionBean.dfDb.format(dLeaveTo.getValue())+"'," +
 			" '"+txtDuration.getValue().toString()+"'," +
@@ -1810,7 +1810,11 @@ public class LeaveApplicationForm extends Window
 	private void reportPreview()
 	{
 		ReportDate reportTime = new ReportDate();
-		String sql = " select * from funLeaveApplicationReport('"+txtReferenceNo.getValue()+"','"+cmbEmployeeName.getValue()+"') "
+		String sql = "select vReferenceNo,dApplicationDate,vEmployeeId,vEmployeeName,vSection,vDesignation,dJoiningDate,vTypeOfLeave,"
+				+ "dLeaveFromDate,dLeaveToDate,dSanctionFromDate,dSanctionToDate,mTotalAppliedDays,mFriDays,mTotalSanctionDays,vPaymentFlag,"
+				+ "replace(vLeaveAddress,'#','''')vLeaveAddress,replace(vLeavePurpose,'#','''')vLeavePurpose,vContactNo,dLastLeaveDate,"
+				+ "mLastLeaveDays,vLastLeavePurpose,vUnitId,vUnitName,vEmployeeCode,vDepartmentId,vDepartmentName,iCL,iSL,iEL "
+				+ "from funLeaveApplicationReport('"+txtReferenceNo.getValue()+"','"+cmbEmployeeName.getValue()+"') "
 				+ "order by vEmployeeId ";
 		System.out.println(sql);
 		

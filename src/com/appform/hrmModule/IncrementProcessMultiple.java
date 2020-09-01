@@ -11,6 +11,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.common.share.AmountField;
 import com.common.share.CommaSeparator;
@@ -999,7 +1000,7 @@ public class IncrementProcessMultiple extends Window{
 							" dDateOfBirth,vNationality,vNationalIdNo,vEmployeeType,vServiceType,bPhysicallyDisable,"+
 							" dApplicationDate,dInterviewDate,dJoiningDate,vConfirmationDate,vPayScaleId,vPayScaleName,"+
 							" vEmployeeStatus,bStatus,vStatusDate,vAccountNo," + 
-							" (select vDesignationId from tbEmpDesignationInfo where vEmployeeId = '"+masterEmployeeId+"' and isCurrent = 1)," +
+							" (select vDesignationId from tbEmpOfficialPersonalInfo where vEmployeeId = '"+masterEmployeeId+"')," +
 							" '0'," +
 							" vRegisterId,vRegisterName,mBasic,mHouseRent,"+
 							" mMedicalAllowance,mClinicalAllowance,'"+0+"',mSpecialAllowance,mOtherAllowance,"+
@@ -1442,6 +1443,7 @@ public class IncrementProcessMultiple extends Window{
 		cmbIncrementType=new ComboBox();
 		cmbIncrementType.setWidth("250px");
 		cmbIncrementType.setImmediate(true);
+		cmbIncrementType.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		layoutMain.addComponent(new Label("Increment Type :"),"top:10px; left:398px");
 		layoutMain.addComponent(cmbIncrementType,"top:08px; left:490px");
 
@@ -1456,6 +1458,7 @@ public class IncrementProcessMultiple extends Window{
 		cmbEmployee=new ComboBox();
 		cmbEmployee.setImmediate(true);
 		cmbEmployee.setWidth("250px");
+		cmbEmployee.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS);
 		layoutMain.addComponent(lblEmployee,"top:35px; left:398px");
 		layoutMain.addComponent(cmbEmployee,"top:33px; left:490px");
 		

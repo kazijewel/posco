@@ -630,7 +630,11 @@ public class RptLeaveApplication extends Window
 			{
 				unitId=cmbUnit.getValue().toString();
 			}
-			String query = " select * from funLeaveApplicationReport('"+cmbAppDate.getValue()+"','"+cmbEmployee.getValue()+"')";
+			String query = "select vReferenceNo,dApplicationDate,vEmployeeId,vEmployeeName,vSection,vDesignation,dJoiningDate,vTypeOfLeave,"
+				+ "dLeaveFromDate,dLeaveToDate,dSanctionFromDate,dSanctionToDate,mTotalAppliedDays,mFriDays,mTotalSanctionDays,vPaymentFlag,"
+				+ "replace(vLeaveAddress,'#','''')vLeaveAddress,replace(vLeavePurpose,'#','''')vLeavePurpose,vContactNo,dLastLeaveDate,"
+				+ "mLastLeaveDays,vLastLeavePurpose,vUnitId,vUnitName,vEmployeeCode,vDepartmentId,vDepartmentName,iCL,iSL,iEL "
+				+ "from funLeaveApplicationReport('"+cmbAppDate.getValue()+"','"+cmbEmployee.getValue()+"')";
 			System.out.println("reportpreview: "+query);
 			
 			if(queryValueCheck(query))
