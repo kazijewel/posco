@@ -526,18 +526,16 @@ public class OverTimeRequestForm extends Window
 			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("empList", "Employee's List ( "+cmbJobSite.getItemCaption(cmbJobSite.getValue())+" )");
 
-			String query="select *,case when iHoliday=1 and mTotalTimeHR>=10 " +
-			" then mTotalTimeHR-1 else mTotalTimeHR end hours, "+
-			" (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "+
-			" from tbOTRequest ot "
-			+ " where vEmployeeId='"+cmbEmployee.getValue()+"' "
-			+ " and dRequestDate='"+sessionBean.dfDb.format(dRequestDate.getValue())+"' "
-			+ " and vTransactionId like '"+txtTransactionID.getValue()+"' ";
+			String query="select iAutoId,vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,vDepartmentName,"
+					+ "vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,replace(vWorkRequest,'#','''')vWorkRequest,vManPower,iHoliday,"
+					+ "iNightTim,vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vApprovedBy,mTotalTimeHR,"
+					+ "case when iHoliday=1 and mTotalTimeHR>=10 then mTotalTimeHR-1 else mTotalTimeHR end hours,"
+					+ "(select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "
+					+ "from tbOTRequest ot "
+					+ "where vEmployeeId='"+cmbEmployee.getValue()+"' and dRequestDate='"+sessionBean.dfDb.format(dRequestDate.getValue())+"' "
+					+ "and vTransactionId like '"+txtTransactionID.getValue()+"' ";
 
 			System.out.println("report :"+query);
-
-
-
 			if(queryValueCheck(query))
 			{
 				hm.put("sql", query);
@@ -1282,7 +1280,7 @@ public class OverTimeRequestForm extends Window
 					
 					txtTimeTotal.setValue(element[5]);
 					cmbManager.setValue(element[6]);
-					txtOverTimeRequest.setValue(element[7]);
+					txtOverTimeRequest.setValue(element[7].toString().replaceAll("#", "'"));
 					if(element[8].equals(1))
 					{
 						opgOverTime.setValue("Holiday");

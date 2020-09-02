@@ -456,8 +456,7 @@ public class RptOverTimeRequest extends Window
 		ReportOption RadioBtn= new ReportOption(RadioBtnGroup.getValue().toString());
 
 		try
-		{			
-
+		{
 			HashMap <String,Object>  hm = new HashMap <String,Object> ();
 			hm.put("company", sessionBean.getCompany());
 			hm.put("address", sessionBean.getCompanyAddress());
@@ -468,16 +467,15 @@ public class RptOverTimeRequest extends Window
 			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("empList", "Employee's List ( Site Office )");
 
-			String query="select *,case when iHoliday=1 and mTotalTimeHR>10 " +
-			"then mTotalTimeHR-1 else mTotalTimeHR end hours, "+
-			" (select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "+
-			" from tbOTRequest ot "
-			+ " where  vTransactionId like '"+cmbTimeOfWork.getValue()+"' and vEmployeeId like '"+cmbEmployeeName.getValue()+"' ";
+			String query="select iAutoId,vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,vDepartmentName,"
+					+ "vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,replace(vWorkRequest,'#','''')vWorkRequest,vManPower,iHoliday,"
+					+ "iNightTim,vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vApprovedBy,mTotalTimeHR"
+					+ ",case when iHoliday=1 and mTotalTimeHR>10 then mTotalTimeHR-1 else mTotalTimeHR end hours,"
+					+ "(select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "
+					+ "from tbOTRequest ot "
+					+ "where  vTransactionId like '"+cmbTimeOfWork.getValue()+"' and vEmployeeId like '"+cmbEmployeeName.getValue()+"' ";
 
 			System.out.println("report :"+query);
-			
-			
-
 			if(queryValueCheck(query))
 			{
 				hm.put("sql", query);
