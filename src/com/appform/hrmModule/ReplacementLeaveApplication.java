@@ -424,13 +424,11 @@ public class ReplacementLeaveApplication extends Window
 					+ "(select vSectionName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vSectionName, "
 					+ "(select vDesignationName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vDesignationName, "
 					+ "(select vUnitName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vUnitName, "
-					+ "iTotalDays,vMobileNo,vVisitingAddress,vPurposeOfLeave,dApplicationDate,dReplacementLeaveFrom,dReplacementLeaveTo  "
+					+ "iTotalDays,vMobileNo,replace(vVisitingAddress,'#','''')vVisitingAddress,vPurposeOfLeave,dApplicationDate,dReplacementLeaveFrom,dReplacementLeaveTo  "
 					+ "from tbReplacementLeaveApplication rla where vTransactionId like '"+txtTransactionID.getValue()+"' ";
 
 			System.out.println("report :"+query);
-
-
-
+			
 			if(queryValueCheck(query))
 			{
 				hm.put("sql", query);

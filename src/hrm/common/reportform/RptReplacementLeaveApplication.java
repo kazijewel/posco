@@ -293,12 +293,13 @@ public class RptReplacementLeaveApplication extends Window
 			
 
 			String str1 = " select vEmployeeID,vEmployeeCode,vEmployeeName, "
-					+ " (select vDepartmentName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vDepartmentName, "
+					+ "(select vDepartmentName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vDepartmentName, "
 					+ "(select vSectionName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vSectionName, "
 					+ "(select vDesignationName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vDesignationName, "
 					+ "(select vUnitName from tbEmpOfficialPersonalInfo where vEmployeeID=rla.vEmployeeID)vUnitName, "
-					+ "iTotalDays,vMobileNo,vVisitingAddress,vPurposeOfLeave,dApplicationDate,dReplacementLeaveFrom,dReplacementLeaveTo  "
-					+ "from tbReplacementLeaveApplication rla where vTransactionId like '"+(cmbAppDate.getValue()==null?"%":cmbAppDate.getValue())+"' ";
+					+ "iTotalDays,vMobileNo,replace(vVisitingAddress,'#','''')vVisitingAddress,vPurposeOfLeave,dApplicationDate,"
+					+ "dReplacementLeaveFrom,dReplacementLeaveTo from tbReplacementLeaveApplication rla "
+					+ "where vTransactionId like '"+(cmbAppDate.getValue()==null?"%":cmbAppDate.getValue())+"' ";
 			
 			if(queryValueCheck(str1))
 			{
