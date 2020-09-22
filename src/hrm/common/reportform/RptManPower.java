@@ -11,41 +11,37 @@ import org.hibernate.Session;
 import com.common.share.CommonButton;
 import com.common.share.CommonMethod;
 import com.common.share.FocusMoveByEnter;
-import com.common.share.GenerateExcelReport;
 import com.common.share.ReportDate;
-import com.common.share.ReportOption;
 import com.common.share.ReportViewer;
 import com.common.share.SessionBean;
 import com.common.share.SessionFactoryUtil;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings("serial")
 public class RptManPower extends Window 
 {
-	private ReportDate reportTime;
 	private SessionBean sessionBean;
 	public AbsoluteLayout mainLayout;
 	private CommonMethod cm;
 	private String menuId = "";
+	
+	private ReportDate reportTime;
 	private ComboBox cmbUnit;	
 	private ComboBox cmbSection;
 	private ComboBox cmbDepartment;
 	private ComboBox cmbDesignation;
-
-	private OptionGroup opgReportView;
+	
 	private OptionGroup opgStatus = new OptionGroup();
 	private CheckBox chkUnitAll = new CheckBox("All");
 	private CheckBox chkSectionAll = new CheckBox("All");
@@ -57,11 +53,13 @@ public class RptManPower extends Window
 	private String stAIctive = "";
 
 	CommonButton cButton = new CommonButton("", "", "", "", "", "", "", "Preview", "", "Exit");
+	
 	public RptManPower(SessionBean sessionBean,String menuId)
 	{
 		this.sessionBean = sessionBean;
 		this.setCaption("MAN POWER :: "+sessionBean.getCompany());
 		this.setResizable(false);
+		this.menuId = menuId;
 		cm = new CommonMethod(sessionBean);
 		buildMainLayout();
 		setContent(mainLayout);
@@ -79,17 +77,17 @@ public class RptManPower extends Window
 		cm.checkFormAction(menuId);
 		if(!sessionBean.isSuperAdmin())
 		{
-			if(!sessionBean.isAdmin())
-			{
-				if(!cm.isSave)
-				{cButton.btnSave.setVisible(false);}
-				if(!cm.isEdit)
-				{cButton.btnEdit.setVisible(false);}
-				if(!cm.isDelete)
-				{cButton.btnDelete.setVisible(false);}
-				if(!cm.isPreview)
-				{cButton.btnPreview.setVisible(false);}
-			}
+		if(!sessionBean.isAdmin())
+		{
+			if(!cm.isSave)
+			{cButton.btnSave.setVisible(false);}
+			if(!cm.isEdit)
+			{cButton.btnEdit.setVisible(false);}
+			if(!cm.isDelete)
+			{cButton.btnDelete.setVisible(false);}
+			if(!cm.isPreview)
+			{cButton.btnPreview.setVisible(false);}
+		}
 		}
 	}
 

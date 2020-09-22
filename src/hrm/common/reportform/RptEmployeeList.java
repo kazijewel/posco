@@ -71,6 +71,7 @@ public class RptEmployeeList extends Window
 		this.sessionBean = sessionBean;
 		this.setCaption("EMPLOYEE LIST :: "+sessionBean.getCompany());
 		this.setResizable(false);
+		this.menuId = menuId;
 		cm = new CommonMethod(sessionBean);
 		buildMainLayout();
 		setContent(mainLayout);

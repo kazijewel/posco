@@ -968,7 +968,7 @@ public class HrmMenu
 				}
 				if(event.getItem().toString().equalsIgnoreCase("MAN POWER"))
 				{
-					showWindow(new RptManPower(sessionBean,"RptManPower"),event.getItem(),"RptManPower","HRM MODULE","REPORT");
+					showWindow(new RptManPower(sessionBean,"RptManPower"), event.getItem(),"RptManPower","HRM MODULE","REPORT");
 				}
 
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE JOINING LETTER"))
