@@ -24,6 +24,8 @@ import java.util.Iterator;
 import org.hibernate.Session;
 
 import com.appform.hrmModule.CheckNoEntry;
+import com.appform.hrmModule.DeleteMonthlyHouseAllowance;
+import com.appform.hrmModule.DeleteMonthlyMobileAllowance;
 import com.appform.hrmModule.DeleteMonthlySalary;
 import com.appform.hrmModule.EditMonthlySalary;
 import com.appform.hrmModule.FestivalBonus;
@@ -169,9 +171,17 @@ public class HrmAccountMenu
 		{
 			addCaptionedItem("MONTHLY HOUSE ALLAWANCE", salaryTransaction);
 		}
+		if(isValidMenu("DeleteMonthlyHouseAllowance"))
+		{
+			addCaptionedItem("DELETE MONTHLY HOUSE ALLAWANCE",salaryTransaction);
+		}
 		if(isValidMenu("MonthlyMobileAllowance"))
 		{
 			addCaptionedItem("MONTHLY MOBILE ALLAWANCE", salaryTransaction);
+		}
+		if(isValidMenu("DeleteMonthlyMobileAllowance"))
+		{
+			addCaptionedItem("DELETE MONTHLY MOBILE ALLAWANCE",salaryTransaction);
 		}
 	}
 	private void addsalaryReport(Object salaryReport) {
@@ -314,10 +324,19 @@ public class HrmAccountMenu
 				{
 					showWindow(new MonthlyHouseAllowance(sessionBean,"MonthlyHouseAllowance"),event.getItem(),"MonthlyHouseAllowance","HRM MODULE","TRANSACTION");
 				}
+				if(event.getItem().toString().equalsIgnoreCase("DELETE MONTHLY HOUSE ALLAWANCE"))
+				{
+					showWindow(new DeleteMonthlyHouseAllowance(sessionBean,"DeleteMonthlyHouseAllowance"),event.getItem(),"DeleteMonthlyHouseAllowance","HRM MODULE","TRANSACTION");
+				}
 				if(event.getItem().toString().equalsIgnoreCase("MONTHLY MOBILE ALLAWANCE"))
 				{
 					showWindow(new MonthlyMobileAllowance(sessionBean,"MonthlyMobileAllowance"),event.getItem(),"MonthlyMobileAllowance","HRM MODULE","TRANSACTION");
 				}
+				if(event.getItem().toString().equalsIgnoreCase("DELETE MONTHLY MOBILE ALLAWANCE"))
+				{
+					showWindow(new DeleteMonthlyMobileAllowance(sessionBean,"DeleteMonthlySalary"),event.getItem(),"DeleteMonthlyMobileAllowance","HRM MODULE","TRANSACTION");
+				}
+				
 				
 				if(event.getItem().toString().equalsIgnoreCase("FESTIVAL BONUS"))
 				{

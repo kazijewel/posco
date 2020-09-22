@@ -108,6 +108,7 @@ public class SessionBean
 	public SimpleDateFormat dfDb = new SimpleDateFormat("yyyy-MM-dd");
 	public SimpleDateFormat dfYear = new SimpleDateFormat("yyyy");
 	public SimpleDateFormat dfMonth = new SimpleDateFormat("MMMMM");
+	public SimpleDateFormat dfMonthInt = new SimpleDateFormat("MM");
 	public SimpleDateFormat dTimeFormat = new SimpleDateFormat("hh:mm:ss aa");
 	public SimpleDateFormat dDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa");
 	
