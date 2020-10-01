@@ -51,14 +51,11 @@ public class RptDateAndMonthWiseLeave extends Window
 	private PopupDateField dMonth;
 	private ComboBox cmbDepartment;
 	private CheckBox chkDepartmentAll;
+	private ComboBox cmbEmployee;
+	private CheckBox chkEmployeeAll;
 
 	private OptionGroup opgTimeSelect;
 	private List<?> timeSelect = Arrays.asList(new String[]{"Monthly","Between Date"});
-
-	//private Label lblLoanType;
-	//private ComboBox cmbLoanType;
-	//private static final String[] loanType = new String[] {"Advanced","Salary Loan","PF Loan"};
-	//private CheckBox chkLoanTypeAll;
 
 	private OptionGroup RadioBtnGroup;
 	private static final List<String> type1=Arrays.asList(new String[]{"PDF","Other"});
@@ -104,6 +101,35 @@ public class RptDateAndMonthWiseLeave extends Window
 			{cButton.btnPreview.setVisible(false);}
 		}
 		}
+	}
+
+	private void cmbEmployeeDataLoad() {
+		Session session = SessionFactoryUtil.getInstance().openSession();
+		session.beginTransaction();
+		try
+		{
+			String sql = "select distinct epo.vEmployeeId,epo.vEmployeeCode,epo.vEmployeeName from tbEmpLeaveApplicationInfo eli "
+					+ "inner join tbEmpOfficialPersonalInfo epo on epo.vEmployeeId=eli.vEmployeeId "
+					+ "where epo.vUnitId like '"+cmbUnit.getValue()+"' "
+					+ "and vDepartmentId like '"+(cmbDepartment.getValue()==null?"%":cmbDepartment.getValue())+"' "
+					+ "and epo.vSectionId like '"+(cmbSection.getValue()==null?"%":chkSectionAll.getValue())+"'" +
+					" order by epo.vEmployeeName";
+			System.out.println("cmbEmployeeDataLoad: "+sql);
+			
+			List<?> list = session.createSQLQuery(sql).list();
+			cmbEmployee.removeAllItems();
+			for(Iterator<?> iter = list.iterator();iter.hasNext();)
+			{ 
+				Object element[] = (Object[]) iter.next();
+				cmbEmployee.addItem(element[0].toString());
+				cmbEmployee.setItemCaption(element[0].toString(), element[1]+"-"+element[2]);
+			}
+		}
+		catch(Exception exp)
+		{
+			showNotification(exp+"",Notification.TYPE_ERROR_MESSAGE);
+		}
+		finally{session.close();}
 	}
 	private void cmbSectionDataLoad() {
 		Session session = SessionFactoryUtil.getInstance().openSession();
@@ -183,8 +209,7 @@ public class RptDateAndMonthWiseLeave extends Window
 				}
 			}
 		});
-		cmbDepartment.addListener(new ValueChangeListener() {
-			
+		cmbDepartment.addListener(new ValueChangeListener() {			
 			public void valueChange(ValueChangeEvent event) {
 				if(cmbDepartment.getValue()!=null)
 				{
@@ -193,8 +218,7 @@ public class RptDateAndMonthWiseLeave extends Window
 				}
 			}
 		});
-		chkDepartmentAll.addListener(new ClickListener() {
-			
+		chkDepartmentAll.addListener(new ClickListener() {			
 			public void buttonClick(ClickEvent event) {
 				if(cmbUnit.getValue()!=null)
 				{
@@ -213,8 +237,7 @@ public class RptDateAndMonthWiseLeave extends Window
 			}
 		});
 
-		chkSectionAll.addListener(new ClickListener() {
-			
+		chkSectionAll.addListener(new ClickListener() {			
 			public void buttonClick(ClickEvent event) {
 				if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
 				{
@@ -222,11 +245,50 @@ public class RptDateAndMonthWiseLeave extends Window
 					{
 						cmbSection.setValue(null);
 						cmbSection.setEnabled(false);
-						
+						cmbEmployeeDataLoad();
 					}
 					else
 					{
 						cmbSection.setEnabled(true);
+					}
+				}
+			}
+		});
+		cmbEmployee.addListener(new ValueChangeListener() {			
+			public void valueChange(ValueChangeEvent event) {
+				if(cmbUnit.getValue()!=null)
+				{
+					if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+					{
+						if(cmbSection.getValue()!=null || chkSectionAll.booleanValue())
+						{
+							if(cmbEmployee.getValue()!=null)
+							{
+								System.out.println("LOL");		
+							}				
+						}				
+					}
+				}
+			}
+		});		
+		chkEmployeeAll.addListener(new ClickListener() {			
+			public void buttonClick(ClickEvent event) {
+				if(cmbUnit.getValue()!=null )
+				{
+					if(cmbDepartment.getValue()!=null || chkDepartmentAll.booleanValue())
+					{
+						if(cmbSection.getValue()!=null || chkSectionAll.booleanValue())
+						{
+							if(chkEmployeeAll.booleanValue())
+							{
+								cmbEmployee.setValue(null);
+								cmbEmployee.setEnabled(false);						
+							}
+							else
+							{
+								cmbEmployee.setEnabled(true);
+							}
+						}
 					}
 				}
 			}
@@ -241,22 +303,25 @@ public class RptDateAndMonthWiseLeave extends Window
 					{
 						if(cmbSection.getValue()!=null || chkSectionAll.booleanValue())
 						{
-							if(opgTimeSelect.getValue().toString().equals("Monthly"))
+							if(cmbEmployee.getValue()!=null || chkEmployeeAll.booleanValue())
 							{
-								if(dMonth.getValue()!=null)
+								if(opgTimeSelect.getValue().toString().equals("Monthly"))
 								{
-									reportpreview();
-								}
-							}
-							else
-							{
-								if(dFromDate.getValue()!=null && dToDate.getValue()!=null)
-								{
-									reportpreview();
+									if(dMonth.getValue()!=null)
+									{
+										reportpreview();
+									}
 								}
 								else
 								{
-									showNotification("Warning","Select Date Range",Notification.TYPE_WARNING_MESSAGE);
+									if(dFromDate.getValue()!=null && dToDate.getValue()!=null)
+									{
+										reportpreview();
+									}
+									else
+									{
+										showNotification("Warning","Select Date Range",Notification.TYPE_WARNING_MESSAGE);
+									}
 								}
 							}
 						}
@@ -333,11 +398,7 @@ public class RptDateAndMonthWiseLeave extends Window
 	
 	private void reportpreview()
 	{
-		ReportOption RadioBtn= new ReportOption(RadioBtnGroup.getValue().toString());
-		String loanType= "",report="",query="",dDateMonth="";
-		
-
-		//String fromDate = dDbFormat.format(dMonth.getValue())+ " 00:00:00";	
+		String report="",query="",dDateMonth="";
 		
 		try
 		{
@@ -353,6 +414,7 @@ public class RptDateAndMonthWiseLeave extends Window
 						"where epo.vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue():"")+"' " +
 						"and epo.vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue():"%")+"' " +
 						"and epo.vSectionId like '"+(cmbSection.getValue()!=null?cmbSection.getValue():"%")+"' " +
+						"and epo.vEmployeeId like '"+(cmbEmployee.getValue()!=null?cmbEmployee.getValue():"%")+"' " +
 						"and MONTH(b.dLeaveDate)=MONTH('"+dDbFormat.format(dMonth.getValue())+"') " +
 						"and YEAR(b.dLeaveDate)=YEAR('"+dDbFormat.format(dMonth.getValue())+"')  and a.iApprovedFlag=1 " +
 						"order by epo.vDepartmentName ";
@@ -371,13 +433,14 @@ public class RptDateAndMonthWiseLeave extends Window
 						"where epo.vUnitId like '"+(cmbUnit.getValue()!=null?cmbUnit.getValue():"")+"' " +
 						"and epo.vDepartmentId like '"+(cmbDepartment.getValue()!=null?cmbDepartment.getValue():"%")+"' " +
 						"and epo.vSectionId like '"+(cmbSection.getValue()!=null?cmbSection.getValue():"%")+"' " +
+						"and epo.vEmployeeId like '"+(cmbEmployee.getValue()!=null?cmbEmployee.getValue():"%")+"' " +
 						"and b.dLeaveDate between '"+dDbFormat.format(dFromDate.getValue())+"' and '"+dDbFormat.format(dToDate.getValue())+"' and a.iApprovedFlag=1 " +
 						"order by vDepartmentName ";
-
-				dDateMonth="From Date: "+dFormatBangla.format(dFromDate.getValue())+"   To Date: "+dFormatBangla.format(dToDate.getValue());
+				
+				dDateMonth="From : "+dFormatBangla.format(dFromDate.getValue())+"   To : "+dFormatBangla.format(dToDate.getValue());
 			}
 			System.out.println("Report Query: "+query);
-
+			
 			if(queryValueCheck(query))
 			{
 				HashMap <String,Object> hm = new HashMap <String,Object> ();
@@ -385,10 +448,10 @@ public class RptDateAndMonthWiseLeave extends Window
 				hm.put("address", sessionBean.getCompanyAddress());
 				hm.put("phone", sessionBean.getCompanyContact());
 				hm.put("userName", sessionBean.getUserName()+"  "+sessionBean.getUserIp());
-
+				
 				hm.put("dDate", dMonth.getValue());
 				hm.put("fromDate", dMonth.getValue());
-
+				
 				hm.put("dDateMonth", dDateMonth);
 				
 				hm.put("SysDate",reportTime.getTime);
@@ -444,7 +507,7 @@ public class RptDateAndMonthWiseLeave extends Window
 
 		// top-level component properties
 		setWidth("490px");
-		setHeight("280px");
+		setHeight("300px");
 
 		opgTimeSelect=new OptionGroup("",timeSelect);
 		opgTimeSelect.select("Monthly");
@@ -475,7 +538,6 @@ public class RptDateAndMonthWiseLeave extends Window
 
 		// lblSectionName
 		
-		mainLayout.addComponent(new Label("Section :"),"top:100px; left:20.0px;");
 
 		// cmbSectionName
 		cmbSection = new ComboBox();
@@ -483,6 +545,7 @@ public class RptDateAndMonthWiseLeave extends Window
 		cmbSection.setHeight("-1px");
 		cmbSection.setNullSelectionAllowed(true);
 		cmbSection.setImmediate(true);
+		mainLayout.addComponent(new Label("Section :"),"top:100px; left:20.0px;");
 		mainLayout.addComponent(cmbSection, "top:98px; left:130.0px;");
 		
 		chkSectionAll=new CheckBox("All");
@@ -490,13 +553,27 @@ public class RptDateAndMonthWiseLeave extends Window
 		chkSectionAll.setHeight("-1px");
 		chkSectionAll.setImmediate(true);
 		mainLayout.addComponent(chkSectionAll,"top:100; left:393px");
-
+		
+		cmbEmployee = new ComboBox();
+		cmbEmployee.setWidth("260px");
+		cmbEmployee.setHeight("-1px");
+		cmbEmployee.setNullSelectionAllowed(true);
+		cmbEmployee.setImmediate(true);
+		mainLayout.addComponent(new Label("Employee :"),"top:130px; left:20.0px;");
+		mainLayout.addComponent(cmbEmployee, "top:130px; left:130.0px;");
+		
+		chkEmployeeAll=new CheckBox("All");
+		chkEmployeeAll.setWidth("-1px");
+		chkEmployeeAll.setHeight("-1px");
+		chkEmployeeAll.setImmediate(true);
+		mainLayout.addComponent(chkEmployeeAll,"top:130px; left:393px");
+		
 		// lblFromDate
 		lblFromDate = new Label("From Date :");
 		lblFromDate.setImmediate(false);
 		lblFromDate.setWidth("100.0%");
 		lblFromDate.setHeight("-1px");
-		mainLayout.addComponent(lblFromDate,"top:130px; left:20px;");
+		mainLayout.addComponent(lblFromDate,"top:160px; left:20px;");
 		lblFromDate.setVisible(false);
 		// dFromDate
 		dFromDate = new PopupDateField();
@@ -506,14 +583,14 @@ public class RptDateAndMonthWiseLeave extends Window
 		dFromDate.setDateFormat("dd-MM-yyyy");
 		dFromDate.setValue(new java.util.Date());
 		dFromDate.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainLayout.addComponent(dFromDate, "top:128px; left:130px;");
+		mainLayout.addComponent(dFromDate, "top:158px; left:130px;");
 		dFromDate.setVisible(false);
 		//lblMonth
 		lblMonth = new Label("Month :");
 		lblMonth.setImmediate(false);
 		lblMonth.setWidth("100.0%");
 		lblMonth.setHeight("-1px");
-		mainLayout.addComponent(lblMonth,"top:130px; left:20px;");
+		mainLayout.addComponent(lblMonth,"top:160px; left:20px;");
 		
 		// dMonth
 		dMonth = new PopupDateField();
@@ -523,14 +600,14 @@ public class RptDateAndMonthWiseLeave extends Window
 		dMonth.setDateFormat("MMMMM-yyyy");
 		dMonth.setValue(new java.util.Date());
 		dMonth.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainLayout.addComponent(dMonth, "top:128px; left:130px;");
+		mainLayout.addComponent(dMonth, "top:158px; left:130px;");
 		
 		// lblToDate
 		lblToDate = new Label("To");
 		lblToDate.setImmediate(false);
 		lblToDate.setWidth("100.0%");
 		lblToDate.setHeight("-1px");
-		mainLayout.addComponent(lblToDate,"top:130px; left:250.0px;");
+		mainLayout.addComponent(lblToDate,"top:160px; left:250.0px;");
 		lblToDate.setVisible(false);
 
 		// dToDate
@@ -541,18 +618,18 @@ public class RptDateAndMonthWiseLeave extends Window
 		dToDate.setDateFormat("dd-MM-yyyy");
 		dToDate.setValue(new java.util.Date());
 		dToDate.setResolution(PopupDateField.RESOLUTION_DAY);
-		mainLayout.addComponent(dToDate, "top:128px; left:268.0px;");
+		mainLayout.addComponent(dToDate, "top:158px; left:268.0px;");
 		dToDate.setVisible(false);
 		// optionGroup
 		RadioBtnGroup = new OptionGroup("",type1);
 		RadioBtnGroup.setImmediate(true);
 		RadioBtnGroup.setStyleName("horizontal");
 		RadioBtnGroup.setValue("PDF");
-		mainLayout.addComponent(RadioBtnGroup, "top:140px;left:150px;");
+		mainLayout.addComponent(RadioBtnGroup, "top:190px;left:150px;");
 		RadioBtnGroup.setVisible(false);
 
 	//	mainLayout.addComponent(new Label("_______________________________________________________________________________"), "top:170.0px;left:20.0px;right:20.0px;");
-		mainLayout.addComponent(cButton,"top:200.opx; left:130.0px");
+		mainLayout.addComponent(cButton,"bottom:15.0px; left:130.0px");
 
 		return mainLayout;
 	}

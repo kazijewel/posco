@@ -645,7 +645,7 @@
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{Enjoyed}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement x="6" y="28" width="144" height="40"/>
+				<reportElement x="6" y="28" width="120" height="40"/>
 				<subreportParameter name="subSql">
 					<subreportParameterExpression><![CDATA[$P{subSql}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -653,7 +653,7 @@
 				<subreportExpression class="java.lang.String"><![CDATA[$P{path} + "rptLeaveRegisterIndividual_CL.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="191" y="28" width="144" height="40"/>
+				<reportElement x="132" y="28" width="120" height="40"/>
 				<subreportParameter name="subSqlSL">
 					<subreportParameterExpression><![CDATA[$P{subSqlSL}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -661,7 +661,7 @@
 				<subreportExpression class="java.lang.String"><![CDATA[$P{path} + "rptLeaveRegisterIndividual_SL.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="376" y="28" width="144" height="40"/>
+				<reportElement x="257" y="28" width="120" height="40"/>
 				<subreportParameter name="subSqlEL">
 					<subreportParameterExpression><![CDATA[$P{subSqlEL}]]></subreportParameterExpression>
 				</subreportParameter>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptLeaveRegisterIndividual_SL" language="groovy" pageWidth="144" pageHeight="360" columnWidth="144" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptLeaveRegisterIndividual_SL" language="groovy" pageWidth="120" pageHeight="360" columnWidth="120" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -40,7 +40,7 @@
 				<text><![CDATA[Date (From - To)]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="17" width="144" height="1"/>
+				<reportElement x="0" y="17" width="120" height="1"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -52,20 +52,20 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="-1" width="144" height="1"/>
+				<reportElement x="0" y="-1" width="120" height="1"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="81" y="0" width="62" height="17"/>
+				<reportElement x="81" y="0" width="39" height="17"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Days]]></text>
 			</staticText>
 			<line>
-				<reportElement x="143" y="-1" width="1" height="19"/>
+				<reportElement x="119" y="-1" width="1" height="19"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -81,7 +81,7 @@
 	<detail>
 		<band height="16" splitType="Stretch">
 			<line>
-				<reportElement x="143" y="0" width="1" height="16"/>
+				<reportElement x="119" y="0" width="1" height="16"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -107,13 +107,13 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="0" y="15" width="144" height="1"/>
+				<reportElement x="0" y="15" width="120" height="1"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="81" y="0" width="62" height="15"/>
+				<reportElement x="81" y="0" width="39" height="15"/>
 				<box rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8"/>
@@ -147,7 +147,7 @@
 				<text><![CDATA[Total Days :]]></text>
 			</staticText>
 			<textField pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="81" y="0" width="63" height="17"/>
+				<reportElement x="81" y="0" width="40" height="17"/>
 				<box>
 					<bottomPen lineWidth="1.5" lineStyle="Double"/>
 				</box>

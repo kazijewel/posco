@@ -466,20 +466,30 @@ public class RptLeaveRegisterIndividual extends Window
 			System.out.println("Preview Query :" +subQuery);
 
 			String subQuerySL="select dSanctionFrom,dSanctionTo,mTotalDays,iApprovedFlag from tbEmpLeaveApplicationInfo "
-					+ "where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '2' and iApprovedFlag = '1' "
-					+ "and dEntitleFromDate=(select distinct dEntitleFromDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '2' and vStatus='1') "
-					+ "and dEntitleToDate=(select distinct dEntitleToDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '2' and vStatus='1') "
-					+ "order by dSanctionFrom desc";					
+			+ "where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '2' and iApprovedFlag = '1' "
+			+ "and dEntitleFromDate=(select distinct dEntitleFromDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '2' and vStatus='1') "
+			+ "and dEntitleToDate=(select distinct dEntitleToDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '2' and vStatus='1') "
+			+ "order by dSanctionFrom desc";					
 			
 			System.out.println("Preview Query :" +subQuerySL);
 
 			String subQueryEL="select dSanctionFrom,dSanctionTo,mTotalDays,iApprovedFlag from tbEmpLeaveApplicationInfo "
-					+ "where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '3' and iApprovedFlag = '1' "
-					+ "and dEntitleFromDate=(select distinct dEntitleFromDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '3' and vStatus='1') "
-					+ "and dEntitleToDate=(select distinct dEntitleToDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '3' and vStatus='1') "
-					+ "order by dSanctionFrom desc";
+			+ "where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '3' and iApprovedFlag = '1' "
+			+ "and dEntitleFromDate=(select distinct dEntitleFromDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '3' and vStatus='1') "
+			+ "and dEntitleToDate=(select distinct dEntitleToDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '3' and vStatus='1') "
+			+ "order by dSanctionFrom desc";
 						
 			System.out.println("Preview Query :" +subQueryEL);
+			
+			
+			String subSqlWP="select dSanctionFrom,dSanctionTo,mTotalDays,iApprovedFlag from tbEmpLeaveApplicationInfo "
+			+ "where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = 'Without Pay' and iApprovedFlag = '1' "
+			+ "and dEntitleFromDate=(select distinct dEntitleFromDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '1' and vStatus='1') "
+			+ "and dEntitleToDate=(select distinct dEntitleToDate from tbLeaveEntitlement where vEmployeeId ='"+cmbEmployee.getValue()+"' and vLeaveTypeID = '1' and vStatus='1') "
+			+ "order by dSanctionFrom desc";
+			
+			System.out.println("subSqlWP :" +subSqlWP);
+			
 
 			String query=" select * from funIndividualLeaveRegister('"+cmbEmployee.getValue()+"')";
 			
@@ -514,6 +524,16 @@ public class RptLeaveRegisterIndividual extends Window
 			else
 			{
 				hm.put("subSqlEL", "");
+			}
+
+			if(queryValueCheck(subSqlWP))
+			{
+				strDetails="Enjoyed Leave Details :";
+				hm.put("subSqlWP", subSqlWP);
+			}
+			else
+			{
+				hm.put("subSqlWP", "");
 			}
 
 			if(queryValueCheck(query))
