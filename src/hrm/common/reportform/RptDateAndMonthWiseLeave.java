@@ -265,12 +265,12 @@ public class RptDateAndMonthWiseLeave extends Window
 							if(cmbEmployee.getValue()!=null)
 							{
 								System.out.println("LOL");		
-							}				
-						}				
+							}
+						}
 					}
 				}
 			}
-		});		
+		});
 		chkEmployeeAll.addListener(new ClickListener() {			
 			public void buttonClick(ClickEvent event) {
 				if(cmbUnit.getValue()!=null )
@@ -341,7 +341,7 @@ public class RptDateAndMonthWiseLeave extends Window
 				}
 			}
 		});
-
+		
 		cButton.btnExit.addListener(new Button.ClickListener() 
 		{	
 			public void buttonClick(ClickEvent event) 
@@ -349,9 +349,7 @@ public class RptDateAndMonthWiseLeave extends Window
 				close();
 			}
 		});
-
 		
-
 		opgTimeSelect.addListener(new ValueChangeListener()
 		{
 			public void valueChange(ValueChangeEvent event)
@@ -359,6 +357,7 @@ public class RptDateAndMonthWiseLeave extends Window
 				opgTimeSelectAction();
 			}
 		});
+		
 		chkSectionAll.addListener(new ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				if(chkSectionAll.booleanValue()){

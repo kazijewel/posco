@@ -1825,6 +1825,11 @@ public class EmployeeInformation extends Window
 
 	public void firstTabClear()
 	{
+		firstTab.Image.image.removeAllComponents();
+		firstTab.Image.status.setValue("");
+		firstTab.Image.fileName="";
+		imageLoc="0";
+		
 		firstTab.btnDateofBirth.actionCheck = false;
 		firstTab.btnBirthPreview.setCaption("attach");
 
@@ -1843,7 +1848,6 @@ public class EmployeeInformation extends Window
 		firstTab.btnServiceAgreement.actionCheck = false;
 		firstTab.btnServiceAgreementPreview.setCaption("attach");
 		
-
 		firstTab.txtEmployeeID.setValue("");
 		firstTab.txtEmployeeCode.setValue("");
 		firstTab.txtFingerId.setValue("");
