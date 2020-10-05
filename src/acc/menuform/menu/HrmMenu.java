@@ -61,6 +61,7 @@ import com.appform.hrmModule.EmployeeAttendanceUploadSingleDevice;
 import com.appform.hrmModule.EmployeeInformation;
 import com.appform.hrmModule.EmployeeRequsitionForm;
 import com.appform.hrmModule.GetEmployeeAttendance;
+import com.appform.hrmModule.GoogleTranslate;
 import com.appform.hrmModule.GradeInformation;
 import com.appform.hrmModule.IncrementProcessMultiple;
 import com.appform.hrmModule.IncrementType;
@@ -552,6 +553,10 @@ public class HrmMenu
 		{
 			addCaptionedItem("SALARY INCREMENT PROCESS", OthersTransaction);
 		}
+		/*if(isValidMenu("GoogleTranslate"))
+		{
+			addCaptionedItem("GOOGLE TRANSLATE", OthersTransaction);
+		}*/
 	}
 
 	private void addOthersReportChild(Object OthersReport) {
@@ -868,6 +873,11 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("SALARY INCREMENT REPORT"))
 				{
 					showWindow(new RptIncrementProposal(sessionBean, "RptIncrementProposal"), event.getItem(), "RptIncrementProposal","HRM MODULE","REPORT");
+				}
+				
+				if(event.getItem().toString().equalsIgnoreCase("GOOGLE TRANSLATE"))
+				{
+					showWindow(new GoogleTranslate(sessionBean,"GoogleTranslate"),event.getItem(),"GoogleTranslate","HRM MODULE","TRANSACTION");
 				}
 				
 				//OT Transaction 
