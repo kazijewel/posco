@@ -676,6 +676,9 @@
 			</textField>
 			<subreport>
 				<reportElement x="379" y="28" width="150" height="40"/>
+				<subreportParameter name="subSqlWP">
+					<subreportParameterExpression><![CDATA[$P{subSqlWP}]]></subreportParameterExpression>
+				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[$P{path} + "rptLeaveRegisterIndividual_subreport_WP.jasper"]]></subreportExpression>
 			</subreport>
