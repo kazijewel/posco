@@ -21,13 +21,11 @@
 	<parameter name="year" class="java.lang.String"/>
 	<parameter name="month" class="java.lang.String"/>
 	<parameter name="path" class="java.lang.String">
-		<parameterDescription><![CDATA["E:\\workspace\\Uptd\\src\\report\\account\\hrmModule\\"]]></parameterDescription>
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["./report/account/hrmModule/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="subSql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select * from tbEmpLeaveApplicationInfo"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["E:\\workspace\\uptd\\src\\report\\account\\hrmModule\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="subSqlSL" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select * from tbEmpLeaveApplicationInfo"]]></defaultValueExpression>
@@ -37,6 +35,7 @@
 	</parameter>
 	<parameter name="pDetails" class="java.lang.String"/>
 	<parameter name="Unit" class="java.lang.String"/>
+	<parameter name="subSqlWP" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[$P!{sql}]]>
 	</queryString>
@@ -653,7 +652,7 @@
 				<subreportExpression class="java.lang.String"><![CDATA[$P{path} + "rptLeaveRegisterIndividual_CL.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="132" y="28" width="120" height="40"/>
+				<reportElement x="130" y="28" width="120" height="40"/>
 				<subreportParameter name="subSqlSL">
 					<subreportParameterExpression><![CDATA[$P{subSqlSL}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -661,7 +660,7 @@
 				<subreportExpression class="java.lang.String"><![CDATA[$P{path} + "rptLeaveRegisterIndividual_SL.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="257" y="28" width="120" height="40"/>
+				<reportElement x="255" y="28" width="120" height="40"/>
 				<subreportParameter name="subSqlEL">
 					<subreportParameterExpression><![CDATA[$P{subSqlEL}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -675,6 +674,11 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pDetails}]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement x="379" y="28" width="150" height="40"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{path} + "rptLeaveRegisterIndividual_subreport_WP.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>
