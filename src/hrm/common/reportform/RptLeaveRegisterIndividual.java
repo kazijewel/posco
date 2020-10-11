@@ -452,8 +452,7 @@ public class RptLeaveRegisterIndividual extends Window
 			hm.put("SysDate",reportTime.getTime);
 			hm.put("path", "./report/account/hrmModule/");
 			hm.put("logo", sessionBean.getCompanyLogo());
-			hm.put("Unit",cmbUnit.getItemCaption(cmbUnit.getValue()));
-			
+			hm.put("Unit",cmbUnit.getItemCaption(cmbUnit.getValue()));			
 			
 			String strDetails="";
 

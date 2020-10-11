@@ -277,7 +277,7 @@ public class RptBankStatement extends Window {
 				String exelSql="";
 				String signature[]={""};
 			
-				exelSql="select vEmployeeCode,vEmployeeName,vAccountNo,vBankName,vBranchName,vRoutingNo,CONVERT(float,CONVERT(Decimal(18,0),mNetPayableTaka))mNetPayableTaka from tbMonthlySalary "+
+				exelSql="select vEmployeeCode,vEmployeeName,'X'+vAccountNo vAccountNo,vBankName,vBranchName,'X'+vRoutingNo vRoutingNo,CONVERT(float,CONVERT(Decimal(18,0),mNetPayableTaka))mNetPayableTaka from tbMonthlySalary "+
 						" where MONTH(dSalaryDate)=MONTH('"+cmbMonthName.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonthName.getValue()+"') and vBankId like '%' "+ 
 						" and vMoneyTransferType='"+opgMoneyTransferType.getValue().toString()+"'";
 				System.out.println(exelSql);
@@ -291,7 +291,7 @@ public class RptBankStatement extends Window {
 					for(Iterator<?> iter=lst1.iterator(); iter.hasNext();)
 					{
 					 Object [] element = (Object[])iter.next();	
-					 detailQuery[countInd]="select vEmployeeCode,vEmployeeName,vAccountNo,vBankName,vBranchName,vRoutingNo,CONVERT(float,CONVERT(Decimal(18,0),mNetPayableTaka))mNetPayableTaka from tbMonthlySalary "+
+					 detailQuery[countInd]="select vEmployeeCode,vEmployeeName,'X'+vAccountNo vAccountNo,vBankName,vBranchName,'X'+vRoutingNo vRoutingNo,CONVERT(float,CONVERT(Decimal(18,0),mNetPayableTaka))mNetPayableTaka from tbMonthlySalary "+
 								" where MONTH(dSalaryDate)=MONTH('"+cmbMonthName.getValue()+"') and YEAR(dSalaryDate)=YEAR('"+cmbMonthName.getValue()+"') and vBankId like '%' "+ 
 								" and vMoneyTransferType='"+opgMoneyTransferType.getValue().toString()+"'";
 						
