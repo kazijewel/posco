@@ -85,7 +85,12 @@ public class LogIn extends Window
      * @param dst
      * 			  "D:\\ScheduleBackup\\posco\\"
      * 
+     * @author Mohammad Didarul Alam
+     * emdidar@gmail.com
+     * www.codinghelpbd.com
+     * 
      */
+	
 	public void copyReportFolder(String src,String dst)
 	{
 		SimpleDateFormat dFormatDDMMYY = new SimpleDateFormat("dd-MM-yyyy");
