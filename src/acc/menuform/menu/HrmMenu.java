@@ -32,6 +32,7 @@ import hrm.common.reportform.RptManPower;
 import hrm.common.reportform.RptMaterialReturnForm;
 import hrm.common.reportform.RptMonthlyAttendanceManually;
 import hrm.common.reportform.RptMonthlyAttendanceSummary;
+import hrm.common.reportform.RptMonthlyOverTime;
 import hrm.common.reportform.RptNoticeInfo;
 import hrm.common.reportform.RptOfferLetter;
 import hrm.common.reportform.RptOverTimeRequest;
@@ -591,10 +592,14 @@ public class HrmMenu
 
 	}
 	private void addOTReportChild(Object otReport) {
-		
+
 		if(isValidMenu("RptOverTimeRequest"))
 		{
 			addCaptionedItem("OVER TIME REQUEST", otReport);
+		}
+		if(isValidMenu("RptMonthlyOverTime"))
+		{
+			addCaptionedItem("MONTHLY OVER TIME", otReport);
 		}
 		if(isValidMenu("RptShortViewOfOvertime"))
 		{
@@ -894,6 +899,10 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("OVER TIME REQUEST"))
 				{
 					showWindow(new RptOverTimeRequest(sessionBean,"RptOverTimeRequest"),event.getItem(),"RptOverTimeRequest","HRM MODULE","REPORT");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("MONTHLY OVER TIME"))
+				{
+					showWindow(new RptMonthlyOverTime(sessionBean,"RptMonthlyOverTime"),event.getItem(),"RptMonthlyOverTime","HRM MODULE","REPORT");
 				}				
 				if(event.getItem().toString().equalsIgnoreCase("SHORT VIEW OF OVERTIME"))
 				{
@@ -903,7 +912,6 @@ public class HrmMenu
 				{
 					showWindow(new RptEditDeleteOverTimeRequest(sessionBean,"RptEditDeleteOverTimeRequest"),event.getItem(),"RptEditDeleteOverTimeRequest","HRM MODULE","REPORT");
 				}
-				
 				
 				
 				if(event.getItem().toString().equalsIgnoreCase("EMPLOYEE ATTENDANCE UPLOAD"))
