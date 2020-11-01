@@ -401,6 +401,11 @@ public class RptMonthlyOverTime extends Window
 
 		try
 		{
+			String fDate=sessionBean.dfBd.format(dFrom.getValue());
+			String tDate=sessionBean.dfBd.format(dTo.getValue());
+			Object unit=cmbUnit.getValue()==null?"%":cmbUnit.getValue(),dept=cmbDepartment.getValue()==null?"%":cmbDepartment.getValue(),
+			sec=cmbSection.getValue()==null?"%":cmbSection.getValue(),empId=cmbEmployeeName.getValue()==null?"%":cmbEmployeeName.getValue();
+			
 			HashMap <String,Object>  hm = new HashMap <String,Object> ();
 			hm.put("company", sessionBean.getCompany());
 			hm.put("address", sessionBean.getCompanyAddress());
@@ -409,22 +414,25 @@ public class RptMonthlyOverTime extends Window
 			hm.put("SysDate",new java.util.Date());
 			hm.put("developer", sessionBean.getDeveloperAddress());
 			hm.put("logo", sessionBean.getCompanyLogo());
-			hm.put("empList", "Employee's List ( Site Office )");
+			hm.put("dDate", "From : "+fDate+"  To : "+tDate);
 
-			String query="select iAutoId,vTransactionId,vEmployeeId,vEmployeeName,vDesignationId,vDesignationName,vDepartmentId,vDepartmentName,"
-					+ "vJobSite,dRequestDate,dTimeFrom,dTimeTo,dTimeTotal,vManger,replace(vWorkRequest,'#','''')vWorkRequest,vManPower,iHoliday,"
-					+ "iNightTim,vUserId,vUserName,vUserIp,dEntryTime,dDateFrom,dDateTo,iFinal,vApprovedBy,mTotalTimeHR"
-					+ ",case when iHoliday=1 and mTotalTimeHR>10 then mTotalTimeHR-1 else mTotalTimeHR end hours,"
-					+ "(select vEmployeeCode from tbEmpOfficialPersonalInfo where vEmployeeId=ot.vEmployeeId)vEmployeeCode "
-					+ "from tbOTRequest ot "
-					+ "where vEmployeeId like '"+cmbEmployeeName.getValue()+"' ";
+			String query="select distinct a.vEmployeeId,a.vEmployeeCode,a.vEmployeeName,a.vDesignationName,a.dJoiningDate,SUM(b.mTotalTimeHR)mTotalTimeHR,"+
+					" a.vUnitName,a.vDepartmentName,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint)code,c.iRank from tbEmpOfficialPersonalInfo a "+
+					" inner join tbOTRequest b on a.vEmployeeId=b.vEmployeeId "+
+					" inner join tbDesignationInfo c on a.vDesignationId=c.vDesignationId "+
+					" where a.vUnitId like '"+unit+"' and a.vDepartmentId like '"+dept+"' "+
+					" and a.vSectionId like '"+sec+"' and a.vEmployeeId like '"+empId+"' "+
+					" and b.dRequestDate between '"+sessionBean.dfDb.format(dFrom.getValue())+"' and '"+sessionBean.dfDb.format(dTo.getValue())+"' "+
+					" group by a.vEmployeeId,a.vEmployeeCode,a.vEmployeeName,a.vDesignationName,a.dJoiningDate, "+
+					" a.vUnitName,a.vDepartmentName,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint),c.iRank "+
+					" order by a.vUnitName,a.vDepartmentName,c.iRank,a.dJoiningDate,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint)";
 
 			System.out.println("report :"+query);
 			if(queryValueCheck(query))
 			{
 				hm.put("sql", query);
 
-				Window win = new ReportViewer(hm,"report/account/hrmModule/rptOverTimeRequestForm.jasper",
+				Window win = new ReportViewer(hm,"report/account/hrmModule/RptMonthlyOverTime.jasper",
 						this.getWindow().getApplication().getContext().getBaseDirectory()+"".replace("\\","/")+"/VAADIN/rpttmp",
 						this.getWindow().getApplication().getURL()+"VAADIN/rpttmp",false,
 						this.getWindow().getApplication().getURL()+"VAADIN/applet",RadioBtn.Radio);
@@ -488,7 +496,7 @@ public class RptMonthlyOverTime extends Window
 		opGroupType.setImmediate(true);
 		opGroupType.setStyleName("horizontal");
 		opGroupType.setValue("Info");
-		mainLayout.addComponent(opGroupType, "top:10.0px;left:130.0px;");
+		//mainLayout.addComponent(opGroupType, "top:10.0px;left:130.0px;");
 		
 		dFrom=new PopupDateField();
 		dFrom.setWidth("110px");
@@ -578,7 +586,7 @@ public class RptMonthlyOverTime extends Window
 		chkEmployeeName.setHeight("-1px");
 		chkEmployeeName.setWidth("-1px");
 		mainLayout.addComponent(chkEmployeeName, "top:170px; left:395.0px;");
-		chkEmployeeName.setVisible(false);
+		//chkEmployeeName.setVisible(false);
 
 		// optionGroup
 		RadioBtnGroup = new OptionGroup("",type1);
