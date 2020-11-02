@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RptMonthlyOverTime" language="groovy" pageWidth="595" pageHeight="842" columnWidth="565" leftMargin="15" rightMargin="15" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="18"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.ignore.graphics" value="false"/>
 	<property name="net.sf.jasperreports.export.xls.collapse.row.span" value="false"/>
@@ -15,7 +15,7 @@
 	<parameter name="phone" class="java.lang.String"/>
 	<parameter name="fax" class="java.lang.String"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select distinct a.vEmployeeId,a.vEmployeeCode,a.vEmployeeName,a.vDesignationName,a.dJoiningDate,SUM(b.mTotalTimeHR)mTotalTimeHR, a.vUnitName,a.vDepartmentName,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint)code,c.iRank from tbEmpOfficialPersonalInfo a  inner join tbOTRequest b on a.vEmployeeId=b.vEmployeeId inner join tbDesignationInfo c on a.vDesignationId=c.vDesignationId where a.vUnitId like '%' and a.vDepartmentId like '%' and a.vSectionId like '%' and a.vEmployeeId like '%' and b.dRequestDate between '2018-06-26' and '2018-08-05' group by a.vEmployeeId,a.vEmployeeCode,a.vEmployeeName,a.vDesignationName,a.dJoiningDate, a.vUnitName,a.vDepartmentName,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint),c.iRank order by a.vUnitName,a.vDepartmentName,c.iRank,a.dJoiningDate,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint) "]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select * from funMonthlyOverTime('2020-09-01', '2020-09-30','19001','%','%','%') order by vDepartmentName,CAST(SUBSTRING(vEmployeeCode,3,LEN(vEmployeeCode)) as bigint)"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="username" class="java.lang.String"/>
 	<parameter name="userIp" class="java.lang.String"/>
@@ -25,22 +25,27 @@
 	<queryString>
 		<![CDATA[$P!{sql}]]>
 	</queryString>
+	<field name="vDepartmentName" class="java.lang.String"/>
 	<field name="vEmployeeId" class="java.lang.String"/>
 	<field name="vEmployeeCode" class="java.lang.String"/>
 	<field name="vEmployeeName" class="java.lang.String"/>
 	<field name="vDesignationName" class="java.lang.String"/>
-	<field name="dJoiningDate" class="java.sql.Date"/>
-	<field name="mTotalTimeHR" class="java.lang.Integer"/>
-	<field name="vUnitName" class="java.lang.String"/>
-	<field name="vDepartmentName" class="java.lang.String"/>
-	<field name="code" class="java.lang.Long"/>
-	<field name="iRank" class="java.lang.Integer"/>
+	<field name="dJoiningDate" class="java.util.Date"/>
+	<field name="mOtHr" class="java.math.BigDecimal"/>
 	<variable name="sl" class="java.lang.Number" resetType="Group" resetGroup="Department">
 		<variableExpression><![CDATA[$V{sl}+1]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="ToatalEmployee" class="java.math.BigDecimal" calculation="Count">
 		<variableExpression><![CDATA[$F{vEmployeeId}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tlSubOtHr" class="java.math.BigDecimal" resetType="Group" resetGroup="Department" calculation="Sum">
+		<variableExpression><![CDATA[$F{mOtHr}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="tlOtHr" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{mOtHr}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<group name="Department">
@@ -74,6 +79,42 @@
 				</textField>
 			</band>
 		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<staticText>
+					<reportElement x="0" y="0" width="565" height="14"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.5" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField pattern="#,##0">
+					<reportElement x="523" y="0" width="42" height="14"/>
+					<box rightPadding="2"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tlSubOtHr}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="454" y="0" width="69" height="14"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif"/>
+					</textElement>
+					<text><![CDATA[Sub Total :]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
 	</group>
 	<background>
 		<band splitType="Stretch"/>
@@ -119,10 +160,10 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd-MM-yyyy">
-				<reportElement x="1" y="75" width="194" height="14"/>
+				<reportElement x="1" y="75" width="251" height="14"/>
 				<box leftPadding="2" rightPadding="0"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8"/>
+					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{dDate}]]></textFieldExpression>
 			</textField>
@@ -319,10 +360,10 @@
 			</staticText>
 			<textField pattern="#,##0;(#,##0)">
 				<reportElement x="523" y="0" width="42" height="14">
-					<printWhenExpression><![CDATA[$F{mTotalTimeHR}!=0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{mOtHr}!=0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mTotalTimeHR}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{mOtHr}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -379,6 +420,19 @@
 				<textElement/>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{ToatalEmployee}]]></textFieldExpression>
 			</textField>
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="509" y="0" width="56" height="13"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{tlOtHr}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="436" y="0" width="68" height="13"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Hour :]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>

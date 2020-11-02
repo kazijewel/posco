@@ -416,16 +416,9 @@ public class RptMonthlyOverTime extends Window
 			hm.put("logo", sessionBean.getCompanyLogo());
 			hm.put("dDate", "From : "+fDate+"  To : "+tDate);
 
-			String query="select distinct a.vEmployeeId,a.vEmployeeCode,a.vEmployeeName,a.vDesignationName,a.dJoiningDate,SUM(b.mTotalTimeHR)mTotalTimeHR,"+
-					" a.vUnitName,a.vDepartmentName,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint)code,c.iRank from tbEmpOfficialPersonalInfo a "+
-					" inner join tbOTRequest b on a.vEmployeeId=b.vEmployeeId "+
-					" inner join tbDesignationInfo c on a.vDesignationId=c.vDesignationId "+
-					" where a.vUnitId like '"+unit+"' and a.vDepartmentId like '"+dept+"' "+
-					" and a.vSectionId like '"+sec+"' and a.vEmployeeId like '"+empId+"' "+
-					" and b.dRequestDate between '"+sessionBean.dfDb.format(dFrom.getValue())+"' and '"+sessionBean.dfDb.format(dTo.getValue())+"' "+
-					" group by a.vEmployeeId,a.vEmployeeCode,a.vEmployeeName,a.vDesignationName,a.dJoiningDate, "+
-					" a.vUnitName,a.vDepartmentName,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint),c.iRank "+
-					" order by a.vUnitName,a.vDepartmentName,c.iRank,a.dJoiningDate,CAST(SUBSTRING(a.vEmployeeCode,3,LEN(a.vEmployeeCode)) as bigint)";
+			String query="select * from funMonthlyOverTime('"+sessionBean.dfDb.format(dFrom.getValue())+"',"
+					+ " '"+sessionBean.dfDb.format(dTo.getValue())+"','"+unit+"','"+dept+"','"+sec+"','"+empId+"')"+
+					" order by vDepartmentName,CAST(SUBSTRING(vEmployeeCode,3,LEN(vEmployeeCode)) as bigint)";
 
 			System.out.println("report :"+query);
 			if(queryValueCheck(query))
