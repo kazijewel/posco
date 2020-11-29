@@ -74,6 +74,7 @@ import com.appform.hrmModule.LeaveApproveFinal;
 import com.appform.hrmModule.LeaveApproveHR;
 import com.appform.hrmModule.LeaveApprovePrimary;
 import com.appform.hrmModule.LeaveBalanceGenerate;
+import com.appform.hrmModule.LeaveEncashment;
 import com.appform.hrmModule.LeaveEntitlement;
 import com.appform.hrmModule.LeaveTypeInfo;
 import com.appform.hrmModule.MealChargeInformation;
@@ -480,6 +481,10 @@ public class HrmMenu
 		{
 			addCaptionedItem("LEAVE APPLICATION", leaveTransaction);
 		}
+		if(isValidMenu("LeaveEncashment"))
+		{
+			addCaptionedItem("LEAVE ENCASHMENT", leaveTransaction);
+		}
 		if(isValidMenu("LeaveBalanceGenerate"))
 		{
 			addCaptionedItem("LEAVE BALANCE GENERATE", leaveTransaction);
@@ -730,6 +735,10 @@ public class HrmMenu
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE APPLICATION"))
 				{
 					showWindow(new LeaveApplicationForm(sessionBean,"leaveApplication",false),event.getItem(),"leaveApplication","HRM MODULE","TRANSACTION");
+				}
+				if(event.getItem().toString().equalsIgnoreCase("LEAVE ENCASHMENT"))
+				{
+					showWindow(new LeaveEncashment(sessionBean,"LeaveEncashment"),event.getItem(),"LeaveEncashment","HRM MODULE","TRANSACTION");
 				}
 				if(event.getItem().toString().equalsIgnoreCase("LEAVE BALANCE GENERATE"))
 				{

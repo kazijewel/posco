@@ -56,6 +56,9 @@ public class LeaveBalanceGenerate extends Window
 	private SimpleDateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private CommonMethod cm;
 	private String menuId = "";
+
+	private int start = 0;
+	
 	public LeaveBalanceGenerate(SessionBean sessionBean,String menuId) 
 	{
 		this.sessionBean= sessionBean;
@@ -133,7 +136,15 @@ public class LeaveBalanceGenerate extends Window
 					{
 						if(checkPendingLeave())
 						{
-							generateAction();
+							if(start == 1)
+							{
+								generateAction();
+							}
+							else
+							{
+								showNotification("Warning!","Before Generate leave balance please confirm again",Notification.TYPE_WARNING_MESSAGE);
+							}
+							start = 1;
 						}
 						else
 						{
